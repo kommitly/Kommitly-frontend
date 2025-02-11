@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+@import "tailwindcss";
+.fredoka-normal {
+  font-family: "Fredoka", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+} 
+
+.fredoka-medium {
+  font-family: "Fredoka", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.fredoka-semibold {
+  font-family: "Fredoka", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+
+
+
+.fredoka-bold {
+  font-family: "Fredoka", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.lowercase-text {
+  text-transform: lowercase;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari, Edge */
+}
+
+.no-scrollbar {
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  ms-overflow-style: none; /* Hide scrollbar for IE & Edge */
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border-width: 5px;
+}
+
+.custom-checkbox .checkmark {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 2px solid #4F378A;
+  border-radius: 4px;
+  position: relative;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkmark {
+  background-color: #4F378A;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+input[type="checkbox"] {
+  accent-color: #4F378A;
+  /* Green color */
+}
+
+
+.custom-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex; /* Ensures button width is based on content */
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 12px;
+}
+
+.custom-button .btn-text {
+  position: relative; /* Keeps text and line aligned */
+  display: inline-block;
+}
+
+.custom-button .hover-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #4F378A;
+  transition: width 0.3s ease;
+}
+
+.custom-button:hover .hover-line {
+  width: 100%;
+}
