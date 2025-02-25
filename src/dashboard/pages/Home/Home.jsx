@@ -1,8 +1,8 @@
 import { IconButton } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import  { useState,  } from 'react';
 import { LuSendHorizontal } from "react-icons/lu";
 import GoalBreakdown from '../../components/GoalBreakdown/GoalBreakdown';
-import { createGoal, generateInsights } from '../../../utils/Api';
+import {  generateInsights } from '../../../utils/Api';
 
 const Home = () => {
   const [inputValue, setInputValue] = useState('');
@@ -41,7 +41,7 @@ const Home = () => {
 
   return (
     <div className='w-full min-h-screen'>
-      <div className="w-full px-4 flex-1 overflow-y-auto scrollbar-hide max-h-[85vh] no-scrollbar">
+      <div className="w-full px-4 flex-1 overflow-y-auto scrollbar-hide xl:max-h-[83vh] md:max-h-[80vh] no-scrollbar">
         {loading && <p>Loading...</p>}
         {showGoalBreakdown && goalData && taskData && (
           <GoalBreakdown
@@ -55,12 +55,12 @@ const Home = () => {
       <div className='flex w-full items-center justify-center flex-wrap gap-4 mt-8'>
         <div className='w-6/12 bg-[#ECE6F0] p-2 z-10 rounded-full fixed bottom-16'>
           <div className='flex items-center justify-between gap-4'>
-            <div className='flex items-center gap-4 ml-2'>
+            <div className='flex items-center w-full gap-4 ml-2'>
               <IconButton>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="#1D1B20"
@@ -80,11 +80,13 @@ const Home = () => {
                 placeholder='Add a new goal'
                 value={inputValue}
                 onChange={handleInputChange}
-                className='text-[#49454F] outline-none border-none'
+                onKeyDown={(e) => e.key === 'Enter' && handleFormSubmit()}
+                className='text-[#49454F] outline-none border-none w-full text-xs'
               />
+
             </div>
             <IconButton onClick={handleFormSubmit}>
-              <LuSendHorizontal size={24} className='text-[#1D1B20] mr-2' />
+              <LuSendHorizontal size={16} className='text-[#1D1B20] ' />
             </IconButton>
           </div>
         </div>

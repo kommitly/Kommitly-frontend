@@ -6,6 +6,8 @@ import { BrowserRouter } from 'react-router-dom'
 
 import theme from './theme';
 import { GoalsProvider } from './context/GoalsContext';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 
 createRoot(document.getElementById('root')).render(
@@ -13,7 +15,9 @@ createRoot(document.getElementById('root')).render(
    <BrowserRouter>
 
       <GoalsProvider> 
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
          <App />
+      </LocalizationProvider>
       </GoalsProvider>
         
     

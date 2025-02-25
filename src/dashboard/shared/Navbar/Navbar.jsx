@@ -1,20 +1,20 @@
-import React from 'react';
+
 import { IconButton } from '@mui/material';
 
 
 export const Navbar = () => {
   return (
-    <div className="fixed   top-0 left-70 right-0 p-2 flex items-center justify-end  z-10 bg-white">
+    <div className="fixed   top-0 left-68 right-0 p-4 flex items-center justify-end  z-10 bg-white">
 
 
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-4 '>
         <IconButton>
 
 
         <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="16"
+        height="16"
         viewBox="0 0 24 24"
         fill="none"
         stroke="#65558F"
@@ -28,10 +28,10 @@ export const Navbar = () => {
         </svg>
         </IconButton>
         <div className='flex items-center bg-[#EADDFF] p-2 rounded-full'>
-        <svg
+               <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="#65558F"
@@ -43,7 +43,6 @@ export const Navbar = () => {
           <circle cx="12" cy="7" r="4"></circle>
           <path d="M5.5 21a9 9 0 0 1 13 0"></path>
         </svg>
-
         </div>
        
         </div>

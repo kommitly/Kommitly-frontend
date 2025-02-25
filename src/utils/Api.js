@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5MDYzMjA1LCJpYXQiOjE3Mzg0NTg0MDUsImp0aSI6IjI5NjRiYzE2MjQ2YjRlMjE5ZDYwOGQ2YTAxZjQzYzA0IiwidXNlcl9pZCI6Ijg3OWJmOGIxLTkzYWItNDIzOC1iZTJjLWRlNjViZTQwZDk1ZSJ9.9lhn5Fsm9TPKYJOkpYEyX89tBqiC_2yJV-abIjVIca4";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwODM4MjE3LCJpYXQiOjE3NDAyMzM0MTcsImp0aSI6ImU1ZThkOWEwMTg1ZjRmZjA4MTI0NTAyNjQ1NmE5M2MwIiwidXNlcl9pZCI6ImU4ZWNjNmZlLWFiYjQtNDBiNC1iOGYwLTE5MmY4ODVlYjg1YiJ9.J_WjRWprcdV_DO-72msMO_T4z8v6_i3ZQU-dO8gGsig";
 
 
 const generateInsights = async (title, description) => {
@@ -70,4 +70,54 @@ const fetchGoalById = async (goalId) => {
   }
 };
 
-export { generateInsights, createGoal, fetchGoals, fetchGoalById };
+const deleteGoalById = async (goalId) => {
+  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/delete-ai-goal/`;
+  try {
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting goal with ID ${goalId}:`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
+const updateAiGoalById = async (goalId, title, description) => {
+  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/update-ai-goal/`;
+  const requestBody = { title, description };
+  try {
+    const response = await axios.patch(url, requestBody, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating goal with ID ${goalId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+const updateTaskStatus = async (taskId, updatedData) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update-ai-task/`;
+  try {
+    const response = await axios.patch(url, updatedData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+    
+  } catch (error) {
+    console.error(`Error updating task with ID ${taskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export { generateInsights, createGoal, fetchGoals, fetchGoalById, deleteGoalById, updateAiGoalById, updateTaskStatus };

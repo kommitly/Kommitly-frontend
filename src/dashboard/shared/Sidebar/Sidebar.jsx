@@ -3,10 +3,6 @@ import { GoalsContext } from '../../../context/GoalsContext';
 import { Link, useLocation } from "react-router-dom";
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
-import { FiHome } from "react-icons/fi";
-import { FiBriefcase } from "react-icons/fi";
-import { FaTasks } from "react-icons/fa";
-import Typography from '@mui/material/Typography';
 
 
 const Sidebar = () => {
@@ -21,9 +17,9 @@ const Sidebar = () => {
 
   return (
     <div className='fixed inset-y-0 transition-width duration-300 min-h-screen p-2 '>
-        <div className='w-68 h-full  bg-[#F7F2FA] rounded-xl flex flex-col px-2 py-4  '>
+        <div className=' md:w-54 xl:w-64 h-full  bg-[#F7F2FA] rounded-xl flex flex-col px-2 py-4  '>
         <div className='w-10/12 p-2 inset-y-2 mb-2'>
-        <h1 className='text-black fredoka-semibold text-2xl ml-3 mt-2 '>Kommitly</h1>
+        <h1 className='text-black fredoka-semibold xl:text-2xl lg:text-xl ml-3 mt-2 '>Kommitly</h1>
             </div>
 
             <div className="flex flex-col flex-grow mt-4 overflow-y-auto no-scrollbar">
@@ -31,15 +27,15 @@ const Sidebar = () => {
 
               <Link
                 to="/dashboard/home"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center  p-3 md:text-sm xl:text-xs font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
                   "/home"
                 )}`}
               >
                 <div className='flex items-center px-1 justify-center '>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="#65558F"
@@ -55,7 +51,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4 flex items-center justify-center"
                 >
-                  <p className='text-base text-[#4A4459]  text-center font-normal'>
+                  <p className='text-base text-[#4A4459] md:text-sm  text-center font-normal'>
                   Home
                   </p>
                 </span>
@@ -67,9 +63,9 @@ const Sidebar = () => {
               <ul className='mb-8 '>
               <li className='w-full h-12'>
                 <Link to="/dashboard/goals" className="flex items-center p-2 text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                  <div className='flex w-full px-2 justify-between'>
+                  <div className='flex w-11/12 px-2 justify-between'>
                     <div className='flex items-center'>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#65558F"
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#65558F"
                         strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                         <path d="M16 3H8v4h8V3z"></path>
@@ -77,16 +73,16 @@ const Sidebar = () => {
                         <path d="M15 7v14"></path>
                       </svg>
 
-                      <span className="ml-4 text-base text-[#4A4459] font-normal">
+                      <span className="ml-4  md:text-sm text-[#4A4459] font-normal">
                         Goals
                       </span> 
                     </div>
                     <div className='flex  items-center rounded-full p-2 hover:bg-[#F7F2FA]' 
-                 style={{ boxShadow: '4px 8px 16.5px rgba(13, 39, 80, 0.16), -8px -9px 23.5px rgba(255,255,255,1), 0px 4px 4px rgba(0,0,0,0.25) ' }}>
+                 style={{ boxShadow: '2px 2px 8.5px rgba(13, 39, 80, 0.16), -8px -8px 13.5px rgba(255,255,255,1) ' }}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
+                      width="10"
+                      height="10"
                       viewBox="0 0 18 18"
                       fill="none"
                       stroke="#65558F"
@@ -108,10 +104,10 @@ const Sidebar = () => {
 
               {/* Dynamically Added Goals */}
               {goals.map((goal) => (
-                <li key={goal.id} className="w-full   p-2 h-12 ">
+                <li key={goal.id} className="w-full     ">
                   <Link to={`/dashboard/goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                  <span className="ml-2 p-4 text-sm text-[#4A4459] font-normal truncate max-w-[200px] block">
-                  • {goal.title}
+                  <span className="ml-2 px-3 py-3 md:text-xs text-[#4A4459] font-normal truncate max-w-[200px] block">
+                  •  {goal.title}
                 </span>
 
                   </Link>
@@ -190,12 +186,12 @@ const Sidebar = () => {
                     "/tasks"
                   )}`}
                 >
-                  <div className='flex w-full px-2 justify-between'>
+                  <div className='flex w-11/12 px-2 justify-between'>
                    <div className='flex items-center '>
                    <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="#65558F"
@@ -214,18 +210,18 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='text-base  text-[#4A4459] font-normal'>
+                  <p className='md:text-sm  text-[#4A4459] font-normal'>
                   Tasks
                   </p>
                 </span>
                    </div>
                    
                    <div className='flex items-center rounded-full p-2 hover:bg-[#F7F2FA] ' 
-                 style={{ boxShadow: '4px 8px 16.5px rgba(13, 39, 80, 0.16), -8px -9px 23.5px rgba(255,255,255,1), 0px 4px 4px rgba(0,0,0,0.25) ' }}>
-                   <svg
+                  style={{ boxShadow: '2px 2px 8.5px rgba(13, 39, 80, 0.16), -8px -8px 13.5px rgba(255,255,255,1) ' }}>
+                    <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
+                      width="10"
+                      height="10"
                       viewBox="0 0 18 18"
                       fill="none"
                       stroke="#65558F"
@@ -262,8 +258,8 @@ const Sidebar = () => {
                 <div className='flex px-1 items-center '>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="#65558F" 
                   stroke="#65558F"
@@ -280,7 +276,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='text-base text-[#4A4459] font-normal'>
+                  <p className='md:text-sm text-[#4A4459] font-normal'>
                   Analytics
                   </p>
                 </span>
@@ -299,8 +295,8 @@ const Sidebar = () => {
                 <div className='flex px-1 items-center '>
                     <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="#65558F"
@@ -310,7 +306,7 @@ const Sidebar = () => {
                 className="text-[#65558F]"
                 >
                 <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
-                <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" stroke-width="2" />
+                <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
                 <line x1="16" y1="2" x2="16" y2="6"></line>
                 <line x1="8" y1="2" x2="8" y2="6"></line>
                 
@@ -321,7 +317,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='text-base text-[#4A4459] font-normal'>
+                  <p className='md:text-sm text-[#4A4459] font-normal'>
                   Calendar
                   </p>
                 </span>
@@ -340,8 +336,8 @@ const Sidebar = () => {
                 <div className='flex px-1 items-center '>
                                <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="#65558F"
@@ -356,7 +352,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='text-base text-[#4A4459] font-normal'>
+                  <p className='md:text-sm text-[#4A4459] font-normal'>
                   Notifications
                   </p>
                 </span>
@@ -379,8 +375,8 @@ const Sidebar = () => {
                     
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
+                        width="16"
+                        height="16"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="#65558F"
@@ -398,7 +394,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='text-base text-[#4A4459] font-normal'>
+                  <p className='md:text-sm text-[#4A4459] font-normal'>
                   Settings
                   </p>
                 </span>
@@ -430,9 +426,11 @@ const Sidebar = () => {
                 <polyline points="16 17 21 12 16 7"></polyline>
                 <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
-               <Typography variant="h8" color="#4A4459" >
-                Logout
-               </Typography>
+    
+               <span className='text-[#4A4459] md:text-sm font-semibold'>
+               Logout
+
+               </span>
 
 
             </Button>
