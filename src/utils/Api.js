@@ -137,9 +137,9 @@ const updateTaskStatus = async (taskId, updatedData) => {
   }
 }
 
-const createTask = async ({ goal, title, due_date, status, reminder_time }) => {
-  const url = "https://kommitly-backend.onrender.com/api/tasks/create/task/";
-  const requestBody = { goal, title, due_date, status, reminder_time };
+const createTask = async ({ goal, title}) => {
+  const url = "https://kommitly-backend.onrender.com/api/goals/create/task/";
+  const requestBody = { goal, title };
   try {
     const response = await axios.post(url, requestBody, {
       headers: {

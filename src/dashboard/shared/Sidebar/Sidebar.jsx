@@ -37,7 +37,7 @@ const Sidebar = () => {
   const handleAddTask = async () => {
     if (newTaskTitle.trim() === '') return;
     try {
-      const newTask = await createTask(newTaskTitle);
+      const newTask = await createTask({ goal: 0, title: newTaskTitle }); 
       setTasks([...tasks, newTask]);
       setNewTaskTitle('');
       setIsTaskInputVisible(false);
@@ -379,6 +379,20 @@ const Sidebar = () => {
               </Link>
 
             </li>
+            {isTaskInputVisible && (
+                <li className='w-full h-12'>
+                  <input
+                    type="text"
+                    value={newTaskTitle}
+                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
+                    className="w-full ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-xs font-normal text-[#4A4459] border-none focus:outline-none"
+                    placeholder="Enter new task"
+                  />
+                </li>
+              )}
+
+
             {tasks.map((task) => (
                 <li key={task.id} className="w-full     ">
                   <Link to={`/dashboard/tasks/${task.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
@@ -392,18 +406,7 @@ const Sidebar = () => {
 
             </ul>
 
-            {isTaskInputVisible && (
-                <li className='w-full h-12'>
-                  <input
-                    type="text"
-                    value={newTaskTitle}
-                    onChange={(e) => setNewTaskTitle(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
-                    className="w-full ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-xs font-normal text-[#4A4459] border-none focus:outline-none"
-                    placeholder="Enter new task"
-                  />
-                </li>
-              )}
+          
             
             <Divider variant="middle" component="li" />
             <ul>
