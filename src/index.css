@@ -144,3 +144,13 @@ input[type="checkbox"] {
     display: block;
   }
 }
+
+.circle-on-top {
+  z-index: 10; /* Ensure this is higher than the z-index of the dotted line */
+  position: relative; /* Ensure the z-index takes effect */
+}
+
+.dotted-line {
+  z-index: 1; /* Ensure this is lower than the z-index of the circle */
+  position: relative; /* Ensure the z-index takes effect */
+}
