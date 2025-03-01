@@ -2,7 +2,7 @@ import { IconButton } from '@mui/material';
 import React, { useState, useContext, useEffect } from 'react';
 import { Divider } from '@mui/material';
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
-import { createGoal } from '../../../utils/Api';
+import { createAiGoal } from '../../../utils/Api';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -84,7 +84,7 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
   const handleCreateGoal = async () => {
     setLoading(true);
     try {
-      const response = await createGoal(goalData, taskData);
+      const response = await createAiGoal(goalData, taskData);
       console.log("Goal Creation API Response:", response); // Debugging
       setGoals((prevGoals) => [...prevGoals, response.ai_goal]);
       navigate(`/dashboard/goal/${response.ai_goal.id}`);

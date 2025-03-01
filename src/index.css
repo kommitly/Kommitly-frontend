@@ -126,3 +126,21 @@ input[type="checkbox"] {
 .custom-button:hover .hover-line {
   width: 100%;
 }
+
+@media (min-width: 769px) {
+  .icon-small {
+    display: block;
+  }
+  .icon-large {
+    display: none;
+  }
+}
+
+@media (min-width: 1536px) {
+  .icon-small {
+    display: none;
+  }
+  .icon-large {
+    display: block;
+  }
+}

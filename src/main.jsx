@@ -8,19 +8,18 @@ import theme from './theme';
 import { GoalsProvider } from './context/GoalsContext';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-
+import { TasksProvider } from './context/TasksContext.jsx'  
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
    <BrowserRouter>
-
       <GoalsProvider> 
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-         <App />
-      </LocalizationProvider>
+        <TasksProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <App />
+          </LocalizationProvider>
+        </TasksProvider>
       </GoalsProvider>
-        
-    
-        </BrowserRouter>
+    </BrowserRouter>
   </StrictMode>,
 )

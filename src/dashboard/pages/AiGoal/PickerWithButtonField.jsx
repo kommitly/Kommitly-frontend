@@ -22,9 +22,13 @@ function ButtonField(props) {
     ref={ref}
     aria-label={ariaLabel}
     onClick={() => setOpen?.((prev) => !prev)}
-    sx={{ minWidth: "auto", padding: 0, color: "#4F378A", fontSize: "10px" }} // Optional: removes default button padding
+    sx={{ minWidth: "auto", padding: 0, color: "#4F378A", 
+      fontSize: {
+        xs:"10px", sm:"10px", md:"10px", lg:"9px", xl:"12px"
+        } }} // Optional: removes default button padding
     >
       {label ? `Due date: ${label}` : (
+        <>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -35,7 +39,7 @@ function ButtonField(props) {
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-[#65558F]"
+          className="text-[#65558F] icon-small"
         >
           <rect x="3" y="4" width="18" height="5" fill="#65558F" stroke="#65558F"></rect>
           <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
@@ -43,6 +47,26 @@ function ButtonField(props) {
           <line x1="8" y1="2" x2="8" y2="6"></line>
           <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
         </svg>
+         <svg
+         xmlns="http://www.w3.org/2000/svg"
+         width="20"
+         height="20"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="#65558F"
+         strokeWidth="3"
+         strokeLinecap="round"
+         strokeLinejoin="round"
+         className="text-[#65558F] icon-large"
+       >
+         <rect x="3" y="4" width="18" height="5" fill="#65558F" stroke="#65558F"></rect>
+         <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
+         <line x1="16" y1="2" x2="16" y2="6"></line>
+         <line x1="8" y1="2" x2="8" y2="6"></line>
+         <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
+       </svg>
+       </>
+        
       )}
     </Button>
   );

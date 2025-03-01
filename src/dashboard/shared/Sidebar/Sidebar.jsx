@@ -1,23 +1,54 @@
-import React, { useContext } from 'react';
+import React, { useContext , useState} from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { Link, useLocation } from "react-router-dom";
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
-
+import { createGoal, createTask } from '../../../utils/Api';
+import { TasksContext } from '../../../context/TasksContext';
 
 const Sidebar = () => {
   const location = useLocation();
-  const { goals } = useContext(GoalsContext);
+  const {goals, setGoals} = useContext(GoalsContext);
+  const [isGoalInputVisible, setIsGoalInputVisible] = useState(false);
+  const [newGoalTitle, setNewGoalTitle] = useState('');
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [isTaskInputVisible, setIsTaskInputVisible] = useState(false);
+  const {tasks, setTasks} = useContext(TasksContext);
+
+
 
 
 
 
   const isActive = (path) => (location.pathname === path ? "bg-black dark:bg-blue-700 text-white" : "text-black dark:text-white");
+ 
+  const handleAddGoal = async () => {
+    if (newGoalTitle.trim() === '') return;
+    try {
+      const newGoal = await createGoal(newGoalTitle, '');
+      setGoals([...goals, newGoal]);
+      setNewGoalTitle('');
+      setIsGoalInputVisible(false);
+    } catch (error) {
+      console.error('Error adding goal:', error);
+    }
+  };
 
+  const handleAddTask = async () => {
+    if (newTaskTitle.trim() === '') return;
+    try {
+      const newTask = await createTask(newTaskTitle);
+      setTasks([...tasks, newTask]);
+      setNewTaskTitle('');
+      setIsTaskInputVisible(false);
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  }
 
   return (
-    <div className='fixed inset-y-0 transition-width duration-300 min-h-screen p-2 '>
-        <div className=' md:w-54 xl:w-64 h-full  bg-[#F7F2FA] rounded-xl flex flex-col px-2 py-4  '>
+    <div className='fixed inset-y-0 transition-width duration-300 min-h-screen  '>
+        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#F7F2FA]  flex flex-col px-2 py-4  '>
         <div className='w-10/12 p-2 inset-y-2 mb-2'>
         <h1 className='text-black fredoka-semibold xl:text-2xl lg:text-xl ml-3 mt-2 '>Kommitly</h1>
             </div>
@@ -27,7 +58,7 @@ const Sidebar = () => {
 
               <Link
                 to="/dashboard/home"
-                className={`flex items-center  p-3 md:text-sm xl:text-xs font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center  p-3 md:text-sm xl:text-xs  font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
                   "/home"
                 )}`}
               >
@@ -42,16 +73,31 @@ const Sidebar = () => {
                     strokeWidth="3"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="text-[#65558F]"
+                    className="text-[#65558F] icon-small"
                     >
                     <path d="M3 9.5L12 3l9 6.5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-11z"></path>
                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     </svg>
+                    <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#65558F"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[#65558F] icon-large"
+                >
+                  <path d="M3 9.5L12 3l9 6.5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-11z"></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
 
                 <span
                   className="ml-4 flex items-center justify-center"
                 >
-                  <p className='text-base text-[#4A4459] md:text-sm  text-center font-normal'>
+                  <p className='text-[#4A4459] md:text-sm xl:text-sm 2xl:text-lg  text-center font-normal'>
                   Home
                   </p>
                 </span>
@@ -60,25 +106,53 @@ const Sidebar = () => {
                
               </Link>
 
-              <ul className='mb-8 '>
+              <ul className='mb-2 '>
               <li className='w-full h-12'>
                 <Link to="/dashboard/goals" className="flex items-center p-2 text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                  <div className='flex w-11/12 px-2 justify-between'>
+                  <div className='flex w-full px-2 justify-between'>
                     <div className='flex items-center'>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#65558F"
-                        strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <svg 
+                      width="16" 
+                      height="16" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="#65558F"
+                      strokeWidth="3" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                      className="icon-small"
+                      >
+                      
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 3H8v4h8V3z"></path>
+                        <path d="M9 7v14"></path>
+                        <path d="M15 7v14"></path>
+                      </svg>
+                      <svg 
+                      width="20" 
+                      height="20" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="#65558F"
+                      strokeWidth="3" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                      className="icon-large"
+                      >
+                      
                         <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                         <path d="M16 3H8v4h8V3z"></path>
                         <path d="M9 7v14"></path>
                         <path d="M15 7v14"></path>
                       </svg>
 
-                      <span className="ml-4  md:text-sm text-[#4A4459] font-normal">
+                      <span className="ml-4  md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal">
                         Goals
                       </span> 
                     </div>
-                    <div className='flex  items-center rounded-full p-2 hover:bg-[#F7F2FA]' 
-                 style={{ boxShadow: '2px 2px 8.5px rgba(13, 39, 80, 0.16), -8px -8px 13.5px rgba(255,255,255,1) ' }}>
+                    <div className='flex  items-center rounded-full  p-2 hover:bg-[#F7F2FA]' 
+                 style={{ boxShadow: '2px 2px 8.5px rgba(13, 39, 80, 0.16), -8px -8px 13.5px rgba(255,255,255,1) ' }}
+                 onClick={() => setIsGoalInputVisible(!isGoalInputVisible)}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="10"
@@ -89,7 +163,22 @@ const Sidebar = () => {
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="text-[#65558F]"
+                      className="text-[#65558F] icon-small"
+                    >
+                      <path d="M9 2v16" strokeLinecap="round"></path>
+                      <path d="M2 9h16" strokeLinecap="round"></path>
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      stroke="#65558F"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-[#65558F] icon-large"
                     >
                       <path d="M9 2v16" strokeLinecap="round"></path>
                       <path d="M2 9h16" strokeLinecap="round"></path>
@@ -101,12 +190,24 @@ const Sidebar = () => {
                   </div>
                 </Link>
               </li>
+              {isGoalInputVisible && (
+                <li className='w-full h-12'>
+                  <input
+                    type="text"
+                    value={newGoalTitle}
+                    onChange={(e) => setNewGoalTitle(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddGoal()}
+                    className="w-full ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-xs font-normal text-[#4A4459] border-none focus:outline-none"
+                    placeholder="Enter new goal"
+                  />
+                </li>
+              )}
 
               {/* Dynamically Added Goals */}
               {goals.map((goal) => (
                 <li key={goal.id} className="w-full     ">
-                  <Link to={`/dashboard/goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                  <span className="ml-2 px-3 py-3 md:text-xs text-[#4A4459] font-normal truncate max-w-[200px] block">
+                  <Link to={`/dashboard/ai-goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
+                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block">
                   •  {goal.title}
                 </span>
 
@@ -186,7 +287,7 @@ const Sidebar = () => {
                     "/tasks"
                   )}`}
                 >
-                  <div className='flex w-11/12 px-2 justify-between'>
+                  <div className='flex w-full px-2 justify-between'>
                    <div className='flex items-center '>
                    <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +299,26 @@ const Sidebar = () => {
                     strokeWidth="3"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="text-[#65558F]"
+                    className="text-[#65558F] icon-small"
+                >
+                    <path d="M12 6h14"></path>
+                    <path d="M12 12h14"></path>
+                    <path d="M12 18h14"></path>
+                    <path d="M1 6l2 2 4-4"></path>
+                    <path d="M1 12l2 2 4-4 "></path>
+                    <circle cx="3" cy="19" r="1"></circle>
+                </svg>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#65558F"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-[#65558F] icon-large"
                 >
                     <path d="M12 6h14"></path>
                     <path d="M12 12h14"></path>
@@ -210,14 +330,16 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm  text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
                   Tasks
                   </p>
                 </span>
                    </div>
                    
                    <div className='flex items-center rounded-full p-2 hover:bg-[#F7F2FA] ' 
-                  style={{ boxShadow: '2px 2px 8.5px rgba(13, 39, 80, 0.16), -8px -8px 13.5px rgba(255,255,255,1) ' }}>
+                  style={{ boxShadow: '2px 2px 8.5px rgba(13, 39, 80, 0.16), -8px -8px 13.5px rgba(255,255,255,1) ' }} 
+                  onClick={() => setIsTaskInputVisible(!isTaskInputVisible)}>
+                  
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="10"
@@ -228,7 +350,22 @@ const Sidebar = () => {
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="text-[#65558F]"
+                      className="text-[#65558F] icon-small"
+                    >
+                      <path d="M9 2v16" strokeLinecap="round"></path>
+                      <path d="M2 9h16" strokeLinecap="round"></path>
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      stroke="#65558F"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-[#65558F] icon-large"
                     >
                       <path d="M9 2v16" strokeLinecap="round"></path>
                       <path d="M2 9h16" strokeLinecap="round"></path>
@@ -242,8 +379,31 @@ const Sidebar = () => {
               </Link>
 
             </li>
+            {tasks.map((task) => (
+                <li key={task.id} className="w-full     ">
+                  <Link to={`/dashboard/tasks/${task.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
+                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block">
+                  •  {task.title}
+                </span>
+
+                  </Link>
+                </li>
+              ))}
 
             </ul>
+
+            {isTaskInputVisible && (
+                <li className='w-full h-12'>
+                  <input
+                    type="text"
+                    value={newTaskTitle}
+                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
+                    className="w-full ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-xs font-normal text-[#4A4459] border-none focus:outline-none"
+                    placeholder="Enter new task"
+                  />
+                </li>
+              )}
             
             <Divider variant="middle" component="li" />
             <ul>
@@ -266,7 +426,23 @@ const Sidebar = () => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-[#65558F]"
+                  className="text-[#65558F] icon-small"
+                >
+                  <rect x="4" y="10" width="2" height="10" rx="1" ry="1"></rect>
+                  <rect x="10" y="6" width="2" height="14" rx="1" ry="1"></rect>
+                  <rect x="16" y="2" width="2" height="18" rx="1" ry="1"></rect>
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="#65558F" 
+                  stroke="#65558F"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[#65558F] icon-large"
                 >
                   <rect x="4" y="10" width="2" height="10" rx="1" ry="1"></rect>
                   <rect x="10" y="6" width="2" height="14" rx="1" ry="1"></rect>
@@ -276,7 +452,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm text-[#4A4459] font-normal'>
+                  <p className='mmd:text-sm xl:text-sm 2xl:text-lg text-[#4A4459] font-normal'>
                   Analytics
                   </p>
                 </span>
@@ -303,7 +479,26 @@ const Sidebar = () => {
                 strokeWidth="3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="text-[#65558F]"
+                className="text-[#65558F] icon-small"
+                >
+                <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
+                <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                
+                <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
+                </svg>
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#65558F"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-[#65558F] icon-large"
                 >
                 <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
                 <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
@@ -317,7 +512,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
                   Calendar
                   </p>
                 </span>
@@ -344,7 +539,21 @@ const Sidebar = () => {
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-[#65558F]"
+                  className="text-[#65558F] icon-small"
+                >
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#65558F"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[#65558F] icon-large"
                 >
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
@@ -352,7 +561,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
                   Notifications
                   </p>
                 </span>
@@ -383,7 +592,22 @@ const Sidebar = () => {
                         strokeWidth="3"
                         strokeLinecap="bevel"
                         strokeLinejoin="bevel"
-                        className="text-[#65558F]"
+                        className="text-[#65558F] icon-small"
+                    >
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#65558F"
+                        strokeWidth="3"
+                        strokeLinecap="bevel"
+                        strokeLinejoin="bevel"
+                        className="text-[#65558F] icon-large"
                     >
                         <circle cx="12" cy="12" r="3"></circle>
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -394,7 +618,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
                   Settings
                   </p>
                 </span>
@@ -407,7 +631,7 @@ const Sidebar = () => {
             
 
             </ul>
-            <div className='flex justify-center w-11/12  mt-16 mb-8'>
+            <div className='flex justify-center w-11/12  2xl:mt-28 xl:mt-16 mb-8'>
               
                  <Button className='w-7/12 flex gap-2  text-[#4A4459]' size="large"  style={{ height: '48px',  borderRadius: '8px', boxShadow: '6px 6px 12px rgba(13, 39, 80, 0.26), -6px -6px 16px rgba(255,255,255,1) ' }}>
             <svg
