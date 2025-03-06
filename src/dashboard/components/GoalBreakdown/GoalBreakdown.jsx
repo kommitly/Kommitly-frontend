@@ -104,7 +104,7 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
 
   return (
     <div className="mt-6 w-full flex justify-center p-4 flex-1 overflow-y-auto scrollbar-hide">
-      <div className='bg-[#ECE6F0] xl:w-6/12 md:w-8/12 rounded-4xl px-2 mt-8'>
+      <div className='bg-[#F4F1FF] xl:w-6/12 md:w-8/12 rounded-4xl px-2 mt-8'>
         <div className='flex items-center px-4 py-4 justify-between '>
           <div className='flex items-center gap-4'>
             <IconButton onClick={handleCreateGoal}>

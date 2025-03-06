@@ -12,7 +12,7 @@ import '@fontsource/roboto/700.css';
 import Home from './dashboard/pages/Home/Home';
 import AiGoal from './dashboard/pages/AiGoal/AiGoal';
 import Goals from './dashboard/pages/Goals/Goals';
-
+import Goal from './dashboard/pages/Goal/Goal';
 
 function App() {
  
@@ -29,6 +29,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="goals" element={<Goals />} />
             <Route path="ai-goal/:goalId" element={<AiGoal />} />
+            <Route path="goal/:goalId" element={<Goal />} />
 
            </Route>
 

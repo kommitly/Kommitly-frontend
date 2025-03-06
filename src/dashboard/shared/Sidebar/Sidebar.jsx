@@ -20,6 +20,8 @@ const Sidebar = () => {
 
 
 
+
+
   const isActive = (path) => (location.pathname === path ? "bg-black dark:bg-blue-700 text-white" : "text-black dark:text-white");
  
   const handleAddGoal = async () => {
@@ -48,9 +50,9 @@ const Sidebar = () => {
 
   return (
     <div className='fixed inset-y-0 transition-width duration-300 min-h-screen  '>
-        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#F7F2FA]  flex flex-col px-2 py-4  '>
+        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#F4F1FF]  flex flex-col px-2 py-4  '>
         <div className='w-10/12 p-2 inset-y-2 mb-2'>
-        <h1 className='text-black fredoka-semibold xl:text-2xl lg:text-xl ml-3 mt-2 '>Kommitly</h1>
+        <h1 className='text-black fredoka-bold xl:text-2xl lg:text-xl ml-3 mt-2 '>Kommitly</h1>
             </div>
 
             <div className="flex flex-col flex-grow mt-4 overflow-y-auto no-scrollbar">
@@ -58,7 +60,7 @@ const Sidebar = () => {
 
               <Link
                 to="/dashboard/home"
-                className={`flex items-center  p-3 md:text-sm xl:text-xs  font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center  p-3 md:text-sm xl:text-xs  font-medium rounded-xl transition-300 hover:bg-[#E8DEF8]  ${isActive(
                   "/home"
                 )}`}
               >
@@ -108,7 +110,7 @@ const Sidebar = () => {
 
               <ul className='mb-2 '>
               <li className='w-full h-12'>
-                <Link to="/dashboard/goals" className="flex items-center p-2 text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
+                <Link to="/dashboard/goals" className="group  flex items-center p-2 text-sm font-medium rounded-lg hover:bg-[#E8DEF8] ">
                   <div className='flex w-full px-2 justify-between'>
                     <div className='flex items-center'>
                       <svg 
@@ -146,7 +148,7 @@ const Sidebar = () => {
                         <path d="M15 7v14"></path>
                       </svg>
 
-                      <span className="ml-4  md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal">
+                      <span className="ml-4  md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]">
                         Goals
                       </span> 
                     </div>
@@ -202,18 +204,26 @@ const Sidebar = () => {
                   />
                 </li>
               )}
-
-              {/* Dynamically Added Goals */}
-              {goals.map((goal) => (
-                <li key={goal.id} className="w-full     ">
-                  <Link to={`/dashboard/ai-goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block">
-                  •  {goal.title}
-                </span>
-
+             {goals.goals?.map((goal) => (
+                <li key={goal.id} className="w-full">
+                  <Link to={`/dashboard/goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
+                    <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[200px] block">
+                      • {goal.title}
+                    </span>
                   </Link>
                 </li>
               ))}
+
+              {goals.ai_goals?.map((goal) => (
+                <li key={goal.id} className="w-full">
+                  <Link to={`/dashboard/ai-goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
+                    <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[200px] block">
+                      • {goal.title}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+
             </ul>
             
             {/* {<li className='w-full  h-12'>
@@ -408,7 +418,7 @@ const Sidebar = () => {
 
           
             
-            <Divider variant="middle" component="li" />
+            <Divider variant="middle" />
             <ul>
 
             <li className='w-full h-12 mt-4'>

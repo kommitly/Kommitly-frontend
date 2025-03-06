@@ -4,7 +4,7 @@ import { IconButton } from '@mui/material';
 
 export const Navbar = () => {
   return (
-    <div className="fixed   top-0 left-68 2xl:left-72 right-0 2xl:p-4 p-2 xl:p-3 flex items-center justify-end  z-10 bg-white">
+    <div className="fixed   top-0 left-64 2xl:left-70 right-0 2xl:p-4 p-2 xl:p-2.5 flex items-center justify-end  z-10 bg-white">
 
 
         <div className='flex items-center gap-4 '>

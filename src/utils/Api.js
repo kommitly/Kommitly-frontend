@@ -63,8 +63,8 @@ const fetchGoals = async () => {
         "Authorization": `Bearer ${token}`
       }
     });
-    const { goals, ai_goals } = response.data;
-    return [...goals, ...ai_goals];
+    return response.data; // Since response.data is already an array
+
   } catch (error) {
     console.error("Error fetching goals:", error.response?.data || error.message);
     throw error;
@@ -73,6 +73,23 @@ const fetchGoals = async () => {
 
 const fetchAiGoalById = async (goalId) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/ai-goal/`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching goal with ID ${goalId}:`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
+const fetchGoalById = async (goalId) => {
+  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/`;
   try {
     const response = await axios.get(url, {
       headers: {
@@ -173,4 +190,4 @@ const fetchTasks = async () => {
 }
 
 
-export { generateInsights, createAiGoal, createGoal, fetchGoals, fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateTaskStatus, createTask , fetchTasks};
+export { generateInsights, createAiGoal, createGoal, fetchGoals, fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateTaskStatus, fetchGoalById, createTask , fetchTasks};

@@ -53,7 +53,7 @@ const Home = () => {
       </div>
 
       <div className='flex w-full items-center justify-center flex-wrap gap-4 mt-8'>
-        <div className='w-6/12 bg-[#ECE6F0] p-2 z-10 rounded-full fixed bottom-16'>
+        <div className='w-6/12 bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-16'>
           <div className='flex items-center justify-between gap-4'>
             <div className='flex items-center w-full gap-4 ml-2'>
               <IconButton>
