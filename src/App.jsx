@@ -12,6 +12,7 @@ import '@fontsource/roboto/700.css';
 import Home from './dashboard/pages/Home/Home';
 import AiGoal from './dashboard/pages/AiGoal/AiGoal';
 import Goals from './dashboard/pages/Goals/Goals';
+import Tasks from './dashboard/pages/Tasks/Tasks';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
            <Route index element={<DashboardPage />} />
             <Route path="home" element={<Home />} />
             <Route path="goals" element={<Goals />} />
+            <Route path="tasks" element={<Tasks />} />
             <Route path="ai-goal/:goalId" element={<AiGoal />} />
 
            </Route>
