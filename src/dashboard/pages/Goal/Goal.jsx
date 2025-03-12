@@ -1,37 +1,37 @@
-import React from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useState, useEffect, useCallback } from 'react'
-import { fetchGoalById } from '../../../utils/Api'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchGoalById, createTask, fetchTasksByGoalId, deleteGoalById } from '../../../utils/Api';
+import { motion } from 'framer-motion';
+import survey from '../../../assets/survey.svg';
+import flag from '../../../assets/flag-dynamic-color.svg';
+import { GoalsContext } from '../../../context/GoalsContext';
+
+import {
+  Box, Table, TableBody, TableCell, TableContainer, TableHead,
+  TableRow, Paper, TextField, Button, Typography
+} from '@mui/material';
 
 const Goal = () => {
   const { goalId } = useParams();
-  const navigate = useNavigate();
   const [goal, setGoal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [taskCompletionStatus, setTaskCompletionStatus] = useState([]); // Track completion of each task
-  const [activeTaskIndex, setActiveTaskIndex] = useState(0);
-  const [newTask, setNewTask] = useState(''); // Track new task input
-  const [tasks, setTasks] = useState([]); // Track manually added tasks
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState('');
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [isGoalRenaming, setIsGoalRenaming] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const { removeGoal, addGoalToSidebar } = useContext(GoalsContext);
+  const inputGoalRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [taskMenuVisible, setTaskMenuVisible] = useState(null);
+
 
 
   const loadGoal = useCallback(async () => {
     try {
       const fetchedGoal = await fetchGoalById(goalId);
       setGoal(fetchedGoal);
-
-      // Check if ai_tasks is defined and is an array
-      if (Array.isArray(fetchedGoal.ai_tasks)) {
-        // Update taskCompletionStatus based on fetched goal data
-        setTaskCompletionStatus(fetchedGoal.ai_tasks.map(task => task.status === 'completed'));
-
-        const inProgressTaskIndex = fetchedGoal.ai_tasks.findIndex(task => task.status === 'in-progress');
-        setActiveTaskIndex(inProgressTaskIndex !== -1 ? inProgressTaskIndex : 0);
-      } else {
-        setTaskCompletionStatus([]);
-        setActiveTaskIndex(0);
-      }
     } catch (error) {
       setError(error.message);
     } finally {
@@ -39,25 +39,58 @@ const Goal = () => {
     }
   }, [goalId]);
 
-  useEffect(() => {
-    loadGoal();
-  }, [loadGoal]);
+  const loadTasks = useCallback(async () => {
+    try {
+      const fetchedTasks = await fetchTasksByGoalId(goalId);
+      setTasks(fetchedTasks);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  }, [goalId]);
 
-  const handleAddTask = (e) => {
+  useEffect(() => {
+    setGoal(null);
+    setTasks([]);
+    setLoading(true);
+    loadGoal();
+    loadTasks();
+  }, [goalId, loadGoal, loadTasks]);
+  
+  useEffect(() => {
+    if (isGoalRenaming) {
+      inputGoalRef.current?.focus();
+    }
+  }, [isGoalRenaming]);
+  
+  const handleAddTask = async (e) => {
     e.preventDefault();
-    if (newTask.trim()) {
-      setTasks([...tasks, { id: tasks.length + 1, title: newTask }]);
+    if (!newTask) return;
+
+    try {
+      const createdTask = await createTask({ goal: goalId, title: newTask });
+      setTasks((prevTasks) => [...prevTasks, createdTask]);
       setNewTask('');
+    } catch (error) {
+      console.error('Error creating task:', error);
     }
   };
 
-
-  console.log('Goal:', goal); // Debugging
+  const handleDelete = async () => {
+      try {
+        await deleteGoalById(goalId);
+        
+        removeGoal(goalId); // Remove from state immediately
+        navigate('/dashboard/goals');
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    
 
   if (loading) {
     return (
       <div className='w-full mt-8 flex min-h-screen'>
-        <div className="w-11/12 p-8 mt-8 py-8 flex-1 flex justify-center items-center overflow-y-auto scrollbar-hide max-h-[75vh] no-scrollbar">
+        <div className="w-11/12 p-8 mt-8 py-8 flex-1 flex justify-center items-center overflow-y-auto max-h-[75vh]">
           <motion.div className="flex space-x-2">
             {[0, 1, 2].map((i) => (
               <motion.div
@@ -74,72 +107,159 @@ const Goal = () => {
     );
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (error) return <div>Error: {error}</div>;
+  if (!goal) return <div>Goal not found</div>;
 
-  if (!goal) {
-    return (
-      <div className='w-full mt-8 flex min-h-screen'>
-        <div className="w-11/12 p-8 mt-8 py-8 flex-1 overflow-y-auto scrollbar-hide max-h-[75vh] no-scrollbar">
-          Goal not found
-        </div>
-      </div>
-    );
-  }
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
+  const toggleTaskMenu = (id) => {
+    setTaskMenuVisible(prevId => (prevId === id ? null : id));
+  };
+
+  
+  
+
+  const handleUpdate = async () => {
+    if (!newTitle.trim() || newTitle === goal.title) {
+      setIsGoalRenaming(false); // Cancel rename if empty or unchanged
+      return;
+    }
+  };
 
   return (
-    <div>
-      <h1 className='text-lg font-medium text-[#00000]'>
-      {goal.title}
-      </h1>
+    <div className='w-full  min-h-screen p-6'>
+      <div className='w-full'>
+        <div className='flex items-center justify-between gap-2'>
+        <div className='flex items-center gap-2'>
+        <img src={flag} alt="Flag" className="w-6 h-6" />
+        {isGoalRenaming ? (
+                    <input
+                      type="text"
+                      value={newTitle}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleUpdate()} // Only update on Enter key
+                      onBlur={handleUpdate} // Update when clicking away
+                      ref={inputGoalRef}
+                      className="md:text-md font-semibold border-b border-b-[#6246AC] p-1 focus:outline-none"
+                    />
+                  ) : (
+                    <h1 className='md:text-lg  xl:text-lg 2xl:text-xl font-medium'>{goal.title}</h1>
+                  )}
+        </div>
 
-      <div className='flex items-center gap-4 mt-4'>
-        <p>Category</p>
-        <p>{goal.category}</p>
 
-      </div>
+        <div className="relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#65558F"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="cursor-pointer"
+                onClick={toggleMenu}
+              >
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+               {menuVisible && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                    <button 
+                      onClick={() => {
+                        setIsGoalRenaming(true);
+                        setTimeout(() => inputGoalRef.current?.focus(), 0); // Ensure focus on input
+                      }} 
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F4F1FF]"
+                    >
+                      Rename
+                    </button>
+                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-sm text-[#006FDB] hover:bg-[#F4F1FF]">
+                      Pin to Sidebar
+                    </button>
 
-      <div className='gap-4 mt-4'>
-        <form onSubmit={handleAddTask} className='flex items-center gap-4'>
-          <input
-            type='text'
+                    <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-sm text-[#E60178] hover:bg-[#F4F1FF]">Delete</button>
+                  </div>
+                )}
+              </div>
+
+
+
+
+        </div>
+        
+
+      
+
+
+
+
+
+
+
+
+
+        <Typography variant="subtitle1" color="textSecondary">
+          Category: {goal.category}
+        </Typography>
+
+        <Typography variant="h6" mt={4}>Tasks</Typography>
+
+        {/* Add Task Form */}
+        <Box component="form" onSubmit={handleAddTask} display="flex" gap={2} mt={2}>
+          <TextField
+            label="New Task"
+            variant="outlined"
+            size="small"
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
-            placeholder='Add a task'
-            className='p-2 border border-gray-300 rounded-md'
           />
-          <button type='submit' className='bg-[#6246AC] text-white px-4 py-2 rounded-md'>
+          <Button type="submit" variant="contained" color="primary">
             Add Task
-          </button>
-        </form>
+          </Button>
+        </Box>
 
-        <div className='mt-4'>
-          {tasks.length > 0 ? (
-            tasks.map((task) => (
-              <div key={task.id} className='flex items-center gap-4'>
-                <input
-                  type='radio'
-                  id={`task-${task.id}`}
-                  name='task'
-                  value={task.id}
-                />
+        {/* Task Table */}
+        <TableContainer component={Paper} sx={{ mt: 3 }}>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: '#F4F1FF' }}>
+                <TableCell><strong>Task</strong></TableCell>
+                <TableCell><strong>Status</strong></TableCell>
+                <TableCell><strong>Due date</strong></TableCell>
+                <TableCell><strong>Last Updated</strong></TableCell>
 
-<label htmlFor={`task-${task.id}`} className='text-[#1D1B20]'>
-                  {task.title}
-                </label>
-              </div>
-            ))
-          ) : (
-            <p>No tasks added yet</p>
-          )}
-        </div>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tasks.length > 0 ? (
+                tasks.map((task) => (
+                  <TableRow key={task.id}>
+                    <TableCell>{task.title}</TableCell>
+                    <TableCell>{task.status}</TableCell>
+                    <TableCell>{task.due_date ? new Date(task.due_date).toLocaleString() : 'Not set'}</TableCell>
+                    <TableCell>{new Date(task.last_updated).toLocaleString()}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={3} align="center">No tasks added yet</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
 
-     
     
-      </div>
-  )
-}
+    </div>
+  );
+};
 
-export default Goal
+export default Goal;

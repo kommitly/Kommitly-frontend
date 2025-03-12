@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxNDU4NTI4LCJpYXQiOjE3NDA4NTM3MjgsImp0aSI6IjEyMjFlOTliMTMxNDQxYmU4YTZiMmQxNTJkYTkyOTQ5IiwidXNlcl9pZCI6IjA5MzIxOTgwLTk1NWItNGFkOS04MTE1LWI5YWQxZGM4ODY0NyJ9.klrBjFt24ec4VawF0tVMkUE6XbSt3l74-yTJpnQ2QYE";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMzU2NTg4LCJpYXQiOjE3NDE3NTE3ODgsImp0aSI6IjRmMzlhMzUzMGZkNjQ4ZTFhMGRjZmVkZDY0ZWY1MzE1IiwidXNlcl9pZCI6IjA5MzIxOTgwLTk1NWItNGFkOS04MTE1LWI5YWQxZGM4ODY0NyJ9.tUzk_2x2M6xdP5K3SLzGVyiG-OfiVTHX34zoxd_sagQ";
 
 
 const generateInsights = async (title, description) => {
@@ -120,6 +120,24 @@ const deleteAiGoalById = async (goalId) => {
   }
 };
 
+const deleteGoalById = async (goalId) => {
+  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/delete/`;
+  try {
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting goal with ID ${goalId}:`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
+
 const updateAiGoalById = async (goalId, title, description) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/update-ai-goal/`;
   const requestBody = { title, description };
@@ -137,7 +155,7 @@ const updateAiGoalById = async (goalId, title, description) => {
   }
 }
 
-const updateTaskStatus = async (taskId, updatedData) => {
+const updateAiTaskStatus = async (taskId, updatedData) => {
   const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update-ai-task/`;
   try {
     const response = await axios.patch(url, updatedData, {
@@ -153,6 +171,8 @@ const updateTaskStatus = async (taskId, updatedData) => {
     throw error;
   }
 }
+
+
 
 const createTask = async ({ goal, title}) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create/task/";
@@ -189,5 +209,37 @@ const fetchTasks = async () => {
   }
 }
 
+const deleteTaskById = async (taskId) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/delete/`;
+  try {
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting task with ID ${taskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
 
-export { generateInsights, createAiGoal, createGoal, fetchGoals, fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateTaskStatus, fetchGoalById, createTask , fetchTasks};
+const fetchTasksByGoalId = async (goalId) => {
+  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/tasks/`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching tasks for goal with ID ${goalId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+export { generateInsights, createAiGoal, createGoal, fetchGoals, fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus, fetchGoalById, createTask , fetchTasks, deleteGoalById, deleteTaskById, fetchTasksByGoalId};

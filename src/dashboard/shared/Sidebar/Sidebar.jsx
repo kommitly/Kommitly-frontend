@@ -1,19 +1,28 @@
 import React, { useContext , useState} from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Link, useLocation } from "react-router-dom";
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
-import { createGoal, createTask } from '../../../utils/Api';
+import { createGoal, createTask, deleteGoalById, deleteAiGoalById, deleteTaskById} from '../../../utils/Api';
 import { TasksContext } from '../../../context/TasksContext';
 
+
+
 const Sidebar = () => {
+  const { goalId } = useParams();
+  const { taskId } = useParams();
   const location = useLocation();
   const {goals, setGoals} = useContext(GoalsContext);
+  const {pinnedGoals, hiddenGoals, removeGoalFromSidebar } = useContext(GoalsContext);
   const [isGoalInputVisible, setIsGoalInputVisible] = useState(false);
   const [newGoalTitle, setNewGoalTitle] = useState('');
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [isTaskInputVisible, setIsTaskInputVisible] = useState(false);
-  const {tasks, setTasks} = useContext(TasksContext);
+  const {tasks,  pinnedTasks, setTasks,  hiddenTasks,  removeTaskFromSidebar,  addTaskToSidebar, removeTask } = useContext(TasksContext);
+  const { removeGoal } = useContext(GoalsContext);
+  const [menuVisible, setMenuVisible] = useState({});
+  const [taskMenuVisible, setTaskMenuVisible] = useState({});
 
 
 
@@ -28,13 +37,17 @@ const Sidebar = () => {
     if (newGoalTitle.trim() === '') return;
     try {
       const newGoal = await createGoal(newGoalTitle, '');
-      setGoals([...goals, newGoal]);
+      setGoals((prevGoals) => ({
+        ...prevGoals,
+        goals: [...prevGoals.goals, newGoal], // ✅ Correct way to update
+      }));
       setNewGoalTitle('');
       setIsGoalInputVisible(false);
     } catch (error) {
       console.error('Error adding goal:', error);
     }
   };
+  
 
   const handleAddTask = async () => {
     if (newTaskTitle.trim() === '') return;
@@ -47,6 +60,88 @@ const Sidebar = () => {
       console.error('Error adding task:', error);
     }
   }
+  const toggleMenu = (goalId) => {
+    setMenuVisible((prev) => ({ 
+      ...prev,
+      [goalId]: !prev[goalId]
+    }));
+  };
+
+  const toggleTaskMenu = (taskId) => {
+    setTaskMenuVisible((prev) => ({
+      ...prev,
+      [taskId]: !prev[taskId]
+    }));
+  };
+
+
+
+  const handleDelete = async (goalId) => {
+    try {
+      await deleteGoalById(goalId);
+
+      removeGoal(goalId);
+    } catch (error) {
+      console.error(`Error deleting goal with ID ${goalId}:`, error.response?.data || error.message );    
+    } 
+  }
+
+  const handleDeleteAiGoal = async (goalId) => {
+    try {
+      await deleteAiGoalById(goalId);
+      removeGoal(goalId); 
+    }
+    catch (error) {
+      console.error(`Error deleting goal with ID ${goalId}:`, error.response?.data || error.message );
+    }
+  }
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await deleteTaskById(taskId);
+      removeTask(taskId);
+    } catch (error) {
+      console.error(`Error deleting task with ID ${taskId}:`, error.response?.data || error.message);
+    }
+  }
+
+    // Get the last two AI goals that are not hidden
+  const recentAiGoals = goals.ai_goals
+  ?.filter(goal => !hiddenGoals.has(goal.id))
+  .slice(-2);
+
+  // Get pinned goals
+  const pinnedAiGoals = goals.ai_goals.filter(goal => pinnedGoals.has(goal.id));
+
+  // Merge pinned goals and recent AI goals (avoid duplicates)
+  const displayedAiGoals = [...new Set([...pinnedAiGoals, ...recentAiGoals])];
+
+  const recentTasks = tasks
+  ?.filter(task => !hiddenTasks.has(task.id))
+  .slice(-2);
+
+  const pinnedTasksList = tasks.filter(task => pinnedTasks.has(task.id));
+
+  const displayedTasks = [...new Set([...pinnedTasksList, ...recentTasks])];
+
+  const handleRemoveGoalFromSidebar = (goalId) => {
+    removeGoalFromSidebar(goalId);
+    setMenuVisible((prev) => {
+      const newState = { ...prev };
+      delete newState[goalId]; // Remove the goalId from menuVisible
+      return newState;
+    });
+  };
+
+  const handleRemoveTaskFromSidebar = (taskId) => {
+    removeTaskFromSidebar(taskId);
+    setTaskMenuVisible((prev) => {
+        const newState = { ...prev };
+        delete newState[taskId]; 
+        return newState;
+    });
+};
+
 
   return (
     <div className='fixed inset-y-0 transition-width duration-300 min-h-screen  '>
@@ -60,7 +155,7 @@ const Sidebar = () => {
 
               <Link
                 to="/dashboard/home"
-                className={`flex items-center  p-3 md:text-sm xl:text-xs  font-medium rounded-xl transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center group p-3 md:text-sm xl:text-xs  font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
                   "/home"
                 )}`}
               >
@@ -99,7 +194,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4 flex items-center justify-center"
                 >
-                  <p className='text-[#4A4459] md:text-sm xl:text-sm 2xl:text-lg  text-center font-normal'>
+                  <p className='text-[#4A4459] md:text-sm xl:text-sm 2xl:text-lg  text-center font-normal group-hover:text-[#FFFFFF]'>
                   Home
                   </p>
                 </span>
@@ -124,11 +219,11 @@ const Sidebar = () => {
                       strokeLinejoin="round"
                       className="icon-small"
                       >
-                      
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 3H8v4h8V3z"></path>
-                        <path d="M9 7v14"></path>
-                        <path d="M15 7v14"></path>
+                    
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                      <path d="M16 3H8v4h8V3z"></path>
+                      <path d="M9 7v14"></path>
+                      <path d="M15 7v14"></path>
                       </svg>
                       <svg 
                       width="20" 
@@ -204,23 +299,136 @@ const Sidebar = () => {
                   />
                 </li>
               )}
-             {goals.goals?.map((goal) => (
-                <li key={goal.id} className="w-full">
-                  <Link to={`/dashboard/goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                    <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[200px] block">
-                      • {goal.title}
-                    </span>
-                  </Link>
-                </li>
-              ))}
 
-              {goals.ai_goals?.map((goal) => (
-                <li key={goal.id} className="w-full">
-                  <Link to={`/dashboard/ai-goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                    <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[200px] block">
-                      • {goal.title}
+                {goals.goals?.slice(-2).filter(goal => !hiddenGoals.has(goal.id)).map((goal) => (
+                  <li key={goal.id} className="w-full relative group ">
+                    <Link
+                      to={`/dashboard/goal/${goal.id}`}
+                      className="flex items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] w-full z-0"
+                    >
+                      <span className="ml-2 px-3 py-3 z-0 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[180px] block group-hover:text-[#FFFFFF]">
+                         {goal.title}
+                      </span>
+                    </Link>
+
+                    {/* Three-dot menu icon */}
+                    <div className="absolute right-1 top-1/2 transform -translate-y-1/2 z-1000">
+                      <button
+                        className="p-1 text-[#4A4459] z-1000 hover:text-[#000000] opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents clicking the menu from triggering other actions
+                          toggleMenu(goal.id);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#65558F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="cursor-pointer"
+                        >
+                          <circle cx="12" cy="5" r="1"></circle>
+                          <circle cx="12" cy="12" r="1"></circle>
+                          <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                      </button>
+
+                      {/* Dropdown Menu (Only Shows When Clicked) */}
+                      {menuVisible[goal.id] && (
+                        <div className="absolute right-0 mt-2 w-42 bg-white shadow-lg rounded-md z-[100]">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-black hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveGoalFromSidebar(goal.id);
+                            }}
+                          >
+                            Remove from Sidebar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(goal.id);
+                            }}
+                          >
+                            Delete Goal
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+
+              {displayedAiGoals.map((goal)=> (
+                <li key={goal.id} className="w-full relative group">
+                  <Link to={`/dashboard/ai-goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] w-full z-0">
+                  <span className="ml-2 px-3 py-3 z-0 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[180px] block group-hover:text-[#FFFFFF]">
+                      {goal.title}
                     </span>
                   </Link>
+
+               
+                   <div className="absolute right-1 top-1/2 transform -translate-y-1/2 z-1000">
+                      <button
+                        className="p-1 text-[#4A4459] z-1000 hover:text-[#000000] opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents clicking the menu from triggering other actions
+                          toggleMenu(goal.id);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#65558F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="cursor-pointer"
+                        >
+                          <circle cx="12" cy="5" r="1"></circle>
+                          <circle cx="12" cy="12" r="1"></circle>
+                          <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                      </button>
+
+                      {/* Dropdown Menu (Only Shows When Clicked) */}
+                      {menuVisible[goal.id] && (
+                        <div className="absolute right-0 mt-2 w-42 bg-white shadow-lg rounded-md z-[100]">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-black hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveGoalFromSidebar(goal.id);
+                            }}
+                          >
+                            Remove from Sidebar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteAiGoal(goal.id);
+                            }}
+                          >
+                            Delete Goal
+                          </button>
+                        </div>
+                      )}
+
+                      </div>
+
+
+
+
                 </li>
               ))}
 
@@ -293,7 +501,7 @@ const Sidebar = () => {
             <li className='w-full mb-4 h-12'>
               <Link
                 to="/dashboard/tasks"
-                className={`flex items-center p-2 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8] ${isActive(
+                className={`flex items-center group p-2 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8] ${isActive(
                     "/tasks"
                   )}`}
                 >
@@ -340,7 +548,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
                   Tasks
                   </p>
                 </span>
@@ -403,14 +611,66 @@ const Sidebar = () => {
               )}
 
 
-            {tasks.map((task) => (
-                <li key={task.id} className="w-full     ">
-                  <Link to={`/dashboard/tasks/${task.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block">
-                  •  {task.title}
+                {displayedTasks.map((task)  => (
+                <li key={task.id} className="w-full relative group ">
+                  <Link to={`/dashboard/tasks/${task.id}`} className="flex group items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8]">
+                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block group-hover:text-[#FFFFFF]">
+                    {task.title}
                 </span>
 
                   </Link>
+                  <div className="absolute right-1 top-1/2 transform -translate-y-1/2 z-1000">
+                      <button
+                        className="p-1 text-[#4A4459] z-1000 hover:text-[#000000] opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents clicking the menu from triggering other actions
+                          toggleTaskMenu(task.id);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#65558F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="cursor-pointer"
+                        >
+                          <circle cx="12" cy="5" r="1"></circle>
+                          <circle cx="12" cy="12" r="1"></circle>
+                          <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                      </button>
+
+                      {/* Dropdown Menu (Only Shows When Clicked) */}
+                      {taskMenuVisible[task.id]  && (
+                        <div className="absolute right-0 mt-2 w-42 bg-white shadow-lg rounded-md z-[100]">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-black hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveTaskFromSidebar(task.id);
+                            }}
+                          >
+                            Remove from Sidebar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteTask(task.id);
+                            }}
+                          >
+                            Delete Task
+                          </button>
+                        </div>
+                      )}
+
+                      </div>
+
                 </li>
               ))}
 
@@ -424,7 +684,7 @@ const Sidebar = () => {
             <li className='w-full h-12 mt-4'>
               <Link
                 to="/dashboard/analytics"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center group  p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
                   "/analytics"
                 )}`}
               >
@@ -465,7 +725,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='mmd:text-sm xl:text-sm 2xl:text-lg text-[#4A4459] font-normal'>
+                  <p className='mmd:text-sm xl:text-sm 2xl:text-lg text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
                   Analytics
                   </p>
                 </span>
@@ -477,7 +737,7 @@ const Sidebar = () => {
             <li className='w-full h-12'>
               <Link
                 to="/dashboard/calendar"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center group  p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
                     "/calendar"
                 )}`}
               >
@@ -525,7 +785,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
                   Calendar
                   </p>
                 </span>
@@ -537,7 +797,7 @@ const Sidebar = () => {
             <li className='w-full h-12 mb-4'>
               <Link
                 to="/dashboard/notifications"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center  group p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
                     "/notifications"
                 )}`}
               >
@@ -574,7 +834,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
                   Notifications
                   </p>
                 </span>
@@ -589,7 +849,7 @@ const Sidebar = () => {
             <li className='w-full h-12 mt-4'>
               <Link
                 to="/settings"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center group p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
                     "/settings"
                 )}`}
               >
@@ -631,7 +891,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
                   Settings
                   </p>
                 </span>

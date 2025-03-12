@@ -1,7 +1,7 @@
 import  { useEffect, useState,useCallback, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateTaskStatus } from '../../../utils/Api'; // Adjust the import path as needed
+import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus } from '../../../utils/Api'; // Adjust the import path as needed
 import flag from '../../../assets/flag-dynamic-color.svg';
 import { GoDotFill } from "react-icons/go";
 import { Divider } from '@mui/material';
@@ -53,6 +53,7 @@ const AiGoal = () => {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const { removeGoal } = useContext(GoalsContext);
+  const { addGoalToSidebar} = useContext(GoalsContext);
   const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [taskMenuVisible, setTaskMenuVisible] = useState(false);
@@ -93,7 +94,7 @@ const AiGoal = () => {
     try {
       const taskId = goal.ai_tasks[activeTaskIndex].id;
 
-      const response = await updateTaskStatus(taskId, { status: "completed" });
+      const response = await updateAiTaskStatus(taskId, { status: "completed" });
 
     if (!response.ok) {
       throw new Error("Failed to update task");
@@ -327,7 +328,7 @@ const AiGoal = () => {
                 <circle cx="12" cy="19" r="1"></circle>
               </svg>
                {menuVisible && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                     <button 
                       onClick={() => {
                         setIsRenaming(true);
@@ -337,6 +338,10 @@ const AiGoal = () => {
                     >
                       Rename
                     </button>
+                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-sm text-[#006FDB] hover:bg-[#F4F1FF]">
+                      Pin to Sidebar
+                    </button>
+
                     <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-sm text-[#E60178] hover:bg-[#F4F1FF]">Delete</button>
                   </div>
                 )}
