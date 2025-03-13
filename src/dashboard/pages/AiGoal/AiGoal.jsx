@@ -328,21 +328,21 @@ const AiGoal = () => {
                 <circle cx="12" cy="19" r="1"></circle>
               </svg>
                {menuVisible && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                     <button 
                       onClick={() => {
                         setIsRenaming(true);
                         setTimeout(() => inputRef.current?.focus(), 0); // Ensure focus on input
                       }} 
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F4F1FF]"
+                      className="block w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-[#F4F1FF]"
                     >
                       Rename
                     </button>
-                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-sm text-[#006FDB] hover:bg-[#F4F1FF]">
+                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-xs text-[#006FDB] hover:bg-[#F4F1FF]">
                       Pin to Sidebar
                     </button>
 
-                    <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-sm text-[#E60178] hover:bg-[#F4F1FF]">Delete</button>
+                    <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-xs text-[#E60178] hover:bg-[#F4F1FF]">Delete</button>
                   </div>
                 )}
               </div>

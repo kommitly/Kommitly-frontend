@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation , useParams} from "react-router-dom";
 
 import { motion } from 'framer-motion';
 import analysis from '../../../assets/analyze-data.svg';
 import aiGoals from '../../../assets/goals.svg';
+import { createGoal } from '../../../utils/Api';
 import CircularProgress, {
 
 
@@ -16,6 +17,7 @@ import GoalsPieChart from './GoalsPieChart'; // Import the PieChart component
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
 import { IoSearch } from "react-icons/io5";
+import Backdrop from '@mui/material/Backdrop';
 
 function CircularProgressWithLabel(props) {
   return (
@@ -69,20 +71,30 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 
 const Goals = () => {
+  const goalId = useParams();
   const location = useLocation();
-  const { goals } = useContext(GoalsContext);
+  const navigate = useNavigate();
+  const { goals, addGoal } = useContext(GoalsContext);
   const [loading, setLoading] = useState(true);
   const [selectedAiCategory, setSelectedAiCategory] = useState('recentlyAdded');
   const [selectedCategory, setSelectedCategory] = useState('recentlyAdded');
   const goalsContainerRef = useRef(null);
   const aiGoalsContainerRef = useRef(null);
   const [selectedPeriod, setSelectedPeriod] = useState('yearly');
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     if (goals.goals && goals.ai_goals) {
       setLoading(false);
     }
   }, [goals]);
+
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const filterAiGoals = (category) => {
     switch (category) {
@@ -120,11 +132,36 @@ const Goals = () => {
         return [...goals.ai_goals, ...goals.goals].filter(goal => goal.category === 'yearly');
       case 'monthly':
         return [...goals.ai_goals, ...goals.goals].filter(goal => goal.category === 'monthly');
+      case 'weekly':
+        return [...goals.ai_goals, ...goals.goals].filter(goal => goal.category === 'weekly');
      
       default:
         return [];
     }
   };
+
+  const openModal = () => {
+    setOpen(true);
+  };
+
+  const handleAddGoal = async () => {
+    if (!title || !category) {
+      alert("Please enter both title and category!");
+      return;
+    }
+  
+    try {
+      const newGoal = await createGoal(title, category); // Ensure this returns the goal object with an ID
+      addGoal(newGoal); // Add the new goal to the context
+      setOpen(false);
+      navigate(`/dashboard/goal/${newGoal.id}`); // Use newGoal.id instead of undefined goal.id
+    } catch (error) {
+      console.error("Error creating goal:", error);
+    }
+
+
+  };
+  
 
   const scrollGoals = (direction) => {
     if (goalsContainerRef.current) {
@@ -138,6 +175,7 @@ const Goals = () => {
       aiGoalsContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
+
 
   if (loading) {
     return (
@@ -166,6 +204,75 @@ const Goals = () => {
 
   return (
     <div className='w-full  grid gap-1 grid-cols-12  flex min-h-screen'>
+       <Backdrop
+          sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+          open={open}
+          onClick={handleClose} // Clicking outside should close it
+        >
+          <div 
+            className="bg-white w-4/12 p-6 rounded-lg shadow-lg text-center" 
+            onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
+          >
+            <div className='flex w-full mb-4 justify-end'>
+            <div className='flex w-2/3 items-center justify-between'>
+            <h1 className='text-xl font-bold text-[#6F2DA8] mt-4 flex items-center justify-center gap-2'>
+              New Goal
+            </h1>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="cursor-pointer"
+              onClick={handleClose}
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>  
+            
+
+
+
+            </div>
+
+            </div>
+            
+           
+
+            <div className="flex items-center mb-4 gap-4">
+              <p className='text-sm text-start w-20 text-[#000000]'>Title</p>
+              <input
+                type="text"
+                placeholder="Enter goal title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 border text-black border-gray-200 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <div className="flex items-center mb-4 gap-4">
+              <p className='text-sm w-20 text-[#000000]'>Category</p>
+              <input
+                type="text"
+                placeholder="Weekly, Monthly, Yearly"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full p-2 border border-gray-200 rounded-lg text-black focus:outline-none"
+              />
+            </div>
+
+            <button onClick={handleAddGoal} className="mt-4 px-4 py-2 bg-[#6200EE] text-white rounded-lg">
+              Add Goal
+            </button>
+          
+          </div>
+        </Backdrop>
+
       <div className="col-span-8 flex-1 overflow-y-auto scrollbar-hide  no-scrollbar">
         <div className='flex items-center justify-between '>
        <div>
@@ -180,7 +287,7 @@ const Goals = () => {
         </span>
         <span role="img" aria-label="waving hand" className='ml-2'>
     👋
-  </span>
+        </span>
        </h1>
         <p className='text-[#2C2C2C] font-light text-xs'>
           Let's take a dive into your goals
@@ -196,8 +303,8 @@ const Goals = () => {
         <div className='w-full container h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] p-8 mt-4'>
           <div className='space-y-4'>
             <h1 className='text-2xl font-semibold'>Manage your Goals</h1>
-            <button className='bg-[#6246AC] flex items-center text-sm font-light text-white px-4 gap-2 py-2 rounded-md'>
-                           <svg
+            <button onClick={openModal}  className='bg-[#6246AC] flex items-center text-sm font-light text-white px-4 gap-2 py-2 rounded-md'>
+                <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -248,8 +355,8 @@ const Goals = () => {
           </button>
           <div ref={aiGoalsContainerRef} className='flex gap-2 overflow-x-auto no-scrollbar  w-full'>
             {filteredAiGoals.map((goal) => (
-              <Link to={`/dashboard/ai-goal/${goal.id}`}>
-              <li key={goal.id} className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  rounded-lg'>
+              <Link key={goal.id} to={`/dashboard/ai-goal/${goal.id}`}>
+              <li  className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  rounded-lg'>
                 <div className='flex w-full items-center gap-2 p-2'>
                   <div className='w-1/3 bg-white rounded-lg p-4'>
                    <img src={aiGoals} alt="goals"  className='h-20'/>
@@ -293,18 +400,18 @@ const Goals = () => {
           </div>
           <button onClick={() => scrollAiGoals('right')} className='absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 w-10 h-10 p-2 rounded-full cursor-pointer'>
           <svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="24"
-  height="24"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  strokeWidth="2"
-  strokeLinecap="round"
-  strokeLinejoin="round"
->
-  <polyline points="9 18 15 12 9 6" />
-</svg>
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
           </button>
         </div>
 
@@ -340,8 +447,8 @@ const Goals = () => {
           </button>
           <div ref={goalsContainerRef} className='flex gap-2 overflow-x-auto no-scrollbar  w-full'>
             {filteredGoals.map((goal) => (
-              <Link to={`/dashboard/goal/${goal.id}`}>
-              <li key={goal.id} className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  rounded-lg'>
+              <Link key={goal.id} to={`/dashboard/goal/${goal.id}`}>
+              <li className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  rounded-lg'>
                 <div className='flex w-full items-center gap-2 p-2'>
                   <div className='w-1/3 bg-white rounded-lg p-4'>
                    <img src={aiGoals} alt="goals"  className='h-20'/>
@@ -427,9 +534,10 @@ const Goals = () => {
        <div className='flex w-1/2 bg-gray-200 rounded-full justify-center '>
             <button onClick={() => setSelectedPeriod('yearly')} className={`px-4 font-light cursor-pointer py-1 rounded-full ${selectedPeriod === 'yearly' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Yearly</button>
             <button onClick={() => setSelectedPeriod('monthly')} className={`px-4 font-light py-1  cursor-pointer rounded-full ${selectedPeriod === 'monthly' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Monthly</button>
+            <button onClick={() => setSelectedPeriod('weekly')} className={`px-4 font-light py-1  cursor-pointer rounded-full ${selectedPeriod === 'weekly' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Weekly</button>
         </div>
        </div>
-        <ul className='bg-white p-4 rounded-lg'>
+        <ul className='bg-white p-4 rounded-lg max-h-[35vh] overflow-y-auto scrollbar-hide no-scrollbar'>
           {filteredPeriods.map((goal, index) => (
             <>
             <li key={goal.id} className='bg-white p-4 border-l border-l-2 border-l-[#4F378A] rounded-lg  ' style={{ boxShadow: '2px 3px 3px 2px rgba(101, 85, 143, 0.2)' }}>

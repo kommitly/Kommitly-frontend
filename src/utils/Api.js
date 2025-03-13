@@ -37,9 +37,10 @@ const createAiGoal = async (ai_goal, ai_tasks) => {
   }
 };
 
-const createGoal = async (title, description = '') => {
+
+const createGoal = async (title, category) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create/goal/";
-  const requestBody = { title, description };
+  const requestBody = { title, category };
   try {
     const response = await axios.post(url, requestBody, {
       headers: {
@@ -50,9 +51,11 @@ const createGoal = async (title, description = '') => {
     return response.data;
   } catch (error) {
     console.error("Error creating goal:", error.response?.data || error.message);
+    alert(`Error: ${JSON.stringify(error.response?.data)}`); // Show error to user
     throw error;
   }
 };
+
 
 const fetchGoals = async () => {
   const url = "https://kommitly-backend.onrender.com/api/goals/user-goals/";
@@ -140,6 +143,23 @@ const deleteGoalById = async (goalId) => {
 
 const updateAiGoalById = async (goalId, title, description) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/update-ai-goal/`;
+  const requestBody = { title, description };
+  try {
+    const response = await axios.patch(url, requestBody, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating goal with ID ${goalId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+const updateGoalById = async (goalId, title, description) => {
+  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/update-goal/`;
   const requestBody = { title, description };
   try {
     const response = await axios.patch(url, requestBody, {
