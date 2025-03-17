@@ -9,7 +9,7 @@ import Goals from "./dashboard/pages/Goals/Goals";
 import Goal from "./dashboard/pages/Goal/Goal";
 import LandingPage from "./landing-page/LandingPage";
 import Signup from "./landing-page/Signup";
-import EmailVerification from "./landing-page/EmailVerification";
+import EmailVerificationCheck from "./landing-page/EmailVerificationCheck";
 import Login from "./landing-page/Login";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/verify/:token" element={<EmailVerification />} />
+        <Route path="/verify-email/:token" element={<EmailVerificationCheck />} />
 
         {/* ✅ Correct way to wrap ProtectedRoute */}
         <Route

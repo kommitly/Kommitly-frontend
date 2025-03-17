@@ -9,41 +9,34 @@ const EmailVerificationCheck = () => {
   const [error, setError] = useState(null);
   const { login } = useContext(AuthContext);
   const { token } = useParams();
-  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    // Initialize WebSocket connection
-    const newSocket = io("https://kommitly-backend.onrender.com", {
-      query: { token: token },
-    });
+    const socket = io(`ws://kommitly-backend.onrender.com/ws/verify/${token}/`);
 
-    setSocket(newSocket);
-
-    newSocket.on("connect", () => {
+    socket.on("connect", () => {
       console.log("WebSocket connected");
     });
 
-    newSocket.on("verification_status", (data) => {
-      if (data.verified) {
+    socket.on("message", (data) => {
+      const parsedData = JSON.parse(data);
+      if (parsedData.verified) {
         setLoading(false);
-        login(data.token); // Assuming backend sends a new token
+        login(token); // Authenticate with the token.
         navigate("/dashboard/home");
       } else {
         setLoading(false);
-        setError("Verification failed.");
+        setError(parsedData.message);
       }
     });
 
-    newSocket.on("connect_error", (err) => {
+    socket.on("connect_error", (err) => {
       console.error("WebSocket connection error:", err);
       setLoading(false);
       setError("Error connecting to verification server.");
     });
 
     return () => {
-      if (newSocket) {
-        newSocket.disconnect();
-      }
+      socket.disconnect();
     };
   }, [token, login, navigate]);
 
