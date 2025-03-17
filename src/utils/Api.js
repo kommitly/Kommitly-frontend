@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMzU2NTg4LCJpYXQiOjE3NDE3NTE3ODgsImp0aSI6IjRmMzlhMzUzMGZkNjQ4ZTFhMGRjZmVkZDY0ZWY1MzE1IiwidXNlcl9pZCI6IjA5MzIxOTgwLTk1NWItNGFkOS04MTE1LWI5YWQxZGM4ODY0NyJ9.tUzk_2x2M6xdP5K3SLzGVyiG-OfiVTHX34zoxd_sagQ";
+// Function to get token from localStorage
+const getToken = () => localStorage.getItem("token");
 
 
 const generateInsights = async (title, description) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/generate-ai-insights/";
   const requestBody = { title, description };
   try {
+    const token = getToken();
     const response = await axios.post(url, requestBody, {
       headers: {
         "Content-Type": "application/json",
@@ -24,6 +26,7 @@ const createAiGoal = async (ai_goal, ai_tasks) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create-goal-ai/";
   const requestBody = { ai_goal, ai_tasks };
   try {
+    const token = getToken();
     const response = await axios.post(url, requestBody, {
       headers: {
         "Content-Type": "application/json",
@@ -42,6 +45,7 @@ const createGoal = async (title, category) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create/goal/";
   const requestBody = { title, category };
   try {
+    const token = getToken();
     const response = await axios.post(url, requestBody, {
       headers: {
         "Content-Type": "application/json",
@@ -60,6 +64,7 @@ const createGoal = async (title, category) => {
 const fetchGoals = async () => {
   const url = "https://kommitly-backend.onrender.com/api/goals/user-goals/";
   try {
+    const token = getToken();
     const response = await axios.get(url, {
       headers: {
         "Content-Type": "application/json",
@@ -77,6 +82,7 @@ const fetchGoals = async () => {
 const fetchAiGoalById = async (goalId) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/ai-goal/`;
   try {
+    const token = getToken();
     const response = await axios.get(url, {
       headers: {
         "Content-Type": "application/json",
@@ -94,6 +100,7 @@ const fetchAiGoalById = async (goalId) => {
 const fetchGoalById = async (goalId) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/`;
   try {
+    const token = getToken();
     const response = await axios.get(url, {
       headers: {
         "Content-Type": "application/json",
@@ -110,6 +117,7 @@ const fetchGoalById = async (goalId) => {
 const deleteAiGoalById = async (goalId) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/delete-ai-goal/`;
   try {
+    const token = getToken();
     const response = await axios.delete(url, {
       headers: {
         "Content-Type": "application/json",
@@ -126,6 +134,7 @@ const deleteAiGoalById = async (goalId) => {
 const deleteGoalById = async (goalId) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/delete/`;
   try {
+    const token = getToken();
     const response = await axios.delete(url, {
       headers: {
         "Content-Type": "application/json",
@@ -145,6 +154,7 @@ const updateAiGoalById = async (goalId, title, description) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/update-ai-goal/`;
   const requestBody = { title, description };
   try {
+    const token = getToken();
     const response = await axios.patch(url, requestBody, {
       headers: {
         "Content-Type": "application/json",
@@ -162,6 +172,7 @@ const updateGoalById = async (goalId, title, description) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/update-goal/`;
   const requestBody = { title, description };
   try {
+    const token = getToken();
     const response = await axios.patch(url, requestBody, {
       headers: {
         "Content-Type": "application/json",
@@ -178,6 +189,7 @@ const updateGoalById = async (goalId, title, description) => {
 const updateAiTaskStatus = async (taskId, updatedData) => {
   const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update-ai-task/`;
   try {
+    const token = getToken();
     const response = await axios.patch(url, updatedData, {
       headers: {
         "Content-Type": "application/json",
@@ -198,6 +210,7 @@ const createTask = async ({ goal, title}) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create/task/";
   const requestBody = { goal, title };
   try {
+    const token = getToken();
     const response = await axios.post(url, requestBody, {
       headers: {
         "Content-Type": "application/json",
@@ -215,6 +228,7 @@ const createTask = async ({ goal, title}) => {
 const fetchTasks = async () => {  
   const url = "https://kommitly-backend.onrender.com/api/tasks/";
   try {
+    const token = getToken();
     const response = await axios.get(url, {
       headers: {
         "Content-Type": "application/json",
@@ -232,6 +246,7 @@ const fetchTasks = async () => {
 const deleteTaskById = async (taskId) => {
   const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/delete/`;
   try {
+    const token = getToken();
     const response = await axios.delete(url, {
       headers: {
         "Content-Type": "application/json",
@@ -248,6 +263,7 @@ const deleteTaskById = async (taskId) => {
 const fetchTasksByGoalId = async (goalId) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/tasks/`;
   try {
+    const token = getToken();
     const response = await axios.get(url, {
       headers: {
         "Content-Type": "application/json",

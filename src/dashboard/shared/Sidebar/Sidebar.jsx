@@ -81,6 +81,7 @@ const Sidebar = () => {
       await deleteGoalById(goalId);
 
       removeGoal(goalId);
+      
     } catch (error) {
       console.error(`Error deleting goal with ID ${goalId}:`, error.response?.data || error.message );    
     } 
@@ -141,6 +142,16 @@ const Sidebar = () => {
         return newState;
     });
 };
+
+const handleLogout = () => {
+  // Clear authentication tokens or user session
+  localStorage.removeItem("authToken"); // Adjust based on how you're storing auth info
+  sessionStorage.removeItem("authToken");
+
+  // Redirect to login page or homepage
+  window.location.href = "/login"; // Adjust the path as needed
+};
+
 
 
   return (
@@ -925,7 +936,7 @@ const Sidebar = () => {
                 <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
     
-               <span className='text-[#4A4459] md:text-sm font-semibold'>
+               <span onClick={handleLogout} className='text-[#4A4459] md:text-sm font-semibold'>
                Logout
 
                </span>

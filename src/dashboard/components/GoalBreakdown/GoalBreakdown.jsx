@@ -86,7 +86,11 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
     try {
       const response = await createAiGoal(goalData, taskData);
       console.log("Goal Creation API Response:", response); // Debugging
-      setGoals((prevGoals) => [...prevGoals, response.ai_goal]);
+      setGoals((prevGoals) => ({
+  ...prevGoals,
+  ai_goals: [...prevGoals.ai_goals, response.ai_goal], // Append to ai_goals array
+}));
+
       navigate(`/dashboard/ai-goal/${response.ai_goal.id}`);
     } catch (error) {
       console.error('Error creating goal:', error);

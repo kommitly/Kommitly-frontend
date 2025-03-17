@@ -193,6 +193,7 @@ const AiGoal = () => {
       await deleteAiGoalById(goalId);
       
       removeGoal(goalId); // Remove from state immediately
+      
       navigate('/dashboard/goals');
     } catch (error) {
       setError(error.message);

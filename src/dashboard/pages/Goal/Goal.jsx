@@ -127,6 +127,15 @@ const Goal = () => {
       setIsGoalRenaming(false); // Cancel rename if empty or unchanged
       return;
     }
+
+     try {
+          await updateGoalById(goalId, newTitle, goal.description);
+          setGoal((prevGoal) => ({ ...prevGoal, title: newTitle }));
+          setIsGoalRenaming(false);
+          setMenuVisible(false);
+        } catch (error) {
+          setError(error.message);
+        }
   };
 
   return (
@@ -204,10 +213,10 @@ const Goal = () => {
 
 
 
-
+{/* {
         <Typography variant="subtitle1" color="textSecondary">
           Category: {goal.category}
-        </Typography>
+        </Typography>} */}
 
         <Typography variant="h6" mt={4}>Tasks</Typography>
 

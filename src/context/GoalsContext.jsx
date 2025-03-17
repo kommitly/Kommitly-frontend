@@ -39,12 +39,14 @@ export const GoalsProvider = ({ children }) => {
     }));
   };
 
+
   const removeGoal = (goalId) => {
     setGoals((prevGoals) => ({
-      ...prevGoals,
       goals: prevGoals.goals.filter((goal) => goal.id !== goalId),
+      ai_goals: prevGoals.ai_goals.filter((goal) => goal.id !== goalId), // Ensure AI goals update
     }));
   };
+  
 
   // Hide goal from sidebar without modifying setGoals
   const removeGoalFromSidebar = (goalId) => {

@@ -1,42 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import DashboardPage from './dashboard/pages/DashboardPage';
-import { Route, Routes, Navigate } from "react-router-dom";
-import DashboardLayout from './DashboardLayout';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import Home from './dashboard/pages/Home/Home';
-import AiGoal from './dashboard/pages/AiGoal/AiGoal';
-import Goals from './dashboard/pages/Goals/Goals';
-import Goal from './dashboard/pages/Goal/Goal';
+import { Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./landing-page/ProtectedRoute";
+import DashboardLayout from "./DashboardLayout";
+import DashboardPage from "./dashboard/pages/DashboardPage";
+import Home from "./dashboard/pages/Home/Home";
+import AiGoal from "./dashboard/pages/AiGoal/AiGoal";
+import Goals from "./dashboard/pages/Goals/Goals";
+import Goal from "./dashboard/pages/Goal/Goal";
+import LandingPage from "./landing-page/LandingPage";
+import Signup from "./landing-page/Signup";
+import EmailVerification from "./landing-page/EmailVerification";
+import Login from "./landing-page/Login";
 
 function App() {
- 
-
   return (
-    <div className=''>
+    <AuthProvider>
       <Routes>
- 
-      <Route
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/verify/:token" element={<EmailVerification />} />
+
+        {/* ✅ Correct way to wrap ProtectedRoute */}
+        <Route
           path="/dashboard/*"
-          element= {<DashboardLayout />}
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
         >
-           <Route index element={<DashboardPage />} />
-            <Route path="home" element={<Home />} />
-            <Route path="goals" element={<Goals />} />
-            <Route path="ai-goal/:goalId" element={<AiGoal />} />
-            <Route path="goal/:goalId" element={<Goal />} />
-
-           </Route>
-
+          <Route index element={<DashboardPage />} />
+          <Route path="home" element={<Home />} />
+          <Route path="goals" element={<Goals />} />
+          <Route path="ai-goal/:goalId" element={<AiGoal />} />
+          <Route path="goal/:goalId" element={<Goal />} />
+        </Route>
       </Routes>
-
-    </div>
-  )
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

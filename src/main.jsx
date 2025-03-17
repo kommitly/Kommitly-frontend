@@ -9,10 +9,12 @@ import { GoalsProvider } from './context/GoalsContext';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { TasksProvider } from './context/TasksContext.jsx'  
+import { AuthProvider } from './context/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-   <BrowserRouter>
+  <BrowserRouter> {/* Router comes first */}
+    <AuthProvider> {/* Now inside the Router */}
       <GoalsProvider> 
         <TasksProvider>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -20,6 +22,7 @@ createRoot(document.getElementById('root')).render(
           </LocalizationProvider>
         </TasksProvider>
       </GoalsProvider>
-    </BrowserRouter>
-  </StrictMode>,
+    </AuthProvider>
+  </BrowserRouter>
+</StrictMode>,
 )
