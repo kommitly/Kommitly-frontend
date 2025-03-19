@@ -37,11 +37,7 @@ const Signup = () => {
     }
   };
 
-  // Function to handle redirection after verification
-  const handleVerificationComplete = () => {
-    navigate("/dashboard/home");
-  };
-
+ 
   return (
     <div className="flex items-center h-screen">
       <div className="w-1/2 h-full bg-[#6F2DA8] flex flex-col items-center justify-center">
@@ -55,10 +51,10 @@ const Signup = () => {
         <h2 className="text-2xl font-bold">Sign Up</h2>
         {message && <p className="text-red-500">{message}</p>}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input type="text" name="first_name" placeholder="First Name" onChange={handleChange} required />
-          <input type="text" name="last_name" placeholder="Last Name" onChange={handleChange} required />
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+          <input type="text" name="first_name" placeholder="First Name"  value={formData.first_name} onChange={handleChange} required />
+          <input type="text" name="last_name" placeholder="Last Name" value={formData.last_name} onChange={handleChange} required />
+          <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+          <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
           <button type="submit" className="bg-[#6F2DA8] text-white px-4 py-2 rounded">Sign Up</button>
         </form>
 
@@ -66,15 +62,7 @@ const Signup = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-md">
               <p>Signup successful! Please check your email to verify your account.</p>
-              <button
-                className="mt-4 bg-[#6F2DA8] text-white px-4 py-2 rounded"
-                onClick={() => {
-                  setDialogOpen(false);
-                  handleVerificationComplete(); // Redirect after verification
-                }}
-              >
-                Verification Complete
-              </button>
+             
             </div>
           </div>
         )}

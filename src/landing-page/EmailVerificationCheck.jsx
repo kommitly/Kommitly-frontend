@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { io } from "socket.io-client";
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import { AuthContext } from '../context/AuthContext'; // Adjust path as needed
 
 const EmailVerificationCheck = () => {
   const navigate = useNavigate();
@@ -10,22 +10,36 @@ const EmailVerificationCheck = () => {
   const { login } = useContext(AuthContext);
   const { token } = useParams();
 
+  console.log("Token received:", token);
+
   useEffect(() => {
-    const socket = io(`ws://kommitly-backend.onrender.com/ws/verify/${token}/`);
+    if (!token) {
+      setError("Verification token missing.");
+      setLoading(false);
+      return;
+    }
+
+    const socket = io(`wss://kommitly-backend.onrender.com/ws/verify/${token}/`);
 
     socket.on("connect", () => {
       console.log("WebSocket connected");
     });
 
-    socket.on("message", (data) => {
-      const parsedData = JSON.parse(data);
-      if (parsedData.verified) {
+    socket.on("user_verified", (data) => {
+      try {
+        const parsedData = JSON.parse(data);
+        if (parsedData.verified) {
+          setLoading(false);
+          login(parsedData.auth_token); // Use actual auth token
+          navigate("/dashboard/home");
+        } else {
+          setLoading(false);
+          setError(parsedData.message);
+        }
+      } catch (e) {
+        console.error("Error parsing verification data:", e);
         setLoading(false);
-        login(token); // Authenticate with the token.
-        navigate("/dashboard/home");
-      } else {
-        setLoading(false);
-        setError(parsedData.message);
+        setError("Invalid verification response.");
       }
     });
 
