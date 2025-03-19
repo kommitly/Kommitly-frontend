@@ -19,7 +19,8 @@ const EmailVerificationCheck = () => {
       return;
     }
 
-    const socket = io(`wss://kommitly-backend.onrender.com/ws/verify/${token}/`);
+    const socket = new WebSocket(`wss://kommitly-backend.onrender.com/ws/verify/${token}/`);
+
 
     socket.on("connect", () => {
       console.log("WebSocket connected");
