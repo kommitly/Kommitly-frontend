@@ -25,7 +25,7 @@ const EmailVerificationCheck = () => {
       console.log("WebSocket connected");
     });
 
-    socket.on("user_verified", (data) => {
+    socket.on("message", (data) => {
       try {
         const parsedData = JSON.parse(data);
         if (parsedData.verified) {
