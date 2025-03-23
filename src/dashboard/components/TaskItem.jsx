@@ -1,11 +1,12 @@
 import { CheckSquare, Square, CalendarDays, Edit, Trash2, MoreVertical } from 'lucide-react';
 import PropTypes from 'prop-types';
-import { updateTaskStatus } from "../../../utils/Api";
-import { TasksContext } from '../../../context/TasksContext';
+import { TasksContext } from "../../context/TasksContext";
+import { updateSingleTaskStatus } from "../../utils/Api";
+
 
 import { useState, useContext } from 'react';
 
-const TaskItem = ({ task }) => {
+const TaskItem = ({ task, onEdit }) => {
   const [checked, setChecked] = useState(task.status === "completed");
   const { setTasks } = useContext(TasksContext);
   const handleTaskCompletion = async () => {
@@ -13,11 +14,13 @@ const TaskItem = ({ task }) => {
       const newStatus = checked ? "pending" : "completed";
       const taskId = task.id;
 
+      console.log("updating task", taskId, "with status", newStatus);
+
       //optimistic UI update
       setChecked(!checked);
+      await updateSingleTaskStatus(taskId, { status: newStatus });
 
-      await updateTaskStatus(taskId, { status: newStatus });
-
+      console.log("Task updated successfully");
        // Update local tasks state
        setTasks((prevTasks) =>
         prevTasks.map((t) =>
@@ -30,6 +33,11 @@ const TaskItem = ({ task }) => {
       // Rollback if needed
       setChecked(checked); // Reset to previous state on error
     }
+  };
+
+  const handleDelete = () => {
+    console.log("Delete task:", task.id);
+    // Add your delete logic here (e.g., API call, state update)
   };
 
   return (
@@ -47,7 +55,7 @@ const TaskItem = ({ task }) => {
       </div>
 
       {/* Task Card */}
-      <div className="w-full bg-purple-50 p-4 rounded-xl shadow-sm">
+      <div className="w-1/2 bg-purple-50 p-4 rounded-xl shadow-sm">
         {/* Top Row */}
         <div className="flex justify-between items-start">
           <div>
@@ -58,31 +66,21 @@ const TaskItem = ({ task }) => {
           </div>
 
           {/* Status and Menu */}
-          <div className="flex items-center gap-1">
-            <span className="text-sm text-gray-700">Status: {checked ? "Completed" : task.status}</span>
+          {/*<div className="flex items-center gap-1">
+            <span className="text-sm text-gray-700"> {checked ? "Completed" : task.status}</span>
             <MoreVertical size={18} className="text-gray-600" />
-          </div>
+          </div>*/}
         </div>
 
-        {/* Description */}
-        <p className="text-sm text-gray-700 mt-2">{task.description || 'Description'}</p>
 
         {/* Bottom Row */}
         <div className="flex justify-between items-center mt-3 pt-2 border-t">
           <div className="flex items-center gap-2 text-sm text-gray-700">
-            <CalendarDays size={16} />
-            {task.timeline || 'Timeline'}
+            {task.timeline}
           </div>
 
-          <div className="flex items-center gap-3">
-            <button className="text-gray-700 hover:text-purple-600">
-              <Edit size={18} />
-            </button>
-            <button className="text-gray-700 hover:text-red-600">
-              <Trash2 size={18} />
-            </button>
-          </div>
-        </div>
+          
+        </div>              
       </div>
     </div>
   );

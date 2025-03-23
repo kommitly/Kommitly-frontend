@@ -45,6 +45,91 @@ const Sidebar = () => {
       console.error('Error adding task:', error);
     }
   }
+<<<<<<< Updated upstream
+=======
+  const toggleMenu = (goalId) => {
+    setMenuVisible((prev) => ({ 
+      ...prev,
+      [goalId]: !prev[goalId]
+    }));
+  };
+
+  const toggleTaskMenu = (taskId) => {
+    setTaskMenuVisible((prev) => ({
+      ...prev,
+      [taskId]: !prev[taskId]
+    }));
+  };
+
+
+
+  const handleDelete = async (goalId) => {
+    try {
+      await deleteGoalById(goalId);
+
+      removeGoal(goalId);
+    } catch (error) {
+      console.error(`Error deleting goal with ID ${goalId}:`, error.response?.data || error.message );    
+    } 
+  }
+
+  const handleDeleteAiGoal = async (goalId) => {
+    try {
+      await deleteAiGoalById(goalId);
+      removeGoal(goalId); 
+    }
+    catch (error) {
+      console.error(`Error deleting goal with ID ${goalId}:`, error.response?.data || error.message );
+    }
+  }
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await deleteTaskById(taskId);
+      removeTask(taskId);
+    } catch (error) {
+      console.error(`Error deleting task with ID ${taskId}:`, error.response?.data || error.message);
+    }
+  }
+
+    // Get the last two AI goals that are not hidden
+  const recentAiGoals = goals.ai_goals
+  ?.filter(goal => !hiddenGoals.has(goal.id))
+  .slice(-2);
+
+  // Get pinned goals
+  const pinnedAiGoals = goals.ai_goals.filter(goal => pinnedGoals.has(goal.id));
+
+  // Merge pinned goals and recent AI goals (avoid duplicates)
+  const displayedAiGoals = [...new Set([...pinnedAiGoals, ...recentAiGoals])];
+  
+  const recentTasks = tasks
+  ?.filter(task => !hiddenTasks.has(task.id))
+  .slice(-2);
+
+  const pinnedTasksList = tasks.filter(task => pinnedTasks.has(task.id));
+
+  const displayedTasks = [...new Set([...pinnedTasksList, ...recentTasks])];
+
+  const handleRemoveGoalFromSidebar = (goalId) => {
+    removeGoalFromSidebar(goalId);
+    setMenuVisible((prev) => {
+      const newState = { ...prev };
+      delete newState[goalId]; // Remove the goalId from menuVisible
+      return newState;
+    });
+  };
+
+  const handleRemoveTaskFromSidebar = (taskId) => {
+    removeTaskFromSidebar(taskId);
+    setTaskMenuVisible((prev) => {
+        const newState = { ...prev };
+        delete newState[taskId]; 
+        return newState;
+    });
+};
+
+>>>>>>> Stashed changes
 
   return (
     <div className='fixed inset-y-0 transition-width duration-300 min-h-screen  '>
@@ -393,11 +478,19 @@ const Sidebar = () => {
               )}
 
 
+<<<<<<< Updated upstream
             {tasks.map((task) => (
                 <li key={task.id} className="w-full     ">
                   <Link to={`/dashboard/tasks/${task.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
                   <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block">
                   •  {task.title}
+=======
+                {displayedTasks.map((task)  => (
+                <li key={task.id} className="w-full relative group ">
+                  <Link to={`/dashboard/task/${task.id}`} className="flex group items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8]">
+                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block group-hover:text-[#FFFFFF]">
+                    {task.title}
+>>>>>>> Stashed changes
                 </span>
 
                   </Link>

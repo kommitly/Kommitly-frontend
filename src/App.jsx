@@ -13,6 +13,7 @@ import Home from './dashboard/pages/Home/Home';
 import AiGoal from './dashboard/pages/AiGoal/AiGoal';
 import Goals from './dashboard/pages/Goals/Goals';
 import Tasks from './dashboard/pages/Tasks/Tasks';
+import Taskpage from './dashboard/pages/Task/Task';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="goals" element={<Goals />} />
             <Route path="tasks" element={<Tasks />} />
+            <Route path="task/:taskId" element={<Taskpage />} />
             <Route path="ai-goal/:goalId" element={<AiGoal />} />
 
            </Route>

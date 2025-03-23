@@ -9,6 +9,7 @@ const Goals = () => {
 
 
   useEffect(() => {
+<<<<<<< Updated upstream
     const refreshGoals = async () => {
       try {
         const fetchedGoals = await fetchGoals();
@@ -20,6 +21,13 @@ const Goals = () => {
         setLoading(false);
       }
     };
+=======
+    if (goals.goals && goals.ai_goals) {
+      setLoading(false);
+      console.log("ai goals", goals.ai_goals);
+    }
+  }, [goals]);
+>>>>>>> Stashed changes
 
     refreshGoals();
   }, [goals.length]); // Re-fetch whenever goals change

@@ -11,7 +11,11 @@ export const GoalsProvider = ({ children }) => {
     const loadGoals = async () => {
       try {
         const fetchedGoals = await fetchGoals();
+<<<<<<< Updated upstream
         setGoals(fetchedGoals);
+=======
+        setGoals(fetchedGoals ?? { goals: [], ai_goals: [] });
+>>>>>>> Stashed changes
       } catch (error) {
         console.error('Error fetching goals:', error);
       }
