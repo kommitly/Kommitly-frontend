@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
+  const { login } = useContext(AuthContext); 
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -12,6 +14,7 @@ const Signup = () => {
   const [message, setMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false); // State for dialog
   const navigate = useNavigate();
+  const [isCheckingVerification, setIsCheckingVerification] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,6 +31,7 @@ const Signup = () => {
 
       if (response.ok) {
         setDialogOpen(true); // Open the dialog
+        setIsCheckingVerification(true);
       } else {
         const errorData = await response.json();
         setMessage(errorData.error || "Signup failed. Try again.");
@@ -36,6 +40,43 @@ const Signup = () => {
       setMessage("Error signing up. Please try again.");
     }
   };
+
+
+  useEffect(() => {
+    let interval;
+    if (isCheckingVerification) {
+      interval = setInterval(async () => {
+        try {
+          const res = await fetch(`https://kommitly-backend.onrender.com/api/users/check-verification-status/${formData.email}/`);
+          if (!res.ok) throw new Error("Failed to check verification status");
+  
+          const data = await res.json();
+          if (data.verified === true) {
+            clearInterval(interval);
+  
+            // 🔥 Get access token using the token generation API
+            const tokenRes = await fetch("https://kommitly-backend.onrender.com/api/token/", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: formData.email, password: formData.password }), // Send user credentials
+            });
+  
+            if (tokenRes.ok) {
+              const tokenData = await tokenRes.json();
+              login(tokenData.access); // Call login from AuthContext
+            } else {
+              navigate("/login"); // Fallback if token generation fails
+            }
+          }
+        } catch (error) {
+          console.error("Error checking verification status:", error);
+        }
+      }, 5000);
+    }
+    return () => clearInterval(interval);
+  }, [isCheckingVerification, formData.email, formData.password, navigate]);
+  
+
 
  
   return (

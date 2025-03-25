@@ -1,0 +1,10 @@
+[data-theme="light"] {
+    --tw-text-primary: theme("colors.text.light");
+    --tw-bg-background: theme("colors.background.light");
+  }
+  
+  [data-theme="dark"] {
+    --tw-text-primary: theme("colors.text.dark");
+    --tw-bg-background: theme("colors.background.dark");
+  }
+  

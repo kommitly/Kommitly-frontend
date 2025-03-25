@@ -41,9 +41,9 @@ const createAiGoal = async (ai_goal, ai_tasks) => {
 };
 
 
-const createGoal = async (title, category) => {
+const createGoal = async (title) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create/goal/";
-  const requestBody = { title, category };
+  const requestBody = { title };
   try {
     const token = getToken();
     const response = await axios.post(url, requestBody, {
@@ -277,5 +277,57 @@ const fetchTasksByGoalId = async (goalId) => {
   }
 }
 
+const fetchUserProfile = async () => {
+  const url = "https://kommitly-backend.onrender.com/api/users/profile/";
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user profile:", error.response?.data || error.message);
+    throw error;
+  }
+} 
 
-export { generateInsights, createAiGoal, createGoal, fetchGoals, fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus, fetchGoalById, createTask , fetchTasks, deleteGoalById, deleteTaskById, fetchTasksByGoalId};
+const deleteAiTaskById = async (taskId) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/delete-ai-task/`;
+  try {
+    const token = getToken();
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting task with ID ${taskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+const updateAiTaskById = async (taskId, updatedData) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update-ai-task/`;
+  try {
+    const token = getToken();
+    const response = await axios.patch(url, updatedData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+    
+  } catch (error) {
+    console.error(`Error updating task with ID ${taskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+export { generateInsights, createAiGoal, createGoal, fetchGoals, updateAiTaskById,fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus, fetchGoalById, createTask , fetchTasks, deleteGoalById, deleteTaskById, fetchTasksByGoalId, fetchUserProfile, deleteAiTaskById};

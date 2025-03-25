@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { ProfileContext } from "../context/ProfileContext";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -9,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Initialize useNavigate
+  const { loadProfile } = useContext(ProfileContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,6 +24,7 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         await login(data.access); // Wait for login process to complete
+        await loadProfile(); // Fetch user profile immediately after login
         navigate("/dashboard/home"); // Redirect after successful login
       } else {
         setMessage(data.error || "Login failed.");

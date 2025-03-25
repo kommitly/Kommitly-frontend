@@ -23,6 +23,7 @@ const Sidebar = () => {
   const { removeGoal } = useContext(GoalsContext);
   const [menuVisible, setMenuVisible] = useState({});
   const [taskMenuVisible, setTaskMenuVisible] = useState({});
+  const navigate = useNavigate();
 
 
 
@@ -36,13 +37,14 @@ const Sidebar = () => {
   const handleAddGoal = async () => {
     if (newGoalTitle.trim() === '') return;
     try {
-      const newGoal = await createGoal(newGoalTitle, '');
+      const newGoal = await createGoal(newGoalTitle);
       setGoals((prevGoals) => ({
         ...prevGoals,
         goals: [...prevGoals.goals, newGoal], // ✅ Correct way to update
       }));
       setNewGoalTitle('');
       setIsGoalInputVisible(false);
+      navigate(`/dashboard/goal/${newGoal.id}`);
     } catch (error) {
       console.error('Error adding goal:', error);
     }
@@ -143,20 +145,12 @@ const Sidebar = () => {
     });
 };
 
-const handleLogout = () => {
-  // Clear authentication tokens or user session
-  localStorage.removeItem("authToken"); // Adjust based on how you're storing auth info
-  sessionStorage.removeItem("authToken");
-
-  // Redirect to login page or homepage
-  window.location.href = "/login"; // Adjust the path as needed
-};
 
 
 
   return (
-    <div className='fixed inset-y-0 transition-width duration-300 min-h-screen  '>
-        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#F4F1FF]  flex flex-col px-2 py-4  '>
+    <div className='fixed inset-y-0 transition-width duration-300 min-h-screen border-r  border-[#CFC8FF] '>
+        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#FBF9FF]  flex flex-col px-2 py-4  '>
         <div className='w-10/12 p-2 inset-y-2 mb-2'>
         <h1 className='text-black fredoka-bold xl:text-2xl lg:text-xl ml-3 mt-2 '>Kommitly</h1>
             </div>
@@ -858,94 +852,12 @@ const handleLogout = () => {
 
            
 
-            <li className='w-full h-12 mt-4'>
-              <Link
-                to="/dashboard/settings"
-                className={`flex items-center group p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
-                    "/settings"
-                )}`}
-              >
-                <div className='flex px-1 items-center '>
-                    
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#65558F"
-                        strokeWidth="3"
-                        strokeLinecap="bevel"
-                        strokeLinejoin="bevel"
-                        className="text-[#65558F] icon-small"
-                    >
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#65558F"
-                        strokeWidth="3"
-                        strokeLinecap="bevel"
-                        strokeLinejoin="bevel"
-                        className="text-[#65558F] icon-large"
-                    >
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
 
-                
-              
-                <span
-                  className="ml-4  "
-                >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
-                  Settings
-                  </p>
-                </span>
-
-                </div>
-               
-              </Link>
-            </li>
             
             
 
             </ul>
-            <div className='flex justify-center w-11/12  2xl:mt-28 xl:mt-16 mb-8'>
-              
-                 <Button className='w-7/12 flex gap-2  text-[#4A4459]' size="large"  style={{ height: '48px',  borderRadius: '8px', boxShadow: '6px 6px 12px rgba(13, 39, 80, 0.26), -6px -6px 16px rgba(255,255,255,1) ' }}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#65558F"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#65558F]"
-                >
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                <polyline points="16 17 21 12 16 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-    
-               <span onClick={handleLogout} className='text-[#4A4459] md:text-sm font-semibold'>
-               Logout
-
-               </span>
-
-
-            </Button>
-
-             
-            </div>
+          
             
         </nav>
         </div>

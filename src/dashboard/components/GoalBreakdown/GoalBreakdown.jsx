@@ -1,10 +1,14 @@
-import { IconButton } from '@mui/material';
+import { colors, IconButton } from '@mui/material';
 import React, { useState, useContext, useEffect } from 'react';
 import { Divider } from '@mui/material';
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import { createAiGoal } from '../../../utils/Api';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { useNavigate } from 'react-router-dom';
+import { Box, Button, Typography, useTheme } from "@mui/material";
+import { tokens } from "../../../theme";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+
 
 const extractTimeline = (details) => {
   if (!details) return { timeline: 'No detail available', cleanedDetails: details };
@@ -34,23 +38,37 @@ const extractTimeline = (details) => {
 
 
 const TaskComponent = ({ task, index }) => {
+  const theme = useTheme();
+  const colors =tokens(theme.palette.mode);
+
   const { timeline, cleanedDetails } = extractTimeline(task.details);
   return (
     <div className='w-11/12'>
       <div className='flex items-center gap-4'>
         <div className='flex items-center justify-center'>
-          <div className='flex items-center p-2 justify-center bg-[#EADDFF] text-[#65558F] rounded-[100px]'>
+          <Box className='flex items-center p-2 justify-center  text-[#65558F] rounded-[100px]' sx={{ backgroundColor: colors.primary[100] }}>
             <p className='flex items-center justify-center text-xs w-4 h-4 text-center'>{index + 1}</p>
-          </div>
+          </Box>
         </div>
         <div className='w-full gap-4'>
-          <div className='font-normal text-sm text-[#1D1B20] px-2 py-1'>{task.subtask_title || task.title || "No title available"}</div>
+          <div className='font-normal text-sm text-[#1D1B20] px-2 py-1'>
+            <Typography variant="h5" component="h2" sx={{ color: colors.text.primary }}>
+            {task.subtask_title || task.title || "No title available"}
+            </Typography>
+            </div>
           <div className='font-medium text-[#65558F] px-2 py-1'>
-            <div className='font-medium w-9/12 text-sm'>
+            <div className='font-medium w-full text-sm'>
               {cleanedDetails ? (
-                <span className='text-[#49454F] text-xs font-normal'>{cleanedDetails}</span>
+                <span className='text-[#49454F] text-xs font-normal'>
+                  <Typography variant="body2" component="p" sx={{ color: colors.text.secondary }}>
+                  {cleanedDetails}
+                  </Typography>
+                  </span>
               ) : (
-                <span className='text-[#4F378A] text-xs'>{`Timeline: ${task.task_timeline || 'No timeline available'}`}</span>
+                <span className="text-[#4F378A] text-xs flex items-center gap-1">
+                <AccessTimeIcon className="w-4 h-4" />
+                {task.task_timeline || "No timeline available"}
+              </span>
               )}
             </div>
           </div>
@@ -61,10 +79,13 @@ const TaskComponent = ({ task, index }) => {
 };
 
 const GoalBreakdown = ({ goalData, taskData, onClose }) => {
+  const theme = useTheme();
+  const colors =tokens(theme.palette.mode);
   const [showSteps, setShowSteps] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const { goals, setGoals } = useContext(GoalsContext);
   const [loading, setLoading] = useState(false);
+  const { goal, setGoal } = useContext(GoalsContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -108,7 +129,7 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
 
   return (
     <div className="mt-6 w-full flex justify-center p-4 flex-1 overflow-y-auto scrollbar-hide">
-      <div className='bg-[#F4F1FF] xl:w-6/12 md:w-8/12 rounded-4xl px-2 mt-8'>
+      <Box className=' xl:w-9/12 md:w-8/12 rounded-2xl py-2 px-2 ' sx={{ backgroundColor: colors.background.paper }}>
         <div className='flex items-center px-4 py-4 justify-between '>
           <div className='flex items-center gap-4'>
             <IconButton onClick={handleCreateGoal}>
@@ -130,9 +151,11 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
               </svg>
             </IconButton>
             <div className='flex items-center gap-1'>
-              <div className='bg-[#F7F2FA] font-semibold text-[#65558F] text-sm px-4 py-1 rounded-lg'>
+              <Box className=' font-semibold text-[#65558F] px-4 py-1 rounded-lg' >
+                <Typography variant="h4" component="h2" sx={{ color: colors.text.primary }}>
                 {goalData.title}
-              </div>
+                </Typography>
+              </Box>
             </div>
           </div>
           <IconButton onClick={onClose}>
@@ -154,11 +177,11 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
           </IconButton>
         </div>
 
-        <Divider orientation="horizontal" sx={{ borderColor: "#79747E", opacity: 0.8 }} />
+        <Divider orientation="horizontal" sx={{ borderColor: colors.primary[500], opacity: 0.8 }} />
 
         <div className='flex flex-col  p-4 gap-4'>
           <p className='inline-block'>
-            <span className='bg-[#F7F2FA] font-semibold text-[#65558F] text-sm px-2 py-1 rounded-lg'>
+            <span className=' font-semibold text-[#65558F] text-sm px-2 py-1 rounded-lg'>
               {showSteps && selectedTask ? selectedTask.title : "Tasks"}
             </span>
           </p>
@@ -186,21 +209,19 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
                       </button>
                     )}
                     {showSteps && (
-                      <div className='flex w-4/12 items-center '>
+                      <div className='flex w-4/12 item-start '>
                         <p className=' font-medium text-xs text-[#4F378A]'>
                          <span>
-                         Timeline: {timeline}
+                         <AccessTimeIcon/> {timeline}
                          </span>
                         </p>
                       </div>
                     )}
-                    <div className='flex ml-4 items-center gap-4'>
-                      <MdCheckBoxOutlineBlank size={16} className='text-[#65558F]' />
-                    </div>
+                 
                   </div>
                   {index < displayData.length - 1 && (
                       <div className='py-4'>
-                        <Divider orientation="horizontal" sx={{ borderColor: "#CAC4D0", opacity: 0.8 }} />
+                        <Divider orientation="horizontal" sx={{ borderColor: colors.primary[300], opacity: 0.8 }} />
                       </div>
                     )}
                 </div>
@@ -238,7 +259,7 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
             </button>
           )}
         </div>
-      </div>
+      </Box>
     </div>
   );
 };

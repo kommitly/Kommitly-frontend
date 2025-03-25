@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { Link, useNavigate, useLocation , useParams} from "react-router-dom";
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { tokens } from "../../../theme";
 
 import { motion } from 'framer-motion';
 import analysis from '../../../assets/analyze-data.svg';
@@ -10,14 +12,16 @@ import CircularProgress, {
 
 
 } from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+
 import { Divider } from '@mui/material';
 import GoalsPieChart from './GoalsPieChart'; // Import the PieChart component
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
 import { IoSearch } from "react-icons/io5";
 import Backdrop from '@mui/material/Backdrop';
+import { ProfileContext } from '../../../context/ProfileContext';
+
+
 
 function CircularProgressWithLabel(props) {
   return (
@@ -71,6 +75,8 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 
 const Goals = () => {
+  const theme = useTheme();
+  const colors =tokens(theme.palette.mode);
   const goalId = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -84,6 +90,9 @@ const Goals = () => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
+  const { profile, setProfile } = useContext(ProfileContext);
+
+  
 
   useEffect(() => {
     if (goals.goals && goals.ai_goals) {
@@ -266,44 +275,87 @@ const Goals = () => {
               />
             </div>
 
-            <button onClick={handleAddGoal} className="mt-4 px-4 py-2 bg-[#6200EE] text-white rounded-lg">
+            <button onClick={handleAddGoal} className="mt-4 px-4 py-2 bg-[#6200EE] text-white rounded-lg cursor-pointer">
               Add Goal
             </button>
           
           </div>
         </Backdrop>
 
-      <div className="col-span-8 flex-1 overflow-y-auto scrollbar-hide  no-scrollbar">
+      <div className="col-span-8 mt-4 flex-1 overflow-y-auto scrollbar-hide  no-scrollbar">
         <div className='flex items-center justify-between '>
        <div>
-       <h1 className='text-[#4F378A] space-x-1 font-semibold text-xl'>
-        <span className='text-black'>
-        Hello
+       {profile.user && (
+       <h1 className=' space-x-1 font-semibold text-xl'>
+        <span >
+          <Typography
+            component="span"
+            variant="h2"
+            className=" text-semibold"
+            color='text.primary' 
+          >
+          Hello
+
+          </Typography>
+       
 
         </span>
-        <span>
-        Shanon
+        <span className='text-secondary'>
+        <Typography
+            component="span"
+            variant="h2"
+            className=" text-semibold"
+            
+            sx={{ color: colors.primary[500] }}
+          >
+           {profile.user.first_name}
+
+          </Typography>
+
+       
 
         </span>
         <span role="img" aria-label="waving hand" className='ml-2'>
     👋
         </span>
        </h1>
+        )}
         <p className='text-[#2C2C2C] font-light text-xs'>
-          Let's take a dive into your goals
+        <Typography
+            component="span"
+            variant="h5"
+            color='text.secondary' 
+            
+            
+          >
+           Let's take a dive into your goals
+
+          </Typography>
+          
+          
         </p>
 
       
        </div>
-       <div className='p-2 rounded-full bg-[#F4F1FF] flex items-center justify-center'
+       <Box className='p-2 rounded-full bg-[#F4F1FF] flex items-center justify-center' sx={{backgroundColor:colors.background.paper}}
         >
         <IoSearch size={20} className='text-[#4A4459]' />
+        </Box>
         </div>
-        </div>
-        <div className='w-full container h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] p-8 mt-4'>
+        <Box className='w-full container h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] p-8 mt-4'
+        sx={{backgroundColor:colors.background.paper}}
+        >
           <div className='space-y-4'>
-            <h1 className='text-2xl font-semibold'>Manage your Goals</h1>
-            <button onClick={openModal}  className='bg-[#6246AC] flex items-center text-sm font-light text-white px-4 gap-2 py-2 rounded-md'>
+            <h1 className='text-2xl font-semibold'>
+            <Typography
+              component="span"
+              variant="h2"
+              className=" text-semibold"
+              color='text.primary'
+            >Manage your Goals 
+            </Typography>
+            </h1>
+            <Button onClick={openModal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{backgroundColor:colors.primary[500], borderRadius: '6px', paddingX: '12px'}}>
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -319,14 +371,26 @@ const Goals = () => {
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
+              <Typography
+                component="span"
+                variant="h5"  
+                sx={{color:colors.primary[100]}}
+              >
               Add New Goal
-            </button>
+              </Typography>
+            </Button>
           </div>
           <img src={analysis} alt='Analysis' className='h-36' />
-        </div>
+        </Box>
 
         <div>
-          <h1 className='text-lg font-medium mt-8'>AI Goals</h1>
+          <h1 className='text-lg font-medium mt-8'>
+          <Typography
+              component="span"
+              variant="h3"
+              className=" text-semibold"
+              color='text.primary'
+            >AI Goals </Typography></h1>
           <div className='flex space-x-4 mt-4'>
             <button onClick={() => setSelectedAiCategory('recentlyAdded')} className={`px-4 font-light cursor-pointer py-2 rounded-md ${selectedAiCategory === 'recentlyAdded' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Recently Added</button>
             <button onClick={() => setSelectedAiCategory('inProgress')} className={`px-4 py-2 font-light cursor-pointer rounded-md ${selectedAiCategory === 'inProgress' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>In Progress</button>
@@ -356,8 +420,8 @@ const Goals = () => {
           <div ref={aiGoalsContainerRef} className='flex gap-2 overflow-x-auto no-scrollbar  w-full'>
             {filteredAiGoals.map((goal) => (
               <Link key={goal.id} to={`/dashboard/ai-goal/${goal.id}`}>
-              <li  className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  rounded-lg'>
-                <div className='flex w-full items-center gap-2 p-2'>
+              <li  className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  '  >
+                <Box className='flex w-full items-center gap-2 p-2 rounded-lg' sx={{backgroundColor:colors.background.paper}}>
                   <div className='w-1/3 bg-white rounded-lg p-4'>
                    <img src={aiGoals} alt="goals"  className='h-20'/>
                   </div>
@@ -393,7 +457,7 @@ const Goals = () => {
                 </span>
                    </span>
                   </div>
-                </div>
+                </Box>
               </li>
               </Link>
             ))}
@@ -417,7 +481,17 @@ const Goals = () => {
 
 
         <div>
-          <h1 className='text-lg font-medium mt-8'>Goals</h1>
+          <h1 className='text-lg font-medium mt-8'>
+            <Typography
+              component="span"
+              variant="h3"
+              className=" text-semibold"
+              color='text.primary'
+            >
+            Goals
+
+            </Typography>
+            </h1>
           <div className='flex space-x-4 mt-4'>
             <button onClick={() => setSelectedCategory('recentlyAdded')} className={`px-4 font-light cursor-pointer py-2 rounded-md ${selectedCategory === 'recentlyAdded' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Recently Added</button>
             <button onClick={() => setSelectedCategory('inProgress')} className={`px-4 py-2  font-light cursor-pointer rounded-md ${selectedCategory === 'inProgress' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>In Progress</button>
@@ -449,7 +523,7 @@ const Goals = () => {
             {filteredGoals.map((goal) => (
               <Link key={goal.id} to={`/dashboard/goal/${goal.id}`}>
               <li className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  rounded-lg'>
-                <div className='flex w-full items-center gap-2 p-2'>
+              <Box className='flex w-full items-center gap-2 p-2 rounded-lg' sx={{backgroundColor:colors.background.paper}}>
                   <div className='w-1/3 bg-white rounded-lg p-4'>
                    <img src={aiGoals} alt="goals"  className='h-20'/>
                   </div>
@@ -489,7 +563,7 @@ const Goals = () => {
                     
                    </span>
                   </div>
-                </div>
+                </Box>
               </li>
               </Link>
             ))}
@@ -527,15 +601,45 @@ const Goals = () => {
 
 
 
-      <div className='col-span-4 bg-[#F4F1FF] space-y-4 mx-4 rounded-2xl justify-center p-4'>
+      <Box className='col-span-4  space-y-4 mx-4 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
         
         <div className=''>
         <div className='w-full flex justify-center mb-3'>
-       <div className='flex w-1/2 bg-gray-200 rounded-full justify-center '>
-            <button onClick={() => setSelectedPeriod('yearly')} className={`px-4 font-light cursor-pointer py-1 rounded-full ${selectedPeriod === 'yearly' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Yearly</button>
-            <button onClick={() => setSelectedPeriod('monthly')} className={`px-4 font-light py-1  cursor-pointer rounded-full ${selectedPeriod === 'monthly' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Monthly</button>
-            <button onClick={() => setSelectedPeriod('weekly')} className={`px-4 font-light py-1  cursor-pointer rounded-full ${selectedPeriod === 'weekly' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Weekly</button>
-        </div>
+        <div className="flex w-1/2 rounded-full justify-center" style={{ backgroundColor: theme.palette.background.default }}>
+      <button
+        onClick={() => setSelectedPeriod("yearly")}
+        className={`px-4 font-light cursor-pointer py-1 rounded-full ${
+          selectedPeriod === "yearly" ? "text-white" : ""
+        }`}
+        style={{
+          backgroundColor: selectedPeriod === "yearly" ? theme.palette.primary.main : theme.palette.background.default,
+        }}
+      >
+        Yearly
+      </button>
+      <button
+        onClick={() => setSelectedPeriod("monthly")}
+        className={`px-4 font-light cursor-pointer py-1 rounded-full ${
+          selectedPeriod === "monthly" ? "text-white" : ""
+        }`}
+        style={{
+          backgroundColor: selectedPeriod === "monthly" ? theme.palette.primary.main : theme.palette.background.default,
+        }}
+      >
+        Monthly
+      </button>
+      <button
+        onClick={() => setSelectedPeriod("weekly")}
+        className={`px-4 font-light cursor-pointer py-1 rounded-full ${
+          selectedPeriod === "weekly" ? "text-white" : ""
+        }`}
+        style={{
+          backgroundColor: selectedPeriod === "weekly" ? theme.palette.primary.main : theme.palette.background.default,
+        }}
+      >
+        Weekly
+      </button>
+    </div>
        </div>
         <ul className='bg-white p-4 rounded-lg max-h-[35vh] overflow-y-auto scrollbar-hide no-scrollbar'>
           {filteredPeriods.map((goal, index) => (
@@ -571,14 +675,14 @@ const Goals = () => {
         <div className='w-full  bg-white flex p-4 rounded-lg flex-col justify-center items-center'>
         
         <GoalsPieChart goals={goals.goals} aiGoals={goals.ai_goals} />
-      </div>
+       </div>
        </div>
 
 
       
        
     
-      </div>
+      </Box>
 
      
 

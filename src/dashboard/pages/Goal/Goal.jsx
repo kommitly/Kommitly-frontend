@@ -143,7 +143,7 @@ const Goal = () => {
       <div className='w-full'>
         <div className='flex items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
-        <img src={flag} alt="Flag" className="w-6 h-6" />
+        🚩
         {isGoalRenaming ? (
                     <input
                       type="text"

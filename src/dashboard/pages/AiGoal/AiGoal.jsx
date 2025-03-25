@@ -1,14 +1,17 @@
 import  { useEffect, useState,useCallback, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus } from '../../../utils/Api'; // Adjust the import path as needed
+import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus,updateAiTaskById, deleteAiTaskById } from '../../../utils/Api'; // Adjust the import path as needed
 import flag from '../../../assets/flag-dynamic-color.svg';
 import { GoDotFill } from "react-icons/go";
 import { Divider } from '@mui/material';
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { tokens } from "../../../theme";
 
-import { motion } from 'framer-motion';
+
 import { CiMenuKebab } from "react-icons/ci";
 import { GoalsContext } from '../../../context/GoalsContext'; // Adjust the import path as needed
+import { TasksContext } from '../../../context/TasksContext'; // Adjust the import path as needed
 import GoalTrophyAnimation from './GoalTrophyAnimation';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import Backdrop from '@mui/material/Backdrop';
@@ -16,6 +19,9 @@ import TrophyAnimation from './TrophyAnimation';
 import PickerWithButtonField from './PickerWithButtonField';
 import GoalBadgeAnimation from './GoalBadge';
 import aiGoals from '../../../assets/goals.svg';
+
+import * as motion from "motion/react-client"
+import { VisibilityRounded } from '@mui/icons-material';
 
 const extractTimeline = (details) => {
   if (!details) return { timeline: 'No detail available', cleanedDetails: details };
@@ -36,11 +42,31 @@ const extractTimeline = (details) => {
   return { timeline, cleanedDetails };
 };
 
+const pathVariant = {
+  hidden : {
+    opacity: 0,
+    pathLength: 0,      
+  },
+
+  visible: { 
+    opacity: 1, 
+    pathLength: 1,
+    transition: {
+      duration: 1,
+      ease: "easeIn"
+    }
+  }
+  
+ 
+}
+
 
 
 
 
 const AiGoal = () => {
+  const theme = useTheme();
+  const colors =tokens(theme.palette.mode);
   const { goalId } = useParams();
   const navigate = useNavigate();
   const [goal, setGoal] = useState(null);
@@ -54,9 +80,12 @@ const AiGoal = () => {
   const [newTitle, setNewTitle] = useState('');
   const { removeGoal } = useContext(GoalsContext);
   const { addGoalToSidebar} = useContext(GoalsContext);
+  const { removeTask } = useContext(TasksContext);
   const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [taskMenuVisible, setTaskMenuVisible] = useState(false);
+  const [isTaskRenaming, setIsTaskRenaming] = useState(false);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
 
 
 
@@ -182,6 +211,22 @@ const AiGoal = () => {
     }
   };
   
+  const handleTaskUpdate = async () => {
+    if (!newTaskTitle.trim() || newTaskTitle === task.title) {
+      setIsTaskRenaming(false); // Cancel rename if empty or unchanged
+      return;
+    }
+  
+    try {
+      await updateAiTaskById(taskId, newTaskTitle);
+      setTask((prevTask) => ({ ...prevTask, title: newTaskTitle }));
+      setIsTaskRenaming(false);
+      setTaskMenuVisible(false);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+  
 
   
 
@@ -195,6 +240,16 @@ const AiGoal = () => {
       removeGoal(goalId); // Remove from state immediately
       
       navigate('/dashboard/goals');
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleTaskDelete = async (taskId) => {
+    try {
+      await deleteAiTaskById(taskId);
+      removeTask(taskId); // Remove from state immediately
+      loadGoal(); // Refresh goal data after deletion
     } catch (error) {
       setError(error.message);
     }
@@ -266,7 +321,7 @@ const AiGoal = () => {
       <div className="w-full    overflow-y-auto  no-scrollbar  ">
         
         
-        <div className=' flex space-x-4 w-full border-b border-[#ECE6F0]'>
+        <div className=' flex  w-full border-b border-[#ECE6F0]'>
         <Backdrop
         sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
         open={open}
@@ -290,10 +345,10 @@ const AiGoal = () => {
         </div>
     
     </Backdrop>
-          <div className='md:px-4 xl:px-0 mt-4 lg:px-0 xl:w-8/12 w-10/12'>
-           <div className='flex items-center mb-8 gap-4 justify-between'>
+          <div className='md:px-4 xl:px-0 mt-4 lg:px-0 xl:w-9/12 w-10/12'>
+           <div className='flex items-center mb-4 mt-2 gap-4 justify-between'>
               <div className='flex items-center gap-4 2xl:ml-4 '>
-                <img src={flag} alt="Flag" className="w-8 h-8" />
+                🚩
                 {isRenaming ? (
                     <input
                       type="text"
@@ -354,17 +409,40 @@ const AiGoal = () => {
          
            
             <div className="ai-tasks overflow-visible overflow-y-clip  px-4 w-full  flex flex-col items-center  justify-center " >
-              <div className="w-full gap-4  pb-10 md:pl-36 xl:pl-24 2xl:pl-26 m-2">
+              <div className="w-full gap-4  pb-10 md:pl-36 xl:pl-10 2xl:pl-26 m-2">
                 {goal.ai_tasks.map((task, index) => {
                   const isCompleted = taskCompletionStatus[index];
                   const allTasksCompleted = goal.ai_tasks.every(t => t.status === 'completed');
                   const isActive = !allTasksCompleted && (index === activeTaskIndex || (index === 0 && activeTaskIndex === null));
+                  const isLastTask = index === goal.ai_tasks.length - 1;
 
                   return (
                     <div className="mx-auto" key={task.id}>
-                      <div className={`task ${allTasksCompleted ? 'bg-[#F4F1FF]' : isActive ? 'bg-[#FFFFFF]' : 'bg-[#F4F1FF]'} ${isCompleted ? 'completed' : ''} relative mt-8  border-l   p-4 md:space-y-2 xl:space-y-2 rounded-xl border-l-[#4F378A] xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12`} style={{ boxShadow: '2px 3px 8px 2px rgba(101, 85, 143, 0.2), 0px 4px 4px 0px rgba(0, 0, 0, 0.25)' }}>
+                         <motion.div
+      className={`task ${isCompleted ? "completed" : ""} relative mt-8 border-l p-4 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12`}
+      style={{
+        backgroundColor: allTasksCompleted
+          ? theme.palette.background.paper // Adjust to your theme color
+          : isActive
+          ? theme.palette.primary[100] // White background for active
+          : theme.palette.background.paper,
+        borderLeftColor: theme.palette.primary.main, // Replace with the desired theme color
+        boxShadow:
+          "2px 3px 8px 2px rgba(101, 85, 143, 0.2), 0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+      }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 0.6,
+                          ease: "easeOut",
+                          delay: index * 0.3, // Staggered delay based on index
+                        }}>
                         <div className="flex   justify-between md:gap-4 relative  max-h-full">
-                          <div className={`w-1/4  rounded-lg p-4 ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}>
+                          <div className={`w-1/4  rounded-lg p-4 ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}  style={{
+        backgroundColor:isActive
+          ? theme.palette.background.paper // White background for active
+          : theme.palette.background.default,
+
+      }}>
                               <img src={aiGoals} alt="goals"  className='h-20 object-cover'/>
                                  </div>
                             <div className='w-full'>
@@ -390,7 +468,7 @@ const AiGoal = () => {
                                             <circle cx="12" cy="12" r="1"></circle>
                                             <circle cx="12" cy="19" r="1"></circle>
                                           </svg>
-                                                {taskMenuVisible === task.id && (
+                                          {taskMenuVisible === task.id && (
                                                     <div className="absolute z-[1000] left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                                                       <button 
                                                         onClick={() => {
@@ -401,7 +479,7 @@ const AiGoal = () => {
                                                       >
                                                         Rename
                                                       </button>
-                                                      <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F4F1FF]">Delete</button>
+                                                      <button onClick={() => handleTaskDelete(task.id)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F4F1FF]">Delete</button>
                                                     </div>
                                                   )}
                                  </div>
@@ -436,44 +514,89 @@ const AiGoal = () => {
 
                               </div>
                            
-                          <div>
-                           
-                                                    
-                          
-
-                              
-                               </div>
+                         
                                         </div>
                                           
 
-                                        {index < goal.ai_tasks.length && (
-                                   <div className="absolute 2xl:-left-18 xl:-left-19 -left-18 transform -translate-x-1/4 -top-36 flex flex-col items-center overflow-hidden">
-                                  <svg 
-                              width="100" 
-                              height="222" 
-                              viewBox="0 0 104 288" 
-                              fill="none" 
-                              xmlns="http://www.w3.org/2000/svg"
-                              className='icon-small'>
-                                    <path d="M103.005 287.369C103.557 287.366 104.003 286.916 104 286.364C103.997 285.812 103.548 285.366 102.995 285.369L103.005 287.369ZM15.3315 236.84L16.3315 236.839L15.3315 236.84ZM65.5609 286.77L65.5654 287.77L65.5609 286.77ZM14 0.00139951L14.0055 3.94874L16.0055 3.94594L16 -0.00139951L14 0.00139951ZM14.0166 11.8434L14.0276 19.7381L16.0276 19.7353L16.0166 11.8406L14.0166 11.8434ZM14.0387 27.6328L14.0497 35.5274L16.0497 35.5246L16.0387 27.63L14.0387 27.6328ZM14.0608 43.4221L14.0718 51.3168L16.0718 51.314L16.0608 43.4193L14.0608 43.4221ZM14.0829 59.2115L14.0939 67.1062L16.0939 67.1034L16.0829 59.2087L14.0829 59.2115ZM14.105 75.0008L14.116 82.8955L16.116 82.8927L16.105 74.998L14.105 75.0008ZM14.1271 90.7902L14.1381 98.6849L16.1381 98.6821L16.1271 90.7874L14.1271 90.7902ZM14.1492 106.58L14.1602 114.474L16.1602 114.471L16.1492 106.577L14.1492 106.58ZM14.1712 122.369L14.1823 130.264L16.1823 130.261L16.1712 122.366L14.1712 122.369ZM14.1933 138.158L14.2044 146.053L16.2044 146.05L16.1933 138.155L14.1933 138.158ZM14.2155 153.948L14.2265 161.842L16.2265 161.839L16.2154 153.945L14.2155 153.948ZM14.2375 169.737L14.2486 177.632L16.2486 177.629L16.2375 169.734L14.2375 169.737ZM14.2596 185.526L14.2707 193.421L16.2707 193.418L16.2596 185.523L14.2596 185.526ZM14.2817 201.316L14.2928 209.21L16.2928 209.208L16.2817 201.313L14.2817 201.316ZM14.3038 217.105L14.3149 225L16.3149 224.997L16.3038 217.102L14.3038 217.105ZM14.3259 232.894L14.3315 236.842L16.3315 236.839L16.3259 232.892L14.3259 232.894ZM14.3315 236.842C14.3333 238.192 14.3877 239.53 14.4926 240.854L16.4864 240.696C16.3855 239.424 16.3333 238.137 16.3315 236.839L14.3315 236.842ZM15.7521 248.774C16.3857 251.4 17.2224 253.947 18.2446 256.396L20.0903 255.626C19.1085 253.273 18.3049 250.827 17.6964 248.305L15.7521 248.774ZM21.9079 263.531C23.318 265.814 24.903 267.978 26.6441 270.003L28.1606 268.699C26.4874 266.753 24.9644 264.674 23.6096 262.48L21.9079 263.531ZM32.3313 275.656C34.3667 277.385 36.5396 278.957 38.8313 280.353L39.872 278.645C37.6701 277.304 35.5822 275.793 33.6261 274.132L32.3313 275.656ZM45.9877 283.974C48.4436 284.981 50.9954 285.803 53.6254 286.421L54.0827 284.474C51.5567 283.88 49.1058 283.091 46.7468 282.124L45.9877 283.974ZM61.5524 287.633C62.8769 287.73 64.2152 287.776 65.5654 287.77L65.5563 285.77C64.2579 285.776 62.9714 285.731 61.6984 285.638L61.5524 287.633ZM65.5654 287.77L69.9374 287.75L69.9282 285.75L65.5563 285.77L65.5654 287.77ZM78.6813 287.71L87.4252 287.669L87.4161 285.67L78.6721 285.71L78.6813 287.71ZM96.1691 287.629L104.913 287.589L104.904 285.589L96.16 285.629L96.1691 287.629ZM113.657 287.549L122.401 287.509L122.392 285.509L113.648 285.549L113.657 287.549ZM131.145 287.469L139.889 287.429L139.88 285.429L131.136 285.469L131.145 287.469ZM148.633 287.389L153.005 287.369L152.995 285.369L148.623 285.389L148.633 287.389Z" fill="#4F378A" stroke="#4F378A" strokeWidth="0.1"/>
-                                    <circle cx="15" cy="252" r="9" fill="#4F378A" stroke="#4F378A" strokeWidth="2" />
-                              {isCompleted && (
-                                <g transform="translate(7, 246)">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    fill="none"
-                                    stroke="#FFFFFF"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <path d="M3 6l3 3 6-6" />
-                                  </svg>
-                                </g>
-                              )}
-                            </svg>
+                         {index < goal.ai_tasks.length && (
+                                          
+                                   <div className="absolute 2xl:-left-18 xl:-left-6 -left-18   transform -translate-x-1/4 top-1/5   flex flex-col items-center  overflow-hidden">
+
+                                    <motion.svg 
+                                      width="300" 
+                                      height="300" 
+                                      viewBox="0 0 300 300" 
+                                      fill="none" 
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      {/* Circle Moving Along the Line */}
+                                      <motion.circle
+                                      cx="50"
+                                      cy="50"
+                                      r="8"
+                                      fill="#4F378A"
+                                      initial={{ opacity: 0, scale: 0 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      transition={{
+                                        delay: index * 0.5, // Stagger animation for each task
+                                        duration: 0.6,
+                                        ease: "easeOut",
+                                      }}
+                                    />
+                                       {/* Line connecting to the next task (only if it's not the last task) */}
+                                       {!isLastTask && (
+                                            <motion.line
+                                              x1="50"
+                                              y1="50"  // Start from this circle’s bottom
+                                              x2="50"
+                                              y2="230" // End at the next task’s top
+                                              stroke="#4F378A"
+                                              strokeWidth="2"
+                                              strokeDasharray="6 4"
+                                              initial={{ pathLength: 0 }}
+                                              animate={{ pathLength: 1 }}
+                                              transition={{ duration: 1.2, ease: "easeInOut" }}
+                                            />
+                                          )}
+                                  {isCompleted && (
+                                    <motion.g
+                                      initial={{ opacity: 0, scale: 0 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      transition={{ duration: 0.3, ease: "easeOut" }}
+                                    >
+                                      <path
+                                        d="M47 50 L49 52 L53 47"
+                                        stroke="white"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </motion.g>
+                                  )}
+
+                                   {isActive && (
+                                    <motion.g
+                                      initial={{ opacity: 0, scale: 0 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      transition={{ duration: 0.3, ease: "easeOut" }}
+                                    >
+                                      <circle
+                                        cx="50"
+                                        cy="50"
+                                        r="6"
+                                        stroke="white"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </motion.g>
+
+                                  )}
+                                      
+
+                                       
+                                        </motion.svg> 
+
                             <svg 
                               width="100" 
                               height="242" 
@@ -502,7 +625,7 @@ const AiGoal = () => {
                             </svg>
                           </div>
                         )}
-                      </div>
+                      </motion.div>
                     </div>
                   );
                 })}
@@ -512,7 +635,7 @@ const AiGoal = () => {
             
           </div>
 
-          <div className="actionable-steps xl:w-5/12 md:w-5/12 space-y-4 px-4 max-h-full rounded-xl mx-4 " style={{ backgroundColor: 'rgba(244, 241, 255)' }}>
+          <Box className="actionable-steps xl:w-5/12 md:w-5/12 space-y-4 px-4 max-h-full rounded-xl m-4 " sx={{ backgroundColor: colors.background.paper }}>
               <div className=' items-center gap-4 mb-4 mt-4'>
                 <div className='flex items-center gap-4 w-full justify-between mb-2'>
                 <span className=' font-regular text-[#00000] text-sm xl:text-sm 2xl:text-base'
@@ -526,13 +649,13 @@ const AiGoal = () => {
 
               
               </div>
-            <div className='w-full bg-[#FFFFFF]   rounded-lg p-2 flex justify-center items-center'>
+            <Box className='w-full    rounded-lg p-2 flex justify-center items-center' sx={{ backgroundColor: colors.background.default }}>
                  <p className="md:text-sm lg:text-md 2xl:text-lg text-[#1D1B20] font-medium">
                 Start working on your goal today! 🚀
               </p>
-            </div>
+            </Box>
            
-            <div className="text-lg container w-full px-4 py-2 rounded-xl bg-[#FFFFFF] relative">
+            <Box className="text-lg container w-full px-4 py-2 mb-4 rounded-xl bg-[#FFFFFF] relative" sx={{ backgroundColor: colors.background.default }}>
               {isVisible ? (<TrophyAnimation />) : 
               (
                   <>
@@ -570,7 +693,7 @@ const AiGoal = () => {
                   const {timeline, cleanedDetails } = extractTimeline(step.details); // Extract cleaned details for each step
               
                   return (
-                    <div key={stepIndex}  className="step bg-[#F4F1FF] p-4 rounded-xl cursor-pointer flex items-center gap-4">
+                    <Box key={stepIndex}  className="step  p-4 rounded-xl cursor-pointer flex items-center gap-4" sx={{ backgroundColor: colors.background.paper }}>
                     <label className="custom-checkbox">
                         <input
                         type="checkbox"
@@ -584,11 +707,15 @@ const AiGoal = () => {
                         <div className="flex w-full ">
                       
                       <span className=' text-[#1D1B20] md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular'>{step.subtask_title}</span>
-                      <span className=' 2xl:h-6 h-6 flex justify-center items-center bg-[#FFFFFF]   text-[#4F378A] rounded-md xl:w-6/12 md:w-3/12 2xl:w-3/12 '>
-                       <p className='md:text-xs xl:text-xs text-xs font-light'
+                      
+                      <Box className=' 2xl:h-6 h-6  flex justify-center items-center bg-[#FFFFFF]   text-[#4F378A] rounded-md xl:w-6/12 md:w-3/12 2xl:w-3/12 ' sx={{ backgroundColor: colors.background.default }}>
+                      <p className='md:text-xs xl:text-xs text-xs font-light'
                        >
                        {timeline}
-                         </p></span>
+                         </p>
+
+                      </Box>
+                      
                      
 
                        
@@ -598,7 +725,7 @@ const AiGoal = () => {
                         </div>
                         
                      
-                    </div>
+                    </Box>
                   );
                 })}
               </div>
@@ -613,10 +740,10 @@ const AiGoal = () => {
              
             
 
-            </div>
+            </Box>
 
             
-          </div>
+          </Box>
   
           
         </div>
