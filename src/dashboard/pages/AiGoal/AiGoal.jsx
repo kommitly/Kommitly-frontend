@@ -1,14 +1,14 @@
 import  { useEffect, useState,useCallback, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus,updateAiTaskById, deleteAiTaskById } from '../../../utils/Api'; // Adjust the import path as needed
+import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus,updateAiTaskById, deleteAiTaskById, createAiTask } from '../../../utils/Api'; // Adjust the import path as needed
 import flag from '../../../assets/flag-dynamic-color.svg';
 import { GoDotFill } from "react-icons/go";
 import { Divider } from '@mui/material';
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
-
-
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import { CiMenuKebab } from "react-icons/ci";
 import { GoalsContext } from '../../../context/GoalsContext'; // Adjust the import path as needed
 import { TasksContext } from '../../../context/TasksContext'; // Adjust the import path as needed
@@ -19,22 +19,25 @@ import TrophyAnimation from './TrophyAnimation';
 import PickerWithButtonField from './PickerWithButtonField';
 import GoalBadgeAnimation from './GoalBadge';
 import aiGoals from '../../../assets/goals.svg';
+import Modal from '@mui/material/Modal';
+
+import TextField from '@mui/material/TextField';
 
 import * as motion from "motion/react-client"
 import { VisibilityRounded } from '@mui/icons-material';
 
-const extractTimeline = (details) => {
-  if (!details) return { timeline: 'No detail available', cleanedDetails: details };
+const extractTimeline = (description) => {
+  if (!description) return { timeline: 'No detail available', cleanedDetails: description };
 
-  console.log('Details:', details); // Debugging
+  console.log('Details:', description); // Debugging
 
    // Updated regex to match time ranges and single values even without parentheses
-   const match = details.match(/\b(\d+-\d+ (days|weeks|months|years)|\d+ (day|week|month|year)|On-going|Ongoing|\d+\s*(days|weeks|months|years))\b/i);
+   const match = description.match(/\b(\d+-\d+ (days|weeks|months|years)|\d+ (day|week|month|year)|On-going|Ongoing|\d+\s*(days|weeks|months|years))\b/i);
 
   console.log('Match:', match); // Debugging
 
   const timeline = match ? match[1] : 'No timeline available';
-  let cleanedDetails = match ? details.replace(match[0], '').trim() : details;
+  let cleanedDetails = match ? description.replace(match[0], '').trim() : description;
 
   // Remove empty parentheses
   cleanedDetails = cleanedDetails.replace(/\s*\(\s*\)\s*/g, '');
@@ -78,14 +81,16 @@ const AiGoal = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [newTitle, setNewTitle] = useState('');
-  const { removeGoal } = useContext(GoalsContext);
+  const { removeGoal, removeGoalFromSidebar } = useContext(GoalsContext);
   const { addGoalToSidebar} = useContext(GoalsContext);
   const { removeTask } = useContext(TasksContext);
   const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [taskOpen, setTaskOpen] = useState(false);
   const [taskMenuVisible, setTaskMenuVisible] = useState(false);
   const [isTaskRenaming, setIsTaskRenaming] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
+
 
 
 
@@ -157,9 +162,9 @@ const AiGoal = () => {
       const newGoal = JSON.parse(JSON.stringify(prevGoal)); // Deep copy the goal object
   
       const activeTask = newGoal.ai_tasks[activeTaskIndex];
-      const updatedSteps = [...activeTask.actionable_steps]; // Create a copy of the steps array
+      const updatedSteps = [...activeTask.ai_subtasks]; // Create a copy of the steps array
       updatedSteps[stepIndex].completed = !updatedSteps[stepIndex].completed;
-      activeTask.actionable_steps = updatedSteps;
+      activeTask.ai_subtasks = updatedSteps;
   
       return newGoal;
     });
@@ -170,7 +175,7 @@ const AiGoal = () => {
         const newGoal = JSON.parse(JSON.stringify(prevGoal)); // Deep copy the goal object
   
         const activeTask = newGoal.ai_tasks[activeTaskIndex];
-        const updatedSteps = [...activeTask.actionable_steps]; // Create a copy of the steps array
+        const updatedSteps = [...activeTask.ai_subtasks]; // Create a copy of the steps array
   
         if (updatedSteps.every(s => s.completed)) {
           handleStepCompletion();
@@ -238,7 +243,9 @@ const AiGoal = () => {
       await deleteAiGoalById(goalId);
       
       removeGoal(goalId); // Remove from state immediately
-      
+   
+
+    
       navigate('/dashboard/goals');
     } catch (error) {
       setError(error.message);
@@ -254,6 +261,44 @@ const AiGoal = () => {
       setError(error.message);
     }
   };
+  const now = new Date();
+  const formattedDueDate = now.toISOString(); // Ensure this is defined before useState
+  const formattedCompletedAt = now.toISOString(); 
+  const formattedReminderTime = now.toTimeString().split(" ")[0]; // Extracts "HH:MM:SS"
+
+  const [formData, setFormData] = useState({
+    ai_goal: goalId,
+    title: "",
+    description: "",
+    due_date: formattedDueDate,
+    status: "pending",
+    completed_at: "",
+    completed_at: formattedCompletedAt,
+    reminder_time: formattedReminderTime
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handlesumbitAiTask = async () => {
+    try {
+      const newTask = await createAiTask({ goalId, taskData: formData });
+
+      // Update the goal state to include the new task
+      setGoal((prevGoal) => ({
+        ...prevGoal,
+        ai_tasks: [...prevGoal.ai_tasks, newTask], // Append the new task
+      }));
+
+      alert("AI Task Created Successfully");
+      setTaskOpen(false);
+      
+    } catch (error) {
+      alert("Failed to create AI Task");
+    }
+  };
+
   
   
   
@@ -315,7 +360,7 @@ const AiGoal = () => {
   }));
   
   return (
-    <div className='w-full  flex min-h-screen '>
+    <div className='w-full  flex min-h-screen px-4'>
       
 
       <div className="w-full    overflow-y-auto  no-scrollbar  ">
@@ -392,7 +437,10 @@ const AiGoal = () => {
                       }} 
                       className="block w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-[#F4F1FF]"
                     >
-                      Rename
+                      Rename goal
+                    </button>
+                    <button onClick={() => setTaskOpen(true)} className='block w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-[#F4F1FF]'>
+                      Add Task 
                     </button>
                     <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-xs text-[#006FDB] hover:bg-[#F4F1FF]">
                       Pin to Sidebar
@@ -405,6 +453,25 @@ const AiGoal = () => {
               
             </div>
 
+              {/* Modal for AI Task Form */}
+              <Modal open={taskOpen} onClose={() => setTaskOpen(false)}>
+                  <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 bg-white rounded-xl w-96'>
+                    <h2 className='text-xl font-semibold mb-4'>Add  Task</h2>
+                    <TextField fullWidth label='Title' name='title' value={formData.title} onChange={handleChange} margin='normal' />
+                    <TextField fullWidth label='Description' name='description' value={formData.description} onChange={handleChange} margin='normal' />
+                    <TextField fullWidth label='Due Date' type='datetime-local' name='due_date' value={formData.due_date} onChange={handleChange} margin='normal' />
+                    <TextField fullWidth label='Task Timeline' name='task_timeline' value={formData.task_timeline} onChange={handleChange} margin='normal' />
+                    <TextField fullWidth label='Reminder Time' name='reminder_time' value={formData.reminder_time} onChange={handleChange} margin='normal' />
+                    <div className='flex justify-end gap-4 mt-4'>
+                      <Button onClick={() => setTaskOpen(false)} variant='outlined'>Cancel</Button>
+                      <Button onClick={handlesumbitAiTask} variant='contained' color='primary'>Submit</Button>
+                    </div>
+                  </Box>
+                </Modal>
+
+
+
+
 
          
            
@@ -415,7 +482,7 @@ const AiGoal = () => {
                   const allTasksCompleted = goal.ai_tasks.every(t => t.status === 'completed');
                   const isActive = !allTasksCompleted && (index === activeTaskIndex || (index === 0 && activeTaskIndex === null));
                   const isLastTask = index === goal.ai_tasks.length - 1;
-
+                  open
                   return (
                     <div className="mx-auto" key={task.id}>
                          <motion.div
@@ -635,7 +702,7 @@ const AiGoal = () => {
             
           </div>
 
-          <Box className="actionable-steps xl:w-5/12 md:w-5/12 space-y-4 px-4 max-h-full rounded-xl m-4 " sx={{ backgroundColor: colors.background.paper }}>
+          <Box className="actionable-steps xl:w-6/12 md:w-5/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
               <div className=' items-center gap-4 mb-4 mt-4'>
                 <div className='flex items-center gap-4 w-full justify-between mb-2'>
                 <span className=' font-regular text-[#00000] text-sm xl:text-sm 2xl:text-base'
@@ -689,8 +756,8 @@ const AiGoal = () => {
               
               </div>
               <div className='space-y-6 mt-4'>
-                {activeTask && activeTask.actionable_steps.map((step, stepIndex) => {
-                  const {timeline, cleanedDetails } = extractTimeline(step.details); // Extract cleaned details for each step
+                {activeTask && activeTask.ai_subtasks.map((step, stepIndex) => {
+                  const {timeline, cleanedDetails } = extractTimeline(step.description); // Extract cleaned description for each step
               
                   return (
                     <Box key={stepIndex}  className="step  p-4 rounded-xl cursor-pointer flex items-center gap-4" sx={{ backgroundColor: colors.background.paper }}>
@@ -703,16 +770,25 @@ const AiGoal = () => {
                         />
 
                         </label>
-                        <div>
-                        <div className="flex w-full ">
+                        <div className='w-full'>
+                        <div className="flex flex-col w-full ">
                       
-                      <span className=' text-[#1D1B20] md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular'>{step.subtask_title}</span>
+                        <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
+                        <span className=' text-[#1D1B20] md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular'>{step.title}</span>
+                          <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }}/>
+
+                        </Box>
+                    
                       
-                      <Box className=' 2xl:h-6 h-6  flex justify-center items-center bg-[#FFFFFF]   text-[#4F378A] rounded-md xl:w-6/12 md:w-3/12 2xl:w-3/12 ' sx={{ backgroundColor: colors.background.default }}>
-                      <p className='md:text-xs xl:text-xs text-xs font-light'
-                       >
-                       {timeline}
-                         </p>
+                      
+                      
+                      <Box className=' 2xl:h-6 h-6  flex items-center  gap-2  text-[#4F378A] '>
+                      <AccessTimeIcon fontSize='small'/>
+                          <p className='md:text-xs xl:text-xs text-xs font-medium gap-4 '
+                          >
+                           
+                          {timeline}
+                            </p>
 
                       </Box>
                       
@@ -720,7 +796,9 @@ const AiGoal = () => {
 
                        
                      </div>
-                        <span className='text-[#49454F] md:text-md xl:text-xs font-light 2xl:text-sm'>{cleanedDetails}</span>
+                    
+
+                      {/* {  <span className='text-[#49454F] md:text-md xl:text-xs font-light 2xl:text-sm'>{cleanedDetails}</span>} */}
                 
                         </div>
                         
@@ -730,9 +808,10 @@ const AiGoal = () => {
                 })}
               </div>
               <div className='flex  my-8 w-full justify-center  '>
-              <button className='bg-[#4F378A] w-full relative max-w-sm md:text-sm lg:text-md text-white py-2 px-8 rounded-lg'>
+             {/* { <button onClick={() => setTaskOpen(true)} className='bg-[#4F378A] w-full max-w-sm text-white py-2 px-8 rounded-lg'>
                 Add to List
-              </button>
+              </button>} */}
+             
               </div>
                 </>
               )

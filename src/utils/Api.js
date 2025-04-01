@@ -225,6 +225,26 @@ const createTask = async ({ goal, title}) => {
   }
 }
 
+
+const createAiTask = async ({goalId, taskData}) => {  
+  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/ai-tasks/create/`;
+  try {
+    const token = getToken();
+    const response = await axios.post(url, taskData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  }
+  catch (error) {
+    console.error("Error creating AI task:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
 const fetchTasks = async () => {  
   const url = "https://kommitly-backend.onrender.com/api/tasks/";
   try {
@@ -330,4 +350,22 @@ const updateAiTaskById = async (taskId, updatedData) => {
 }
 
 
-export { generateInsights, createAiGoal, createGoal, fetchGoals, updateAiTaskById,fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus, fetchGoalById, createTask , fetchTasks, deleteGoalById, deleteTaskById, fetchTasksByGoalId, fetchUserProfile, deleteAiTaskById};
+export { 
+  generateInsights, 
+  createAiGoal, 
+  createGoal, 
+  fetchGoals, 
+  createAiTask,
+  updateAiTaskById,
+  fetchAiGoalById, 
+  deleteAiGoalById, 
+  updateAiGoalById, 
+  updateAiTaskStatus, 
+  fetchGoalById, 
+  createTask , 
+  fetchTasks, 
+  deleteGoalById, 
+  deleteTaskById, 
+  fetchTasksByGoalId, 
+  fetchUserProfile, 
+  deleteAiTaskById};

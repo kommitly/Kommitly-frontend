@@ -1,31 +1,46 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import { ProfileContext } from "../context/ProfileContext";
+import { TextField } from "@mui/material";
+import { Formik } from "formik";
+import * as yup from "yup";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import { tokens } from "../theme";
+import { Box } from "@mui/material";
+
+const initialValues = {
+  email: "",
+  password: "",
+};
+
+const userSchema = yup.object().shape({
+  email: yup.string().email("invalid email").required("required"),
+  password: yup.string().required("required"),
+});
 
 const Login = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const isNonMobile = useMediaQuery("(min-width: 600px)");
   const { login } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
   const { loadProfile } = useContext(ProfileContext);
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (values) => {
     try {
-      const response = await fetch("https://kommitly-backend.onrender.com/api/token/", {
+      const response = await fetch("https://kommitly-backend.onrender.com/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(values),
       });
 
       const data = await response.json();
       if (response.ok) {
-        await login(data.access); // Wait for login process to complete
-        await loadProfile(); // Fetch user profile immediately after login
-        navigate("/dashboard/home"); // Redirect after successful login
+        await login(data.access);
       } else {
         setMessage(data.error || "Login failed.");
       }
@@ -35,24 +50,54 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center h-screen">
-      <div className="w-1/2 h-full bg-[#6F2DA8] flex flex-col items-center justify-center">
-        <h1 className="text-4xl text-white font-bold mb-4">Welcome to Kommitly</h1>
-        <p className="text-white max-w-[300px] text-center">
-          Achieve your goals with Kommitly. Break down your big dreams into small, actionable steps. Track your progress, stay accountable, and make success a habit.
-        </p>
-      </div>
-
-      <div className="flex w-1/2 flex-col h-screen items-center p-4">
-        <h2 className="text-3xl font-semibold text-[#6F2DA8]">Login</h2>
-
-        <div className="flex flex-col gap-4 p-4 justify-center h-screen">
-          {message && <p>{message}</p>}
-          <form onSubmit={handleLogin} className="flex flex-col gap-4">
-            <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-            <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
-            <Button type="submit" variant="contained" color="secondary" className="cursor-pointer mt-4 rounded-md text-white p-2 w-auto">Login</Button>
-          </form>
+    <div className="flex w-full flex-col items-center h-screen">
+      <div className="flex w-full flex-col h-8/12 items-center p-4">
+        <div className="flex w-10/12 flex-col gap-4 p-4 justify-center h-screen">
+          {message && <p style={{color:colors.background.warning}}>{message}</p>}
+          <Formik onSubmit={handleLogin} initialValues={initialValues} validationSchema={userSchema}>
+            {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+              <form onSubmit={handleSubmit}>
+                <Box
+                  display="grid"
+                  gap="30px"
+                  gridTemplateColumns="repeat(4,minmax(0,1fr))"
+                  sx={{ "& > div": { gridColumn: isNonMobile ? undefined : "span 4" } }}
+                >
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    type="text"
+                    label="Email"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.email}
+                    name="email"
+                    error={!!touched.email && !!errors.email}
+                    helperText={touched.email && errors.email}
+                    sx={{ gridColumn: "span 4" }}
+                  />
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    type="password"
+                    label="Password"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.password}
+                    name="password"
+                    error={!!touched.password && !!errors.password}
+                    helperText={touched.password && errors.password}
+                    sx={{ gridColumn: "span 4" }}
+                  />
+                </Box>
+                <Box display="flex" justifyContent="center" mt="20px" width="100%">
+                  <Button type="submit" color="secondary" variant="contained" sx={{ width: "100%", padding: 1.5 }}>
+                    Login
+                  </Button>
+                </Box>
+              </form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>

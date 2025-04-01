@@ -1,37 +1,63 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { tokens } from "../theme";
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import { TextField} from "@mui/material";
+import {Formik} from "formik";
+import * as yup from "yup";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { use } from "react";
+
+const initialValues = {
+  first_name: "",
+  last_name: "",
+  email: "",
+  password: "",
+  timezone: "Africa/Nairobi",
+  
+};
+
+const userSchema = yup.object().shape({
+  first_name: yup.string().required("required"),
+  last_name: yup.string().required("required"),
+  email: yup.string().email("invalid email").required("required"),
+  password: yup.string().required("required"),
+  
+});
+
+
 
 const Signup = () => {
-  const { login } = useContext(AuthContext); 
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    timezone: "Africa/Nairobi",
-  });
-  const [message, setMessage] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false); // State for dialog
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const isNonMobile = useMediaQuery("(min-width: 600px)");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [isCheckingVerification, setIsCheckingVerification] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleFormSubmit = async (values) => {
     try {
       const response = await fetch("https://kommitly-backend.onrender.com/api/users/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(values),
       });
 
       if (response.ok) {
-        setDialogOpen(true); // Open the dialog
+        setDialogOpen(true);
+        setEmail(values.email);
+        setPassword(values.password);
         setIsCheckingVerification(true);
+
       } else {
         const errorData = await response.json();
         setMessage(errorData.error || "Signup failed. Try again.");
@@ -41,13 +67,13 @@ const Signup = () => {
     }
   };
 
-
+ 
   useEffect(() => {
     let interval;
     if (isCheckingVerification) {
       interval = setInterval(async () => {
         try {
-          const res = await fetch(`https://kommitly-backend.onrender.com/api/users/check-verification-status/${formData.email}/`);
+          const res = await fetch(`https://kommitly-backend.onrender.com/api/users/check-verification-status/${email}/`);
           if (!res.ok) throw new Error("Failed to check verification status");
   
           const data = await res.json();
@@ -58,7 +84,7 @@ const Signup = () => {
             const tokenRes = await fetch("https://kommitly-backend.onrender.com/api/token/", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: formData.email, password: formData.password }), // Send user credentials
+              body: JSON.stringify({ email, password}), // Send user credentials
             });
   
             if (tokenRes.ok) {
@@ -74,30 +100,113 @@ const Signup = () => {
       }, 5000);
     }
     return () => clearInterval(interval);
-  }, [isCheckingVerification, formData.email, formData.password, navigate]);
-  
-
+  }, [isCheckingVerification, email, password, navigate]);
 
  
   return (
-    <div className="flex items-center h-screen">
-      <div className="w-1/2 h-full bg-[#6F2DA8] flex flex-col items-center justify-center">
-        <h1 className="text-4xl text-white font-bold mb-4">Welcome to Kommitly</h1>
-        <p className="text-white max-w-[300px] text-center">
-          Achieve your goals with Kommitly. Break down your big dreams into small, actionable steps. Track your progress, stay accountable, and make success a habit.
-        </p>
-      </div>
+    <div className="flex w-full  flex-col items-center h-screen bg-[#1E1A2A]">
+   
 
-      <div className="flex w-1/2 justify-center flex-col items-center">
-        <h2 className="text-2xl font-bold">Sign Up</h2>
-        {message && <p className="text-red-500">{message}</p>}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input type="text" name="first_name" placeholder="First Name"  value={formData.first_name} onChange={handleChange} required />
-          <input type="text" name="last_name" placeholder="Last Name" value={formData.last_name} onChange={handleChange} required />
-          <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-          <button type="submit" className="bg-[#6F2DA8] text-white px-4 py-2 rounded">Sign Up</button>
-        </form>
+ 
+      
+     
+        {message && <p style={{color:colors.background.warning}}>{message}</p>}
+
+        <div className="h-8/12 w-10/12 flex flex-col items-center justify-center">
+
+        <Formik
+        onSubmit={handleFormSubmit}
+        initialValues={initialValues}
+        validationSchema={userSchema}
+        >
+            {({
+                values,
+                errors, 
+                touched, 
+                handleBlur, 
+                handleChange, 
+                handleSubmit,
+            }) => (
+              <form onSubmit={handleSubmit}>
+              <Box 
+              display="grid" 
+              gap="30px" 
+              gridTemplateColumns="repeat(4,minmax(0,1fr))"
+              sx={{
+                  "& > div": {gridColumn: isNonMobile ? undefined : "span 4" },
+              }}
+              >
+                  <TextField 
+                  fullWidth
+                  variant="filled"
+                  type="text"
+                  label="First Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.first_name}
+                  name="first_name"
+                  error={!!touched.first_name && !!errors.first_name}
+                  helperText={touched.first_name && errors.first_name}
+                  sx={{gridColumn: "span 2"}}
+                  InputProps={{ style: { color: "#fff" } }} 
+
+                  />
+                    <TextField 
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="Last Name"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.last_name}
+                        name="last_name"
+                        error={!!touched.first_name && !!errors.last_name}
+                        helperText={touched.first_name && errors.last_name}
+                        sx={{ gridColumn: "span 2" }}
+                        InputProps={{ style: { color: "#fff" } }} 
+                        />
+                        <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="Email"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.email}
+                        name="email"
+                        error={!!touched.email && !!errors.email}
+                        helperText={touched.email && errors.email}
+                        sx={{ gridColumn: "span 4" }}
+                        />
+                        <TextField
+                        fullWidth
+                        variant="filled"
+                        type="password"
+                        label="Password"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.password}
+                        name="password"
+                        error={!!touched.password && !!errors.password}
+                        helperText={touched.password && errors.password}
+                        sx={{ gridColumn: "span 4" }}
+                        InputProps={{ style: { color: "#fff" } }} 
+                        />
+
+
+
+                    </Box>
+                    <Box display="flex" justifyContent="end" mt="20px" width="100%"  >
+                        <Button type="submit" color="secondary" variant="contained"  sx={{width: '100%', padding: 1.5 }}>
+                            Create New User
+                        </Button>
+                    </Box>
+
+                </form>
+            )}
+        </Formik>
+
+      
 
         {dialogOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">

@@ -13,6 +13,9 @@ export const ProfileProvider = ({ children }) => {
   });
 
   const loadProfile = async () => {
+    const token = localStorage.getItem("token"); // Check if token exists
+    if (!token) return; // No token, exit early
+    
     try {
       const fetchedProfile = await fetchUserProfile();
       setProfile(fetchedProfile);

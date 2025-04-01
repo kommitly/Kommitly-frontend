@@ -16,6 +16,8 @@ import Login from "./landing-page/Login";
 import Settings from "./dashboard/pages/Settings/Settings";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { CssVarsProvider } from '@mui/joy/styles';
+import Registration from "./landing-page/Registration";
 
 
 
@@ -34,15 +36,16 @@ function App() {
 
 
   return (
-    <AuthProvider>
-    
-        <ColorModeContext.Provider value={colorMode}>
+   
+    <CssVarsProvider>
+       <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline/>
             <Routes>
               <Route path="/" element={<LandingPage />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/registration" element={<Registration />} />
+             
+           
               <Route path="/verify-email/:token" element={<EmailVerificationCheck />} />
 
               {/* ✅ Correct way to wrap ProtectedRoute */}
@@ -65,13 +68,15 @@ function App() {
       </ThemeProvider>
       </ColorModeContext.Provider>
 
+      </CssVarsProvider>
+       
 
 
 
 
        
       
-    </AuthProvider>
+   
   );
 }
 

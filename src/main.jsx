@@ -15,7 +15,8 @@ import { ProfileProvider } from './context/ProfileContext.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
   <BrowserRouter> {/* Router comes first */}
-    <AuthProvider> {/* Now inside the Router */}
+ 
+  <AuthProvider> {/* Now inside the Router */}
       <ProfileProvider>
       <GoalsProvider> 
         <TasksProvider>
@@ -26,6 +27,9 @@ createRoot(document.getElementById('root')).render(
       </GoalsProvider>
       </ProfileProvider>
     </AuthProvider>
+
+
+   
   </BrowserRouter>
 </StrictMode>,
 )

@@ -20,17 +20,32 @@ export const GoalsProvider = ({ children }) => {
 
   useEffect(() => {
     const loadGoals = async () => {
-      try {
-        const fetchedGoals = await fetchGoals();
-        console.log(fetchedGoals);
-        setGoals(fetchedGoals ?? { goals: [], ai_goals: [] });
-      } catch (error) {
+        const token = localStorage.getItem("token");  // Check if token exists
+        if (!token) return; 
+
+          try {
+            const fetchedGoals = await fetchGoals();
+            console.log("Fetched Goals:", fetchedGoals);
+            setGoals(fetchedGoals ?? { goals: [], ai_goals: [] });
+        } 
+        catch (error) {
         console.error('Error fetching goals:', error);
       }
     };
 
     loadGoals();
   }, []);
+
+  // Function to reload goals from API
+const reloadGoals = async () => {
+  try {
+    const fetchedGoals = await fetchGoals();
+    console.log("Reloaded Goals:", fetchedGoals);
+    setGoals(fetchedGoals ?? { goals: [], ai_goals: [] });
+  } catch (error) {
+    console.error('Error reloading goals:', error);
+  }
+};
 
   const addGoal = (newGoal) => {
     setGoals((prevGoals) => ({
@@ -45,23 +60,37 @@ export const GoalsProvider = ({ children }) => {
       goals: prevGoals.goals.filter((goal) => goal.id !== goalId),
       ai_goals: prevGoals.ai_goals.filter((goal) => goal.id !== goalId), // Ensure AI goals update
     }));
+     // Wait for UI update and then fetch fresh data
+  setTimeout(reloadGoals, 500);
   };
   
 
   // Hide goal from sidebar without modifying setGoals
   const removeGoalFromSidebar = (goalId) => {
     setHiddenGoals((prevHidden) => {
-      const updatedHidden = new Set([...prevHidden, goalId]);
+      const updatedHidden = new Set(prevHidden);
+      updatedHidden.delete(goalId);
       localStorage.setItem("hiddenGoals", JSON.stringify([...updatedHidden]));
       return updatedHidden;
-    });
+  });
 
-    setPinnedGoals((prevPinned) => {
-      const updatedPinned = new Set(prevPinned);
-      updatedPinned.delete(goalId);
-      localStorage.setItem("pinnedGoals", JSON.stringify([...updatedPinned]));
-      return updatedPinned;
-    });
+  setPinnedGoals((prevPinned) => {
+    const updatedPinned = new Set(prevPinned);
+    updatedPinned.delete(goalId);
+    console.log("Updated Pinned Goals:", updatedPinned);
+    localStorage.setItem("pinnedGoals", JSON.stringify([...updatedPinned]));
+    return updatedPinned;
+});
+
+
+  // Remove from the main goal list
+  setGoals((prevGoals) => ({
+    goals: prevGoals.goals.filter(goal => goal.id !== goalId),
+    ai_goals: prevGoals.ai_goals.filter(goal => goal.id !== goalId),
+}));
+
+ // Reload goals from API after removal
+ setTimeout(reloadGoals, 500);
     
   };
 

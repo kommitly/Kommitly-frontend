@@ -29,15 +29,19 @@ export const tokens = (mode) => ({
           300: "#A89FE3", // Dusty Periwinkle
           400: "#6D5BA6", // Deep Violet
           500: "#4F378A", // Rich Purple
+          600: "#2C2640", // Muted Eggplant (Surface)
         },
         text: {
           primary: "#1E1A2A", // Dark Purple (for contrast in light mode)
           secondary: "#6D5BA6", //Deep Violet
+
         },
         background: {
           default: "#FBF9FF", // Light mode background
           paper: "#D6CFFF", // Muted Lavender (for surfaces)
+          warning: "#E60178"
         },
+
       }),
 });
 

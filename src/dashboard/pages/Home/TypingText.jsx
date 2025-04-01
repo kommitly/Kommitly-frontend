@@ -1,0 +1,72 @@
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Typography } from "@mui/material";
+import { tokens } from "../../../theme";
+import { useTheme } from "@mui/material/styles";
+
+
+const TypingText = ({ color, onComplete }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const phrases = ["Turn Your Dreams into a reality", "Break Down Your Goals into Actionable Steps"];
+  const [phraseIndex, setPhraseIndex] = useState(0); // Tracks the current phrase
+  const [displayedText, setDisplayedText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showCursor, setShowCursor] = useState(true);
+  const [deleting, setDeleting] = useState(false); // Controls deleting effect
+
+  useEffect(() => {
+    const currentPhrase = phrases[phraseIndex];
+  
+    if (!deleting && currentIndex < currentPhrase.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText((prev) => prev + currentPhrase[currentIndex]);
+        setCurrentIndex((prev) => prev + 1);
+      }, 100);
+      return () => clearTimeout(timeout);
+    } else if (!deleting && currentIndex === currentPhrase.length) {
+      setTimeout(() => setDeleting(true), 2000);
+      
+      // Ensure onComplete is called when typing finishes
+      if (onComplete) {
+        onComplete();
+      }
+  
+    } else if (deleting && currentIndex > 0) {
+      const timeout = setTimeout(() => {
+        setDisplayedText((prev) => prev.slice(0, -1));
+        setCurrentIndex((prev) => prev - 1);
+      }, 50);
+      return () => clearTimeout(timeout);
+    } else if (deleting && currentIndex === 0) {
+      setDeleting(false);
+      setPhraseIndex((prev) => (prev + 1) % phrases.length);
+    }
+  }, [currentIndex, deleting]);
+  
+
+  useEffect(() => {
+    // Cursor blinking effect
+    const cursorInterval = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 500);
+    return () => clearInterval(cursorInterval);
+  }, []);
+
+  return (
+    <Typography variant="h1" sx={{ color, fontWeight: "semibold" }}>
+      <motion.span>
+        {displayedText}
+        {showCursor && (
+          <motion.span
+            style={{ fontWeight: "200", color: colors.primary[500] }}
+          >
+            |
+          </motion.span>
+        )}
+      </motion.span>
+    </Typography>
+  );
+};
+
+export default TypingText;

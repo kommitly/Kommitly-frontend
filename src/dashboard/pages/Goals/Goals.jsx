@@ -212,7 +212,7 @@ const Goals = () => {
 
 
   return (
-    <div className='w-full  grid gap-1 grid-cols-12  flex min-h-screen'>
+    <div className='w-full  grid gap-1 grid-cols-12  px-6  flex min-h-screen'>
        <Backdrop
           sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
           open={open}
@@ -282,66 +282,8 @@ const Goals = () => {
           </div>
         </Backdrop>
 
-      <div className="col-span-8 mt-4 flex-1 overflow-y-auto scrollbar-hide  no-scrollbar">
-        <div className='flex items-center justify-between '>
-       <div>
-       {profile.user && (
-       <h1 className=' space-x-1 font-semibold text-xl'>
-        <span >
-          <Typography
-            component="span"
-            variant="h2"
-            className=" text-semibold"
-            color='text.primary' 
-          >
-          Hello
-
-          </Typography>
+      <div className="col-span-8  flex-1 overflow-y-auto scrollbar-hide  no-scrollbar">
        
-
-        </span>
-        <span className='text-secondary'>
-        <Typography
-            component="span"
-            variant="h2"
-            className=" text-semibold"
-            
-            sx={{ color: colors.primary[500] }}
-          >
-           {profile.user.first_name}
-
-          </Typography>
-
-       
-
-        </span>
-        <span role="img" aria-label="waving hand" className='ml-2'>
-    👋
-        </span>
-       </h1>
-        )}
-        <p className='text-[#2C2C2C] font-light text-xs'>
-        <Typography
-            component="span"
-            variant="h5"
-            color='text.secondary' 
-            
-            
-          >
-           Let's take a dive into your goals
-
-          </Typography>
-          
-          
-        </p>
-
-      
-       </div>
-       <Box className='p-2 rounded-full bg-[#F4F1FF] flex items-center justify-center' sx={{backgroundColor:colors.background.paper}}
-        >
-        <IoSearch size={20} className='text-[#4A4459]' />
-        </Box>
-        </div>
         <Box className='w-full container h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] p-8 mt-4'
         sx={{backgroundColor:colors.background.paper}}
         >
@@ -601,7 +543,7 @@ const Goals = () => {
 
 
 
-      <Box className='col-span-4  space-y-4 mx-4 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
+      <Box className='col-span-4  space-y-4 ml-6 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
         
         <div className=''>
         <div className='w-full flex justify-center mb-3'>

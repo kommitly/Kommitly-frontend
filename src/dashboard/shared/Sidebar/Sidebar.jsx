@@ -1,4 +1,4 @@
-import React, { useContext , useState} from 'react';
+import React, { useContext , useEffect, useState} from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Link, useLocation } from "react-router-dom";
@@ -6,7 +6,8 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import { createGoal, createTask, deleteGoalById, deleteAiGoalById, deleteTaskById} from '../../../utils/Api';
 import { TasksContext } from '../../../context/TasksContext';
-
+import { HiOutlineHome } from "react-icons/hi";
+import { GoGoal } from "react-icons/go";
 
 
 const Sidebar = () => {
@@ -31,8 +32,8 @@ const Sidebar = () => {
 
 
 
-
-  const isActive = (path) => (location.pathname === path ? "bg-black dark:bg-blue-700 text-white" : "text-black dark:text-white");
+  console.log("Goals from Sidebar:", goals);
+  const isActive = (path) => (location.pathname === path ? "bg-[#4F378A] dark:bg-blue-700 text-white " : "text-[#2C2640] dark:text-white");
  
   const handleAddGoal = async () => {
     if (newGoalTitle.trim() === '') return;
@@ -108,16 +109,23 @@ const Sidebar = () => {
     }
   }
 
-    // Get the last two AI goals that are not hidden
-  const recentAiGoals = goals.ai_goals
+  const recentAiGoals = goals?.ai_goals
   ?.filter(goal => !hiddenGoals.has(goal.id))
   .slice(-2);
 
+
+useEffect(() => {
+  console.log("Recent AI Goals:", recentAiGoals);
+}, [goals, hiddenGoals]); // Removed recentAiGoals from dependencies
+
+  
+
   // Get pinned goals
-  const pinnedAiGoals = goals.ai_goals.filter(goal => pinnedGoals.has(goal.id));
+  //const pinnedAiGoals = goals.ai_goals.filter(goal => pinnedGoals.has(goal.id));
+  //console.log("Pinned AI Goals:", pinnedAiGoals);
 
   // Merge pinned goals and recent AI goals (avoid duplicates)
-  const displayedAiGoals = [...new Set([...pinnedAiGoals, ...recentAiGoals])];
+  //const displayedAiGoals = [...new Set([...pinnedAiGoals, ...recentAiGoals])];
 
   const recentTasks = tasks
   ?.filter(task => !hiddenTasks.has(task.id))
@@ -150,9 +158,9 @@ const Sidebar = () => {
 
   return (
     <div className='fixed inset-y-0 transition-width duration-300 min-h-screen border-r  border-[#CFC8FF] '>
-        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#FBF9FF]  flex flex-col px-2 py-4  '>
+        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#FBF9FF]  flex flex-col px-2 py-2  '>
         <div className='w-10/12 p-2 inset-y-2 mb-2'>
-        <h1 className='text-black fredoka-bold xl:text-2xl lg:text-xl ml-3 mt-2 '>Kommitly</h1>
+        <h1 className='text-black fredoka-bold xl:text-2xl lg:text-xl ml-3  '>Kommitly</h1>
             </div>
 
             <div className="flex flex-col flex-grow mt-4 overflow-y-auto no-scrollbar">
@@ -161,45 +169,18 @@ const Sidebar = () => {
               <Link
                 to="/dashboard/home"
                 className={`flex items-center group p-3 md:text-sm xl:text-xs  font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
-                  "/home"
+                  "/dashboard/home"
                 )}`}
               >
                 <div className='flex items-center px-1 justify-center '>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#65558F"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-[#65558F] icon-small"
-                    >
-                    <path d="M3 9.5L12 3l9 6.5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-11z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                    <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#65558F"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-[#65558F] icon-large"
-                >
-                  <path d="M3 9.5L12 3l9 6.5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-11z"></path>
-                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
+                <HiOutlineHome  size={16} className={`icon-small group-hover:text-[#4F378A]  ${location.pathname === "/dashboard/home" ? "#FFFFFF" : "#65558F"}`}/>
+                <HiOutlineHome  size={20} className={`icon-large group-hover:text-[#4F378A]  ${location.pathname === "/dashboard/home" ? "#FFFFFF" : "#65558F"}`}/>
+               
 
                 <span
                   className="ml-4 flex items-center justify-center"
                 >
-                  <p className='text-[#4A4459] md:text-sm xl:text-sm 2xl:text-lg  text-center font-normal group-hover:text-[#FFFFFF]'>
+                  <p className=' md:text-sm xl:text-sm 2xl:text-lg  text-center font-normal group-hover:text-[#4F378A]'>
                   Home
                   </p>
                 </span>
@@ -208,60 +189,36 @@ const Sidebar = () => {
                
               </Link>
 
+              {goals?.ai_goals?.length > 0 && (
+                <>
+                
+
               <ul className='mb-2 '>
               <li className='w-full h-12'>
-                <Link to="/dashboard/goals" className="group  flex items-center p-2 text-sm font-medium rounded-lg hover:bg-[#E8DEF8] ">
+                <Link to="/dashboard/goals" className={`group  flex items-center p-2 text-sm font-medium rounded-lg hover:bg-[#E8DEF8] ${isActive(
+                  "/dashboard/goals"
+                )}`} >
                   <div className='flex w-full px-2 justify-between'>
                     <div className='flex items-center'>
-                      <svg 
-                      width="16" 
-                      height="16" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="#65558F"
-                      strokeWidth="3" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                      className="icon-small"
-                      >
-                    
-                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                      <path d="M16 3H8v4h8V3z"></path>
-                      <path d="M9 7v14"></path>
-                      <path d="M15 7v14"></path>
-                      </svg>
-                      <svg 
-                      width="20" 
-                      height="20" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="#65558F"
-                      strokeWidth="3" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                      className="icon-large"
-                      >
-                      
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 3H8v4h8V3z"></path>
-                        <path d="M9 7v14"></path>
-                        <path d="M15 7v14"></path>
-                      </svg>
+                    <GoGoal size={16}  className={`icon-small group-hover:text-[#4F378A]  ${location.pathname === "/dashboard/goals" ? "#FFFFFF" : "#65558F"}`}/> 
+                    <GoGoal size={20} className={`icon-large group-hover:text-[#4F378A]  ${location.pathname === "/dashboard/goals" ? "#FFFFFF" : "#65558F"}`}/> 
 
-                      <span className="ml-4  md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]">
+
+                      <span className="ml-4  md:text-sm xl:text-sm 2xl:text-lg   font-normal group-hover:text-[#4F378A]">
                         Goals
                       </span> 
                     </div>
-                    <div className='flex  items-center rounded-full  p-2 hover:bg-[#F7F2FA]' 
+                   {/* <div className='flex  items-center rounded-full  p-2 hover:bg-[#F7F2FA]' 
                  style={{ boxShadow: '2px 2px 8.5px rgba(13, 39, 80, 0.16), -8px -8px 13.5px rgba(255,255,255,1) ' }}
                  onClick={() => setIsGoalInputVisible(!isGoalInputVisible)}>
+                   
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="10"
                       height="10"
                       viewBox="0 0 18 18"
                       fill="none"
-                      stroke="#65558F"
+                      stroke={location.pathname === "/dashboard/goals" ? "#FFFFFF" : "#65558F"}
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -276,7 +233,7 @@ const Sidebar = () => {
                       height="14"
                       viewBox="0 0 18 18"
                       fill="none"
-                      stroke="#65558F"
+                      stroke={location.pathname === "/dashboard/goals" ? "#FFFFFF" : "#65558F"}
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -289,9 +246,13 @@ const Sidebar = () => {
 
 
                  </div>
+                 */}
                   </div>
+
                 </Link>
               </li>
+              
+
               {isGoalInputVisible && (
                 <li className='w-full h-12'>
                   <input
@@ -305,13 +266,13 @@ const Sidebar = () => {
                 </li>
               )}
 
+
                 {goals.goals?.slice(-2).filter(goal => !hiddenGoals.has(goal.id)).map((goal) => (
                   <li key={goal.id} className="w-full relative group ">
                     <Link
                       to={`/dashboard/goal/${goal.id}`}
-                      className="flex items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] w-full z-0"
-                    >
-                      <span className="ml-2 px-3 py-3 z-0 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[180px] block group-hover:text-[#FFFFFF]">
+                      className={`flex items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] w-full z-0 ${isActive(`/dashboard/goal/${goal.id}`)}`}>
+                      <span className="ml-2 px-3 py-3 z-0 md:text-xs xl:text-xs 2xl:text-sm  font-normal truncate max-w-[180px] block group-hover:text-[#4F378A]">
                          {goal.title}
                       </span>
                     </Link>
@@ -331,7 +292,8 @@ const Sidebar = () => {
                           height="24"
                           viewBox="0 0 24 24"
                           fill="none"
-                          stroke="#65558F"
+                          stroke={location.pathname === `/dashboard/goal/${goal.id}` ? "#FFFFFF" : "#65558F"}
+
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -370,10 +332,14 @@ const Sidebar = () => {
                   </li>
                 ))}
 
-              {displayedAiGoals.map((goal)=> (
+              {recentAiGoals?.map((goal)=> (
                 <li key={goal.id} className="w-full relative group">
-                  <Link to={`/dashboard/ai-goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] w-full z-0">
-                  <span className="ml-2 px-3 py-3 z-0 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[180px] block group-hover:text-[#FFFFFF]">
+                 <Link
+                      to={`/dashboard/ai-goal/${goal.id}`}
+                      className={`flex items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] w-full z-0 ${isActive(`/dashboard/ai-goal/${goal.id}`)}`}
+                    >
+
+                  <span className="ml-2 px-3 py-3 z-0 md:text-xs xl:text-xs 2xl:text-sm  font-normal truncate max-w-[180px] block group-hover:text-[#4F378A]">
                       {goal.title}
                     </span>
                   </Link>
@@ -393,7 +359,8 @@ const Sidebar = () => {
                           height="24"
                           viewBox="0 0 24 24"
                           fill="none"
-                          stroke="#65558F"
+                          stroke={location.pathname === `/dashboard/ai-goal/${goal.id}` ? "#FFFFFF" : "#65558F"}
+
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -439,75 +406,13 @@ const Sidebar = () => {
 
             </ul>
             
-            {/* {<li className='w-full  h-12'>
-              <Link
-                to="/goals"
-                className={`flex items-center p-2 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8] ${isActive(
-                  "/goals"
-                )}`}
-              >
-                <div className='flex w-full px-2 justify-between'>
-                    <div className='flex items-center '>
-                    <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#65558F"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-[#65558F]"
-                >
-                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                    <path d="M16 3H8v4h8V3z"></path>
-                    <path d="M9 7v14"></path>
-                    <path d="M15 7v14"></path>
-                </svg>
-
-                <span
-                  className="ml-4  "
-                >
-                  <p className='text-base  text-[#4A4459] font-normal'>
-                  Goals
-                  </p>
-                </span> 
-                 </div>
-                 <div className='flex  items-center rounded-full p-2 hover:bg-[#F7F2FA]' 
-                 style={{ boxShadow: '4px 8px 16.5px rgba(13, 39, 80, 0.16), -8px -9px 23.5px rgba(255,255,255,1), 0px 4px 4px rgba(0,0,0,0.25) ' }}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18"
-                      fill="none"
-                      stroke="#65558F"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-[#65558F]"
-                    >
-                      <path d="M9 2v16" strokeLinecap="round"></path>
-                      <path d="M2 9h16" strokeLinecap="round"></path>
-                    </svg>
-
-
-
-                 </div>
-
-
-
-                </div>
-               
-              </Link>
-            </li>} */}
+            
             <ul> 
             <li className='w-full mb-4 h-12'>
               <Link
                 to="/dashboard/tasks"
                 className={`flex items-center group p-2 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8] ${isActive(
-                    "/tasks"
+                    "/dashboard/tasks"
                   )}`}
                 >
                   <div className='flex w-full px-2 justify-between'>
@@ -518,7 +423,8 @@ const Sidebar = () => {
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#65558F"
+                    stroke={location.pathname === "/dashboard/tasks" ? "#FFFFFF" : "#65558F"}
+
                     strokeWidth="3"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -537,7 +443,8 @@ const Sidebar = () => {
                     height="20"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#65558F"
+                    stroke={location.pathname === "/dashboard/tasks" ? "#FFFFFF" : "#65558F"}
+
                     strokeWidth="3"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -553,12 +460,13 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg font-normal group-hover:text-[#4F378A]'>
                   Tasks
                   </p>
                 </span>
                    </div>
                    
+                   {/* Add Task Button 
                    <div className='flex items-center rounded-full p-2 hover:bg-[#F7F2FA] ' 
                   style={{ boxShadow: '2px 2px 8.5px rgba(13, 39, 80, 0.16), -8px -8px 13.5px rgba(255,255,255,1) ' }} 
                   onClick={() => setIsTaskInputVisible(!isTaskInputVisible)}>
@@ -569,7 +477,8 @@ const Sidebar = () => {
                       height="10"
                       viewBox="0 0 18 18"
                       fill="none"
-                      stroke="#65558F"
+                      stroke={location.pathname === "/dashboard/tasks" ? "#FFFFFF" : "#65558F"}
+
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -584,7 +493,8 @@ const Sidebar = () => {
                       height="14"
                       viewBox="0 0 18 18"
                       fill="none"
-                      stroke="#65558F"
+                      stroke={location.pathname === "/dashboard/tasks" ? "#FFFFFF" : "#65558F"}
+
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -596,6 +506,7 @@ const Sidebar = () => {
 
 
                  </div>
+                 */}
 
                 </div>
                
@@ -618,8 +529,10 @@ const Sidebar = () => {
 
                 {displayedTasks.map((task)  => (
                 <li key={task.id} className="w-full relative group ">
-                  <Link to={`/dashboard/tasks/${task.id}`} className="flex group items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8]">
-                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block group-hover:text-[#FFFFFF]">
+                  <Link to={`/dashboard/tasks/${task.id}`} className={`flex group items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] ${isActive(
+                  `/dashboard/tasks/${task.id}`
+                )}`}>
+                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm   font-normal truncate max-w-[200px] block group-hover:text-[#4F378A]">
                     {task.title}
                 </span>
 
@@ -638,7 +551,8 @@ const Sidebar = () => {
                           height="24"
                           viewBox="0 0 24 24"
                           fill="none"
-                          stroke="#65558F"
+                          stroke={location.pathname === `/dashboard/tasks/${task.id}` ? "#FFFFFF" : "#65558F"}
+
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -681,16 +595,14 @@ const Sidebar = () => {
 
             </ul>
 
-          
-            {/* {
-            <Divider variant="middle" />} */}
+        
             <ul>
 
             <li className='w-full h-12 mt-4'>
               <Link
                 to="/dashboard/analytics"
                 className={`flex items-center group  p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
-                  "/analytics"
+                  "/dashboard/analytics"
                 )}`}
               >
                 <div className='flex px-1 items-center '>
@@ -700,7 +612,8 @@ const Sidebar = () => {
                   height="16"
                   viewBox="0 0 24 24"
                   fill="#65558F" 
-                  stroke="#65558F"
+                  stroke={location.pathname === "/dashboard/analytics" ? "#FFFFFF" : "#65558F"}
+
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -716,7 +629,7 @@ const Sidebar = () => {
                   height="20"
                   viewBox="0 0 24 24"
                   fill="#65558F" 
-                  stroke="#65558F"
+                  stroke={location.pathname === "/dashboard/analytics" ? "#FFFFFF" : "#65558F"}
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -730,7 +643,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='mmd:text-sm xl:text-sm 2xl:text-lg text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
+                  <p className='mmd:text-sm xl:text-sm 2xl:text-lg  font-normal group-hover:text-[#4F378A]'>
                   Stats
                   </p>
                 </span>
@@ -739,124 +652,14 @@ const Sidebar = () => {
                
               </Link>
             </li>
-          {/* {<li className='w-full h-12'>
-            <Link
-              to="/dashboard/calendar"
-              className={`flex items-center group  p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
-                  "/calendar"
-              )}`}
-            >
-              <div className='flex px-1 items-center '>
-                  <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#65558F"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-[#65558F] icon-small"
-              >
-              <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
-              <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              
-              <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
-              </svg>
-              <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#65558F"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-[#65558F] icon-large"
-              >
-              <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
-              <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              
-              <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
-              </svg>
-
-
-              <span
-                className="ml-4  "
-              >
-                <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
-                Calendar
-                </p>
-              </span>
-
-              </div>
-              
-            </Link>
-          </li>
-          <li className='w-full h-12 mb-4'>
-            <Link
-              to="/dashboard/notifications"
-              className={`flex items-center  group p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
-                  "/notifications"
-              )}`}
-            >
-              <div className='flex px-1 items-center '>
-                              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#65558F"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#65558F] icon-small"
-              >
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#65558F"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#65558F] icon-large"
-              >
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-
-              <span
-                className="ml-4  "
-              >
-                <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
-                Notifications
-                </p>
-              </span>
-
-              </div>
-              
-            </Link>
-          </li>}
-           <Divider variant="middle" component="li" /> */}
-
-           
-
+        
 
             
             
 
             </ul>
+            </>
+            )}
           
             
         </nav>

@@ -1,5 +1,5 @@
 import { colors, IconButton } from '@mui/material';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect,forwardRef } from 'react';
 import { Divider } from '@mui/material';
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import { createAiGoal } from '../../../utils/Api';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-
+import { motion } from "framer-motion";
 
 const extractTimeline = (details) => {
   if (!details) return { timeline: 'No detail available', cleanedDetails: details };
@@ -21,6 +21,7 @@ const extractTimeline = (details) => {
   console.log('Match:', match); // Debugging
 
   const timeline = match ? match[2] : 'No timeline available'; // Extract actual time value, ignoring "within"
+  console.log('Timeline:', timeline); // Debugging
   
   let cleanedDetails = match ? details.replace(match[0], '').trim() : details;
 
@@ -41,7 +42,7 @@ const TaskComponent = ({ task, index }) => {
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
 
-  const { timeline, cleanedDetails } = extractTimeline(task.details);
+  const { timeline, cleanedDetails } = extractTimeline(task.description);
   return (
     <div className='w-11/12'>
       <div className='flex items-center gap-4'>
@@ -78,7 +79,7 @@ const TaskComponent = ({ task, index }) => {
   );
 };
 
-const GoalBreakdown = ({ goalData, taskData, onClose }) => {
+const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
   const [showSteps, setShowSteps] = useState(false);
@@ -95,7 +96,22 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
   }, [goalData, taskData]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+         <div className="w-11/12 p-8  min-h-screen flex justify-center items-center no-scrollbar">
+               <motion.div className="flex space-x-2">
+           {[0, 1, 2].map((i) => (
+             <motion.div
+               key={i}
+               className="w-2 h-2 bg-[#65558F] rounded-full"
+               initial={{ y: -10 }}
+               animate={{ y: [0, 10, 0] }}
+               transition={{ repeat: Infinity, duration: 0.9, delay: i * 0.2 }}
+             />
+           ))}
+         </motion.div>
+         
+               </div>
+    );
   }
 
   if (!goalData || !taskData || taskData.length === 0) {
@@ -108,9 +124,10 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
       const response = await createAiGoal(goalData, taskData);
       console.log("Goal Creation API Response:", response); // Debugging
       setGoals((prevGoals) => ({
-  ...prevGoals,
-  ai_goals: [...prevGoals.ai_goals, response.ai_goal], // Append to ai_goals array
-}));
+        goals: [...prevGoals.goals, response.ai_goal], // Add to goals array
+        ai_goals: [...prevGoals.ai_goals, response.ai_goal], // Add to ai_goals array
+    }));
+
 
       navigate(`/dashboard/ai-goal/${response.ai_goal.id}`);
     } catch (error) {
@@ -121,14 +138,14 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
   };
 
   const displayData = showSteps && selectedTask
-    ? selectedTask.actionable_steps.map((step, i) => ({
+    ? selectedTask.ai_subtasks.map((step, i) => ({
         ...step,
         id: `step-${i}`, // Ensure each step has a unique ID
       }))
     : taskData;
 
   return (
-    <div className="mt-6 w-full flex justify-center p-4 flex-1 overflow-y-auto scrollbar-hide">
+    <div ref={ref} className="mt-6 w-full flex justify-center p-4 flex-1 overflow-y-auto scrollbar-hide">
       <Box className=' xl:w-9/12 md:w-8/12 rounded-2xl py-2 px-2 ' sx={{ backgroundColor: colors.background.paper }}>
         <div className='flex items-center px-4 py-4 justify-between '>
           <div className='flex items-center gap-4'>
@@ -188,7 +205,7 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
 
           <div className='flex flex-col gap-4 justify-center'>
             {displayData.map((task, index) => {
-              const { timeline, cleanedDetails } = extractTimeline(task.details);
+              const { timeline, cleanedDetails } = extractTimeline(task.description);
 
               return (
                 <div key={task.id || `task-${index}`} className="">
@@ -262,6 +279,6 @@ const GoalBreakdown = ({ goalData, taskData, onClose }) => {
       </Box>
     </div>
   );
-};
+});
 
 export default GoalBreakdown;
