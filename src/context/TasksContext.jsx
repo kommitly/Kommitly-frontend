@@ -7,6 +7,17 @@ export const TasksContext = createContext();
 export const TasksProvider = ({ children }) => {    
     const [tasks, setTasks] = useState([]);
 
+    const [hiddenTasks, setHiddenTasks] = useState(() => {
+        const storedHiddenTasks = localStorage.getItem("hiddenTasks");
+        return storedHiddenTasks ? new Set(JSON.parse(storedHiddenTasks)) : new Set();
+    });
+
+    const [pinnedTasks, setPinnedTasks] = useState(() => {
+        const storedPinnedTasks = localStorage.getItem("pinnedTasks");
+        return storedPinnedTasks ? new Set(JSON.parse(storedPinnedTasks)) : new Set();
+    });
+
+
     useEffect(() => {
         const loadTasks = async () => {
             try {
@@ -29,8 +40,49 @@ export const TasksProvider = ({ children }) => {
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
     };
 
+    const removeTaskFromSidebar = (taskId) => {
+        setHiddenTasks((prevHidden) => {
+            const updatedHidden = new Set([...prevHidden, taskId]);
+            localStorage.setItem("hiddenTasks", JSON.stringify([...updatedHidden]));
+            return updatedHidden;
+        });
+
+        setPinnedTasks((prevPinned) => {
+            const updatedPinned = new Set(prevPinned);
+            updatedPinned.delete(taskId);
+            localStorage.setItem("pinnedTasks", JSON.stringify([...updatedPinned]));
+            return updatedPinned;
+        });
+    };
+
+    const unhideTask = (taskId) => {
+        setHiddenTasks((prevHidden) => {
+            const updatedHidden = new Set(prevHidden);
+            updatedHidden.delete(taskId);
+            localStorage.setItem("hiddenTasks", JSON.stringify([...updatedHidden]));
+            return updatedHidden;
+        });
+    };
+
+
+    const addTaskToSidebar = (taskId) => {
+        setPinnedTasks((prevPinned) => {
+            const updatedPinned = new Set(prevPinned);
+            updatedPinned.add(taskId);
+            localStorage.setItem("pinnedTasks", JSON.stringify([...updatedPinned]));
+            return updatedPinned;
+        });
+
+        setHiddenTasks((prevHidden) => {
+            const updatedHidden = new Set(prevHidden);
+            updatedHidden.delete(taskId);
+            localStorage.setItem("hiddenTasks", JSON.stringify([...updatedHidden]));
+            return updatedHidden;
+        });
+    };
+
     return (
-        <TasksContext.Provider value={{ tasks, setTasks, addTask, removeTask }}>
+        <TasksContext.Provider value={{ tasks, setTasks, addTask, removeTask,  removeTaskFromSidebar, hiddenTasks, unhideTask, addTaskToSidebar, pinnedTasks  }}>
             {children}
         </TasksContext.Provider>
     );

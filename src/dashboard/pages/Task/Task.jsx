@@ -7,10 +7,13 @@ import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } fr
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
-import { deleteTaskById, updateSingleTaskStatus, fetchTaskById } from "../../../utils/api/";
+import { deleteTaskById, updateSingleTaskStatus, fetchTaskById, createSubtask, updateSubtask} from "../../../utils/api/";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaCalendarAlt } from "react-icons/fa"; // Calendar icon
+import { FaCalendarAlt, FaClock, FaFlag, FaTasks  } from "react-icons/fa"; // Calendar icon
+import SubtaskDetails from "./Subtask";
+
+
 
 const TaskPage = () => {
     const { taskId } = useParams();
@@ -22,7 +25,10 @@ const TaskPage = () => {
     const [error, setError] = useState(null);
     const [showInput, setShowInput] = useState(false);
     const [newSubtask, setNewSubtask] = useState("");
-    const [task, setTask] = useState([]);
+    const [selectedSubtask, setSelectedSubtask] = useState(null);
+    const [task, setTask] = useState(
+      {title: "", description: "", due_date: null, reminder_time: "", priority: "Low", subtasks: []}
+    );
     
     //change in task properties
     const handleChange = (e) => {
@@ -39,6 +45,12 @@ const TaskPage = () => {
 
     //Fetch task by id
     useEffect(() => {
+
+      if (!taskId) {
+        console.error("Task ID is missing");
+        return;
+      }
+    
       const fetchTask = async () => {
         try {
           const taskData = await fetchTaskById(taskId);
@@ -47,6 +59,7 @@ const TaskPage = () => {
           setTask({
             ...taskData,
             due_date: taskData.due_date ? new Date(taskData.due_date).toISOString() : null, // Normalize date
+            subtasks: taskData.subtasks.length > 0 ? taskData.subtasks : [], // Default to an empty array if no subtasks
           });
         } catch (error) {
           console.error("Error fetching task:", error);
@@ -60,8 +73,13 @@ const TaskPage = () => {
       //update task
   const handleUpdateTask = async () => {
     try {
-      const updatedTask = await updateSingleTaskStatus(task.id, task);
+      const updatedTask = {
+        ...task,
+        subtasks: task.subtasks.map(({ name, completed }) => ({ name, completed })), // Keep subtasks structured
+      };
+      await updateSingleTaskStatus(task.id, task );
       console.log("Updated task:", updatedTask); // ✅ Debug updated task
+
   
       // ✅ Update the selected task state
       setTask((prevTask) => ({ ...prevTask, ...updatedTask }));
@@ -89,21 +107,41 @@ const completedSubtasks = task?.subtasks?.filter((sub) => sub.completed).length 
 const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 
    // Toggle subtask completion
-   const handleSubtaskToggle = (index) => {
-    const updatedSubtasks = [...task.subtasks];
-    updatedSubtasks[index].completed = !updatedSubtasks[index].completed;
-    setTask({ ...task, subtasks: updatedSubtasks });
-  };
-
-   // Add new subtask
-   const handleAddSubtask = () => {
-    if (newSubtask.trim() !== "") {
-      const updatedSubtasks = [...(task.subtasks || []), { name: newSubtask, completed: false }];
-      setTask({ ...task, subtasks: updatedSubtasks });
-      setNewSubtask("");
-      setShowInput(false); // Hide input after adding
+  const handleSubtaskToggle = async (index) => {
+    try {
+      const updatedSubtasks = [...task.subtasks]; 
+      const subtask = updatedSubtasks[index];
+      subtask.completed = !subtask.completed; // Toggle completion
+  
+      await updateSubtask({
+        taskId: task.id, 
+        subtaskId: subtask.id, 
+        updatedData: { completed: subtask.completed } 
+      });
+  
+      setTask({ ...task, subtasks: updatedSubtasks }); // Update UI after API call
+    } catch (error) {
+      console.error("Failed to update subtask:", error);
     }
   };
+  
+
+  const handleAddSubtask = async () => {
+    if (newSubtask.trim() !== "") {
+      try {
+        const newSubtaskData = await createSubtask({ taskId: task.id, title: newSubtask }); // API call to create subtask
+  
+        const updatedSubtasks = [...(task.subtasks || []), newSubtaskData]; // Add new subtask from API response
+        setTask({ ...task, subtasks: updatedSubtasks });
+  
+        setNewSubtask("");  // Clear input field
+        setShowInput(false); // Hide input field after adding
+      } catch (error) {
+        console.error("Failed to add subtask:", error);
+      }
+    }
+  };
+  
    //Delete task
   const handleDeleteTask = async () => {
     try {
@@ -119,7 +157,8 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
     return <div className="text-center w-full mt-6 text-gray-500">Loading task details...</div>;
   } else {
     return (
-      <div>
+      <div className="flex w-full">
+        <div className="w-1/2 p-4">
       <input
         type="text"
         name="title"
@@ -134,41 +173,69 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
 
       
 
-      <label className="block text-gray-700 ">Description</label>
+      <div className="mt-4 ">
+      <div className="flex items-center  space-x-2">
+        {/* Description Icon */}
+        <FaTasks className="text-gray-500" />
+        {/* Label */}
+        <label htmlFor="description" className="text-gray-700">
+          Description
+        </label>
+        {/* Description Input */}
+      
+      <div className="relative mt-6 ">
       <textarea
       name="description"
-        className="w-full p-2 border rounded "
+        className="pl-6 rounded "
         value={task.description}
         onChange={handleChange}
       />
+      </div>
+      </div>
+      </div>
 
 <div className="mt-4">
-  <label className="block text-gray-700">Due date</label>
-  <div className="relative">
-    {/* Date Picker with Calendar Icon */}
-    <DatePicker
-  selected={task.due_date ? new Date(task.due_date) : null} // Convert to Date
-  onChange={handleDateChange}
-  showTimeSelect
-  dateFormat="yyyy-MM-dd h:mm aa"
-  className="w-full p-2 border rounded pl-10"
-/>
+      <div className="flex items-center space-x-2">
+        {/* Calendar Icon */}
+        <FaCalendarAlt className="text-gray-500" />
+        {/* Label */}
+        <label htmlFor="due-date" className="text-gray-700">
+          Due Date
+        </label>
+        {/* Date Picker Input */}
+        <div className="relative">
+          <DatePicker
+            id="due-date"
+            selected={task.due_date ? new Date(task.due_date) : null}
+            onChange={handleDateChange}
+            showTimeSelect
+            dateFormat="yyyy-MM-dd h:mm aa"
+            className="p-2 pl-10  rounded"
+          />
+        </div>
+      </div>
+    </div>
+ 
 
-
-    {/* Calendar Icon */}
-    <FaCalendarAlt className="absolute left-3 top-3 text-gray-500" />
+<div className=" mt-4">
+  <div className="flex items-center space-x-2">
+    {/*Clock icon*/}
+    <FaClock className="  text-gray-500" />
+    {/*Label*/}
+    <label htmlFor="reminder-time" className="text-gray-700">Reminder</label>
+    {/*Time Picker Input*/}
+    <div className="relative">
+  <input
+    type="time"
+    className="w-full p-2 pl-10  rounded "
+    value={task.reminder_time}
+    onChange={handleChange}
+  />
   </div>
+  
 </div>
 
-      <div className="mt-4">
-        <label className="block text-gray-700">Reminder</label>
-        <input
-          type="time"
-          className="w-full p-2 border rounded"
-          value={task.reminder_time}
-          onChange={handleChange}
-        />
-      </div>
+</div>
 
       <div className="mt-4">
         <label className="block text-gray-700">Priority</label>
@@ -204,7 +271,9 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
       {totalSubtasks > 0 ? (
         <ul className="mt-2">
           {task.subtasks.map((subtask, index) => (
-            <li key={index} className="flex items-center gap-2 mt-1">
+            <li key={index} className="flex items-center gap-2 mt-1"
+            onClick={() => setSelectedSubtask(subtask)}
+            >
               <input
                 type="checkbox"
                 checked={subtask.completed}
@@ -212,7 +281,8 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
                 className="w-4 h-4"
               />
               <span className={subtask.completed ? "line-through text-gray-500" : ""}>
-                {subtask.name}
+                {subtask.title}
+               
               </span>
             </li>
           ))}
@@ -220,6 +290,8 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
       ) : (
         <p className="text-gray-500 mt-2">No subtasks available</p>
       )}
+
+       
 
       {/* Add Subtask Button & Input Field */}
       {showInput ? (
@@ -260,6 +332,11 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
         </button>
       </div>
     </div>
+    </div>
+    {/* Modal for Subtask Details */}
+    <div className="w-1/2 p-4">
+        <SubtaskDetails subtask={selectedSubtask} />
+      </div>
     </div>
   );
 }; } 

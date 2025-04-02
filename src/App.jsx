@@ -1,45 +1,94 @@
+import { Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./landing-page/ProtectedRoute";
+import { ColorModeContext, useMode } from "./theme";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import DashboardLayout from "./DashboardLayout";
+import DashboardPage from "./dashboard/pages/DashboardPage";
+import Home from "./dashboard/pages/Home/Home";
+import AiGoal from "./dashboard/pages/AiGoal/AiGoal";
+import Goals from "./dashboard/pages/Goals/Goals";
+import Goal from "./dashboard/pages/Goal/Goal";
+import LandingPage from "./landing-page/LandingPage";
+import Signup from "./landing-page/Signup";
+import EmailVerificationCheck from "./landing-page/EmailVerificationCheck";
+import Login from "./landing-page/Login";
+import Settings from "./dashboard/pages/Settings/Settings";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import DashboardPage from './dashboard/pages/DashboardPage';
-import { Route, Routes, Navigate } from "react-router-dom";
-import DashboardLayout from './DashboardLayout';
+// Removed duplicate import of DashboardPage
+import { Navigate } from "react-router-dom";
+// Removed duplicate import of DashboardLayout
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import Home from './dashboard/pages/Home/Home';
-import AiGoal from './dashboard/pages/AiGoal/AiGoal';
-import Goals from './dashboard/pages/Goals/Goals';
+// Removed duplicate import of Home
 import Tasks from './dashboard/pages/Tasks/Tasks';
 import Taskpage from './dashboard/pages/Task/Task';
 
 
 function App() {
- 
+  const [theme, colorMode] = useMode();
+  const muiTheme = useTheme();
+  const isSmallScreen = useMediaQuery(muiTheme.breakpoints.down('sm'));
+
+  
+
+  
+
+
+
+
+
 
   return (
-    <div className=''>
-      <Routes>
- 
-      <Route
-          path="/dashboard/*"
-          element= {<DashboardLayout />}
-        >
-           <Route index element={<DashboardPage />} />
-            <Route path="home" element={<Home />} />
-            <Route path="goals" element={<Goals />} />
+    <AuthProvider>
+    
+        <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline/>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/verify-email/:token" element={<EmailVerificationCheck />} />
+
+              {/* ✅ Correct way to wrap ProtectedRoute */}
+              <Route
+                path="/dashboard/*"
+                element={
+                  <ProtectedRoute>
+                    <DashboardLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<DashboardPage />} />
+                <Route path="home" element={<Home />} />
+                <Route path="goals" element={<Goals />} />
             <Route path="tasks" element={<Tasks />} />
             <Route path="task/:taskId" element={<Taskpage />} />
-            <Route path="ai-goal/:goalId" element={<AiGoal />} />
+                <Route path="ai-goal/:goalId" element={<AiGoal />} />
+                <Route path="goal/:goalId" element={<Goal />} />
+                <Route path="settings" element={<Settings/>} />
+              </Route>
+            </Routes>
+      </ThemeProvider>
+      </ColorModeContext.Provider>
 
-           </Route>
 
-      </Routes>
 
-    </div>
-  )
+
+
+       
+      
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

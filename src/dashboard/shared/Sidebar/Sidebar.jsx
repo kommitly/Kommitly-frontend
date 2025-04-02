@@ -1,19 +1,31 @@
 import React, { useContext , useState} from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Link, useLocation } from "react-router-dom";
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
-import { createGoal, createTask } from '../../../utils/Api';
+import { createGoal, createTask, deleteGoalById, deleteAiGoalById, deleteTaskById} from '../../../utils/Api';
 import { TasksContext } from '../../../context/TasksContext';
 
+
+
 const Sidebar = () => {
+  const { goalId } = useParams();
+  const { taskId } = useParams();
   const location = useLocation();
   const {goals, setGoals} = useContext(GoalsContext);
+  const {pinnedGoals, hiddenGoals, removeGoalFromSidebar } = useContext(GoalsContext);
   const [isGoalInputVisible, setIsGoalInputVisible] = useState(false);
   const [newGoalTitle, setNewGoalTitle] = useState('');
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [isTaskInputVisible, setIsTaskInputVisible] = useState(false);
-  const {tasks, setTasks} = useContext(TasksContext);
+  const {tasks,  pinnedTasks, setTasks,  hiddenTasks,  removeTaskFromSidebar,  addTaskToSidebar, removeTask } = useContext(TasksContext);
+  const { removeGoal } = useContext(GoalsContext);
+  const [menuVisible, setMenuVisible] = useState({});
+  const [taskMenuVisible, setTaskMenuVisible] = useState({});
+  const navigate = useNavigate();
+
+
 
 
 
@@ -25,14 +37,19 @@ const Sidebar = () => {
   const handleAddGoal = async () => {
     if (newGoalTitle.trim() === '') return;
     try {
-      const newGoal = await createGoal(newGoalTitle, '');
-      setGoals([...goals, newGoal]);
+      const newGoal = await createGoal(newGoalTitle);
+      setGoals((prevGoals) => ({
+        ...prevGoals,
+        goals: [...prevGoals.goals, newGoal], // ✅ Correct way to update
+      }));
       setNewGoalTitle('');
       setIsGoalInputVisible(false);
+      navigate(`/dashboard/goal/${newGoal.id}`);
     } catch (error) {
       console.error('Error adding goal:', error);
     }
   };
+  
 
   const handleAddTask = async () => {
     if (newTaskTitle.trim() === '') return;
@@ -45,8 +62,6 @@ const Sidebar = () => {
       console.error('Error adding task:', error);
     }
   }
-<<<<<<< Updated upstream
-=======
   const toggleMenu = (goalId) => {
     setMenuVisible((prev) => ({ 
       ...prev,
@@ -68,6 +83,7 @@ const Sidebar = () => {
       await deleteGoalById(goalId);
 
       removeGoal(goalId);
+      
     } catch (error) {
       console.error(`Error deleting goal with ID ${goalId}:`, error.response?.data || error.message );    
     } 
@@ -102,7 +118,7 @@ const Sidebar = () => {
 
   // Merge pinned goals and recent AI goals (avoid duplicates)
   const displayedAiGoals = [...new Set([...pinnedAiGoals, ...recentAiGoals])];
-  
+
   const recentTasks = tasks
   ?.filter(task => !hiddenTasks.has(task.id))
   .slice(-2);
@@ -129,13 +145,14 @@ const Sidebar = () => {
     });
 };
 
->>>>>>> Stashed changes
+
+
 
   return (
-    <div className='fixed inset-y-0 transition-width duration-300 min-h-screen  '>
-        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#F7F2FA]  flex flex-col px-2 py-4  '>
+    <div className='fixed inset-y-0 transition-width duration-300 min-h-screen border-r  border-[#CFC8FF] '>
+        <div className=' md:w-64 lg:w-60 xl:w-56 2xl:w-66  h-full  bg-[#FBF9FF]  flex flex-col px-2 py-4  '>
         <div className='w-10/12 p-2 inset-y-2 mb-2'>
-        <h1 className='text-black fredoka-semibold xl:text-2xl lg:text-xl ml-3 mt-2 '>Kommitly</h1>
+        <h1 className='text-black fredoka-bold xl:text-2xl lg:text-xl ml-3 mt-2 '>Kommitly</h1>
             </div>
 
             <div className="flex flex-col flex-grow mt-4 overflow-y-auto no-scrollbar">
@@ -143,7 +160,7 @@ const Sidebar = () => {
 
               <Link
                 to="/dashboard/home"
-                className={`flex items-center  p-3 md:text-sm xl:text-xs  font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center group p-3 md:text-sm xl:text-xs  font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
                   "/home"
                 )}`}
               >
@@ -182,7 +199,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4 flex items-center justify-center"
                 >
-                  <p className='text-[#4A4459] md:text-sm xl:text-sm 2xl:text-lg  text-center font-normal'>
+                  <p className='text-[#4A4459] md:text-sm xl:text-sm 2xl:text-lg  text-center font-normal group-hover:text-[#FFFFFF]'>
                   Home
                   </p>
                 </span>
@@ -193,7 +210,7 @@ const Sidebar = () => {
 
               <ul className='mb-2 '>
               <li className='w-full h-12'>
-                <Link to="/dashboard/goals" className="flex items-center p-2 text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
+                <Link to="/dashboard/goals" className="group  flex items-center p-2 text-sm font-medium rounded-lg hover:bg-[#E8DEF8] ">
                   <div className='flex w-full px-2 justify-between'>
                     <div className='flex items-center'>
                       <svg 
@@ -207,11 +224,11 @@ const Sidebar = () => {
                       strokeLinejoin="round"
                       className="icon-small"
                       >
-                      
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 3H8v4h8V3z"></path>
-                        <path d="M9 7v14"></path>
-                        <path d="M15 7v14"></path>
+                    
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                      <path d="M16 3H8v4h8V3z"></path>
+                      <path d="M9 7v14"></path>
+                      <path d="M15 7v14"></path>
                       </svg>
                       <svg 
                       width="20" 
@@ -231,7 +248,7 @@ const Sidebar = () => {
                         <path d="M15 7v14"></path>
                       </svg>
 
-                      <span className="ml-4  md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal">
+                      <span className="ml-4  md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]">
                         Goals
                       </span> 
                     </div>
@@ -288,17 +305,138 @@ const Sidebar = () => {
                 </li>
               )}
 
-              {/* Dynamically Added Goals */}
-              {goals.map((goal) => (
-                <li key={goal.id} className="w-full     ">
-                  <Link to={`/dashboard/ai-goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block">
-                  •  {goal.title}
-                </span>
+                {goals.goals?.slice(-2).filter(goal => !hiddenGoals.has(goal.id)).map((goal) => (
+                  <li key={goal.id} className="w-full relative group ">
+                    <Link
+                      to={`/dashboard/goal/${goal.id}`}
+                      className="flex items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] w-full z-0"
+                    >
+                      <span className="ml-2 px-3 py-3 z-0 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[180px] block group-hover:text-[#FFFFFF]">
+                         {goal.title}
+                      </span>
+                    </Link>
 
+                    {/* Three-dot menu icon */}
+                    <div className="absolute right-1 top-1/2 transform -translate-y-1/2 z-1000">
+                      <button
+                        className="p-1 text-[#4A4459] z-1000 hover:text-[#000000] opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents clicking the menu from triggering other actions
+                          toggleMenu(goal.id);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#65558F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="cursor-pointer"
+                        >
+                          <circle cx="12" cy="5" r="1"></circle>
+                          <circle cx="12" cy="12" r="1"></circle>
+                          <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                      </button>
+
+                      {/* Dropdown Menu (Only Shows When Clicked) */}
+                      {menuVisible[goal.id] && (
+                        <div className="absolute right-0 mt-2 w-42 bg-white shadow-lg rounded-md z-[100]">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-black hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveGoalFromSidebar(goal.id);
+                            }}
+                          >
+                            Remove from Sidebar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-[#E60178] hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(goal.id);
+                            }}
+                          >
+                            Delete Goal
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+
+              {displayedAiGoals.map((goal)=> (
+                <li key={goal.id} className="w-full relative group">
+                  <Link to={`/dashboard/ai-goal/${goal.id}`} className="flex items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8] w-full z-0">
+                  <span className="ml-2 px-3 py-3 z-0 md:text-xs xl:text-xs 2xl:text-sm text-[#4A4459] font-normal truncate max-w-[180px] block group-hover:text-[#FFFFFF]">
+                      {goal.title}
+                    </span>
                   </Link>
+
+               
+                   <div className="absolute right-1 top-1/2 transform -translate-y-1/2 z-1000">
+                      <button
+                        className="p-1 text-[#4A4459] z-1000 hover:text-[#000000] opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents clicking the menu from triggering other actions
+                          toggleMenu(goal.id);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#65558F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="cursor-pointer"
+                        >
+                          <circle cx="12" cy="5" r="1"></circle>
+                          <circle cx="12" cy="12" r="1"></circle>
+                          <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                      </button>
+
+                      {/* Dropdown Menu (Only Shows When Clicked) */}
+                      {menuVisible[goal.id] && (
+                        <div className="absolute right-0 mt-2 w-42 bg-white shadow-lg rounded-md z-[100]">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-black hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveGoalFromSidebar(goal.id);
+                            }}
+                          >
+                            Remove from Sidebar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-[#E60178] hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteAiGoal(goal.id);
+                            }}
+                          >
+                            Delete Goal
+                          </button>
+                        </div>
+                      )}
+
+                      </div>
+
+
+
+
                 </li>
               ))}
+
             </ul>
             
             {/* {<li className='w-full  h-12'>
@@ -368,7 +506,7 @@ const Sidebar = () => {
             <li className='w-full mb-4 h-12'>
               <Link
                 to="/dashboard/tasks"
-                className={`flex items-center p-2 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8] ${isActive(
+                className={`flex items-center group p-2 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8] ${isActive(
                     "/tasks"
                   )}`}
                 >
@@ -415,7 +553,7 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
+                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
                   Tasks
                   </p>
                 </span>
@@ -478,36 +616,80 @@ const Sidebar = () => {
               )}
 
 
-<<<<<<< Updated upstream
-            {tasks.map((task) => (
-                <li key={task.id} className="w-full     ">
-                  <Link to={`/dashboard/tasks/${task.id}`} className="flex items-center text-sm font-medium rounded-full hover:bg-[#E8DEF8]">
-                  <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block">
-                  •  {task.title}
-=======
                 {displayedTasks.map((task)  => (
                 <li key={task.id} className="w-full relative group ">
-                  <Link to={`/dashboard/task/${task.id}`} className="flex group items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8]">
+                  <Link to={`/dashboard/tasks/${task.id}`} className="flex group items-center text-sm font-medium rounded-lg hover:bg-[#E8DEF8]">
                   <span className="ml-2 px-3 py-3 md:text-xs xl:text-xs 2xl:text-sm  text-[#4A4459] font-normal truncate max-w-[200px] block group-hover:text-[#FFFFFF]">
                     {task.title}
->>>>>>> Stashed changes
                 </span>
 
                   </Link>
+                  <div className="absolute right-1 top-1/2 transform -translate-y-1/2 z-1000">
+                      <button
+                        className="p-1 text-[#4A4459] z-1000 hover:text-[#000000] opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents clicking the menu from triggering other actions
+                          toggleTaskMenu(task.id);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#65558F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="cursor-pointer"
+                        >
+                          <circle cx="12" cy="5" r="1"></circle>
+                          <circle cx="12" cy="12" r="1"></circle>
+                          <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                      </button>
+
+                      {/* Dropdown Menu (Only Shows When Clicked) */}
+                      {taskMenuVisible[task.id]  && (
+                        <div className="absolute right-0 mt-2 w-42 bg-white shadow-lg rounded-md z-[100]">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-black text-light hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveTaskFromSidebar(task.id);
+                            }}
+                          >
+                            Remove from Sidebar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-[#E60178] font-light hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteTask(task.id);
+                            }}
+                          >
+                            Delete Task
+                          </button>
+                        </div>
+                      )}
+
+                      </div>
+
                 </li>
               ))}
 
             </ul>
 
           
-            
-            <Divider variant="middle" component="li" />
+            {/* {
+            <Divider variant="middle" />} */}
             <ul>
 
             <li className='w-full h-12 mt-4'>
               <Link
                 to="/dashboard/analytics"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                className={`flex items-center group  p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
                   "/analytics"
                 )}`}
               >
@@ -548,8 +730,8 @@ const Sidebar = () => {
                 <span
                   className="ml-4  "
                 >
-                  <p className='mmd:text-sm xl:text-sm 2xl:text-lg text-[#4A4459] font-normal'>
-                  Analytics
+                  <p className='mmd:text-sm xl:text-sm 2xl:text-lg text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
+                  Stats
                   </p>
                 </span>
 
@@ -557,15 +739,75 @@ const Sidebar = () => {
                
               </Link>
             </li>
-            <li className='w-full h-12'>
-              <Link
-                to="/dashboard/calendar"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
-                    "/calendar"
-                )}`}
+          {/* {<li className='w-full h-12'>
+            <Link
+              to="/dashboard/calendar"
+              className={`flex items-center group  p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                  "/calendar"
+              )}`}
+            >
+              <div className='flex px-1 items-center '>
+                  <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#65558F"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-[#65558F] icon-small"
               >
-                <div className='flex px-1 items-center '>
-                    <svg
+              <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
+              <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              
+              <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
+              </svg>
+              <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#65558F"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-[#65558F] icon-large"
+              >
+              <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
+              <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              
+              <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
+              </svg>
+
+
+              <span
+                className="ml-4  "
+              >
+                <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
+                Calendar
+                </p>
+              </span>
+
+              </div>
+              
+            </Link>
+          </li>
+          <li className='w-full h-12 mb-4'>
+            <Link
+              to="/dashboard/notifications"
+              className={`flex items-center  group p-3 text-sm font-medium rounded-lg transition-300 hover:bg-[#E8DEF8]  ${isActive(
+                  "/notifications"
+              )}`}
+            >
+              <div className='flex px-1 items-center '>
+                              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -576,15 +818,10 @@ const Sidebar = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="text-[#65558F] icon-small"
-                >
-                <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
-                <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                
-                <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
-                </svg>
-                <svg
+              >
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
@@ -595,168 +832,32 @@ const Sidebar = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="text-[#65558F] icon-large"
-                >
-                <rect x="3" y="4" width="18" height="5"  fill="#65558F" stroke="#65558F"></rect>
-                <rect x="3" y="10" width="18" height="12" stroke="#65558F" fill="none" strokeWidth="2" />
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                
-                <circle cx="10" cy="16" r="1" fill="#65558F"></circle>
-                </svg>
-
-
-                <span
-                  className="ml-4  "
-                >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
-                  Calendar
-                  </p>
-                </span>
-
-                </div>
-               
-              </Link>
-            </li>
-            <li className='w-full h-12 mb-4'>
-              <Link
-                to="/dashboard/notifications"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
-                    "/notifications"
-                )}`}
               >
-                <div className='flex px-1 items-center '>
-                               <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#65558F"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-[#65558F] icon-small"
-                >
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#65558F"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-[#65558F] icon-large"
-                >
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
 
-                <span
-                  className="ml-4  "
-                >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
-                  Notifications
-                  </p>
-                </span>
-
-                </div>
-               
-              </Link>
-            </li>
-
-            <Divider variant="middle" component="li" />
-
-            <li className='w-full h-12 mt-4'>
-              <Link
-                to="/settings"
-                className={`flex items-center  p-3 text-sm font-medium rounded-full transition-300 hover:bg-[#E8DEF8]  ${isActive(
-                    "/settings"
-                )}`}
+              <span
+                className="ml-4  "
               >
-                <div className='flex px-1 items-center '>
-                    
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#65558F"
-                        strokeWidth="3"
-                        strokeLinecap="bevel"
-                        strokeLinejoin="bevel"
-                        className="text-[#65558F] icon-small"
-                    >
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#65558F"
-                        strokeWidth="3"
-                        strokeLinecap="bevel"
-                        strokeLinejoin="bevel"
-                        className="text-[#65558F] icon-large"
-                    >
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
+                <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal group-hover:text-[#FFFFFF]'>
+                Notifications
+                </p>
+              </span>
 
-                
+              </div>
               
-                <span
-                  className="ml-4  "
-                >
-                  <p className='md:text-sm xl:text-sm 2xl:text-lg  text-[#4A4459] font-normal'>
-                  Settings
-                  </p>
-                </span>
+            </Link>
+          </li>}
+           <Divider variant="middle" component="li" /> */}
 
-                </div>
-               
-              </Link>
-            </li>
+           
+
+
             
             
 
             </ul>
-            <div className='flex justify-center w-11/12  2xl:mt-28 xl:mt-16 mb-8'>
-              
-                 <Button className='w-7/12 flex gap-2  text-[#4A4459]' size="large"  style={{ height: '48px',  borderRadius: '8px', boxShadow: '6px 6px 12px rgba(13, 39, 80, 0.26), -6px -6px 16px rgba(255,255,255,1) ' }}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#65558F"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#65558F]"
-                >
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                <polyline points="16 17 21 12 16 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-    
-               <span className='text-[#4A4459] md:text-sm font-semibold'>
-               Logout
-
-               </span>
-
-
-            </Button>
-
-             
-            </div>
+          
             
         </nav>
         </div>

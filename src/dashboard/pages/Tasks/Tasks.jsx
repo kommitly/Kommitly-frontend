@@ -32,6 +32,7 @@ const Tasks = () => {
   useEffect(() => {
     if (tasks.length > 0) { // Check if tasks array has items
       setLoading(false);
+      console.log("tasks", tasks);
     }
     if (goals.goals && goals.ai_goals) {
       setLoading(false);

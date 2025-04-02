@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
+
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-optical-sizing: auto;
+}
+
 .fredoka-normal {
   font-family: "Fredoka", serif;
   font-optical-sizing: auto;
@@ -39,7 +48,162 @@
     "wdth" 100;
 }
 
-.lowercase-text {
+/* Manrope font styles */
+.manrope-normal {
+  font-weight: 400;
+  font-style: normal;
+}
+.manrope-semibold {
+  font-weight: 600;
+  font-style: normal;
+}
+.manrope-medium {
+  font-weight: 500;
+  font-style: normal;
+}
+.manrope-bold {
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+.poppins-thin {
+
+  font-weight: 100;
+  font-style: normal;
+}
+
+.poppins-extralight {
+
+  font-weight: 200;
+  font-style: normal;
+}
+
+.poppins-light {
+
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+ 
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+
+  .paths {
+    fill: none;
+    stroke: grey;
+    stroke-dasharray: 5;
+    stroke-width: 5;
+    stroke-linejoin: round;
+  }
+  
+  .mask {
+    fill: none;
+    stroke: white;
+    stroke-width: 10;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: dash 5s linear alternate infinite;
+  }
+  
+  /* does not work in IE, need JS to animate there */
+  @keyframes dash {
+    from {
+      stroke-dashoffset: 1000;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+
+  font-weight: 800;
+  font-style: normal;
+}
+
+.poppins-black {
+
+  font-weight: 900;
+  font-style: normal;
+}
+
+.poppins-thin-italic {
+
+  font-weight: 100;
+  font-style: italic;
+}
+
+.poppins-extralight-italic {
+ 
+  font-weight: 200;
+  font-style: italic;
+}
+
+.poppins-light-italic {
+
+  font-weight: 300;
+  font-style: italic;
+}
+
+.poppins-regular-italic {
+
+  font-weight: 400;
+  font-style: italic;
+}
+
+.poppins-medium-italic {
+
+  font-weight: 500;
+  font-style: italic;
+}
+
+.poppins-semibold-italic {
+
+  font-weight: 600;
+  font-style: italic;
+}
+
+.poppins-bold-italic {
+
+  font-weight: 700;
+  font-style: italic;
+}
+
+.poppins-extrabold-italic {
+ 
+  font-weight: 800;
+  font-style: italic;
+}
+
+.poppins-black-italic {
+
+  font-weight: 900;
+  font-style: italic;
+}
+
+  
+
+.lowercase-text { 
   text-transform: lowercase;
 }
 .no-scrollbar::-webkit-scrollbar {
@@ -153,4 +317,33 @@ input[type="checkbox"] {
 .dotted-line {
   z-index: 1; /* Ensure this is lower than the z-index of the circle */
   position: relative; /* Ensure the z-index takes effect */
+}
+
+
+
+.paths {
+  fill: none;
+  stroke: grey;
+  stroke-dasharray: 5;
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.mask {
+  fill: none;
+  stroke: white;
+  stroke-width: 10;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 5s linear alternate infinite;
+}
+
+/* does not work in IE, need JS to animate there */
+@keyframes dash {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
