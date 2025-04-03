@@ -19,6 +19,20 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { CssVarsProvider } from '@mui/joy/styles';
 import Registration from "./landing-page/Registration";
 
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+// Removed duplicate import of DashboardPage
+import { Navigate } from "react-router-dom";
+// Removed duplicate import of DashboardLayout
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+// Removed duplicate import of Home
+import Tasks from './dashboard/pages/Tasks/Tasks';
+import Taskpage from './dashboard/pages/Task/Task';
 
 
 function App() {
@@ -60,6 +74,8 @@ function App() {
                 <Route index element={<DashboardPage />} />
                 <Route path="home" element={<Home />} />
                 <Route path="goals" element={<Goals />} />
+            <Route path="tasks" element={<Tasks />} />
+            <Route path="tasks/:taskId" element={<Taskpage />} />
                 <Route path="ai-goal/:goalId" element={<AiGoal />} />
                 <Route path="goal/:goalId" element={<Goal />} />
                 <Route path="settings" element={<Settings/>} />

@@ -204,6 +204,44 @@ const updateAiTaskStatus = async (taskId, updatedData) => {
   }
 }
 
+const updateSingleTaskStatus = async (taskId, updatedData) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update/`;
+  try {
+    const token = getToken();
+    const response = await axios.patch(url, updatedData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+    
+  } catch (error) {
+    console.error(`Error updating task with ID ${taskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+const updateSubtask = async (taskId, subtaskId, updatedData) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/subtask/${subtaskId}/update/`;
+  try {
+    const token = getToken();
+    const response = await axios.patch(url, updatedData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+    
+  } catch (error) {
+    console.error(`Error updating subtask with ID ${subtaskId} for task ${taskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+
 
 
 const createTask = async ({ goal, title}) => {
@@ -224,6 +262,28 @@ const createTask = async ({ goal, title}) => {
     throw error;
   }
 }
+
+
+const createSubtask = async ({ taskId, title }) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/create-subtask/`; // Ensure task ID is in the URL
+  const requestBody = { title }; // Send only the title in the request body
+  
+  try {
+    const token = getToken();
+    const response = await axios.post(url, requestBody, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating sub-task:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
 
 
 const createAiTask = async ({goalId, taskData}) => {  
@@ -349,9 +409,32 @@ const updateAiTaskById = async (taskId, updatedData) => {
   }
 }
 
+const fetchTaskById = async (taskId) => {
+  
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/`;
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching task with ID ${taskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
 
 export { 
-  generateInsights, 
+  generateInsights,
+  fetchTaskById,
+  updateSubtask,
+  updateSingleTaskStatus, 
+  updateGoalById,
+  createSubtask,
   createAiGoal, 
   createGoal, 
   fetchGoals, 

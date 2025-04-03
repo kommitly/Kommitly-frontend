@@ -22,6 +22,7 @@ export const TasksProvider = ({ children }) => {
         const loadTasks = async () => {
             try {
                 const fetchedTasks = await fetchTasks();
+                console.log('Fetched tasks:', fetchedTasks);
                 setTasks(fetchedTasks);
             } catch (error) {
                 console.error('Error fetching tasks:', error);
