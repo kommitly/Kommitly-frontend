@@ -21,6 +21,13 @@ export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null); // For the filter menu
   const [searchType, setSearchType] = useState(""); // "goal" or "task"
   const [searchQuery, setSearchQuery] = useState(""); // User's search input
+  const isSm = useMediaQuery(theme.breakpoints.only("sm"));
+  const isLg = useMediaQuery(theme.breakpoints.only("lg"));
+  const isXl = useMediaQuery(theme.breakpoints.only("xl"));
+  const isMd = useMediaQuery(theme.breakpoints.only("md"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
+  const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
+  const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
   const goals = [
     ...(profile?.goals?.map(goal => ({ ...goal, is_ai_goal: false })) || []),
     ...(profile?.ai_goals?.map(goal => ({ ...goal, is_ai_goal: true })) || [])
@@ -46,8 +53,8 @@ export const Navbar = () => {
   };
 
   const quotes = [
-    "A goal without a plan is just a wish. – Antoine de Saint-Exupéry",
-    "You don’t have to be great to start, but you have to start to be great. – Zig Ziglar",
+    "A goal without a plan is just a wish. ",
+    "You don’t have to be great to start, but you have to start to be great.",
     "Small steps every day lead to big changes."
   ];
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
@@ -109,9 +116,14 @@ export const Navbar = () => {
 
   
   return (
-    <Box className="border-b border-b-[#CFC8FF] items-center w-full  "  display = "flex" justifyContent="space-between" px={1.5} py={1}>
-      <div className='flex items-center justify-between grid grid-cols-12  w-full'>
-          <div className='col-span-6 flex items-center'>
+    <Box className=" items-center w-full  "  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 5 : isSm ? 2 : isMd ? 2 : isLg ? 2 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4}}>
+      {/* Logo */}
+      <div className='flex items-center  justify-between grid grid-cols-12    w-full'>
+          <Box className='col-span-5 flex items-center'
+            sx={{
+              gridColumn: isXs ? 'span 8' : isSm ? 'span 4' : isMd ? 'span 4' : isLg ? 'span 5' : isXl ? 'span 5' : isXxl ? 'span 5' : 'span 5',
+            }}
+          >
               <div className='flex flex-col mb-0'>
                   {profile.user && (
                 <h1 className=' space-x-1 font-semibold text-xl mb-0'>
@@ -134,7 +146,7 @@ export const Navbar = () => {
                   variant="h3"
                   className=" text-semibold"
                   
-                  sx={{ color: colors.primary[500] }}
+                  sx={{ color: colors.primary[400] }}
                 >
                  {profile.user.first_name}
       
@@ -148,7 +160,7 @@ export const Navbar = () => {
               </span>
              </h1>
               )}
-              <p className=''>
+            
            {/* {   <Typography
                   component="span"
                   variant="h5"
@@ -159,87 +171,107 @@ export const Navbar = () => {
                  Let's take a dive into your goals
       
                 </Typography>} */}
+            {/* {     <motion.p
+          className="text-secondary italic text-xs font-regular  "
+          style={{color: colors.primary[500]}}
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          {randomQuote}
+        </motion.p>} */}
                 
                         
                         
-                      </p>
+                     
               
             
 
                   </div>
                
-             </div>
-             <Box
-  className=" col-span-5  flex w-full justify-end "
- 
->
-  <motion.div
-    initial={{ width: 36,height: 36, justifyContent: "center", alignItems: "center"  }}
-    animate={{ width: isSearchExpanded ? "100%" : 36, justifyContent: "space-between", alignItems: "center", height: 36 }}
-    transition={{ duration: 0.3 }}
-    className="rounded-full bg-[#F4F1FF] flex  p-1  items-center  w-full relative overflow-hidden "
-    style={{ backgroundColor: colors.background.paper, overflow:"visible" }}
-    onMouseEnter={() => setIsSearchExpanded(true)}
-    onMouseLeave={() => {
-      if (filteredResults.length === 0) {
-        setIsSearchExpanded(false);
-      }
-    }}
-    
-  >
-
-<motion.div
-    initial={{ width: 0, opacity: 0 }}
-    animate={{ width: isSearchExpanded ? "auto" : 0, opacity: isSearchExpanded ? 1 : 0 }}
-    transition={{ duration: 0.3 }}
-    className="overflow-hidden flex items-center gap-2"
-  >
-    <IconButton onClick={handleFilterClick}>
-      <FilterListOutlinedIcon sx={{ fontSize: "16px", color: colors.primary[500] }} />
-    </IconButton>
-
-    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleFilterClose}>
-      <MenuItem onClick={() => handleSearchType("goal")}>Goal</MenuItem>
-      <MenuItem onClick={() => handleSearchType("task")}>Task</MenuItem>
-    </Menu>
-
-    <TextField
-      variant="standard"
-      placeholder={`Search ${searchType || "goals or tasks"}`}
-      value={searchQuery}
-      onChange={(e) => {
-        setSearchQuery(e.target.value);
-        setIsSearchExpanded(true);
-      }}
-      onFocus={() => setIsSearchExpanded(true)}
-      InputProps={{
-        disableUnderline: true,
-        style: { color: colors.primary[500], fontSize: "12px" },
-      }}
-      className="bg-transparent outline-none text-sm w-full"
-    />
-  </motion.div>
-    
-    {/* Search Icon - Always Visible */}
-    <IconButton className="p-0.5 " onClick={handleSearch}>
-      <IoSearch size={16} className="text-[#4F378A]" />
-    </IconButton>
-
-  
-
-    <SearchResults
-              results={filteredResults || []}
+             </Box>
+           {!isXs && (
+              <Box
+              className=" col-span-6   flex w-full justify-end  "
+              sx={{
+                paddingRight: isXs ? 4: isSm ? 4 : isMd ? 4 : isLg ? 4 : isXl ? 4 : isXxl ? 4 : 4,
+              }
+              
+              }
+             
+            >
+              <motion.div
+                initial={{ width: 36,height: 36, justifyContent: "center", alignItems: "center"  }}
+                animate={{ width: isSearchExpanded ? "100%" : 36, justifyContent: "space-between", alignItems: "center", height: 36 }}
+                transition={{ duration: 0.3 }}
+                className="rounded-full bg-[#F4F1FF] flex  p-1  items-center  w-full relative overflow-hidden "
+                style={{ backgroundColor: colors.background.paper, overflow:"visible" }}
+                onMouseEnter={() => setIsSearchExpanded(true)}
+                onMouseLeave={() => {
+                  if (filteredResults.length === 0) {
+                    setIsSearchExpanded(false);
+                  }
+                }}
+                
+              >
+            
+            <motion.div
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: isSearchExpanded ? "auto" : 0, opacity: isSearchExpanded ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden flex items-center gap-2"
+              >
+                <IconButton onClick={handleFilterClick}>
+                  <FilterListOutlinedIcon sx={{ fontSize: "16px", color: colors.primary[500] }} />
+                </IconButton>
+            
+                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleFilterClose}>
+                  <MenuItem onClick={() => handleSearchType("goal")}>Goal</MenuItem>
+                  <MenuItem onClick={() => handleSearchType("task")}>Task</MenuItem>
+                </Menu>
+            
+                <TextField
+                  variant="standard"
+                  placeholder={`Search ${searchType || "goals or tasks"}`}
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setIsSearchExpanded(true);
+                  }}
+                  onFocus={() => setIsSearchExpanded(true)}
+                  InputProps={{
+                    disableUnderline: true,
+                    style: { color: colors.primary[500], fontSize: "12px" },
+                  }}
+                  className="bg-transparent outline-none text-sm w-full"
+                />
+              </motion.div>
+                
+                {/* Search Icon - Always Visible */}
+                <IconButton className="p-0.5 " onClick={handleSearch}>
+                  <IoSearch size={16} className="text-[#4F378A]" />
+                </IconButton>
+            
               
             
-              onClose={() => setFilteredResults([])}
-            />
-  </motion.div>
-</Box>
+                <SearchResults
+                          results={filteredResults || []}
+                          
+                        
+                          onClose={() => setFilteredResults([])}
+                        />
+              </motion.div>
+            </Box>
+            )}
 
 
-              <div className='flex col-span-1 justify-end items-center gap-2 '>
-          <Link to="/dashboard/notifications">
-          <IconButton>
+
+         <Box className='flex col-span-1 justify-end items-center space-x-2 '
+         sx={{
+          gridColumn: isXs ? 'span 4' : isSm ? 'span 1' : isMd ? 'span 1' : isLg ? 'span 1' : isXl ? 'span 1' : isXxl ? 'span 1' : 'span 1',
+         }}>
+            <Link to="/dashboard/notifications">
+                 <IconButton>
 
 
                 <NotificationsNoneIcon sx={{ fontSize: "20px", color: colors.primary[400] }} />
@@ -271,7 +303,7 @@ export const Navbar = () => {
                 </div>
               )}
               
-          </div>
+          </Box>
 
                       
 

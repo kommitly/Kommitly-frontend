@@ -3,7 +3,7 @@ import { GoalsContext } from '../../../context/GoalsContext';
 import { Link, useNavigate, useLocation , useParams} from "react-router-dom";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
-
+import { useMediaQuery } from '@mui/material';
 import { motion } from 'framer-motion';
 import analysis from '../../../assets/analyze-data.svg';
 import aiGoals from '../../../assets/goals.svg';
@@ -91,7 +91,13 @@ const Goals = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const { profile, setProfile } = useContext(ProfileContext);
-
+  const isSm = useMediaQuery(theme.breakpoints.only("sm"));
+  const isLg = useMediaQuery(theme.breakpoints.only("lg"));
+  const isXl = useMediaQuery(theme.breakpoints.only("xl"));
+  const isMd = useMediaQuery(theme.breakpoints.only("md"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
+  const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
+  const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
   
 
   useEffect(() => {
@@ -282,20 +288,20 @@ const Goals = () => {
           </div>
         </Backdrop>
 
-      <div className="col-span-8  flex-1 overflow-y-auto scrollbar-hide  no-scrollbar">
+      <div className="xl:col-span-8 col-span-12 flex-1 overflow-y-auto scrollbar-hide  no-scrollbar">
        
-        <Box className='w-full container h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] p-8 mt-4'
+        <Box className='w-full container md:h-40 h-30 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 pl-4 mt-4'
         sx={{backgroundColor:colors.background.paper}}
         >
           <div className='space-y-4'>
             <h1 className='text-2xl font-semibold'>
-            <Typography
-              component="span"
-              variant="h2"
-              className=" text-semibold"
-              color='text.primary'
+            <p
+               
+              className="font-semibold md:text-xl text-base"
+              style={{ color: colors.text.primary }}
+              
             >Manage your Goals 
-            </Typography>
+            </p>
             </h1>
             <Button onClick={openModal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{backgroundColor:colors.primary[500], borderRadius: '6px', paddingX: '12px'}}>
                 <svg
@@ -308,21 +314,23 @@ const Goals = () => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+              className="hidden md:block"
                 style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
               >
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              <Typography
+              <p
                 component="span"
-                variant="h5"  
-                sx={{color:colors.primary[100]}}
+                className='md:text-base text-xs '
+                style={{ color: colors.primary[100] }}
+               
               >
-              Add New Goal
-              </Typography>
+              Create Goal
+              </p>
             </Button>
           </div>
-          <img src={analysis} alt='Analysis' className='h-36' />
+          <img src={analysis} alt='Analysis' className='md:h-36 h-28' />
         </Box>
 
         <div>
@@ -333,12 +341,39 @@ const Goals = () => {
               className=" text-semibold"
               color='text.primary'
             >AI Goals </Typography></h1>
-          <div className='flex space-x-4 mt-4'>
-            <button onClick={() => setSelectedAiCategory('recentlyAdded')} className={`px-4 font-light cursor-pointer py-2 rounded-md ${selectedAiCategory === 'recentlyAdded' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Recently Added</button>
-            <button onClick={() => setSelectedAiCategory('inProgress')} className={`px-4 py-2 font-light cursor-pointer rounded-md ${selectedAiCategory === 'inProgress' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>In Progress</button>
-            <button onClick={() => setSelectedAiCategory('pending')} className={`px-4 py-2 font-light cursor-pointer rounded-md ${selectedAiCategory === 'pending' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Pending</button>
-            <button onClick={() => setSelectedAiCategory('completed')} className={`px-4 py-2 font-light cursor-pointer rounded-md ${selectedAiCategory === 'completed' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Completed</button>
-          </div>
+         {/* Buttons for medium and larger screens */}
+<div className="hidden md:flex space-x-4 mt-4">
+  {["recentlyAdded", "inProgress", "pending", "completed"].map((category) => (
+    <button
+      key={category}
+      onClick={() => setSelectedAiCategory(category)}
+      className={`px-4 py-2 font-light cursor-pointer rounded-md ${
+        selectedAiCategory === category
+          ? "bg-[#6246AC] text-white"
+          : "bg-gray-200"
+      }`}
+    >
+      {category === "recentlyAdded"
+        ? "Recently Added"
+        : category.charAt(0).toUpperCase() + category.slice(1)}
+    </button>
+  ))}
+</div>
+
+{/* Dropdown for small screens */}
+<div className="md:hidden mt-4">
+  <select
+    value={selectedAiCategory}
+    onChange={(e) => setSelectedAiCategory(e.target.value)}
+    className="w-7/12 px-4 py-2 rounded-lg bg-gray-200 text-black  focus:outline-none"
+  >
+    <option value="recentlyAdded">Recently Added</option>
+    <option value="inProgress">In Progress</option>
+    <option value="pending">Pending</option>
+    <option value="completed">Completed</option>
+  </select>
+</div>
+
         </div>
 
         <div className='relative mt-4'>
@@ -434,12 +469,38 @@ const Goals = () => {
 
             </Typography>
             </h1>
-          <div className='flex space-x-4 mt-4'>
-            <button onClick={() => setSelectedCategory('recentlyAdded')} className={`px-4 font-light cursor-pointer py-2 rounded-md ${selectedCategory === 'recentlyAdded' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Recently Added</button>
-            <button onClick={() => setSelectedCategory('inProgress')} className={`px-4 py-2  font-light cursor-pointer rounded-md ${selectedCategory === 'inProgress' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>In Progress</button>
-            <button onClick={() => setSelectedCategory('pending')} className={`px-4 py-2 font-light cursor-pointer rounded-md ${selectedCategory === 'pending' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Pending</button>
-            <button onClick={() => setSelectedCategory('completed')} className={`px-4 py-2 font-light cursor-pointer rounded-md ${selectedCategory === 'completed' ? 'bg-[#6246AC] text-white' : 'bg-gray-200'}`}>Completed</button>
-          </div>
+            <div className="hidden md:flex space-x-4 mt-4">
+  {["recentlyAdded", "inProgress", "pending", "completed"].map((category) => (
+    <button
+      key={category}
+      onClick={() => setSelectedCategory(category)}
+      className={`px-4 py-2 font-light cursor-pointer rounded-md ${
+        selectedCategory === category
+          ? "bg-[#6246AC] text-white"
+          : "bg-gray-200"
+      }`}
+    >
+      {category === "recentlyAdded"
+        ? "Recently Added"
+        : category.charAt(0).toUpperCase() + category.slice(1)}
+    </button>
+  ))}
+</div>
+
+{/* Dropdown for small screens */}
+<div className="md:hidden mt-4">
+  <select
+    value={selectedCategory}
+    onChange={(e) => setSelectedCategory(e.target.value)}
+    className="w-7/12 px-4 py-2 rounded-lg bg-gray-200 text-black  focus:outline-none"
+  >
+    <option value="recentlyAdded">Recently Added</option>
+    <option value="inProgress">In Progress</option>
+    <option value="pending">Pending</option>
+    <option value="completed">Completed</option>
+  </select>
+</div>
+
         </div>
 
 
@@ -543,7 +604,7 @@ const Goals = () => {
 
 
 
-      <Box className='col-span-4  space-y-4 ml-6 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
+      <Box className='hidden lg:block col-span-4  space-y-4 ml-6 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
         
         <div className=''>
         <div className='w-full flex justify-center mb-3'>

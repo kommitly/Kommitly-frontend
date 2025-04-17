@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Typography } from "@mui/material";
 import { tokens } from "../../../theme";
 import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 
 const TypingText = ({ color, onComplete }) => {
@@ -14,6 +15,14 @@ const TypingText = ({ color, onComplete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
   const [deleting, setDeleting] = useState(false); // Controls deleting effect
+  const isSm = useMediaQuery(theme.breakpoints.only("sm"));
+  const isLg = useMediaQuery(theme.breakpoints.only("lg"));
+  const isXl = useMediaQuery(theme.breakpoints.only("xl"));
+  const isMd = useMediaQuery(theme.breakpoints.only("md"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
+  const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
+  const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
+
 
   useEffect(() => {
     const currentPhrase = phrases[phraseIndex];
@@ -54,7 +63,23 @@ const TypingText = ({ color, onComplete }) => {
   }, []);
 
   return (
-    <Typography variant="h1" sx={{ color, fontWeight: "semibold" }}>
+    <Typography variant="h1" sx={{
+      color,
+      fontWeight: "semibold",
+      fontSize: isXs
+        ? "0.8rem" // Smallest size for XS
+        : isSm
+        ? "1rem" // Medium size for SM
+        : isMd
+        ? "2rem" // Medium size for MD
+        : isLg
+        ? "2rem" // Large size for LG
+        : isXl
+        ? "3rem"
+        : isXxl
+        ? "3rem" // Extra large size for XL
+        : "2rem", // Default size for larger screens (or the largest)
+    }}>
       <motion.span>
         {displayedText}
         {showCursor && (

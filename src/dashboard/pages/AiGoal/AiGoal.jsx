@@ -702,7 +702,7 @@ const AiGoal = () => {
             
           </div>
 
-          <Box className="actionable-steps xl:w-6/12 md:w-5/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
+          <Box className="hidden md:block actionable-steps xl:w-6/12 md:w-5/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
               <div className=' items-center gap-4 mb-4 mt-4'>
                 <div className='flex items-center gap-4 w-full justify-between mb-2'>
                 <span className=' font-regular text-[#00000] text-sm xl:text-sm 2xl:text-base'

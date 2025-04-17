@@ -10,6 +10,7 @@ import { tokens } from "../../../theme";
 import FlowChart from './Flowchart';
 import { animate } from "motion"
 import TypingText from './TypingText';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 const Home = () => {
@@ -25,7 +26,13 @@ const Home = () => {
   const [textComplete, setTextComplete] = useState(false);
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const goalBreakdownRef = useRef(null); // Create ref for GoalBreakdown
-
+  const isSm = useMediaQuery(theme.breakpoints.only("sm"));
+  const isLg = useMediaQuery(theme.breakpoints.only("lg"));
+  const isXl = useMediaQuery(theme.breakpoints.only("xl"));
+  const isMd = useMediaQuery(theme.breakpoints.only("md"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
+  const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
+  const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
 
 
   useEffect(() => {
@@ -88,21 +95,7 @@ const Home = () => {
   
   return (
     <div className='w-full   px-6 mt-4 '>
-      <div className='  w-full  flex justify-end gap-4 '>
-      <motion.p
-                  className="text-secondary italic text-xs font-regular  "
-                  style={{color: colors.primary[500]}}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                >
-                  {randomQuote}
-                </motion.p>
       
-    
-
-
-      </div>
 
       <div className="w-full  px-4 flex-1 overflow-y-auto scrollbar-hide xl:max-h-[76vh] md:max-h-[70vh]  no-scrollbar">
         {loading && 
@@ -132,11 +125,29 @@ const Home = () => {
         }}
         className="py-8 space-y-4"
       > 
-          <motion.div className='flex h-10 items-center gap-4 '>
+          <motion.div className='flex h-10 items-center gap-4 mb-4 '
+          style={{marginBottom: isXs
+        ? '10px'
+        : isSm
+        ? '20px'
+        : isMd
+        ? '20px'
+        : isLg
+        ? '20px'
+        : isXl
+        ? '20px'
+        : isXxl
+        ? '20px'
+        : '20px'
+           }}>
 
-            <motion.div
+           <Box>
+           <motion.div
               className='flex items-center justify-center w-4 h-4 rounded-full'
-              style={{ backgroundColor: colors.primary[500] }}
+              style={{ backgroundColor: colors.primary[500],
+                width: isXs ? '10px' : isSm ? '20px' : isMd ? '20px' : isLg ? '20px' : isXl ? '20px' : isXxl ? '20px' : '20px', 
+                height: isXs ? '10px' : isSm ? '20px' : isMd ? '20px' : isLg ? '20px' : isXl ? '20px' : isXxl ? '20px' : '20px',
+               }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -148,6 +159,7 @@ const Home = () => {
             >
 
               </motion.div>
+           </Box>
 
               <TypingText color={colors.primary[500]}  onComplete={() => setTextComplete(true)} />
 
@@ -160,7 +172,7 @@ const Home = () => {
             transition={{ duration: 0.6 }} // Remove fixed delay
             className='flex w-full items-center gap-5'
           >
-            <div className='w-8 h-8'>
+            <div className='w-3  h-8'>
 
             </div>
             <div>
@@ -185,7 +197,18 @@ const Home = () => {
                 <li>Keeping you accountable and tracking progress</li>
               </ul>
  */}
-          <Typography variant="h4" className="mt-2 w-full" style={{ color: colors.primary[600], fontWeight: '400' }}>
+          <Typography variant="h4" className="mt-2 w-full" style={{ color: colors.primary[600], fontWeight: '400' ,  fontSize: isXs
+        ? "0.8rem" // Smallest size for XS
+        : isSm
+        ? "1.2rem" // Medium size for SM
+        : isMd
+        ? "1.2rem" // Medium size for MD
+        : isLg
+        ? "1.2rem" // Large size for LG
+        : isXl
+        ? "1.5rem" // Extra large size for XL
+        : "1.2rem", // Default size for larger screens (or the largest)
+    }}>
             Achieve your goals in just a few steps:
           </Typography>
           <motion.ul
@@ -218,7 +241,21 @@ const Home = () => {
         <path d="M4 4 Q4 14 14 14" strokeLinecap="round" />{/* Smooth right-angle bend */}
         <path strokeLinecap="round" strokeLinejoin="round" d="M16 8l6 6-6 6" />
       </svg>
+      <Typography  style={{fontSize: isXs
+        ? "0.8rem" // Smallest size for XS
+        : isSm
+        ? "1rem" // Medium size for SM
+        : isMd
+        ? "1rem" // Medium size for MD
+        : isLg
+        ? "1rem" // Large size for LG
+        : isXl
+        ? "1.2rem" // Extra large size for XL
+        : "1rem", // Default size for larger screens (or the largest)
+    }}>
       {step}
+      </Typography>
+   
     </motion.li>
   ))}
 </motion.ul>
@@ -304,7 +341,19 @@ const Home = () => {
         <>
       <div className='flex  w-full  items-center justify-center flex-wrap gap-4'>
         
-        <Box className='w-6/12   bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-4' sx={{ backgroundColor:  colors.background.paper }}>
+      <Box 
+  className="w-6/12 bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-4"
+  sx={{ 
+    backgroundColor: colors.background.paper,
+    boxShadow: `
+      inset 0px 4px 12px rgba(43, 24, 89, 0.25),
+      -8px 0px 12px rgba(43, 24, 89, 0.10),
+      0px 8px 12px rgba(43, 24, 89, 0.50)
+    `
+  }}
+>
+
+    
           <div className='flex items-center justify-between gap-4'>
             <div className='flex items-center w-full gap-4 ml-2'>
               <IconButton>
