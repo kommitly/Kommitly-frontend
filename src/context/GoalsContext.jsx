@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { fetchGoals } from '../utils/Api'; // Adjust the import path as needed
 
@@ -20,6 +20,7 @@ export const GoalsProvider = ({ children }) => {
 
   useEffect(() => {
     const loadGoals = async () => {
+      
         const token = localStorage.getItem("token");  // Check if token exists
         if (!token) return; 
 
@@ -28,7 +29,7 @@ export const GoalsProvider = ({ children }) => {
             console.log("Fetched Goals:", fetchedGoals);
             setGoals(fetchedGoals ?? { goals: [], ai_goals: [] });
         } 
-        catch (error) {
+        catch (error) {    
         console.error('Error fetching goals:', error);
       }
     };
