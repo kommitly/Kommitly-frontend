@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { IoSearch } from "react-icons/io5";  // Correct module for IoSearch
 import Backdrop from '@mui/material/Backdrop'; // Import Backdrop from MUI
 import analysis from '../../../assets/analyze-data.svg'; // Adjust the path as necessary
-import { createTask } from "../../../utils/Api";
+import { createTask, deleteTaskById } from "../../../utils/Api";
 import aiGoals from '../../../assets/goals.svg';
 import CalendarComponent from './Calendar';
 import dayjs from "dayjs";
@@ -26,6 +26,11 @@ const Tasks = () => {
   const [title, setTitle] = useState('');
   const aiTasksContainerRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [aiTasks, setAiTasks] = useState([]);
+  const [menuVisible, setMenuVisible] = useState({});
+  const {removeTask, addTaskToSidebar} = useContext(TasksContext); // Use the TasksContext
+  
+
 
 
 
@@ -133,10 +138,37 @@ const Tasks = () => {
   const filteredTasks = filterTasks(selectedCategory);
   const filteredAiTasks = filterAiTasks(selectedAiCategory);
 
-  const toggleTaskMenu = (taskId) => {
+  /*const toggleTaskMenu = (taskId) => {
     console.log(`Toggled task menu for task ID: ${taskId}`);
-  };
-  
+      setMenuVisible(prev => ({
+        [taskId]: !prev[taskId],
+        
+      }
+    ));
+    console.log("menuVisible");
+    };*/
+
+    const toggleTaskMenu = (taskId) => {
+      setMenuVisible((prev) => ({
+        ...prev,
+        [taskId]: !prev[taskId]
+      }));
+    };
+
+    //Delete task
+       const handleDeleteTask = async (taskId) => {
+         try {
+           await deleteTaskById(taskId);
+           removeTask(taskId); // if task is stored in local state
+           alert("Task deleted successfully!");
+       
+         } catch (error) {
+           console.error("Error deleting task:", error);
+           alert("Failed to delete task.");
+         }
+       };
+     
+       
   
     if (loading) {
       return (
@@ -219,31 +251,7 @@ const Tasks = () => {
 
     <div className="col-span-8 flex-1 overflow-y-auto scrollbar-hide  no-scrollbar"> 
         <div className='flex items-center justify-between '>
-       <div>
-       <h1 className='mt-8 text-[#4F378A] space-x-1 font-semibold text-xl'>
-        <span className='text-black'>
-        Hello
-
-        </span>
-        <span>
-        Marie
-
-        </span>
-        <span role="img" aria-label="waving hand" className='ml-2'>
-    👋
-        </span>
-       </h1>
-        <p className='text-[#2C2C2C] font-light text-xs'>
-          Let's take a dive into your tasks
-        </p>
-
       
-       </div>
-
-      <div className='p-3 rounded-full bg-[#F4F1FF] flex items-center justify-center '
-        >
-          <IoSearch size={20} className='text-[#4A4459]' />
-        </div>
         </div>
         <div className='w-full container h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] p-8 mt-4'>
                   <div className='space-y-4'>
@@ -311,11 +319,44 @@ const Tasks = () => {
                 <span className='w-full h-auto font-medium'>
                   {task.title}
                 </span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#65558F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer" onClick={() => toggleTaskMenu(task.id)}>
+                <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#65558F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer" 
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevents clicking the menu from triggering other actions
+                  e.preventDefault(); // Prevents the default action of the event
+                  toggleTaskMenu(task.id)}}>
                   <circle cx="12" cy="5" r="1"></circle>
                   <circle cx="12" cy="12" r="1"></circle>
                   <circle cx="12" cy="19" r="1"></circle>
                 </svg>
+
+                {menuVisible[task.id] && (
+                        <div className="absolute right-0 mt-2 w-42 bg-white shadow-lg rounded-md z-[100]">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-black hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault(); // Prevents the default action of the event
+                              addTaskToSidebar(task.id);
+
+                            }}
+                          >
+                            Add to Sidebar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-[#E60178] hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault(); // Prevents the default action of the event
+                              handleDeleteTask(task.id);
+                            }}
+                          >
+                            Delete Task
+                          </button>
+                        </div>
+                      )}
+                      </div>
+
               </div>
               <div className="flex items-center">
                   <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm font-medium text-[#65558F]">Timeline:</p>
@@ -374,23 +415,44 @@ const Tasks = () => {
                     <span className='w-full h-auto font-medium'>
                     {task.title}
                     </span>
-                    <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="#65558F"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="cursor-pointer"
-                              onClick={() => toggleTaskMenu(task.id)} 
-                            >
-                              <circle cx="12" cy="5" r="1"></circle>
-                              <circle cx="12" cy="12" r="1"></circle>
-                              <circle cx="12" cy="19" r="1"></circle>
-                    </svg>
+
+                    <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#65558F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer" 
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevents clicking the menu from triggering other actions
+                  e.preventDefault(); // Prevents the default action of the event
+                  toggleTaskMenu(task.id);
+                  }}>
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+
+                {menuVisible[task.id] && (
+                        <div className=" mt-2 w-42 bg-white shadow-lg rounded-md z-[100]">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-black hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault(); // Prevents the default action of the event
+                              addTaskToSidebar(task.id);
+                            }}
+                          >
+                            Add to Sidebar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-xs text-[#E60178] hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault(); // Prevents the default action of the event
+                              handleDeleteTask(task.id);
+                            }}
+                          >
+                            Delete Task
+                          </button>
+                        </div>
+                      )}
+                      </div>
                     </div>
                   </div>  
                     
