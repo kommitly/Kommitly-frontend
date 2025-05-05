@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // Function to get token from localStorage
-const getToken = () => localStorage.getItem("token");
+const getToken = () => {
+  return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1OTEzOTg5LCJpYXQiOjE3NDUzMDkxODksImp0aSI6IjZkOGNhYTNhNjUyYjRlOWRhODJlNWZlNzlhNzQ3YTg3IiwidXNlcl9pZCI6ImI0NmQ0MGEyLTllOTktNDdkZi04OGRlLThjYjc2NmU3ZTg5NyJ9.d2RwnlNfESXymilQ34gwEP_DiLHdd5PEhhe46V5MuwE";
+};
 
 
 const generateInsights = async (title, description) => {
@@ -205,7 +207,7 @@ const updateAiTaskStatus = async (taskId, updatedData) => {
 }
 
 const updateSingleTaskStatus = async (taskId, updatedData) => {
-  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update/`;
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/`;
   try {
     const token = getToken();
     const response = await axios.patch(url, updatedData, {
@@ -223,7 +225,9 @@ const updateSingleTaskStatus = async (taskId, updatedData) => {
 }
 
 const updateSubtask = async (taskId, subtaskId, updatedData) => {
-  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/subtask/${subtaskId}/update/`;
+  console.log ( "for task with ID:", taskId, "Updating subtask with ID:", subtaskId, "with data:", updatedData);
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/subtasks/${subtaskId}/`;
+  console.log("API URL: ", url); // Log the URL for debugging
   try {
     const token = getToken();
     const response = await axios.patch(url, updatedData, {
@@ -340,6 +344,23 @@ const deleteTaskById = async (taskId) => {
   }
 }
 
+const deleteSubtaskById = async (subtaskId) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/subtasks/${subtaskId}/delete/`;
+  try {
+    const token = getToken();
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting subtask with ID ${subtaskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
 const fetchTasksByGoalId = async (goalId) => {
   const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/tasks/`;
   try {
@@ -448,7 +469,8 @@ export {
   createTask , 
   fetchTasks, 
   deleteGoalById, 
-  deleteTaskById, 
+  deleteTaskById,
+  deleteSubtaskById, 
   fetchTasksByGoalId, 
   fetchUserProfile, 
   deleteAiTaskById};

@@ -7,25 +7,85 @@ import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } fr
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
-import { deleteTaskById, updateSingleTaskStatus, fetchTaskById, createSubtask, updateSubtask} from "../../../utils/Api";
+import { deleteTaskById, updateSingleTaskStatus, fetchTaskById, createSubtask, updateSubtask, deleteSubtaskById} from "../../../utils/Api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt, FaClock, FaFlag, FaTasks  } from "react-icons/fa"; // Calendar icon
 import SubtaskDetails from "./Subtask";
 
 
+   
+  
+
+
+   
+  
+
+
 
 const TaskPage = () => {
     const { taskId } = useParams();
-    const navigate = useNavigate();
-    const { tasks, setTasks} = useContext(TasksContext);
-    const [loading, setLoading] = useState(true);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [progress, setProgress] = useState(0);
-    const [error, setError] = useState(null);
+    const {setTasks} = useContext(TasksContext);
+    const [selectedFile, setSelectedFile] = useState(null); //for media
     const [showInput, setShowInput] = useState(false);
     const [newSubtask, setNewSubtask] = useState("");
     const [selectedSubtask, setSelectedSubtask] = useState(null);
+    const [subtasks, setSubtasks] = useState(null);
+    const navigate = useNavigate(); // React Router hook
+    
+     
+   
+
+        
+    
+    const handleSubtaskUpdate = async (updatedSubtask) => {
+      const { id: subtaskId, task: taskId } = updatedSubtask;
+      console.log("Type of taskId:", typeof taskId, "Value:", taskId);
+
+      console.log("Task ID: ", taskId, "Subtask ID: ", subtaskId, "updated subtask: ", updatedSubtask);
+       // Format due_date
+  const cleanSubtask = {
+    ...updatedSubtask,
+    due_date: updatedSubtask.due_date?.split("T")[0],
+  };
+
+  console.log("Cleaned subtask for update:", cleanSubtask);
+
+      try {
+        const response = await updateSubtask(taskId, subtaskId, cleanSubtask);
+        console.log("Response from updateSubtask:", response);
+        if (response.success) {
+          setTask((prevTask) => ({
+            ...prevTask,
+            subtasks: prevTask.subtasks.map((subtask) =>
+              subtask.id === updatedSubtask.id ? updatedSubtask : subtask
+            ),
+          }));
+        }
+        alert("subtask updated successfully!");
+      } catch (error) {
+        console.error("Failed to update subtask:", error);
+      }
+    };
+    
+    const handleSubtaskDelete = async (subtask) => {
+      const { id: subtaskId } = subtask
+      try {
+        await deleteSubtaskById(subtaskId);
+        setTask(prevTask => ({
+          ...prevTask,
+          subtasks: prevTask.subtasks.filter(st => st.id !== subtaskId),
+        }));
+
+         // Clear the selected subtask if it was the one deleted
+         setSelectedSubtask(prev => (prev?.id === subtaskId ? null : prev));
+        alert("Subtask deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting subtask:", error);
+        alert("Failed to delete subtask.");
+      }
+    };
+    
     const [task, setTask] = useState(
       {title: "", description: "", due_date: null, reminder_time: "", priority: "Low", subtasks: []}
     );
@@ -97,10 +157,7 @@ const TaskPage = () => {
     }
   };
   
-  const SubtasksSection = ({ task, setTask }) => {
-    const [newSubtask, setNewSubtask] = useState("");
-    const [showInput, setShowInput] = useState(false);
-  };
+  
      // Calculate progress
 const totalSubtasks = task?.subtasks?.length || 0;
 const completedSubtasks = task?.subtasks?.filter((sub) => sub.completed).length || 0;
@@ -143,13 +200,25 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
   };
   
    //Delete task
-  const handleDeleteTask = async () => {
-    try {
-      await deleteTaskById(task.id);
-    } catch (error) {
-      console.error("Error deleting task:", error);
-    }
-  };
+   const handleDeleteTask = async () => {
+     try {
+       console.log("Deleting task with ID:", task.id);
+       await deleteTaskById(task.id);
+   
+       // Optional: clear state or update UI
+       setTask(null); // if task is stored in local state
+       // Redirect to main tasks page
+       navigate("/dashboard/tasks"); // adjust path to your route structure
+   
+       alert("Task deleted successfully!");
+   
+       
+     } catch (error) {
+       console.error("Error deleting task:", error);
+       alert("Failed to delete task.");
+     }
+   };
+   
 
   
   
@@ -187,7 +256,7 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
       <textarea
       name="description"
         className="pl-6 rounded "
-        value={task.description}
+        value={task.description || ''} 
         onChange={handleChange}
       />
       </div>
@@ -333,9 +402,17 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
       </div>
     </div>
     </div>
+    
     {/* Modal for Subtask Details */}
     <div className="w-1/2 p-4">
-        <SubtaskDetails subtask={selectedSubtask} />
+
+  <SubtaskDetails
+    subtask={selectedSubtask}
+    taskId={String(taskId)}
+    onUpdateSubtask={handleSubtaskUpdate}
+    onDeleteSubtask={handleSubtaskDelete}
+  />
+
       </div>
     </div>
   );
