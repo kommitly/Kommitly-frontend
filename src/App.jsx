@@ -33,6 +33,7 @@ import '@fontsource/roboto/700.css';
 // Removed duplicate import of Home
 import Tasks from './dashboard/pages/Tasks/Tasks';
 import Taskpage from './dashboard/pages/Task/Task';
+import AiSubtask from "./dashboard/pages/AiGoal/AiSubtask";
 
 
 function App() {
@@ -77,6 +78,7 @@ function App() {
             <Route path="tasks" element={<Tasks />} />
             <Route path="tasks/:taskId" element={<Taskpage />} />
                 <Route path="ai-goal/:goalId" element={<AiGoal />} />
+                <Route path="ai-goal/:goalId/subtask/:subtaskId" element={<AiSubtask />} />
                 <Route path="goal/:goalId" element={<Goal />} />
                 <Route path="settings" element={<Settings/>} />
               </Route>

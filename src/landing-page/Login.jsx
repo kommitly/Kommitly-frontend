@@ -10,6 +10,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { tokens } from "../theme";
 import { Box } from "@mui/material";
+import getLocationAndTimezone from "../utils/location";
 
 const initialValues = {
   email: "",
@@ -41,6 +42,7 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         await login(data.access);
+        getLocationAndTimezone();
       } else {
         setMessage(data.error || "Login failed.");
       }

@@ -26,23 +26,30 @@ const Dashboard = () => {
 
 
   return (
-    <div className="flex h-screen relative">
+    <div className="flex h-screen relative w-full">
       {/* Sidebar (Fixed on the left) */}
       {/*className=" md:w-64 lg:w-60 xl:w-56 2xl:w-66  text-white fixed inset-y-0 transform translate-x-0 transition-transform duration-200 ease-in-out md:relative md:translate-x-0"*/}
     
-        <DashboardSidebar  isCollapsed={isCollapsed}/>
+      <DashboardSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+
     
 
     
 
         {/* Push Outlet Content Below Navbar */}
         <main
-  className="flex-1 w-full"
-  style={{
-    marginLeft: isXl ? 0 : isXs ? 74 : isSm ? 88 : isLg ? 10 : isMd ? 10 : isXxl ? 0 : isXsDown ? 0 : 0,
-  }}
-> <Navbar setIsCollapsed={setIsCollapsed}/>
-            <Outlet  />
+          className=" w-full "
+          style={{
+            marginLeft: isXl ? 0 : isXs ? 74 : isSm ? 88 : isLg ? 10 : isMd ? 10 : isXxl ? 0 : isXsDown ? 0 : 0,
+          }}
+        > <div className="relative mt-2  z-50 w-full ">
+          <Navbar setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />
+
+        </div>
+          <div className="mt-14 "
+          >
+          <Outlet  />
+          </div>
           </main>
     
     </div>

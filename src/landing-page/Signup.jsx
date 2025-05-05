@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
-
+import getLocationAndTimezone from "../utils/location";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -57,6 +57,7 @@ const Signup = () => {
         setEmail(values.email);
         setPassword(values.password);
         setIsCheckingVerification(true);
+        getLocationAndTimezone();
 
       } else {
         const errorData = await response.json();

@@ -234,6 +234,10 @@ const AiGoal = () => {
   
 
   
+  const openSubtaskPage = (step) => {
+    // Navigate to the subtask page with the step details
+    navigate(`/dashboard/ai-goal/${goalId}/subtask/${step.id}`, { state: { step } });
+  };
 
  
 
@@ -775,7 +779,7 @@ const AiGoal = () => {
                       
                         <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
                         <span className=' text-[#1D1B20] md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular'>{step.title}</span>
-                          <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }}/>
+                          <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }} onClick={() => openSubtaskPage(step)}  />
 
                         </Box>
                     

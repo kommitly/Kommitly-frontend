@@ -75,7 +75,7 @@ const TypingText = ({ color, onComplete }) => {
         : isLg
         ? "2rem" // Large size for LG
         : isXl
-        ? "3rem"
+        ? "2rem"
         : isXxl
         ? "3rem" // Extra large size for XL
         : "2rem", // Default size for larger screens (or the largest)

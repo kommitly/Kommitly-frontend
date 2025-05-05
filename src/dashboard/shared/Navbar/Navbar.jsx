@@ -13,11 +13,12 @@ import SearchResults from './SearchResults';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
-export const Navbar = () => {
+export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { profile, setProfile } = useContext(ProfileContext);
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
+ 
   const [anchorEl, setAnchorEl] = useState(null); // For the filter menu
   const [searchType, setSearchType] = useState(""); // "goal" or "task"
   const [searchQuery, setSearchQuery] = useState(""); // User's search input
@@ -112,13 +113,17 @@ export const Navbar = () => {
   }, [filteredResults]);
   
 
-
+  useEffect(() => {
+    console.log("Navbar isCollapsed:", isCollapsed);
+  }, [isCollapsed]); // Run this whenever isCollapsed changes
 
   
   return (
-    <Box className=" items-center w-full  "  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 5 : isSm ? 2 : isMd ? 2 : isLg ? 2 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4}}>
+    <div className={`fixed top-0  ${isCollapsed ? 'left-26' : 'left-64'} right-0 z-50`}>
+
+      <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 5 : isSm ? 2 : isMd ? 2 : isLg ? 2 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%" , backgroundColor: colors.background.default,  }}>
       {/* Logo */}
-      <div className='flex items-center  justify-between grid grid-cols-12    w-full'>
+      <div className='flex items-center  justify-between grid grid-cols-12   w-full ' style={{ paddingRight: isCollapsed ? 0 : isXs ? 0 : isSm ? 0 : isMd ? 0 : isLg ? 0 : isXl ? 0 : isXxl ? 0 : 0 }}>
           <Box className='col-span-5 flex items-center'
             sx={{
               gridColumn: isXs ? 'span 8' : isSm ? 'span 4' : isMd ? 'span 4' : isLg ? 'span 5' : isXl ? 'span 5' : isXxl ? 'span 5' : 'span 5',
@@ -311,6 +316,7 @@ export const Navbar = () => {
      
        
     </Box>
+    </div>
         
   )
 }

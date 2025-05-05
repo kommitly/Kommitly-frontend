@@ -47,7 +47,8 @@ const Item = ({title, to, icon, selected, setSelected}) => {
 };
 
 
-const DashboardSidebar = () => {
+const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
+
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
@@ -55,7 +56,7 @@ const DashboardSidebar = () => {
     const { taskId } = useParams();
     const location = useLocation();
     const { collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl } = useProSidebar();
-    const [isCollapsed, setIsCollapsed] = useState(false);
+ 
     const [selected, setSelected] = useState("Dashboard");
     const isSm = useMediaQuery(theme.breakpoints.only("sm"));
     const isLg = useMediaQuery(theme.breakpoints.only("lg"));
@@ -204,8 +205,8 @@ useEffect(() => {
   className={`${
     isXs || isSm
       ? 'fixed top-0 w-16 left-0 z-50 h-screen transition-all duration-300'
-      : 'relative h-full '
-  } ${isCollapsed ? 'w-16 p-4  flex justify-center items-center ml-4' : 'w-64'} bg-primary`}
+      : 'relative h-full flex justify-center items-center'
+  } ${isCollapsed ? 'w-16 p-4  flex justify-center items-center ml-4' : 'w-68 border-none'} bg-primary`}
 
 >
 
@@ -217,10 +218,18 @@ useEffect(() => {
   rootStyles={{
     [`.${sidebarClasses.container}`]: {
       backgroundColor: `${colors.primary[500]} !important`,
-      height: isCollapsed ? "96vh" : "100vh",
-      borderRadius: isCollapsed ? '10px' : '0',
+      height: isCollapsed ? "98vh" : "98vh",
+      borderRadius: isCollapsed ? '20px' : '24px',
       border: 'none',
       padding: isCollapsed ? '0px' : '10px',
+      position: 'fixed',
+      top: '0',
+      left: isCollapsed ? '0' : '0',
+      zIndex: 1000,
+      transition: 'width 0.3s ease-in-out',
+      width: isCollapsed ? '80px' : '250px',
+      overflow: 'hidden',
+      margin: '8px',
       boxShadow: isCollapsed
         ? `
           inset 0px 4px 4px rgba(43, 24, 89, 0.15),
@@ -290,14 +299,18 @@ useEffect(() => {
   }}>
                     {/* LOGO AND MENU ICON */}
                     <MenuItem 
-                    onClick={()=>setIsCollapsed(!isCollapsed)}
-                    icon={isCollapsed ? <MapOutlinedIcon/> : undefined}
-                    style={{
-                        margin: "5px 0 20px 0",
-                        color: colors.primary[100],
-                    }}
+  onClick={() => {
+    const newValue = !isCollapsed;
+    setIsCollapsed(newValue);
+    console.log("isCollapsed:", newValue);
+  }}
+  icon={isCollapsed ? <MapOutlinedIcon /> : undefined}
+  style={{
+    margin: "5px 0 20px 0",
+    color: colors.primary[100],
+  }}
+>
 
-                    >
                         {!isCollapsed && (
                             <Box
                             display="flex"
