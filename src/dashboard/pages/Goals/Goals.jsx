@@ -8,10 +8,8 @@ import { motion } from 'framer-motion';
 import analysis from '../../../assets/analyze-data.svg';
 import aiGoals from '../../../assets/goals.svg';
 import { createGoal } from '../../../utils/Api';
-import CircularProgress, {
-
-
-} from '@mui/material/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
+import background from '../../../assets/goal.svg';
 
 import { Divider } from '@mui/material';
 import GoalsPieChart from './GoalsPieChart'; // Import the PieChart component
@@ -218,7 +216,7 @@ const Goals = () => {
 
 
   return (
-    <div className='w-full  grid gap-1 grid-cols-12  px-6  flex min-h-screen'>
+    <div className='w-full p-2  grid gap-1 grid-cols-12    flex min-h-screen'>
        <Backdrop
           sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
           open={open}
@@ -288,7 +286,7 @@ const Goals = () => {
           </div>
         </Backdrop>
 
-      <div className="xl:col-span-8 col-span-12 flex-1 overflow-y-auto scrollbar-hide  no-scrollbar">
+      <div className="md:col-span-7 sm:col-span-12 ">
        
         <Box className='w-full container md:h-40 h-30 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 pl-4 mt-4'
         sx={{backgroundColor:colors.background.paper}}
@@ -398,9 +396,9 @@ const Goals = () => {
             {filteredAiGoals.map((goal) => (
               <Link key={goal.id} to={`/dashboard/ai-goal/${goal.id}`}>
               <li  className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  '  >
-                <Box className='flex w-full items-center gap-2 p-2 rounded-lg' sx={{backgroundColor:colors.background.paper}}>
-                  <div className='w-1/3 bg-white rounded-lg p-4'>
-                   <img src={aiGoals} alt="goals"  className='h-20'/>
+                <Box className='flex w-full items-center gap-2 px-2 py-1 rounded-xl' sx={{backgroundColor:colors.background.paper}}>
+                  <div className='w-1/4 '>
+                   <img src={background } alt="goals"  className='h-auto'/>
                   </div>
                   <div className='w-2/3 h-24  flex flex-col gap-2'>
                   <div className='flex items-start h-10  mb-4 justify-between'>
@@ -526,9 +524,9 @@ const Goals = () => {
             {filteredGoals.map((goal) => (
               <Link key={goal.id} to={`/dashboard/goal/${goal.id}`}>
               <li className='bg-[#F4F1FF] w-1/3 min-w-[300px] min-h-[100px] list-none  rounded-lg'>
-              <Box className='flex w-full items-center gap-2 p-2 rounded-lg' sx={{backgroundColor:colors.background.paper}}>
-                  <div className='w-1/3 bg-white rounded-lg p-4'>
-                   <img src={aiGoals} alt="goals"  className='h-20'/>
+              <Box className='flex w-full items-center gap-2 p-2 rounded-xl' sx={{backgroundColor:colors.background.paper}}>
+                  <div className='w-1/4 '>
+                   <img src={background } alt="goals"  className='h-auto'/>
                   </div>
                   <div className='w-2/3 h-24  flex flex-col '>
                     <div className='flex h-10 mb-4 items-center  justify-between'>
@@ -604,7 +602,7 @@ const Goals = () => {
 
 
 
-      <Box className='hidden lg:block col-span-4  space-y-4 ml-6 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
+      <Box className='hidden lg:block col-span-4 md:col-span-5  space-y-4 ml-6 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
         
         <div className=''>
         <div className='w-full flex justify-center mb-3'>

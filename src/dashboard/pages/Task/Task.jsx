@@ -226,7 +226,7 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
     return <div className="text-center w-full mt-6 text-gray-500">Loading task details...</div>;
   } else {
     return (
-      <div className="flex w-full">
+      <div className="flex min-h-screen w-full">
         <div className="w-1/2 p-4">
       <input
         type="text"
@@ -386,16 +386,16 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
       )}
     </div>
 
-      <div className="mt-6 flex gap-4 pl-85">
+      <div className="mt-6 flex mb-8 gap-4 pl-85">
         <button
           onClick={handleDeleteTask}
-          className="bg-red-400 text-red-100 px-4 py-2 rounded hover:bg-red-600"
+          className="bg-red-400 cursor-pointer text-red-100 px-4 py-2 rounded hover:bg-red-600"
         >
           Delete
         </button>
         <button
           onClick={handleUpdateTask}
-          className="bg-[#6246AC] text-white px-4 py-2 rounded hover:bg-purple-600"
+          className="bg-[#6246AC] cursor-pointer text-white px-4 py-2 rounded hover:bg-purple-600"
         >
           Update
         </button>

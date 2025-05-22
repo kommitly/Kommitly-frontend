@@ -25,6 +25,10 @@ import TextField from '@mui/material/TextField';
 
 import * as motion from "motion/react-client"
 import { VisibilityRounded } from '@mui/icons-material';
+import AiSubtask from './AiSubtask';
+import goal from '../../../assets/goal.svg';
+
+
 
 const extractTimeline = (description) => {
   if (!description) return { timeline: 'No detail available', cleanedDetails: description };
@@ -90,8 +94,7 @@ const AiGoal = () => {
   const [taskMenuVisible, setTaskMenuVisible] = useState(false);
   const [isTaskRenaming, setIsTaskRenaming] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
-
-
+  const [selectedStep, setSelectedStep] = useState(null);
 
 
  
@@ -235,8 +238,13 @@ const AiGoal = () => {
 
   
   const openSubtaskPage = (step) => {
-    // Navigate to the subtask page with the step details
-    navigate(`/dashboard/ai-goal/${goalId}/subtask/${step.id}`, { state: { step } });
+    setSelectedStep(step);
+    // If you also want to navigate to a specific route for the subtask:
+    // navigate(`/dashboard/ai-goal/${goalId}/subtask/${step.id}`, { state: { step } });
+  };
+
+  const closeSubtaskPage = () => {
+    setSelectedStep(null);
   };
 
  
@@ -263,7 +271,11 @@ const AiGoal = () => {
       loadGoal(); // Refresh goal data after deletion
     } catch (error) {
       setError(error.message);
-    }
+    } <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
+    <span className=' text-[#1D1B20] md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular'>{step.title}</span>
+      <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }} onClick={() => openSubtaskPage(step)}  />
+
+    </Box>
   };
   const now = new Date();
   const formattedDueDate = now.toISOString(); // Ensure this is defined before useState
@@ -810,6 +822,10 @@ const AiGoal = () => {
                     </Box>
                   );
                 })}
+
+      {selectedStep && (
+        <AiSubtask step={selectedStep} onClose={closeSubtaskPage} />
+      )}
               </div>
               <div className='flex  my-8 w-full justify-center  '>
              {/* { <button onClick={() => setTaskOpen(true)} className='bg-[#4F378A] w-full max-w-sm text-white py-2 px-8 rounded-lg'>

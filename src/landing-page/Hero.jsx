@@ -11,44 +11,60 @@ const Hero = () => {
     const colors =tokens(theme.palette.mode);
 
   return (
-    <section className=" min-h-[82vh] flex flex-col items-center justify-center px-6">
+    <section className=" min-h-screen flex flex-col  px-6">
        <div
-      className="bg-[#1E1A2A]/10 p-4 w-full h-full flex flex-col backdrop-blur-sm rounded-2xl shadow-lg shadow-[#1E1A2A] border border-white/30"
+      className=" p-4 w-full h-full flex justify-between "
     >
-   <Typography 
+      <div className="w-6/12  ">
+        <img src="/src/assets/hero.svg" alt="Hero" className="w-full size-136" />
+      </div>
+      <div className=" w-5/12 flex flex-col pl-5 justify-center mb-8">
+         <Typography 
         variant="h1"
         component="h1"
         gutterBottom
-        color="secondary"
+        color="primary"
+        sx={{marginBottom: "2rem"}}
        >
-           Achieve Your Goals with <span className="text-primary">Kommitly</span>
+           Drowning in goals, but not getting anything done? 
          
 
       </Typography>
   
       <Typography
+        variant="h4"
+        component="p"
+        gutterBottom
+        color="text.secondary"
+        sx={{marginBottom: "0.8rem"}}
+        >
+       Meet Juma, he has big ideas — maybe too many.
+
+        </Typography>
+        <Typography
         variant="body1"
         component="p"
         gutterBottom
         color="text.secondary"
 
         >
-        Break down your big dreams into small, actionable steps. Track your
-        progress, stay accountable, and make success a habit.
+       
+       He stays up late making plans, watching productivity videos, and jotting goals on sticky notes.
+       </Typography>
+      
+         <Typography
+        variant="body1"
+        component="p"
+        gutterBottom
+        color="text.secondary"
 
+        >
+      He’s trying, but he’s tired. His to-dos keep piling up, and progress feels like a moving target.
         </Typography>
-      {/* {<div className="mt-6 flex gap-4">
-        <Link to="/signup">
-          <button className="bg-[#6F2DA8] text-white px-6 py-3 rounded-lg shadow-lg hover:bg-[#4F378A] transition">
-            Get Started
-          </button>
-        </Link>
-        <Link to="/dashboard">
-          <button className="bg-white text-[#6F2DA8] px-6 py-3 rounded-lg border border-[#6F2DA8] shadow-lg hover:bg-[#E9E4FF] transition">
-            View Dashboard
-          </button>
-        </Link>
-      </div>} */}
+      
+      </div>
+  
+   
     </div>
     </section>
   );

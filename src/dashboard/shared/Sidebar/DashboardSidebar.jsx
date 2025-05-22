@@ -202,11 +202,6 @@ useEffect(() => {
     
     return (
 <Box
-  className={`${
-    isXs || isSm
-      ? 'fixed top-0 w-16 left-0 z-50 h-screen transition-all duration-300'
-      : 'relative h-full flex justify-center items-center'
-  } ${isCollapsed ? 'w-16 p-4  flex justify-center items-center ml-4' : 'w-68 border-none'} bg-primary`}
 
 >
 
@@ -227,7 +222,9 @@ useEffect(() => {
       left: isCollapsed ? '0' : '0',
       zIndex: 1000,
       transition: 'width 0.3s ease-in-out',
-      width: isCollapsed ? '80px' : '250px',
+      width: isCollapsed
+      ? (isXs ? "80px" : isSm ? "80px" : isMd ? "80px" : isLg ? "80px" : isXl ? "80px" : "80px")
+      : (isXs ? "220px" : isSm ? "220px" : isMd ? "230px" : isLg ? "240px" : isXl ? "260px" : "220px"),
       overflow: 'hidden',
       margin: '8px',
       boxShadow: isCollapsed
@@ -393,7 +390,7 @@ useEffect(() => {
                                 <MenuItem
                                     key={task.id}
                                     onClick={() => {
-                                        navigate(`/dashboard/task/${task.id}`);
+                                        navigate(`/dashboard/tasks/${task.id}`);
                                         setSelected(task.title); // optionally track specific task
                                     }}
                                     active={selected === task.title}

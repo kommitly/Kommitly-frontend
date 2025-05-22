@@ -36,10 +36,24 @@ const AiSubtask = () => {
           due_date: date?.toISOString(), // Convert date to string for compatibility with backend
         }));
       };
-      
+      const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+      setTimeout(() => setVisible(true), 10); // allow initial render before animation
+    }, []);
+
 
   return (
-     <div className="flex w-full">
+    <>
+    {visible && (
+      <div
+        className="fixed inset-0 bg-[rgba(0,0,0,0.66)] z-[99]"
+        onClick={() => navigate(-1)}
+      />
+    )}
+    
+    <div className={`fixed top-0 right-0 h-full w-full md:w-1/2 bg-white shadow-lg z-[100] transition-transform duration-300 ${visible ? 'translate-x-0' : 'translate-x-full'}`}>
+
             <div className="w-full p-4">
             
         <div className='flex gap-4 items-center '>
@@ -212,6 +226,7 @@ const AiSubtask = () => {
           {/* {  <SubtaskDetails subtask={selectedSubtask} />} */}
           </div>
         </div>
+        </>
       );
     }; 
 

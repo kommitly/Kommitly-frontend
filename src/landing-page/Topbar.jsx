@@ -4,9 +4,9 @@ import Signup from "./Signup";
 
 const Topbar = () => {
   return (
-    <nav className=" shadow-md w-10/12 bg-[#1E1A2A] rounded-md mt-2 shadow-[#4F378A] px-6 py-3 flex items-center justify-between">
+    <nav className="  w-full rounded-md mt-2 shadow-[#4F378A] px-6 py-3 flex items-center justify-between">
       {/* Logo */}
-      <Link to="/" className="text-2xl font-bold text-[#4F378A]">
+      <Link to="/" className="text-3xl fredoka-semibold font-bold text-[#4F378A]">
         Kommitly
       </Link>
 

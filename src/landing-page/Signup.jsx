@@ -105,7 +105,7 @@ const Signup = () => {
 
  
   return (
-    <div className="flex w-full  flex-col items-center h-screen bg-[#1E1A2A]">
+    <div className="flex w-full   flex-col items-center  ">
    
 
  

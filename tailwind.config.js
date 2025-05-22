@@ -5,6 +5,11 @@ module.exports = {
   darkMode: "class", // Enable dark mode
   theme: {
     extend: {
+  
+      fontFamily: {
+        fredoka: ['Fredoka', 'sans-serif'],
+      },
+  
       colors: {
         primary: {
           light: "#4F378A", // Rich Purple (light mode)

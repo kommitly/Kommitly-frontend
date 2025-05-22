@@ -2,9 +2,13 @@ import axios from 'axios';
 
 // Function to get token from localStorage
 const getToken = () => {
-  return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1OTEzOTg5LCJpYXQiOjE3NDUzMDkxODksImp0aSI6IjZkOGNhYTNhNjUyYjRlOWRhODJlNWZlNzlhNzQ3YTg3IiwidXNlcl9pZCI6ImI0NmQ0MGEyLTllOTktNDdkZi04OGRlLThjYjc2NmU3ZTg5NyJ9.d2RwnlNfESXymilQ34gwEP_DiLHdd5PEhhe46V5MuwE";
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token not found in localStorage");
+    return null;
+  }   
+  return token;
 };
-
 
 const generateInsights = async (title, description) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/generate-ai-insights/";

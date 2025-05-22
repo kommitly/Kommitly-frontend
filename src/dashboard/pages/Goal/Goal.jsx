@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { fetchGoalById, createTask, fetchTasksByGoalId, deleteGoalById } from '../../../utils/Api';
 import { motion } from 'framer-motion';
 import survey from '../../../assets/survey.svg';
@@ -18,6 +18,7 @@ const Goal = () => {
   const [error, setError] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
+  const navigate = useNavigate();
   const [menuVisible, setMenuVisible] = useState(false);
   const [isGoalRenaming, setIsGoalRenaming] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -139,7 +140,7 @@ const Goal = () => {
   };
 
   return (
-    <div className='w-full  min-h-screen p-6'>
+    <div className=' flex  h-screen p-6'>
       <div className='w-full'>
         <div className='flex items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
@@ -249,7 +250,8 @@ const Goal = () => {
             <TableBody>
               {tasks.length > 0 ? (
                 tasks.map((task) => (
-                  <TableRow key={task.id}>
+                  <TableRow key={task.id}  onClick={() => navigate(`/dashboard/tasks/${task.id}`)}
+  sx={{ cursor: 'pointer', '&:hover': { backgroundColor: '#F4F1FF' } }}>
                     <TableCell>{task.title}</TableCell>
                     <TableCell>{task.status}</TableCell>
                     <TableCell>{task.due_date ? new Date(task.due_date).toLocaleString() : 'Not set'}</TableCell>

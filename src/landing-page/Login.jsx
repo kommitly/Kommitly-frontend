@@ -52,9 +52,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex w-full flex-col items-center h-screen">
-      <div className="flex w-full flex-col h-8/12 items-center p-4">
-        <div className="flex w-10/12 flex-col gap-4 p-4 justify-center h-screen">
+    <div className="flex w-full bg-[#FBF9FF] rounded-xl flex-col items-center">
+      <div className="flex w-full flex-col  items-center">
+        <div className="flex w-10/12 flex-col gap-4 justify-center ">
           {message && <p style={{color:colors.background.warning}}>{message}</p>}
           <Formik onSubmit={handleLogin} initialValues={initialValues} validationSchema={userSchema}>
             {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (

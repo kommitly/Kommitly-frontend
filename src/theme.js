@@ -68,7 +68,7 @@ export const themeSettings = (mode) => {
       },
     },
     typography: {
-      fontFamily: ["Source Sans 3", "sans-serif"].join(","),
+      fontFamily: ["Poppins", "sans-serif"].join(","),
       fontSize: 12,
       h1: {
         fontSize: 32,
