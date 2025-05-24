@@ -27,9 +27,8 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen relative w-full ">
-      {/* Sidebar (Fixed on the left) */}
-      {/*className=" md:w-64 lg:w-60 xl:w-56 2xl:w-66  text-white fixed inset-y-0 transform translate-x-0 transition-transform duration-200 ease-in-out md:relative md:translate-x-0"*/}
-    <div className="w-auto">
+      
+     <div className=" ">
 
       <DashboardSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
@@ -40,11 +39,11 @@ const Dashboard = () => {
 
         {/* Push Outlet Content Below Navbar */}
         <main
-          className="   w-full scrollbar-hide "
+          className=" w-full scrollbar-hide "
           style={{
             paddingLeft: isCollapsed
-      ? ( isXl ? '40px' : isXs ? '40px' : isSm ? '100px' : isLg ? '28px': isMd ? '6px' : isXxl ? '40px' : isXsDown ? 0 : 0) : (
-              isXs ? '40px' : isSm ? '100px' : isLg ? '10px': isMd ? '0px' : isXxl ? '40px' : isXsDown ? 0 : 0
+      ? ( isXl ? '40px' : isXs ? '0px' : isSm ? '100px' : isLg ? '28px': isMd ? '26px' : isXxl ? '40px' : isXsDown ? 0 : 0) : (
+              isXs ? '40px' : isSm ? '100px' : isLg ? '10px': isMd ? '20px' : isXxl ? '40px' : isXsDown ? 0 : 0
             
       ),
           }}

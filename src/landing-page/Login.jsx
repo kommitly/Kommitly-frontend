@@ -76,7 +76,7 @@ const Login = () => {
                     name="email"
                     error={!!touched.email && !!errors.email}
                     helperText={touched.email && errors.email}
-                    sx={{ gridColumn: "span 4" }}
+                    sx={{ gridColumn: "span 4",  }}
                   />
                   <TextField
                     fullWidth

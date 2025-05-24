@@ -9,7 +9,7 @@ import { useMediaQuery } from '@mui/material';
 import { useEffect } from 'react';
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 import SearchResults from './SearchResults';
-
+import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
@@ -120,7 +120,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
   
   return (
-  <div className={`fixed top-0   ${isCollapsed ? 'left-26' : 'left-62'}  right-0 z-50 transition-width duration-300 ease-in-out `} style={{backgroundColor: colors.background.default}}>
+  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 ' : 'left-62'}  right-0 z-50 transition-width duration-300 ease-in-out `} style={{backgroundColor: colors.background.default}}>
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 5 : isSm ? 2 : isMd ? 2 : isLg ? 2 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
       {/* Logo */}
@@ -130,6 +130,12 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
               gridColumn: isXs ? 'span 8' : isSm ? 'span 4' : isMd ? 'span 4' : isLg ? 'span 5' : isXl ? 'span 5' : isXxl ? 'span 5' : 'span 5',
             }}
           >
+              <IconButton onClick={()=> setIsCollapsed(!isCollapsed)} sx={{alignItems: "center",  color: colors.primary,  display: {
+      xs: 'flex',  // show on mobile
+      md: 'none',  // hide on medium and larger screens
+    },}}>
+                    <MapOutlinedIcon/>
+                </IconButton>
               <div className='flex flex-col mb-0'>
                   {profile.user && (
                 <h1 className=' space-x-1 font-semibold text-xl mb-0'>

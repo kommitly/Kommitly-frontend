@@ -33,7 +33,7 @@ export const tokens = (mode) => ({
         },
         text: {
           primary: "#1E1A2A", // Dark Purple (for contrast in light mode)
-          secondary: "#6D5BA6", //Deep Violet
+          secondary: "#4F378A", //Deep Violet
 
         },
         background: {

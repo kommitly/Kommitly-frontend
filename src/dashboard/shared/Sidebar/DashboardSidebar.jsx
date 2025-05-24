@@ -202,6 +202,13 @@ useEffect(() => {
     
     return (
 <Box
+className=""
+sx={{
+  width: isCollapsed
+    ? (isXs ? "0px" : isSm ? "80px" : isMd ? "80px" : isLg ? "80px" : isXl ? "80px" : "80px")
+    : (isXs ? "220px" : isSm ? "220px" : isMd ? "230px" : isLg ? "240px" : isXl ? "260px" : "220px")
+
+}}
 
 >
 
@@ -223,7 +230,7 @@ useEffect(() => {
       zIndex: 1000,
       transition: 'width 0.3s ease-in-out',
       width: isCollapsed
-      ? (isXs ? "80px" : isSm ? "80px" : isMd ? "80px" : isLg ? "80px" : isXl ? "80px" : "80px")
+      ? (isXs ? "0px" : isSm ? "80px" : isMd ? "80px" : isLg ? "80px" : isXl ? "80px" : "80px")
       : (isXs ? "220px" : isSm ? "220px" : isMd ? "230px" : isLg ? "240px" : isXl ? "260px" : "220px"),
       overflow: 'hidden',
       margin: '8px',
@@ -315,7 +322,7 @@ useEffect(() => {
                             alignItems="center"
                             width={"100%"}
                             >
-                                <Typography variant="h3" color={colors.primary[100]}>
+                                <Typography variant="h2" color={colors.primary[100]} sx={{ fontFamily: "Fredoka"}}>
                                     Kommitly
 
                                 </Typography>

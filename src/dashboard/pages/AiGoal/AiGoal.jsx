@@ -1,7 +1,7 @@
 import  { useEffect, useState,useCallback, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus,updateAiTaskById, deleteAiTaskById, createAiTask } from '../../../utils/Api'; // Adjust the import path as needed
+import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus,updateAiTaskById, deleteAiTaskById, createAiTask , updateAiSubtaskById} from '../../../utils/Api'; // Adjust the import path as needed
 import flag from '../../../assets/flag-dynamic-color.svg';
 import { GoDotFill } from "react-icons/go";
 import { Divider } from '@mui/material';
@@ -121,7 +121,47 @@ const AiGoal = () => {
     const handleClose = () => {
       setOpen(false);
     };
-  const handleStepCompletion = async () => {
+ 
+  const handleStepCheck = async (stepIndex) => {
+  const activeTask = goal.ai_tasks[activeTaskIndex];
+  const step = activeTask.ai_subtasks[stepIndex];
+
+  const taskId = activeTask.id;
+  const subtaskId = step.id;
+
+  const newStatus = step.status === "completed" ? "pending" : "completed";
+
+  try {
+      await updateAiSubtaskById(taskId, subtaskId, { status: newStatus });
+
+
+    // Update local state only after successful API call
+    setGoal(prevGoal => {
+      const newGoal = JSON.parse(JSON.stringify(prevGoal));
+      
+      const task = newGoal.ai_tasks[activeTaskIndex];
+      task.ai_subtasks[stepIndex].status = newStatus;
+      return newGoal;
+    });
+
+    // Check if all subtasks are completed
+    setTimeout(() => {
+  setGoal(prevGoal => {
+    const newGoal = JSON.parse(JSON.stringify(prevGoal));
+    const updatedTask = newGoal.ai_tasks[activeTaskIndex];
+    const allCompleted = updatedTask.ai_subtasks.every(s => s.status === "completed");
+    if (allCompleted) handleStepCompletion();
+    return newGoal;
+  });
+}, 2000);
+
+  } catch (error) {
+    console.error("Failed to update subtask:", error);
+    // Optionally show an error toast or revert checkbox UI
+  }
+};
+
+ const handleStepCompletion = async () => {
     
     // Show confetti when the current task is completed
     setIsVisible(true);
@@ -160,34 +200,6 @@ const AiGoal = () => {
     }, 100); // Hide confetti after 2 seconds
   };
   
-  const handleStepCheck = (stepIndex) => {
-    setGoal(prevGoal => {
-      const newGoal = JSON.parse(JSON.stringify(prevGoal)); // Deep copy the goal object
-  
-      const activeTask = newGoal.ai_tasks[activeTaskIndex];
-      const updatedSteps = [...activeTask.ai_subtasks]; // Create a copy of the steps array
-      updatedSteps[stepIndex].completed = !updatedSteps[stepIndex].completed;
-      activeTask.ai_subtasks = updatedSteps;
-  
-      return newGoal;
-    });
-  
-    // Delay checking if all steps are completed to ensure the last step is marked first
-    setTimeout(() => {
-      setGoal(prevGoal => {
-        const newGoal = JSON.parse(JSON.stringify(prevGoal)); // Deep copy the goal object
-  
-        const activeTask = newGoal.ai_tasks[activeTaskIndex];
-        const updatedSteps = [...activeTask.ai_subtasks]; // Create a copy of the steps array
-  
-        if (updatedSteps.every(s => s.completed)) {
-          handleStepCompletion();
-        }
-  
-        return newGoal;
-      });
-    }, 2000); // Delay of 100ms (adjust as needed)
-  };
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -780,7 +792,7 @@ const AiGoal = () => {
                     <label className="custom-checkbox">
                         <input
                         type="checkbox"
-                        checked={step.completed}
+                        checked={step.status === "completed"}
                         onChange={() => handleStepCheck(stepIndex)} // Call the new handler
                         size={16}
                         />

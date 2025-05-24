@@ -65,7 +65,7 @@ const Home = () => {
     // Prevent empty goal submission
     setLoading(true);
     try {
-      const response = await generateInsights(inputValue, ''); // Assuming description is optional
+      const response = await generateInsights('string', inputValue); // pass the input value as the description
       console.log("API Response:", response); // Debugging
       setGoalData(response.ai_goal);
       setTaskData(response.ai_tasks);
