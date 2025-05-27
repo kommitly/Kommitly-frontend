@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
+import hero from "../assets/hero.svg"; // Ensure the path is correct
 
 
 
@@ -16,7 +17,7 @@ const Hero = () => {
       className=" p-4 w-full h-full flex justify-between "
     >
       <div className="w-6/12  ">
-        <img src="/src/assets/hero.svg" alt="Hero" className="w-full size-136" />
+        <img src={hero} alt="Hero" className="w-full size-136" />
       </div>
       <div className=" w-5/12 flex flex-col pl-5 justify-center mb-8">
          <Typography 
