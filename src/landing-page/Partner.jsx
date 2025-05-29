@@ -11,40 +11,40 @@ const Partner = () => {
     
     
   return (
-     <section className=" flex flex-col md:mb-18 mb-0  md:px-6 sm:px-2">
+     <section className=" flex flex-col md:mb-18 mb-8  md:px-6 px-2">
           <div
          className="p-4 w-full h-full md:flex mt-8 sm:w-full justify-between  "
        >
-           <div className=" md:w-6/12 sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
-                    <div className="md:w-11/12 sm:w-full flex flex-col sm:justify-center  sm:items-center  md:items-start">
-                     <Typography 
-                      variant="h2"
-                      component="h2"
-                      gutterBottom
-                      color="primary"
-                      sx={{
-                        marginBottom: "2rem",
-                        fontWeight: 'light',
-                        fontSize: {
-                          xs: '2rem',
-                          sm: '2rem',
-                          md: '1.8rem',
-                          lg: '2.2rem',
-                          xl: '3rem',
-                          '2xl': '3rem'
-                        },
-                        textAlign: {
-                          xs: 'center',
-                          md: 'left'
-                        }
-                      }}
-                    >
+          <div className=" md:w-6/12 sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
+                          <div className="md:w-11/12 sm:w-full flex flex-col sm:justify-center  sm:items-center  md:items-start">
+                              <Typography 
+                                      variant="h2"
+                                      component="h2"
+                                      gutterBottom
+                                      color="primary"
+                                      sx={{
+                                        marginBottom: "2rem",
+                                        fontWeight: 'medium',
+                                        fontSize: {
+                                          xs: '1.8rem',
+                                          sm: '1rem',
+                                          md: '1.8rem',
+                                          lg: '2.2rem',
+                                          xl: '3rem',
+                                          '2xl': '3rem'
+                                        },
+                                        textAlign: {
+                                          xs: 'center',
+                                          md: 'left'
+                                        }
+                                      }}
+                                    >
             Stay on track, even when life’s doing the most.
             
    
          </Typography>
 
-        <div className="flex w-full items-center  gap-4 mb-4">
+      {/* {  <div className="flex w-full items-center  gap-4 mb-4">
                       <Icon
                 sx={{
                   padding: "1.2rem",
@@ -73,7 +73,7 @@ const Partner = () => {
            } }}
                >
           Kommitly gently reminds Juma when it’s time to take action, celebrate a win, or refocus — like a personal productivity sidekick who’s always got his back, never annoying</Typography>
-         </div>
+         </div>} */}
          </div>
           </div>
           <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">

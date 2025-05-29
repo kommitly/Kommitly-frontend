@@ -1,38 +1,41 @@
-import React from "react";
+import React , {useState}  from "react";
 import { Link } from "react-router-dom";
-import { Box, Button, Icon, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, Icon, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import hero from "../assets/hero.svg"; // Ensure the path is correct
 import FlareIcon from '@mui/icons-material/Flare';
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 
 
 const Hero = () => {
     const theme = useTheme();
     const colors =tokens(theme.palette.mode);
+    const [showMore, setShowMore] = useState(false);
 
   return (
-   <section className="bg-[#D6CFFF] rounded-t-4xl justify-center items-center   flex flex-col  md:px-6 sm:px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full">
+   <section className="bg-[#D6CFFF] rounded-t-4xl justify-center items-center   flex flex-col  md:px-6 px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full">
       <div className="p-4  w-full h-full flex flex-col-reverse md:flex-row mt-8 sm:w-full md:space-x-8 justify-between">
 
-            <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">
-        <div className="w-10/12 sm:w-full ">
-        <img src={hero} alt="Hero" className="w-full " />
-      </div>
-      </div>
-        <div className=" md:w-6/12 sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
-         <div className="md:w-11/12 sm:w-full flex flex-col sm:justify-center  sm:items-center  md:items-start">
-          <Typography 
+          <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">
+          <div className="w-10/12 sm:w-full ">
+              <img src={hero} alt="Hero" className="w-full " />
+            </div>
+            </div>
+          <div className=" md:w-6/12 sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
+            <div className="md:w-11/12 sm:w-full flex flex-col sm:justify-center  sm:items-center  md:items-start">
+              <Typography 
            variant="h2"
            component="h2"
            gutterBottom
            color="primary"
            sx={{
              marginBottom: "2rem",
-             fontWeight: 'light',
+             fontWeight: 'medium',
              fontSize: {
-               xs: '2rem',
-               sm: '2rem',
+               xs: '1.8rem',
+               sm: '1rem',
                md: '1.8rem',
                lg: '2.2rem',
                xl: '3rem',
@@ -56,7 +59,7 @@ const Hero = () => {
         color="text.secondary"
         sx={{marginBottom: "1.8rem", fontSize: {
           xs: '1rem',   // extra-small screens
-          sm: '1rem', // small screens
+          sm: '0.8rem', // small screens
           md: '1rem',   // medium screens
           lg: '1.1rem',  // large screens and up
           xl: '1.5rem' , // extra-large screens
@@ -64,25 +67,26 @@ const Hero = () => {
         }, textAlign: {
           xs: 'center',
           md: 'left'    
-        }
+        },
+        fontWeight: 'bold',
         }}
         >
        Meet Juma, he has big ideas — maybe too many.
 
         </Typography>
-          <div className="flex w-full items-center  gap-4 mb-4">
+          <div className="flex w-full items-center  gap-4 ">
          <Icon
-  sx={{
-    padding: "1.2rem",
-    backgroundColor: colors.primary[300],
-    borderRadius: "30%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  }}
->
-  <FlareIcon sx={{ color: colors.primary[500] }} />
-</Icon>
+          sx={{
+            padding: "1.2rem",
+            backgroundColor: colors.primary[300],
+            borderRadius: "30%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <FlareIcon sx={{ color: colors.primary[500] }} />
+        </Icon>
 
              <Typography
                variant="body"
@@ -103,19 +107,22 @@ const Hero = () => {
        </Typography>
       
           </div>
-            <div className="flex items-center gap-4 mb-4">
+           {showMore && (
+           <div>
+            <Divider variant="middle" sx={{ margin: "1rem 0" }} />  
+             <div className="flex items-center  gap-4 mb-4">
          <Icon
-  sx={{
-    padding: "1.2rem",
-    backgroundColor: colors.primary[300],
-    borderRadius: "30%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  }}
->
-  <FlareIcon sx={{ color: colors.primary[500] }} />
-</Icon>
+          sx={{
+            padding: "1.2rem",
+            backgroundColor: colors.primary[300],
+            borderRadius: "30%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <FlareIcon sx={{ color: colors.primary[500] }} />
+        </Icon>
 
            <Typography
                variant="body"
@@ -134,7 +141,32 @@ const Hero = () => {
       He’s trying, but he’s tired. His to-dos keep piling up, and progress feels like a moving target.
         </Typography>
         </div>
+            </div>
+          )}
         </div>
+        {/* Toggle Button */}
+      <div className="w-11/12  mb-12 flex justify-end">
+        <button onClick={() => setShowMore(!showMore)}>
+          <Icon
+            sx={{
+             backgroundColor: colors.primary[300],
+              padding: "1.2rem",
+              borderRadius: "30%",
+             
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              
+            }}
+          >
+            {showMore ? (
+              <RemoveIcon sx={{ color: colors.primary[500] , }} />
+            ) : (
+              <AddIcon sx={{ color: colors.primary[500] }} />
+            )}
+          </Icon>
+        </button>
+      </div>
       
       </div>
   

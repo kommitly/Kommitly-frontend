@@ -8,6 +8,7 @@ import FlareIcon from '@mui/icons-material/Flare';
 import { Icon } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { tokens } from '../theme'; // Ensure the path is correct
+import Divider from '@mui/material/Divider';
 
 const Goalmore = () => {
   const [showAlt, setShowAlt] = useState(false);
@@ -24,7 +25,7 @@ const Goalmore = () => {
 
 
   return (
-    <section className=" justify-center items-center   flex flex-col  md:px-6 sm:px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full">
+    <section className=" justify-center items-center   flex flex-col  md:px-6 px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full">
      
       <AnimatePresence mode="wait">
         {!showAlt ? (
@@ -43,27 +44,27 @@ const Goalmore = () => {
             <div className=" md:w-6/12 sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
                      <div className="md:w-11/12 sm:w-full flex flex-col sm:justify-center  sm:items-center  md:items-start">
                       <Typography 
-                       variant="h2"
-                       component="h2"
-                       gutterBottom
-                       color="primary"
-                       sx={{
-                         marginBottom: "2rem",
-                         fontWeight: 'light',
-                         fontSize: {
-                           xs: '2rem',
-                           sm: '2rem',
-                           md: '1.8rem',
-                           lg: '2.2rem',
-                           xl: '3rem',
-                           '2xl': '3rem'
-                         },
-                         textAlign: {
-                           xs: 'center',
-                           md: 'left'
-                         }
-                       }}
-                     >
+                                                  variant="h2"
+                                                  component="h2"
+                                                  gutterBottom
+                                                  color="primary"
+                                                  sx={{
+                                                    marginBottom: "2rem",
+                                                    fontWeight: 'medium',
+                                                    fontSize: {
+                                                      xs: '1.8rem',
+                                                      sm: '1rem',
+                                                      md: '1.8rem',
+                                                      lg: '2.2rem',
+                                                      xl: '3rem',
+                                                      '2xl': '3rem'
+                                                    },
+                                                    textAlign: {
+                                                      xs: 'center',
+                                                      md: 'left'
+                                                    }
+                                                  }}
+                                                >
                 Every goal feels like a mountain.
               </Typography>
               </div>
@@ -96,7 +97,39 @@ const Goalmore = () => {
            } }}
                >
        
-                Juma’s got the vision — but the "how" is giving ✨mystery novel✨. Every step feels like a bold guess… and Google isn’t helping. </Typography>
+                Juma’s got the vision — but the "how" is giving ✨mystery novel✨.  </Typography>
+
+           </div>
+           <Divider variant='middle' sx={{  margin: '1rem 0' }} />  
+              <div className="flex w-full items-center  gap-4 mb-4">
+         <Icon
+  sx={{
+    padding: "1.2rem",
+    backgroundColor: colors.primary[300],
+    borderRadius: "30%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  }}
+>
+  <FlareIcon sx={{ color: colors.primary[500] }} />
+</Icon>
+
+             <Typography
+               variant="body"
+               component="p"
+               gutterBottom
+               
+               sx={{color: '#000000', fontSize: {
+             xs: '1rem',   // extra-small screens
+             sm: '1rem', // small screens
+             md: '0.9rem',   // medium screens
+             lg: '1rem',  // large screens and up
+             xl: '1.4rem' , // extra-large screens
+             '2xl': '1rem' // 2xl screens
+           } }}
+               >
+        Every step feels like a bold guess… and Google isn’t helping. </Typography>
 
            </div>
             </div>
@@ -117,31 +150,32 @@ const Goalmore = () => {
             <div className=" md:w-6/12 sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
                      <div className="md:w-11/12 sm:w-full flex flex-col sm:justify-center  sm:items-center  md:items-start">
                       <Typography 
-                       variant="h2"
-                       component="h2"
-                       gutterBottom
-                       color="primary"
-                       sx={{
-                         marginBottom: "2rem",
-                         fontWeight: 'light',
-                         fontSize: {
-                           xs: '2rem',
-                           sm: '2rem',
-                           md: '1.8rem',
-                           lg: '2.2rem',
-                           xl: '3rem',
-                           '2xl': '3rem'
-                         },
-                         textAlign: {
-                           xs: 'center',
-                           md: 'left'
-                         }
-                       }}
-                     >
+                                                  variant="h2"
+                                                  component="h2"
+                                                  gutterBottom
+                                                  color="primary"
+                                                  sx={{
+                                                    marginBottom: "2rem",
+                                                    fontWeight: 'medium',
+                                                    fontSize: {
+                                                      xs: '1.8rem',
+                                                      sm: '1rem',
+                                                      md: '1.8rem',
+                                                      lg: '2.2rem',
+                                                      xl: '3rem',
+                                                      '2xl': '3rem'
+                                                    },
+                                                    textAlign: {
+                                                      xs: 'center',
+                                                      md: 'left'
+                                                    }
+                                                  }}
+                                                >
                 The climb gets easier with a partner.
               </Typography>
               </div>
-               <div className="flex w-full items-center  gap-4 mb-4">
+             
+               <div className="flex w-full items-center  gap-4 ">
          <Icon
   sx={{
     padding: "1.2rem",
@@ -173,8 +207,9 @@ const Goalmore = () => {
               But Juma doesn’t have to climb alone.
               </Typography>
               </div>
+              <Divider variant='middle' sx={{  margin: '1rem 0' }} />  
               
-                <div className="flex w-full items-center  gap-4 mb-4">
+                <div className="flex w-full items-center  gap-4 ">
          <Icon
   sx={{
     padding: "1.2rem",
@@ -206,8 +241,9 @@ const Goalmore = () => {
                 Just when the mountain starts to feel too steep, help arrives.
               </Typography>
               </div>
+              <Divider variant='middle' sx={{  margin: '1rem 0' }} />  
 
-                <div className="flex w-full items-center  gap-4 mb-4">
+                <div className="flex w-full items-center  gap-4 ">
          <Icon
   sx={{
     padding: "1.2rem",
@@ -239,39 +275,7 @@ const Goalmore = () => {
                 Meet Kommitly — not just a guide, but a smart accountability buddy who actually gets it.
               </Typography>
               </div>
-                <div className="flex w-full items-center  gap-4 mb-4">
-                        <Icon
-                 sx={{
-                   padding: "1.2rem",
-                   backgroundColor: colors.primary[300],
-                   borderRadius: "30%",
-                   display: "flex",
-                   alignItems: "center",
-                   justifyContent: "center"
-                 }}
-               >
-                 <FlareIcon sx={{ color: colors.primary[500] }} />
-               </Icon>
-               
-                            <Typography
-                              variant="body"
-                              component="p"
-                              gutterBottom
-                              
-                              sx={{color: '#000000', fontSize: {
-                            xs: '1rem',   // extra-small screens
-                            sm: '1rem', // small screens
-                            md: '0.9rem',   // medium screens
-                            lg: '1rem',  // large screens and up
-                            xl: '1.4rem' , // extra-large screens
-                            '2xl': '1rem' // 2xl screens
-                          } }}
-                              >
-                      
-                  No fluff. Just clear, doable steps and a little nudge when it matters most.
-             </Typography>
-             </div>
-
+             
 
            </div>
           </motion.div>

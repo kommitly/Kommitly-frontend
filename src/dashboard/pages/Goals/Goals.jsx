@@ -192,7 +192,7 @@ const Goals = () => {
 
   if (loading) {
     return (
-      <div className='w-full mt-8 flex min-h-screen'>
+      <div className='w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full justify-center items-center  flex min-h-screen'>
         <div className="w-11/12 p-8 mt-8 py-8 flex-1 flex justify-center items-center overflow-y-auto scrollbar-hide max-h-[75vh] no-scrollbar">
           <motion.div className="flex space-x-2">
             {[0, 1, 2].map((i) => (
@@ -216,7 +216,7 @@ const Goals = () => {
 
 
   return (
-    <div className='w-full p-2  grid gap-1 grid-cols-12    flex min-h-screen'>
+    <div className='w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full p-2  grid gap-1 grid-cols-12  sm:grid-cols-12 justify-center  flex min-h-screen'>
        <Backdrop
           sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
           open={open}
@@ -286,9 +286,9 @@ const Goals = () => {
           </div>
         </Backdrop>
 
-      <div className="md:col-span-7 sm:col-span-12 ">
+      <div className="md:col-span-7 col-span-12  md:p-0 p-4">
        
-        <Box className='w-full container md:h-40 h-30 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 pl-4 mt-4'
+        <Box className='w-full  container md:h-40 h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 pl-4 md:mt-4 mt-0'
         sx={{backgroundColor:colors.background.paper}}
         >
           <div className='space-y-4'>

@@ -13,12 +13,12 @@ const Hero2 = () => {
     const colors =tokens(theme.palette.mode);
 
   return (
-    <section className=" flex flex-col  md:px-6 sm:px-2">
+    <section className=" flex flex-col  md:px-6 px-2 md:pt-0 pt-12 md:mb-0 mb-8">
        <div
       className=" md:p-4 w-full h-full md:flex mt-8 sm:w-full justify-between  "
     >
     
-      <div className=" md:w-6/12 sm:w-full flex flex-col pl-5 sm:justify-center sm:items-center md:items-start md:mb-8 ">
+      <div className=" md:w-6/12 sm:w-full flex flex-col pl-5 sm:justify-center sm:items-center md:items-start md:mb-8 sm:mb-8 ">
          <div className="md:w-10/12 sm:w-full flex flex-col sm:justify-center  sm:items-center md:items-start">
             <Typography 
   variant="h1"
@@ -27,7 +27,7 @@ const Hero2 = () => {
   color="primary"
   sx={{
     marginBottom: "1rem",
-    fontWeight: 'regular',
+    fontWeight: 'medium',
     fontSize: {
       xs: '2rem',
       sm: '2.5rem',

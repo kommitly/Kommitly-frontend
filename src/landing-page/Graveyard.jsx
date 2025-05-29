@@ -10,7 +10,7 @@ const Graveyard = () => {
   const colors = tokens(theme.palette.mode);
 
   return (
-  <section className="flex w-full bg-[#6D5BA6]  justify-center items-center   flex flex-col  md:px-6 sm:px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full">
+  <section className="flex w-full bg-[#6D5BA6]  justify-center items-center   flex flex-col  md:px-6 px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full">
     
      <div className="p-4  w-full h-full flex flex-col-reverse md:flex-row mt-8 sm:w-full md:space-x-8 justify-between">
 
@@ -34,16 +34,16 @@ const Graveyard = () => {
                  
                  sx={{
                   color: '#FFFFFF',
-                   marginBottom: "2rem",
-                   fontWeight: 'light',
-                   fontSize: {
-                     xs: '2rem',
-                     sm: '2rem',
-                     md: '1.8rem',
-                     lg: '2.2rem',
-                     xl: '3rem',
-                     '2xl': '3rem'
-                   },
+                  marginBottom: "2rem",
+                  fontWeight: 'medium',
+                  fontSize: {
+                    xs: '1.8rem',
+                    sm: '1rem',
+                    md: '1.8rem',
+                    lg: '2.2rem',
+                    xl: '3rem',
+                    '2xl': '3rem'
+                  },
                    textAlign: {
                      xs: 'center',
                      md: 'left'
