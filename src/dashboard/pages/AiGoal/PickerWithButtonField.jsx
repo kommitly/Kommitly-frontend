@@ -24,7 +24,7 @@ function ButtonField(props) {
     onClick={() => setOpen?.((prev) => !prev)}
     sx={{ minWidth: "auto", padding: 0, color: "#4F378A", 
       fontSize: {
-        xs:"10px", sm:"10px", md:"10px", lg:"9px", xl:"12px"
+        xs:"10px", sm:"10px", md:"10px", lg:"11px", xl:"12px"
         } }} // Optional: removes default button padding
     >
       {label ? `Due date: ${label}` : (

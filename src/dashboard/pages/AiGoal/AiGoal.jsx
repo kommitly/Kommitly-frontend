@@ -14,13 +14,13 @@ import { GoalsContext } from '../../../context/GoalsContext'; // Adjust the impo
 import { TasksContext } from '../../../context/TasksContext'; // Adjust the import path as needed
 import GoalTrophyAnimation from './GoalTrophyAnimation';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import Backdrop from '@mui/material/Backdrop';
+
 import TrophyAnimation from './TrophyAnimation';
 import PickerWithButtonField from './PickerWithButtonField';
 import GoalBadgeAnimation from './GoalBadge';
 import aiGoals from '../../../assets/goals.svg';
 import Modal from '@mui/material/Modal';
-
+import Backdrop from '@mui/material/Backdrop';
 import TextField from '@mui/material/TextField';
 
 import * as motion from "motion/react-client"
@@ -90,11 +90,13 @@ const AiGoal = () => {
   const { removeTask } = useContext(TasksContext);
   const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [subtaskOpen, setSubtaskOpen] = useState(false);
   const [taskOpen, setTaskOpen] = useState(false);
   const [taskMenuVisible, setTaskMenuVisible] = useState(false);
   const [isTaskRenaming, setIsTaskRenaming] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [selectedStep, setSelectedStep] = useState(null);
+  const { reloadGoals } = useContext(GoalsContext); // <-- access it from context
 
 
  
@@ -132,28 +134,22 @@ const AiGoal = () => {
   const newStatus = step.status === "completed" ? "pending" : "completed";
 
   try {
-      await updateAiSubtaskById(taskId, subtaskId, { status: newStatus });
-
-
-    // Update local state only after successful API call
+    await updateAiSubtaskById(taskId, subtaskId, { status: newStatus });
+    await loadGoal();
     setGoal(prevGoal => {
+      // Deep copy to avoid state mutation
       const newGoal = JSON.parse(JSON.stringify(prevGoal));
-      
       const task = newGoal.ai_tasks[activeTaskIndex];
       task.ai_subtasks[stepIndex].status = newStatus;
+
+      // Check if all subtasks completed here
+      const allCompleted = task.ai_subtasks.every(s => s.status === "completed");
+      if (allCompleted) {
+        handleTaskCompletion();
+      }
+
       return newGoal;
     });
-
-    // Check if all subtasks are completed
-    setTimeout(() => {
-  setGoal(prevGoal => {
-    const newGoal = JSON.parse(JSON.stringify(prevGoal));
-    const updatedTask = newGoal.ai_tasks[activeTaskIndex];
-    const allCompleted = updatedTask.ai_subtasks.every(s => s.status === "completed");
-    if (allCompleted) handleStepCompletion();
-    return newGoal;
-  });
-}, 2000);
 
   } catch (error) {
     console.error("Failed to update subtask:", error);
@@ -161,7 +157,9 @@ const AiGoal = () => {
   }
 };
 
- const handleStepCompletion = async () => {
+
+
+ const handleTaskCompletion = async () => {
     
     // Show confetti when the current task is completed
     setIsVisible(true);
@@ -251,12 +249,15 @@ const AiGoal = () => {
   
   const openSubtaskPage = (step) => {
     setSelectedStep(step);
+    setSubtaskOpen(true); // show Backdrop
     // If you also want to navigate to a specific route for the subtask:
-    // navigate(`/dashboard/ai-goal/${goalId}/subtask/${step.id}`, { state: { step } });
+   // navigate(`/dashboard/ai-goal/${goalId}/subtask/${step.id}`, { state: { step } });
+ 
   };
 
   const closeSubtaskPage = () => {
     setSelectedStep(null);
+    setSubtaskOpen(false);
   };
 
  
@@ -803,8 +804,10 @@ const AiGoal = () => {
                       
                         <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
                         <span className=' text-[#1D1B20] md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular'>{step.title}</span>
-                          <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }} onClick={() => openSubtaskPage(step)}  />
-
+                         <div onClick={() => openSubtaskPage(step)} >
+                        <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }} />
+                         </div>
+                    
                         </Box>
                     
                       

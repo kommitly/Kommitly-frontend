@@ -43,6 +43,8 @@ const reloadGoals = async () => {
     const fetchedGoals = await fetchGoals();
     console.log("Reloaded Goals:", fetchedGoals);
     setGoals(fetchedGoals ?? { goals: [], ai_goals: [] });
+  
+    return fetchedGoals;  // Return them here!
   } catch (error) {
     console.error('Error reloading goals:', error);
   }
@@ -91,7 +93,7 @@ const reloadGoals = async () => {
 }));
 
  // Reload goals from API after removal
- setTimeout(reloadGoals, 500);
+ setTimeout(reloadGoals, 200);
     
   };
 
@@ -136,6 +138,7 @@ const reloadGoals = async () => {
       goals, 
       setGoals, 
       addGoal, 
+      reloadGoals,
       removeGoal, 
       removeGoalFromSidebar, 
       hiddenGoals, 

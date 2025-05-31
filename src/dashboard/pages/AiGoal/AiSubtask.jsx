@@ -15,12 +15,12 @@ import SubtaskDetails from "../Task/Subtask";
 import { useLocation } from "react-router-dom";
 import {useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import { Hand } from 'lucide-react';
+import { HiMiniChevronDoubleLeft } from "react-icons/hi2";
 
-
-
-const AiSubtask = () => {
-    const location = useLocation();
-    const { step } = location.state;
+const AiSubtask = ({ step, goalId, onClose }) => {
+    
     const theme = useTheme();
     const colors =tokens(theme.palette.mode);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -42,21 +42,41 @@ const AiSubtask = () => {
       setTimeout(() => setVisible(true), 10); // allow initial render before animation
     }, []);
 
+      const handleClose = () => {
+    setVisible(false);
+    setTimeout(() => {
+      onClose(); // calls setSubtaskOpen(false) and setSelectedStep(null)
+    }, 300); // match your transition duration
+  };
+
+
 
   return (
     <>
     {visible && (
       <div
-        className="fixed inset-0 bg-[rgba(0,0,0,0.66)] z-[99]"
-        onClick={() => navigate(-1)}
+        className="fixed inset-0 bg-[rgba(0,0,0,0.66)] z-[99] min-h-screen"
+        onClick={handleClose}
       />
     )}
     
     <div className={`fixed top-0 right-0 h-full w-full md:w-1/2 bg-white shadow-lg z-[100] transition-transform duration-300 ${visible ? 'translate-x-0' : 'translate-x-full'}`}>
 
-            <div className="w-full p-4">
+      <div className="w-full p-4">
+  <button
+ 
+  className="group p-2 w-10 h-10 flex justify-center items-center cursor-pointer hover:bg-[#4F378A] rounded-full border border-2"
+  style={{
+    borderColor: colors.primary[500],
+  }}
+       onClick={handleClose}
+
+>
+  <HiMiniChevronDoubleLeft className="text-2xl  text-[#4F378A] group-hover:text-white transition-colors duration-300"   />
+</button>
+
             
-        <div className='flex gap-4 items-center '>
+        <div className='flex gap-4 mt-8 items-center '>
        <span className='flex items-center gap-2'>
        <FaTasks className="text-gray-500" />
        <label className="text-gray-600 w-20 text-sm font-regular">Title</label>
