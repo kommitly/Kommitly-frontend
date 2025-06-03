@@ -216,7 +216,7 @@ const Goals = () => {
 
 
   return (
-    <div className='w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full p-2  grid gap-1 grid-cols-12  sm:grid-cols-12 justify-center  flex min-h-screen'>
+    <div className='w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full p-4  grid gap-1 grid-cols-12  sm:grid-cols-12 justify-center  flex min-h-screen'>
        <Backdrop
           sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
           open={open}
@@ -286,7 +286,7 @@ const Goals = () => {
           </div>
         </Backdrop>
 
-      <div className="md:col-span-7 col-span-12  md:p-0 p-4">
+      <div className="md:col-span-7 col-span-12  md:p-0 p-0">
        
         <Box className='w-full  container md:h-40 h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 pl-4 md:mt-4 mt-0'
         sx={{backgroundColor:colors.background.paper}}
@@ -602,7 +602,7 @@ const Goals = () => {
 
 
 
-      <Box className='hidden lg:block col-span-4 md:col-span-5  space-y-4 ml-6 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
+      <Box className='hidden lg:block col-span-4 md:col-span-5  space-y-4 ml-4 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
         
         <div className=''>
         <div className='w-full flex justify-center mb-3'>
@@ -642,19 +642,26 @@ const Goals = () => {
       </button>
     </div>
        </div>
-        <ul className='bg-white p-4 rounded-lg max-h-[35vh] overflow-y-auto scrollbar-hide no-scrollbar'>
+       <div className='w-full flex justify-center items-center bg-white rounded-xl  p-3'>
+         <ul className='w-11/12 flex flex-col overflow-hidden max-h-[35vh] overflow-y-auto scrollbar-hide no-scrollbar '>
           {filteredPeriods.map((goal, index) => (
             <>
-            <li key={goal.id} className='bg-white p-4 border-l border-l-2 border-l-[#4F378A] rounded-lg  ' style={{ boxShadow: '2px 3px 3px 2px rgba(101, 85, 143, 0.2)' }}>
-              <div className='flex items-center gap-4'>
+            <Link to={`/dashboard/ai-goal/${goal.id}`} className='w-full'>
+             <li key={goal.id} className='p-4 gap-2 flex   rounded-xl  ' style={{ backgroundColor: colors.background.paper }}>
+              <div className='w-[3px] bg-[#4F378A] h-auto rounded-full flex items-center justify-center'>
+
+              </div>
+              <div className='flex p-2 items-center w-full gap-4'>
                 <div className='flex-1'>
                 <h2 className='font-regular text-[#2C2C2C] text-sm'>{goal.title}</h2>
-                  <p className='text-sm text-gray-600'>{goal.description}</p>
+                 {/* { <p className='text-sm text-gray-600'>{goal.description}</p>} */}
                 </div>
                 <CircularProgressWithLabel value={goal.progress} />
               </div>
             </li>
 
+            </Link>
+           
             
               {index < filteredPeriods.length - 1 && (
                 <div className='py-4'>
@@ -669,6 +676,9 @@ const Goals = () => {
         ))}
          
         </ul>
+
+       </div>
+       
         </div>
        
        <div>

@@ -42,6 +42,7 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         await login(data.access);
+        await loadProfile();
         getLocationAndTimezone();
       } else {
         setMessage(data.error || "Login failed.");
