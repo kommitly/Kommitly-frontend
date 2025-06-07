@@ -2,12 +2,7 @@ import axios from 'axios';
 
 // Function to get token from localStorage
 const getToken = () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    console.error("Token not found in localStorage");
-    return null;
-  }   
-  return token;
+  return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5OTAyMzUyLCJpYXQiOjE3NDkyOTc1NTIsImp0aSI6ImQzMWVlMzE3OGY3YTRkYWFhNDBiMmM2NmMxNjY1YmUyIiwidXNlcl9pZCI6ImI0NmQ0MGEyLTllOTktNDdkZi04OGRlLThjYjc2NmU3ZTg5NyJ9.0kR6oQf_v3p8G05eSYweALWy8kCRyyc9n-k3lIa-2ww";
 };
 
 const generateInsights = async (title, description) => {
@@ -211,7 +206,9 @@ const updateAiTaskStatus = async (taskId, updatedData) => {
 }
 
 const updateSingleTaskStatus = async (taskId, updatedData) => {
-  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/`;
+  console.log ( "for task with ID:", taskId, "with data:", updatedData);
+  const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update/`;
+  console.log("API URL: ", url); // Log the URL for debugging
   try {
     const token = getToken();
     const response = await axios.patch(url, updatedData, {
@@ -249,12 +246,9 @@ const updateSubtask = async (taskId, subtaskId, updatedData) => {
 }
 
 
-
-
-
-const createTask = async ({ goal, title}) => {
+const createTask = async ({ goal, title, task}) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create/task/";
-  const requestBody = { goal, title };
+  const requestBody = { goal, title, task };
   try {
     const token = getToken();
     const response = await axios.post(url, requestBody, {
