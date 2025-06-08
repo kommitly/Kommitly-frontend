@@ -20,10 +20,10 @@ const Breakdown = () => {
   return (
      <section className=" justify-center items-center  mb-8  flex flex-col  md:px-6 px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full">
            <div
-                  className="p-4 w-full h-full md:flex mt-8 sm:w-full justify-between  "
+                  className="p-4 w-full h-full md:flex mt-8 sm:w-full    "
                 >
-                   <div className=" md:w-6/12 sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
-                           <div className="md:w-11/12 sm:w-full flex flex-col sm:justify-center  sm:items-center  md:items-start">
+                   <div className=" w-full sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
+                           <div className="w-11/12 sm:w-full flex flex-col sm:justify-center  sm:items-center  md:items-start">
                             <Typography 
                              variant="h2"
                              component="h2"
@@ -158,8 +158,9 @@ const Breakdown = () => {
             </div>
            </div>
           )}
-        </div>
-        {/* Toggle Button */}
+
+
+            {/* Toggle Button */}
       <div className="w-11/12  mb-12 flex justify-end">
         <button onClick={() => setShowMore(!showMore)}>
           <Icon
@@ -183,12 +184,14 @@ const Breakdown = () => {
         </button>
       </div>
 
+        </div>
+      
 
 
 
 
           
-            <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">
+            <div className="w-full  sm:w-full  flex justify-center  items-center ">
         <div className="w-10/12 sm:w-full ">
            <img src={breakdown} alt="Breakdown" className="w-full " />
          </div>

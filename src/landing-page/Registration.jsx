@@ -94,7 +94,7 @@ const Registration = () => {
           ease: "easeInOut",
         }}
       >
-          <path d="M14 76L76.5603 24L137 76H14Z" stroke="#4F378A" stroke-width="3"/>
+          <path d="M14 76L76.5603 24L137 76H14Z" stroke="#4F378A" strokeWidth="3"/>
           <path d="M1 135.162V82C1 77.5817 4.58172 74 9 74H149C153.418 74 157 77.5817 157 82V135.162C157 139.581 153.418 143.162 149 143.162H9C4.58172 143.162 1 139.581 1 135.162Z" fill="#4F378A" stroke="#4F378A"/>
           <circle cx="141" cy="84" r="4" fill="#F4F1FF"/>
           <circle cx="17" cy="84" r="4" fill="#F4F1FF"/>
