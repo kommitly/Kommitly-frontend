@@ -339,6 +339,7 @@ const Goals = () => {
               className=" text-semibold"
               color='text.primary'
             >AI Goals </Typography></h1>
+            
          {/* Buttons for medium and larger screens */}
 <div className="hidden md:flex space-x-4 mt-4">
   {["recentlyAdded", "inProgress", "pending", "completed"].map((category) => (
