@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from "react";
 import { TasksContext } from "../../../context/TasksContext";
 import PropTypes from 'prop-types';
@@ -7,13 +8,13 @@ import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem, colors
 import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useParams, useNavigate } from "react-router-dom";
+
 import { deleteTaskById, updateSingleTaskStatus, fetchTaskById, createSubtask, updateSubtask} from "../../../utils/Api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt, FaClock, FaFlag, FaTasks  } from "react-icons/fa"; // Calendar icon
 import SubtaskDetails from "../Task/Subtask";
-import { useLocation } from "react-router-dom";
+
 import {useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
@@ -22,7 +23,12 @@ import { HiMiniChevronDoubleLeft } from "react-icons/hi2";
 import SubtaskDateTimePicker from './SubtaskDateTimePicker';
 import ReminderTimePicker from './ReminderTimePicker';
 
-const AiSubtask = ({ step, setStep, taskId, onClose }) => {
+const AiSubtaskPage = () => {
+
+const { goalId, taskId, subtaskId } = useParams();
+const { state } = useLocation();
+const step = state?.step;
+const navigate = useNavigate();
     
     const theme = useTheme();
     const colors =tokens(theme.palette.mode);
@@ -119,31 +125,25 @@ const confirmDeleteSubtask = async () => {
 
 
   return (
-    <>
-    {visible && (
-      <div
-        className="fixed inset-0 bg-[rgba(0,0,0,0.66)] z-[99] min-h-screen"
-        onClick={handleClose}
-      />
-    )}
+
     
-    <div className={`fixed top-0 right-0 h-full w-full md:w-1/2 bg-white shadow-lg z-[100] transition-transform duration-300 ${visible ? 'translate-x-0' : 'translate-x-full'}`}>
+    <div >
 
       <div className="w-full h-full flex flex-col p-4">
   <button
  
-  className="group p-2 w-10 h-10 flex justify-center items-center cursor-pointer hover:bg-[#4F378A] rounded-full border border-2"
+  className="group p-2 w-10 h-10 flex justify-center items-center cursor-pointer "
   style={{
     borderColor: colors.primary[500],
   }}
        onClick={handleClose}
 
 >
-  <HiMiniChevronDoubleLeft className="text-2xl  text-[#4F378A] group-hover:text-white transition-colors duration-300"   />
+  <HiMiniChevronDoubleLeft className="text-2xl  text-[#4F378A] group-hover:text-white transition-colors duration-300" onClick={() => navigate(`/dashboard/ai-goal/${goalId}`)} />
 </button>
 
             
-        <div className='flex gap-4 mt-8 items-center '>
+        <div className='flex gap-2 mt-8 items-center '>
        <span className='flex  items-center gap-2'>
         <span className='bg-[#D6CFFF] p-2 rounded-md'>
          <FaTasks className="text-[#4F378A] " size={12} />
@@ -364,13 +364,10 @@ const confirmDeleteSubtask = async () => {
   </div>
 )}
 
-        {/* Modal for Subtask Details */}
-        <div className="w-1/2 p-4">
-          {/* {  <SubtaskDetails subtask={selectedSubtask} />} */}
-          </div>
+       
         </div>
-        </>
+     
       );
     }; 
 
-export default AiSubtask
+export default AiSubtaskPage

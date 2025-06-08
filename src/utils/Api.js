@@ -466,6 +466,44 @@ const updateAiSubtaskById = async (taskId, subtaskId, updatedData) => {
   }
 }
 
+
+const triggerAiSubtaskReminder = async (subtaskData ) => {
+  const url = "https://kommitly-backend.onrender.com/api/tasks/trigger-ai-subtask-reminders/";
+  try {
+    const token = getToken();
+    const response = await axios.post(url, subtaskData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error triggering AI subtask reminder:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const deleteAiSubtaskById = async (subtaskId) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/ai-subtasks/${subtaskId}/delete/`;
+  try {
+    const token = getToken();
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting AI subtask with ID ${subtaskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+
 export { 
   generateInsights,
   fetchTaskById,
@@ -491,4 +529,6 @@ export {
   fetchTasksByGoalId, 
   fetchUserProfile, 
   deleteAiTaskById,
-  updateAiSubtaskById};
+  updateAiSubtaskById,
+  triggerAiSubtaskReminder,
+  deleteAiSubtaskById};
