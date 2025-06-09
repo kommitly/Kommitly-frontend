@@ -7,7 +7,7 @@ import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } fr
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
-import { deleteTaskById, updateSingleTaskStatus, fetchTaskById, createSubtask, updateSubtask, deleteSubtaskById} from "../../../utils/api/";
+import { deleteTaskById, updateSingleTaskStatus, fetchTaskById, createSubtask, updateSubtask, deleteSubtaskById} from "../../../utils/Api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt, FaClock, FaFlag, FaTasks, } from "react-icons/fa"; // Calendar icon
