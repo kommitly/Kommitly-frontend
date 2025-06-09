@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Function to get token from localStorage
 const getToken = () => {
-  return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5OTAyMzUyLCJpYXQiOjE3NDkyOTc1NTIsImp0aSI6ImQzMWVlMzE3OGY3YTRkYWFhNDBiMmM2NmMxNjY1YmUyIiwidXNlcl9pZCI6ImI0NmQ0MGEyLTllOTktNDdkZi04OGRlLThjYjc2NmU3ZTg5NyJ9.0kR6oQf_v3p8G05eSYweALWy8kCRyyc9n-k3lIa-2ww";
+   return localStorage.getItem('token');
 };
 
 const generateInsights = async (title, description) => {

@@ -13,7 +13,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt, FaClock, FaFlag, FaTasks, } from "react-icons/fa"; // Calendar icon
 import SubtaskDetails from "./Subtask";
 
-import TaskItem  from "../../components/TaskItem";
 
    
   
