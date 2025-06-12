@@ -75,6 +75,8 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
     const [menuVisible, setMenuVisible] = useState({});
     const [taskMenuVisible, setTaskMenuVisible] = useState({});
     const navigate = useNavigate();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
 
     useEffect(() => {
         setIsCollapsed(isSm);
@@ -224,11 +226,11 @@ sx={{
       borderRadius: isCollapsed ? '20px' : '24px',
       border: 'none',
       padding: isCollapsed ? '0px' : '10px',
-      position: 'fixed',
+      position: isMobile ? 'absolute' : 'fixed',
       top: '0',
-      left: isCollapsed ? '0' : '0',
-      zIndex: 1000,
-      transition: 'width 0.3s ease-in-out',
+      left: isMobile ? (isCollapsed ? '-100%' : '0') : '0',
+      zIndex: 2000,
+      transition: 'left 0.3s ease-in-out, width 0.3s ease-in-out',
       width: isCollapsed
       ? (isXs ? "0px" : isSm ? "80px" : isMd ? "80px" : isLg ? "80px" : isXl ? "80px" : "80px")
       : (isXs ? "220px" : isSm ? "220px" : isMd ? "230px" : isLg ? "240px" : isXl ? "260px" : "220px"),
@@ -326,7 +328,7 @@ sx={{
                                     Kommitly
 
                                 </Typography>
-                                <IconButton onClick={()=> setIsCollapsed(!isCollapsed)} sx={{alignItems: "center", border: "2px solid white",  color: colors.primary[100]}}>
+                                <IconButton onClick={()=> setIsCollapsed(!isCollapsed)} sx={{alignItems: "center", color: colors.primary[100]}}>
                                     <MenuOutlinedIcon/>
                                 </IconButton>
 

@@ -1,18 +1,21 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { ColorModeContext, useMode } from "../theme";
+import { tokens } from "../theme";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import DashboardSidebar from "./shared/Sidebar/DashboardSidebar";
 import Navbar from "./shared/Navbar/Navbar";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-
+import Backdrop from '@mui/material/Backdrop';
 
 
 
 const Dashboard = () => {
   const muiTheme = useTheme();
-  const [theme, colorMode] = useMode();
+  const colorMode = useMode();
+  const theme = useTheme();
+  const colors =tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(true);
    const isSm = useMediaQuery(theme.breakpoints.only("sm"));
     const isLg = useMediaQuery(theme.breakpoints.only("lg"));
@@ -21,6 +24,16 @@ const Dashboard = () => {
     const isXs = useMediaQuery(theme.breakpoints.only("xs"));
     const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
     const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+
+    useEffect(() => {
+  if (isMobile && !isCollapsed) {
+    setIsCollapsed(false);
+  }
+}, [location.pathname]);
+
+ 
 
 
 
@@ -29,6 +42,15 @@ const Dashboard = () => {
     <div className="flex h-screen relative w-full ">
       
      <div className=" ">
+    {isMobile && !isCollapsed &&  (
+  <Backdrop
+    sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1, position: 'fixed' })}
+    open={!isCollapsed}
+    onClick={() => setIsCollapsed(true)}
+  />
+)}
+
+
 
       <DashboardSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
@@ -40,13 +62,16 @@ const Dashboard = () => {
         {/* Push Outlet Content Below Navbar */}
         <main
           className=" w-full scrollbar-hide "
+         
           style={{
-            paddingLeft: isCollapsed
-      ? ( isXl ? '40px' : isXs ? '0px' : isSm ? '100px' : isLg ? '28px': isMd ? '26px' : isXxl ? '40px' : isXsDown ? 0 : 0) : (
-              isXs ? '40px' : isSm ? '100px' : isLg ? '10px': isMd ? '20px' : isXxl ? '40px' : isXsDown ? 0 : 0
-            
-      ),
-          }}
+  paddingLeft: !isMobile
+    ? (isCollapsed
+        ? (isXl ? '40px' : '80px')
+        : (isXl ? '260px' : '0px'))
+    : '0px',
+    position: isMobile ? 'fixed' : 'relative',
+
+}}
         >
            <div className="relative mt-2  z-50 w-full ">
           <Navbar setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />

@@ -120,7 +120,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
   
   return (
-  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 ' : 'left-62'}  right-0 z-50 transition-width duration-300 ease-in-out `} style={{backgroundColor: colors.background.default}}>
+  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 ' : 'md:left-62 left-0'}  right-0 z-50 transition-width duration-300 ease-in-out `} style={{backgroundColor: colors.background.default}}>
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 2 : isSm ? 2 : isMd ? 2 : isLg ? 2 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
       {/* Logo */}
