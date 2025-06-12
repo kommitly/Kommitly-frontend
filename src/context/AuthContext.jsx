@@ -26,21 +26,25 @@ export const AuthProvider = ({ children }) => {
       const userData = await response.json();
       if (response.ok) {
         setUser(userData);
+        return true;
         
       } else {
         logout();
+        return false;
       }
     } catch {
       logout();
+      return false;
     } finally {
       setLoading(false); // Set loading to false after fetch completes
     }
   };
 
   const login = async (token) => {
-    localStorage.setItem("token", token);
-    navigate("/dashboard/home"); // ✅ Navigate after user is set
-  };
+  localStorage.setItem("token", token);
+  await fetchUser(token); // Fetch and set the user
+  navigate("/dashboard/home"); // Navigate after user is fully set
+};
 
   const logout = () => {
     localStorage.removeItem("token");
