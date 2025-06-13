@@ -503,6 +503,24 @@ const deleteAiSubtaskById = async (subtaskId) => {
 }
 
 
+const getAiSubtaskById = async (taskId, subtaskId) => {
+  const url = `https://kommitly-backend.onrender.com/api/ai-task/${taskId}/ai-subtask/${subtaskId}/`;
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching AI subtask with ID ${subtaskId} for task ${taskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
 
 export { 
   generateInsights,
@@ -531,4 +549,5 @@ export {
   deleteAiTaskById,
   updateAiSubtaskById,
   triggerAiSubtaskReminder,
-  deleteAiSubtaskById};
+  deleteAiSubtaskById,
+  getAiSubtaskById};

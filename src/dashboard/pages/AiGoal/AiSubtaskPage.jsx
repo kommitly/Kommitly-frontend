@@ -27,8 +27,36 @@ const AiSubtaskPage = () => {
 
 const { goalId, taskId, subtaskId } = useParams();
 const { state } = useLocation();
-const step = state?.step;
+
 const navigate = useNavigate();
+
+  const [step, setStep] = useState(state?.step || null); // start with state or null
+  const [loading, setLoading] = useState(!state?.step);
+  const [error, setError] = useState(null);
+
+  
+  useEffect(() => {
+    const fetchSubtask = async () => {
+      try {
+        const data = await getAiSubtaskById(taskId, subtaskId); // you must implement this
+        setStep(data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load subtask.");
+        setLoading(false);
+      }
+    };
+
+    if (!state?.step) {
+      fetchSubtask();
+    }
+  }, [taskId, subtaskId, state]);
+
+  if (loading) return <div className="p-4 text-center">Loading...</div>;
+  if (error) return <div className="p-4 text-center text-red-500">{error}</div>;
+  if (!step) return <div className="p-4 text-center text-red-500">Subtask data is missing. Please go back and try again.</div>;
+
+
     
     const theme = useTheme();
     const colors =tokens(theme.palette.mode);
@@ -88,13 +116,7 @@ const navigate = useNavigate();
       }
     }, [step?.due_date, step?.reminder_time]);
     
-    if (!step) {
-  return (
-    <div className="p-4 text-center text-red-500">
-      Subtask data is missing. Please go back and try again.
-    </div>
-  );
-}
+ 
 
     
 
