@@ -63,13 +63,15 @@ const navigate = useNavigate();
 
   useEffect(() => {
     if (step?.due_date && step?.reminder_time && !step.reminder_offset) {
+      console.log("RAW due_date:", step.due_date);
       const due = dayjs(step.due_date);
+      console.log("Parsed due:", due.toString(), "| isValid:", due.isValid());
       const reminder = dayjs(`${dayjs(step.due_date).format("YYYY-MM-DD")}T${step.reminder_time}`);
       const offset = due.diff(reminder, 'minute');
       if (offset >= 0) {
         setStep(prev => ({
           ...prev,
-          reminder_offset: offset.toString(),
+          reminder_offset: "15"
         }));
       }
     }
@@ -97,15 +99,21 @@ const navigate = useNavigate();
       setStep((prev) => ({
     ...prev,
     [name]: value, // this will update `reminder_offset`
+    console: console.log("Updated step:", { ...prev, [name]: value }),
   }));
       };
 
   const handleDateChange = (date) => {
   if (!date || !dayjs(date).isValid()) return;
+  console.log("Selected date:", date);
+
+
+
 
   setStep((prev) => ({
     ...prev,
-    due_date: dayjs(date).toISOString(), // this also works
+     due_date: dayjs(date).format("YYYY-MM-DDTHH:mm:ss"),  // this also works
+    
   }));
 };
 
@@ -121,21 +129,32 @@ const handleUpdateSubtask = async () => {
   try {
     let reminderTime;
 
-    if (step.reminder_offset === "custom") {
-      reminderTime = dayjs(step.custom_reminder_time).format("HH:mm:ss");
-    } else {
-      const due = dayjs(step.due_date);
-      if (!due.isValid()) {
-        throw new Error("Invalid due_date format");
-      }
+    console.log("Updating subtask with data:", step);
+    const due = dayjs(step.due_date);
+    console.log("Parsed due date:", due.toString(), "| isValid:", due.isValid());
 
-      const calculatedReminder = due.subtract(Number(step.reminder_offset), "minute");
-      if (!calculatedReminder.isValid()) {
-        throw new Error("Calculated reminder time is invalid");
-      }
-
-      reminderTime = calculatedReminder.format("HH:mm:ss");
+    if (!due.isValid()) {
+      throw new Error("Invalid due_date format: " + step.due_date);
     }
+
+    if (step.reminder_offset === "custom") {
+      const custom = dayjs(step.custom_reminder_time);
+      if (!custom.isValid()) throw new Error("Invalid custom reminder time");
+      reminderTime = custom.format("HH:mm:ss");
+    } else {
+      console.log("Using due date:", due);
+      const offset = Number(step.reminder_offset);
+      if (isNaN(offset)) throw new Error("Invalid reminder offset: " + step.reminder_offset);
+      const calculated = due.subtract(offset, "minute");
+      if (!calculated.isValid()) throw new Error("Calculated reminder time is invalid");
+      reminderTime = calculated.format("HH:mm:ss");
+    }
+
+    console.log("Final payload:", {
+      title: step.title,
+      due_date: step.due_date,
+      reminder_time: reminderTime,
+    });
 
     const updatedData = {
       title: step.title,
@@ -157,6 +176,7 @@ const handleUpdateSubtask = async () => {
     console.error("Failed to update subtask:", err);
   }
 };
+
 
 const confirmDeleteSubtask = async () => {
   try {

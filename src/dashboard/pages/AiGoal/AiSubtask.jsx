@@ -22,6 +22,11 @@ import { HiMiniChevronDoubleLeft } from "react-icons/hi2";
 import SubtaskDateTimePicker from './SubtaskDateTimePicker';
 import ReminderTimePicker from './ReminderTimePicker';
 
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
+
 const AiSubtask = ({ step, setStep, taskId, onClose }) => {
     
     const theme = useTheme();
@@ -52,10 +57,21 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
   const handleDateChange = (date) => {
   if (!date || !dayjs(date).isValid()) return;
 
-  setStep((prev) => ({
-    ...prev,
-    due_date: dayjs(date).toISOString(), // this also works
-  }));
+  const dueDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss");
+
+  setStep((prev) => {
+    const reminderOffset = prev.reminder_offset ?? "15"; // fallback to 15 if not set
+    const reminderTime = dayjs(date)
+      .subtract(Number(reminderOffset), "minute")
+      .format("HH:mm:ss");
+
+    return {
+      ...prev,
+      due_date: dueDate,
+      reminder_offset: reminderOffset,
+      reminder_time: reminderTime,
+    };
+  });
 };
 
       const [visible, setVisible] = useState(false);
@@ -92,8 +108,17 @@ const handleUpdateSubtask = async () => {
     const reminderTime = step.reminder_offset === "custom"
   ? dayjs(step.custom_reminder_time).format("HH:mm:ss")
   : dayjs(step.due_date).subtract(Number(step.reminder_offset), 'minute').format("HH:mm:ss");
-    
+   
+   console.log("Selected Date:", step.due_date); // Debugging line
     console.log("Reminder Time:", reminderTime); // Debugging line
+
+    console.log("Updating subtask with data:", {
+      title: step.title,
+      due_date: step.due_date, // e.g. "2025-06-03T14:00:00Z"
+      description: step.description,
+      reminder_time: reminderTime,
+    });
+
     // Construct updated fields for PATCH
     const updatedData = {
       title: step.title,
@@ -231,7 +256,8 @@ const confirmDeleteSubtask = async () => {
                </span>
         
             <div className="relative">
-      <SubtaskDateTimePicker value={step.due_date ? dayjs(step.due_date) : null} onChange={handleDateChange}/>
+      <SubtaskDateTimePicker value={step.due_date ? dayjs.utc(step.due_date) : null}
+ onChange={handleDateChange}/>
          
             </div>
           </div>

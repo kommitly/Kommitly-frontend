@@ -311,7 +311,7 @@ const AiGoal = () => {
     description: "",
     due_date: formattedDueDate,
     status: "pending",
-    completed_at: "",
+   
     completed_at: formattedCompletedAt,
     reminder_time: formattedReminderTime
   });
