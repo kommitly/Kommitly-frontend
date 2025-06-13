@@ -117,30 +117,39 @@ const navigate = useNavigate();
       onClose(); // calls setSubtaskOpen(false) and setSelectedStep(null)
     }, 300); // match your transition duration
   };
-
 const handleUpdateSubtask = async () => {
   try {
-    const reminderTime = step.reminder_offset === "custom"
-  ? dayjs(step.custom_reminder_time).format("HH:mm:ss")
-  : dayjs(step.due_date).subtract(Number(step.reminder_offset), 'minute').format("HH:mm:ss");
-    
-    console.log("Reminder Time:", reminderTime); // Debugging line
-    // Construct updated fields for PATCH
+    let reminderTime;
+
+    if (step.reminder_offset === "custom") {
+      reminderTime = dayjs(step.custom_reminder_time).format("HH:mm:ss");
+    } else {
+      const due = dayjs(step.due_date);
+      if (!due.isValid()) {
+        throw new Error("Invalid due_date format");
+      }
+
+      const calculatedReminder = due.subtract(Number(step.reminder_offset), "minute");
+      if (!calculatedReminder.isValid()) {
+        throw new Error("Calculated reminder time is invalid");
+      }
+
+      reminderTime = calculatedReminder.format("HH:mm:ss");
+    }
+
     const updatedData = {
       title: step.title,
-      due_date: step.due_date, // e.g. "2025-06-03T14:00:00Z"
+      due_date: step.due_date,
       description: step.description,
       reminder_time: reminderTime,
     };
 
-    // 1. Update the subtask itself
     await updateAiSubtaskById(taskId, step.id, updatedData);
 
-    // 2. Trigger the reminder
     await triggerAiSubtaskReminder({
       subtask_id: step.id,
-      due_date: dayjs(step.due_date).format("YYYY-MM-DD"), // API expects "YYYY-MM-DD"
-      reminder_time: reminderTime // always "HH:mm"
+      due_date: dayjs(step.due_date).format("YYYY-MM-DD"),
+      reminder_time: reminderTime,
     });
 
     console.log("Subtask updated and reminder triggered.");
