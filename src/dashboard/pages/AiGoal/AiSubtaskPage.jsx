@@ -30,42 +30,55 @@ const { state } = useLocation();
 
 const navigate = useNavigate();
 
-  const [step, setStep] = useState(state?.step || null); // start with state or null
+  const [step, setStep] = useState(state?.step || null);
   const [loading, setLoading] = useState(!state?.step);
   const [error, setError] = useState(null);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  
+  const showCustomReminderPicker = step?.reminder_offset === 'custom';
+
   useEffect(() => {
-    console.log("taskId:", taskId, "subtaskId:", subtaskId);
-    const fetchSubtask = async () => {
-      try {
-        const data = await getAiSubtaskById(taskId, subtaskId); // you must implement this
-        setStep(data);
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to load subtask.");
-        setLoading(false);
-      }
-    };
+    setTimeout(() => setVisible(true), 10);
+  }, []);
 
+  useEffect(() => {
     if (!state?.step) {
+      const fetchSubtask = async () => {
+        try {
+          const data = await getAiSubtaskById(taskId, subtaskId);
+          setStep(data);
+          setLoading(false);
+        } catch (err) {
+          setError("Failed to load subtask.");
+          setLoading(false);
+        }
+      };
       fetchSubtask();
     }
   }, [taskId, subtaskId, state]);
 
+  useEffect(() => {
+    if (step?.due_date && step?.reminder_time && !step.reminder_offset) {
+      const due = dayjs(step.due_date);
+      const reminder = dayjs(`${dayjs(step.due_date).format("YYYY-MM-DD")}T${step.reminder_time}`);
+      const offset = due.diff(reminder, 'minute');
+      if (offset >= 0) {
+        setStep(prev => ({
+          ...prev,
+          reminder_offset: offset.toString(),
+        }));
+      }
+    }
+  }, [step?.due_date, step?.reminder_time]);
+
+  // ✅ Only start conditionals after hooks
   if (loading) return <div className="p-4 text-center">Loading...</div>;
   if (error) return <div className="p-4 text-center text-red-500">{error}</div>;
-  if (!step) return <div className="p-4 text-center text-red-500">Subtask data is missing. Please go back and try again.</div>;
-
-
-    
-    const theme = useTheme();
-    const colors =tokens(theme.palette.mode);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const showCustomReminderPicker = step?.reminder_offset === 'custom';
-
-
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+  if (!step) return <div className="p-4 text-center text-red-500">Subtask data is missing.</div>;
 
    const handleCustomReminderChange = (time) => {
   setStep(prev => ({
@@ -96,30 +109,7 @@ const navigate = useNavigate();
   }));
 };
 
-      const [visible, setVisible] = useState(false);
-
-    useEffect(() => {
-      setTimeout(() => setVisible(true), 10); // allow initial render before animation
-    }, []);
-
-     useEffect(() => {
-      if (step?.due_date && step?.reminder_time && !step.reminder_offset) {
-        const due = dayjs(step.due_date);
-        const reminder = dayjs(`${dayjs(step.due_date).format("YYYY-MM-DD")}T${step.reminder_time}`);
-        const offset = due.diff(reminder, 'minute');
-    
-        if (offset >= 0) {
-          setStep(prev => ({
-            ...prev,
-            reminder_offset: offset.toString(),
-          }));
-        }
-      }
-    }, [step?.due_date, step?.reminder_time]);
-    
- 
-
-    
+      
 
       const handleClose = () => {
     setVisible(false);
