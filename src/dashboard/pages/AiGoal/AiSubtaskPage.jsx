@@ -70,6 +70,23 @@ const navigate = useNavigate();
       setTimeout(() => setVisible(true), 10); // allow initial render before animation
     }, []);
 
+     useEffect(() => {
+      if (step?.due_date && step?.reminder_time && !step.reminder_offset) {
+        const due = dayjs(step.due_date);
+        const reminder = dayjs(`${dayjs(step.due_date).format("YYYY-MM-DD")}T${step.reminder_time}`);
+        const offset = due.diff(reminder, 'minute');
+    
+        if (offset >= 0) {
+          setStep(prev => ({
+            ...prev,
+            reminder_offset: offset.toString(),
+          }));
+        }
+      }
+    }, [step?.due_date, step?.reminder_time]);
+    
+    
+
       const handleClose = () => {
     setVisible(false);
     setTimeout(() => {
