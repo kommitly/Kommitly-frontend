@@ -33,7 +33,8 @@ const navigate = useNavigate();
     const theme = useTheme();
     const colors =tokens(theme.palette.mode);
     const [selectedFile, setSelectedFile] = useState(null);
-     const showCustomReminderPicker = step.reminder_offset === 'custom';
+    const showCustomReminderPicker = step?.reminder_offset === 'custom';
+
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -43,6 +44,8 @@ const navigate = useNavigate();
     custom_reminder_time: time,
   }));
 };
+
+
 
 
 
@@ -85,6 +88,14 @@ const navigate = useNavigate();
       }
     }, [step?.due_date, step?.reminder_time]);
     
+    if (!step) {
+  return (
+    <div className="p-4 text-center text-red-500">
+      Subtask data is missing. Please go back and try again.
+    </div>
+  );
+}
+
     
 
       const handleClose = () => {
