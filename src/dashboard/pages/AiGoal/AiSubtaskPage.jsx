@@ -3,7 +3,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from "react";
 import { TasksContext } from "../../../context/TasksContext";
 import PropTypes from 'prop-types';
-import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById } from "../../../utils/Api";
+import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById, getAiSubtaskById } from "../../../utils/Api";
 import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem, colors } from "@mui/material";
 import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -36,6 +36,7 @@ const navigate = useNavigate();
 
   
   useEffect(() => {
+    console.log("taskId:", taskId, "subtaskId:", subtaskId);
     const fetchSubtask = async () => {
       try {
         const data = await getAiSubtaskById(taskId, subtaskId); // you must implement this
