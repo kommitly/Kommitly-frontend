@@ -541,7 +541,7 @@ const markNotificationAsRead = async (notificationId) => {
   const url = `https://kommitly-backend.onrender.com/api/notifications/${notificationId}/mark-read/`;
   try {
     const token = getToken();
-    const response = await axios.post(url, {}, {
+    const response = await axios.patch(url, {}, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`

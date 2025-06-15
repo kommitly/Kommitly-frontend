@@ -3,24 +3,9 @@ import { fetchAllNotifications, markNotificationAsRead } from '../../utils/Api'
 import { useTheme } from '@mui/material'
 import { tokens } from '../../theme'
 import dayjs from 'dayjs'
-
-const Notifications = () => {
-  const [notifications, setNotifications] = useState([])
+const Notifications = ({ notifications, setNotifications }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-
-  useEffect(() => {
-    const fetchNotificationsData = async () => {
-      try {
-        const data = await fetchAllNotifications()
-        setNotifications(data)
-      } catch (error) {
-        console.error('Error fetching notifications:', error)
-      }
-    }
-
-    fetchNotificationsData()
-  }, [])
 
   const handleNotificationClick = async (notif, idx) => {
     if (!notif.is_read) {
@@ -34,11 +19,11 @@ const Notifications = () => {
       }
     }
 
-    window.open(notif.link, '_blank') // Open in new tab
+    window.open(notif.link, '_blank')
   }
 
   return (
-    <div className="p-4 max-h-96 overflow-y-auto shadow-lg rounded-lg " style={{ backgroundColor: colors.background.default }}>
+    <div className="p-4 max-h-96 overflow-y-auto shadow-lg rounded-lg" style={{ backgroundColor: colors.background.default }}>
       <h3 className="text-lg font-bold mb-3" style={{ color: colors.text.primary }}>
         Notifications
       </h3>
@@ -47,7 +32,7 @@ const Notifications = () => {
           <div
             key={notif.id}
             onClick={() => handleNotificationClick(notif, idx)}
-            className={`rounded-lg px-4 py-3 mb-2 cursor-pointer transition duration-150`}
+            className="rounded-lg px-4 py-3 mb-2 cursor-pointer transition duration-150"
             style={{
               backgroundColor: notif.is_read ? colors.primary[100] : colors.primary[200],
               color: notif.is_read ? colors.text.secondary : colors.text.primary,

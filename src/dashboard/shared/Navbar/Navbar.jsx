@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Link } from 'react-router-dom';
 import { Box, Button, IconButton, Typography, useTheme, Menu, MenuItem, TextField } from "@mui/material";
 import  {tokens} from "../../../theme";
+import { fetchAllNotifications } from '../../../utils/Api';
 import { ProfileContext } from '../../../context/ProfileContext';
 import { IoSearch } from "react-icons/io5";
 import { motion } from 'framer-motion';
@@ -13,6 +14,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import Notifications from '../../components/Notifications';
+import Badge from '@mui/material/Badge';
 
 export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +22,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
-
+  const [notifications, setNotifications] = useState([])
  
   const [anchorEl, setAnchorEl] = useState(null); // For the filter menu
   const [searchType, setSearchType] = useState(""); // "goal" or "task"
@@ -98,6 +100,21 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
       alert("No matching results found.");
     }
   };
+
+   useEffect(() => {
+      const fetchNotificationsData = async () => {
+        try {
+          const data = await fetchAllNotifications()
+          setNotifications(data)
+        } catch (error) {
+          console.error('Error fetching notifications:', error)
+        }
+      }
+  
+      fetchNotificationsData()
+    }, [])
+
+    const unreadCount = notifications.filter(n => !n.is_read).length
   
 
   const handleLogout = () => {
@@ -280,20 +297,25 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
 
 
-         <Box className='flex col-span-1 md:col-span-1 justify-end items-center space-x-2 '
+         <Box className='flex col-span-1 md:col-span-1 justify-end items-center space-x-4 pr-2 '
          sx={{
           gridColumn: isXs ? 'span 1' : isSm ? 'span 1' : isMd ? 'span 2' : isLg ? 'span 1' : isXl ? 'span 1' : isXxl ? 'span 1' : 'span 1',
          }}>
            
-                 <IconButton onClick={() => setIsNotifOpen(!isNotifOpen)}>
-                  <NotificationsNoneIcon sx={{ fontSize: "20px", color: colors.primary[400] }} />
-                </IconButton>
+                <Badge badgeContent={unreadCount} color="error">
+           
+                  <NotificationsNoneIcon sx={{ fontSize: "20px", color: colors.primary[400] }} onClick={() => setIsNotifOpen(!isNotifOpen)} />
+            
+              </Badge>
 
-                        {isNotifOpen && (
-          <div className="absolute right-2 top-1/2 mt-8 w-96 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
-            <Notifications />
-          </div>
-        )}
+                     {isNotifOpen && (
+                <div className="absolute right-2 top-1/2 mt-8 w-96 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
+                  <Notifications
+                    notifications={notifications}
+                    setNotifications={setNotifications}
+                  />
+                </div>
+              )}
 
 
                  
