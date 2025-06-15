@@ -12,13 +12,15 @@ import SearchResults from './SearchResults';
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-
+import Notifications from '../../components/Notifications';
 
 export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { profile, setProfile } = useContext(ProfileContext);
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+
  
   const [anchorEl, setAnchorEl] = useState(null); // For the filter menu
   const [searchType, setSearchType] = useState(""); // "goal" or "task"
@@ -282,13 +284,19 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
          sx={{
           gridColumn: isXs ? 'span 1' : isSm ? 'span 1' : isMd ? 'span 2' : isLg ? 'span 1' : isXl ? 'span 1' : isXxl ? 'span 1' : 'span 1',
          }}>
-            <Link to="/dashboard/notifications">
-                 <IconButton>
+           
+                 <IconButton onClick={() => setIsNotifOpen(!isNotifOpen)}>
+                  <NotificationsNoneIcon sx={{ fontSize: "20px", color: colors.primary[400] }} />
+                </IconButton>
+
+                        {isNotifOpen && (
+          <div className="absolute right-2 top-1/2 mt-8 w-96 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
+            <Notifications />
+          </div>
+        )}
 
 
-                <NotificationsNoneIcon sx={{ fontSize: "20px", color: colors.primary[400] }} />
-                  </IconButton>
-                  </Link>
+                 
                 <div className='flex items-center  rounded-full cursor-pointer'
                 onClick={() => setIsOpen(!isOpen)}>
                   <IconButton>

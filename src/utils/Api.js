@@ -520,6 +520,39 @@ const getAiSubtaskById = async (taskId, subtaskId) => {
   }
 }
 
+const fetchAllNotifications = async () => {
+  const url = "https://kommitly-backend.onrender.com/api/notifications/";
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching notifications:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+const markNotificationAsRead = async (notificationId) => {
+  const url = `https://kommitly-backend.onrender.com/api/notifications/${notificationId}/mark-read/`;
+  try {
+    const token = getToken();
+    const response = await axios.post(url, {}, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error marking notification with ID ${notificationId} as read:`, error.response?.data || error.message);
+    throw error;
+  }
+}
 
 
 export { 
@@ -550,4 +583,7 @@ export {
   updateAiSubtaskById,
   triggerAiSubtaskReminder,
   deleteAiSubtaskById,
-  getAiSubtaskById};
+  getAiSubtaskById,
+  fetchAllNotifications,
+  markNotificationAsRead
+};
