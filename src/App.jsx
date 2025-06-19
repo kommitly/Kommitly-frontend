@@ -34,6 +34,7 @@ import '@fontsource/roboto/700.css';
 import Tasks from './dashboard/pages/Tasks/Tasks';
 import Taskpage from './dashboard/pages/Task/Task';
 import AiSubtaskPage from "./dashboard/pages/AiGoal/AiSubtaskPage";
+import Stats from "./dashboard/pages/Analytics/Stats";
 
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
                 <Route path="ai-goal/:goalId" element={<AiGoal />} />
                 <Route path="ai-goal/:goalId/task/:taskId/subtask/:subtaskId" element={<AiSubtaskPage />} />
                 <Route path="goal/:goalId" element={<Goal />} />
+                <Route path="analytics" element={<Stats />} />
                 <Route path="settings" element={<Settings/>} />
               </Route>
             </Routes>
