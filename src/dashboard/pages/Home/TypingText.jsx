@@ -67,7 +67,7 @@ const TypingText = ({ color, onComplete }) => {
       color,
       fontWeight: "semibold",
       fontSize: isXs
-        ? "0.8rem" // Smallest size for XS
+        ? "1.2rem" // Smallest size for XS
         : isSm
         ? "1rem" // Medium size for SM
         : isMd

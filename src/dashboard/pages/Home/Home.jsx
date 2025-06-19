@@ -94,10 +94,10 @@ const Home = () => {
 
   
   return (
-    <div className='w-full   px-6 mt-4 '>
+    <div className='w-full   md:px-0 px-2  mt-4 '>
       
 
-      <div className="w-full  px-4 flex-1 overflow-y-auto scrollbar-hide xl:max-h-[76vh] md:max-h-[70vh]  no-scrollbar">
+      <div className="w-full   flex-1 overflow-y-auto scrollbar-hide xl:max-h-[76vh] md:max-h-[70vh]  no-scrollbar">
         {loading && 
          <div className="w-11/12 p-8  min-h-screen flex justify-center items-center no-scrollbar">
          <motion.div className="flex space-x-2">
@@ -123,7 +123,7 @@ const Home = () => {
           hidden: { opacity: 0 },
           visible: { opacity: 1, transition: { staggerChildren: 0.5 } }, // Stagger effect
         }}
-        className="py-8 space-y-4"
+        className="py-8 px-4 space-y-4"
       > 
           <motion.div className='flex h-10 items-center gap-4 mb-4 '
           style={{marginBottom: isXs
@@ -276,7 +276,7 @@ const Home = () => {
 
 {!showGoalBreakdown && (
    <div className='flex  w-full  items-center justify-center flex-wrap gap-4'>
-   <Box className='w-6/12   bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-20' sx={{ backgroundColor:  colors.background.paper }}>
+   <Box className='md:w-8/12 xl:w-6/12 w-10/12  bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-20' sx={{ backgroundColor:  colors.background.paper }}>
      <div className='flex items-center justify-between gap-4'>
        <div className='flex items-center w-full gap-4 ml-2'>
          <IconButton>
@@ -300,7 +300,7 @@ const Home = () => {
 
          <input
            type="text"
-           placeholder='Add a new goal'
+           placeholder='Break down a new goal'
            value={inputValue}
            onChange={handleInputChange}
            onKeyDown={(e) => e.key === 'Enter' && handleFormSubmit()}
@@ -337,74 +337,7 @@ const Home = () => {
       
 
 
-      {showGoalBreakdown && goalData && taskData && !isScrolledDown && (
-        <>
-      <div className='flex  w-full  items-center justify-center flex-wrap gap-4'>
-        
-      <Box 
-  className="w-6/12 bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-4"
-  sx={{ 
-    backgroundColor: colors.background.paper,
-    boxShadow: `
-      inset 0px 4px 12px rgba(43, 24, 89, 0.25),
-      -8px 0px 12px rgba(43, 24, 89, 0.10),
-      0px 8px 12px rgba(43, 24, 89, 0.50)
-    `
-  }}
->
-
-    
-          <div className='flex items-center justify-between gap-4'>
-            <div className='flex items-center w-full gap-4 ml-2'>
-              <IconButton>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#1D1B20"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-[#65558F]"
-                >
-                  <line x1="3" y1="12" x2="21" y2="12"></line>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-              </IconButton>
-
-              <input
-                type="text"
-                placeholder='Add a new goal'
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyDown={(e) => e.key === 'Enter' && handleFormSubmit()}
-                className='text-[#49454F] outline-none border-none w-full text-xs'
-              />
-
-            </div>
-            <IconButton onClick={handleFormSubmit}>
-              <LuSendHorizontal size={16} className='text-[#1D1B20] ' />
-            </IconButton>
-          </div>
-        </Box>
-      </div>
-      <div className='flex w-full flex-wrap gap-4'>
-      <div className='w-11/12  flex justify-end' >
-      <IconButton onClick={handleScrollToBottom} sx={{ backgroundColor: colors.background.paper, borderRadius: '50%', padding: '8px' }}>  
-
-                 {/* Down Arrow Icon */}
-                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#65558F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" >
-                   <path d="M19 9l-7 7-7-7" />
-                 </svg>
-               </IconButton>
-      </div>
- 
-      </div>
-      </>
-      )}
+   
     </div>
   );
 };

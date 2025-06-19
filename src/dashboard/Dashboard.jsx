@@ -28,8 +28,8 @@ const Dashboard = () => {
 
 
     useEffect(() => {
-  if (isMobile && !isCollapsed) {
-    setIsCollapsed(false);
+  if (isMobile && isCollapsed) {
+    setIsCollapsed(true);
   }
 }, [location.pathname]);
 
@@ -61,27 +61,28 @@ const Dashboard = () => {
 
         {/* Push Outlet Content Below Navbar */}
         <main
-          className=" w-full scrollbar-hide "
-         
-          style={{
-  paddingLeft: !isMobile
-    ? (isCollapsed
-        ? (isXl ? '40px' : '80px')
-        : (isXl ? '20px' : '20px'))
-    : '0px',
+  className="w-full scrollbar-hide"
+  style={{
+    paddingLeft: !isMobile
+      ? isCollapsed
+        ? (isXl ? '40px' : '20px')
+        : (isXl ? '20px' : '20px')
+      : '0px',
     position: isMobile ? 'fixed' : 'relative',
+    height: isMobile ? '100vh' : 'auto',
+    overflowY: isMobile ? 'auto' : 'visible', // 💡 allows scroll on mobile
+  }}
+>
 
-}}
-        >
-           <div className="relative mt-2  z-50 w-full ">
+           <div className="relative  mt-2  z-50 w-full ">
           <Navbar setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />
 
         </div>
           <div
-  className="mt-14   "
+  className="mt-14  relative "
 
 >
-          <div className=" h-screen w-full  ">
+          <div className=" h-screen w-full  relative">
             <Outlet  />
           </div>
           </div>

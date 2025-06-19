@@ -24,6 +24,7 @@ import  LightModeOutlinedIcon  from "@mui/icons-material/LightModeOutlined";
 import  DarkModeOutlinedIcon  from "@mui/icons-material/DarkModeOutlined";
 import { motion } from "framer-motion";
 import { AnimatePresence } from 'framer-motion';
+import {  X } from "lucide-react"; // or use any icons you prefer
 
 
 const Item = ({title, to, icon, selected, setSelected}) => {
@@ -55,8 +56,7 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
     const { goalId } = useParams();
     const { taskId } = useParams();
     const location = useLocation();
-    const { collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl } = useProSidebar();
- 
+  
     const [selected, setSelected] = useState("Dashboard");
     const isSm = useMediaQuery(theme.breakpoints.only("sm"));
     const isLg = useMediaQuery(theme.breakpoints.only("lg"));
@@ -78,9 +78,9 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
 
-    useEffect(() => {
-        setIsCollapsed(isSm);
-      }, [isSm]);
+  // {  useEffect(() => {
+  //       setIsCollapsed(isSm);
+  //     }, [isSm]);
 
 
     const handleAddGoal = async () => {
@@ -225,7 +225,7 @@ sx={{
       height: isCollapsed ? "98vh" : "98vh",
       borderRadius: isCollapsed ? '20px' : '24px',
       border: 'none',
-      padding: isCollapsed ? '0px' : '10px',
+    
       position: isMobile ? 'absolute' : 'fixed',
       top: '0',
       left: isMobile ? (isCollapsed ? '-100%' : '0') : '0',
@@ -312,7 +312,7 @@ sx={{
   }}
   icon={isCollapsed ? <MapOutlinedIcon /> : undefined}
   style={{
-    margin: "5px 0 20px 0",
+    margin: "15px 0 20px 0",
     color: colors.primary[100],
   }}
 >
@@ -323,14 +323,19 @@ sx={{
                             justifyContent="space-between"
                             alignItems="center"
                             width={"100%"}
+                         
                             >
                                 <Typography variant="h2" color={colors.primary[100]} sx={{ fontFamily: "Fredoka"}}>
                                     Kommitly
 
                                 </Typography>
-                                <IconButton onClick={()=> setIsCollapsed(!isCollapsed)} sx={{alignItems: "center", color: colors.primary[100]}}>
-                                    <MenuOutlinedIcon/>
-                                </IconButton>
+                                <button onClick={()=> setIsCollapsed(!isCollapsed)} sx={{alignItems: "center", color: colors.primary[100]}}>
+                                    {isCollapsed ? (
+                                        <MenuOutlinedIcon/>
+                                    ) : (
+                                        < X size={24}/>
+                                    )}
+                                </button>
 
                             </Box>
                         )}

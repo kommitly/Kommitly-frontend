@@ -62,14 +62,14 @@ const Registration = () => {
   return (
     <Box className="flex items-center p-2 h-screen">
       <div className="flex    rounded-xl w-full items-center h-full">
-        <Box className="w-full h-full  hidden md:block bg-[#D6CFFF]  items-center justify-center bg-no-repeat bg-cover bg-center rounded-xl">
+        <Box className="w-full h-full p-4  hidden md:block bg-[#D6CFFF]  items-center justify-center bg-no-repeat bg-cover bg-center rounded-xl">
 
        {/* { <AnimatedLines />} */}
        <Box 
        sx={{ padding: 1, marginBottom: 4, paddingLeft: 2}}>
         <div className="flex  items-center gap-6 ">
           <div className=" mt-10 h-full">
-              <h1 className="md:text-2xl lg:text-4xl  sm:text-2xl xl:text-4xl 2xl:text-6xl  font-regular text-[#4B2E83]">
+              <h1 className="md:text-3xl lg:text-5xl  sm:text-2xl xl:text-4xl 2xl:text-6xl  font-semibold text-[#4B2E83]">
            Welcome to 
         </h1>
           </div>
