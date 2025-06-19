@@ -309,7 +309,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
               </Badge>
 
                      {isNotifOpen && (
-                <div className="absolute right-2 top-1/2 mt-8 w-96 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
+                <div className="absolute md:right-2 -right-2 top-1/2 mt-8 md:w-96 w-90 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
                   <Notifications
                     notifications={notifications}
                     setNotifications={setNotifications}
