@@ -286,7 +286,7 @@ const Goals = () => {
           </div>
         </Backdrop>
 
-      <div className="md:col-span-7 col-span-12  md:p-0 p-0">
+      <div className="md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0">
        
         <Box className='w-full  container md:h-40 h-40 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 pl-4 md:mt-4 mt-0'
         sx={{backgroundColor:colors.background.paper}}
@@ -603,7 +603,7 @@ const Goals = () => {
 
 
 
-      <Box className='hidden lg:block col-span-4 md:col-span-5  space-y-4 ml-4 rounded-2xl justify-center  mt-4 p-4' sx={{backgroundColor:colors.background.paper}}>
+      <Box className=' block col-span-12 md:col-span-5 c  space-y-4 md:ml-4 rounded-2xl justify-center  md:mt-4 mt-8 p-4' sx={{backgroundColor:colors.background.paper}}>
         
         <div className=''>
         <div className='w-full flex justify-center mb-3'>

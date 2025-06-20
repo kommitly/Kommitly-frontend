@@ -554,6 +554,23 @@ const markNotificationAsRead = async (notificationId) => {
   }
 }
 
+const answerAiSubtask = async (subtaskId) => {
+  const url = `https://kommitly-backend.onrender.com/api/tasks/ai-subtasks/${subtaskId}/answer/`;
+  try {
+    const token = getToken();
+    const response = await axios.post(url, {}, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error answering AI subtask with ID ${subtaskId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
 
 export { 
   generateInsights,
@@ -585,5 +602,6 @@ export {
   deleteAiSubtaskById,
   getAiSubtaskById,
   fetchAllNotifications,
-  markNotificationAsRead
+  markNotificationAsRead,
+  answerAiSubtask
 };
