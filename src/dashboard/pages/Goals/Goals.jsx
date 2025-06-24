@@ -714,12 +714,12 @@ const Goals = () => {
               <Box className='flex w-full   px-2 py-4 h-full rounded-xl' sx={{backgroundColor:colors.background.paper}}>
                    <div className='w-1/4  full    overflow-hidden'>
                                   {/* { <img src={background } alt="goals"  className='h-full'/>} */}
-                                                <CircularProgressWithLabel  value={goal.progress}
+                                                   <CircularProgressWithLabel  value={goal.progress}
                                 progressColor={colors.primary[500]}
                                 textColor={colors.text.primary}
                                 size={50}
                                 fontSize={
-                                  isXs ? '0.5rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
+                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
                                 } 
                                 />
 
@@ -874,12 +874,12 @@ const Goals = () => {
                 </div>
                  {/* { <p className='text-sm text-gray-600'>{goal.description}</p>} */}
                 </div>
-                   <CircularProgressWithLabel  value={goal.progress}
+                       <CircularProgressWithLabel  value={goal.progress}
                                 progressColor={colors.primary[500]}
                                 textColor={colors.text.primary}
                                 size={50}
                                 fontSize={
-                                  isXs ? '0.5rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
+                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
                                 } 
                                 />
               </div>
