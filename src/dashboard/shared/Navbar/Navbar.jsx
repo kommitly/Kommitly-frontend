@@ -284,7 +284,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                 sm:w-10 sm:h-10            // small
                 md:w-6 md:h-6            // medium
                 lg:w-8 lg:h-8            // large
-                xl:w-8 xl:h-8           // extra large
+                xl:w-9 xl:h-9           // extra large
                 2xl:w-12 2xl:h-12
                 3xl:w-12 3xl:h-12
                  ${isSearchExpanded ? 'w-full' : ''}`}
@@ -304,8 +304,8 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                   <FilterListOutlinedIcon sx={{ fontSize: {
                              xs: "20px",  // extra-small screens
                           sm: "16px",  // small screens
-                          md: "20px",  // medium screens
-                          lg: "24px",  // large screens
+                         md: "20px",  // medium screens
+                          lg: "20px",  // large screens
                           xl: "28px",  // extra-large screens
                           
                         }, color: colors.primary[500] }} />
@@ -366,7 +366,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                            xs: "20px",  // extra-small screens
                           sm: "16px",  // small screens
                           md: "20px",  // medium screens
-                          lg: "24px",  // large screens
+                          lg: "20px",  // large screens
                           xl: "28px",  // extra-large screens
                           
                         }}}/>

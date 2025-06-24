@@ -23,7 +23,7 @@ const Notifications = ({ notifications, setNotifications }) => {
   }
 
   return (
-    <div className="p-4 max-h-96 overflow-y-auto shadow-lg rounded-lg" style={{ backgroundColor: colors.background.default }}>
+    <div className="p-4 max-h-96 overflow-y-auto shadow-lg rounded-lg" style={{ backgroundColor: colors.tag.primary }}>
       <h3 className="text-lg font-semibold mb-3" style={{ color: colors.text.primary }}>
         Notifications
       </h3>
