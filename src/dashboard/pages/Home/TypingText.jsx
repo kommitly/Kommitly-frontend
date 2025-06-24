@@ -75,11 +75,12 @@ const TypingText = ({ color, onComplete }) => {
         : isLg
         ? "2rem" // Large size for LG
         : isXl
-        ? "2rem"
+        ? "2.8rem"
         : isXxl
         ? "3rem" // Extra large size for XL
         : "2rem", // Default size for larger screens (or the largest)
     }}>
+      
       <motion.span>
         {displayedText}
         {showCursor && (

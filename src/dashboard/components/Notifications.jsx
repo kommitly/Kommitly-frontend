@@ -24,7 +24,7 @@ const Notifications = ({ notifications, setNotifications }) => {
 
   return (
     <div className="p-4 max-h-96 overflow-y-auto shadow-lg rounded-lg" style={{ backgroundColor: colors.background.default }}>
-      <h3 className="text-lg font-bold mb-3" style={{ color: colors.text.primary }}>
+      <h3 className="text-lg font-semibold mb-3" style={{ color: colors.text.primary }}>
         Notifications
       </h3>
       {notifications.length > 0 ? (
@@ -34,7 +34,7 @@ const Notifications = ({ notifications, setNotifications }) => {
             onClick={() => handleNotificationClick(notif, idx)}
             className="rounded-lg px-4 py-3 mb-2 cursor-pointer transition duration-150"
             style={{
-              backgroundColor: notif.is_read ? colors.primary[100] : colors.primary[200],
+              backgroundColor: notif.is_read ? colors.background.paper : colors.primary[200],
               color: notif.is_read ? colors.text.secondary : colors.text.primary,
               fontWeight: notif.is_read ? 'normal' : 'bold',
               borderLeft: `4px solid ${colors.primary[400]}`

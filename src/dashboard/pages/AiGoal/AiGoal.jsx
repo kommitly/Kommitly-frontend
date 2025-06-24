@@ -665,7 +665,7 @@ const AiGoal = () => {
          
            
             <div className="ai-tasks overflow-visible overflow-y-clip  px-4 w-full  flex flex-col items-center  justify-center  " >
-              <div className="md:w-full w-full gap-4 pl-8 pb-10 md:pl-36 xl:pl-10 2xl:pl-26 m-2">
+              <div className="md:w-full w-full gap-4 pl-4 pb-10 md:pl-36 xl:pl-10 2xl:pl-26 m-2">
                 {goal.ai_tasks.map((task, index) => {
                   const isCompleted = taskCompletionStatus[index];
                   const allTasksCompleted = goal.ai_tasks.every(t => t.status === 'completed');
@@ -676,12 +676,12 @@ const AiGoal = () => {
                     <div className="mx-auto" key={task.id} 
 >
                          <motion.div
-      className={`task ${isCompleted ? "completed" : ""} relative mt-8 border-l p-4 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12`}
+      className={`task ${isCompleted ? "completed" : ""} relative mt-8 border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12`}
       style={{
         backgroundColor: allTasksCompleted
           ? theme.palette.background.paper // Adjust to your theme color
           : isActive
-          ? theme.palette.primary[100] // White background for active
+          ? colors.primary[500] // White background for active
           : theme.palette.background.paper,
         borderLeftColor: theme.palette.primary.main, // Replace with the desired theme color
         boxShadow:
@@ -692,9 +692,12 @@ const AiGoal = () => {
                           duration: 0.6,
                           ease: "easeOut",
                           delay: index * 0.3, // Staggered delay based on index
-                        }}>
-                        <div className="flex   justify-between md:gap-4 relative  max-h-full">
-                          <div className={`w-1/4  rounded-lg p-4 ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}  style={{
+                        }} onClick={() => {
+  setActiveTaskIndex(index);
+  setOpenTaskView(true);
+}}>
+                        <div className="flex   justify-between md:gap-4 gap-2 relative  max-h-full">
+                          <div className={`md:w-1/4 w-20 rounded-lg p-4 ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}  style={{
         backgroundColor:isActive
           ? theme.palette.background.paper // White background for active
           : theme.palette.background.default,
@@ -702,14 +705,12 @@ const AiGoal = () => {
       }}>
                               <img src={aiGoals} alt="goals"  className='h-20 object-cover'/>
                                  </div>
-                            <div className='w-full' onClick={() => {
-  setActiveTaskIndex(index);
-  setOpenTaskView(true);
-}}>
+                            <div className='w-full ' >
                               <div className='flex  items-center h-auto gap-4  mb-4  w-full justify-between '>
                   
                                  
-                                  <h3 className="md:text-sm xl:text-sm 2xl:text-base text-[#1D1B20] font-medium">{task.title}</h3>
+                                  <h3 className="md:text-sm xl:text-sm 2xl:text-base  font-medium" style={{color: isActive ? colors.primary[100] : colors.text.primary
+                                  }}>{task.title}</h3>
                                   <div className="relative overflow-visible">
                                           <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -717,7 +718,7 @@ const AiGoal = () => {
                                             height="24"
                                             viewBox="0 0 24 24"
                                             fill="none"
-                                            stroke="#65558F"
+                                            stroke= {isActive ? colors.primary[100] : colors.text.secondary}
                                             strokeWidth="2"
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
@@ -752,14 +753,14 @@ const AiGoal = () => {
 
                                 <div className="flex flex-col gap-2">
                                                   <div className="flex items-center">
-                                                    <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm font-medium text-[#65558F]">Timeline:</p>
-                                                    <span className="px-3 py-0.5 border border-[#65558F] 2xl:text-sm  rounded-sm md:text-xs xl:text-xs text-[#65558F]">
+                                                    <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm  text-xs font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Timeline:</p>
+                                                    <span className="px-3 py-0.5 border  2xl:text-sm text-xs rounded-sm md:text-xs xl:text-xs " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
                                                       {task.task_timeline}
                                                     </span>
                                                   </div>
                                                   <div className="flex items-center">
-                                                    <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm  font-medium text-[#65558F]">Status:</p>
-                                                    <span className="px-3 py-0.5 border border-[#65558F] 2xl:text-sm  text-center rounded-sm md:text-xs xl:text-xs text-[#65558F] flex items-center ">
+                                                    <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>
+                                                    <span className="px-3 py-0.5 border  2xl:text-sm  text-center  text-xs rounded-sm md:text-xs xl:text-xs  flex items-center " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
                                                       {task.status}
                                                     </span>
                                                   </div>
@@ -780,7 +781,7 @@ const AiGoal = () => {
 
                          {index < goal.ai_tasks.length && (
                                           
-                                   <div className="absolute md:-left-18 xl:-left-6  -left-26  transform md:-translate-x-1/4 translate-x-1/12 top-1/5   flex flex-col items-center  overflow-hidden">
+                                   <div className="absolute md:-left-18 xl:-left-6  -left-24  transform md:-translate-x-1/4 translate-x-1/12 top-1/5   flex flex-col items-center  overflow-hidden">
 
                                     <motion.svg 
                                       width="300" 
@@ -875,7 +876,7 @@ const AiGoal = () => {
                 <div className='flex items-center gap-4 w-full justify-between mb-2'>
                 <span className=' font-regular text-[#00000] text-sm xl:text-sm 2xl:text-base'
                 >Progress</span>
-                <span className='text-[#49454F] font-regular text-sm xl:text-xs 2xl:text-base'>
+                <span className=' font-regular text-sm xl:text-xs 2xl:text-base' style={{color: colors.text.primary}}>
                   {goal.progress}%
                 </span>
                 </div>
@@ -885,7 +886,7 @@ const AiGoal = () => {
               
               </div>
             <Box className='w-full    rounded-lg p-2 flex justify-center items-center' sx={{ backgroundColor: colors.background.default }}>
-                 <p className="md:text-sm lg:text-md 2xl:text-lg text-[#1D1B20] font-medium">
+                 <p className="md:text-sm lg:text-md 2xl:text-lg  font-medium" style={{color: colors.text.primary}}>
                 Start working on your goal today! 🚀
               </p>
             </Box>
@@ -900,8 +901,8 @@ const AiGoal = () => {
                  <span className="text-[#B3B3B3] md:text-sm lg:text-base">📌</span>
                     {activeTask ? (
                       <>
-                       <span className="font-medium text-[#1D1B20] md:text-sm xl:text-sm 2xl:text-base 
-                        ">{activeTask.title}</span>
+                       <span className="font-medium md:text-sm xl:text-sm 2xl:text-base 
+                        " style={{color: colors.text.primary}}>{activeTask.title}</span>
                       </>
                     ) : (
                       "Select a task"
@@ -942,7 +943,7 @@ const AiGoal = () => {
                         <div className="flex flex-col w-full ">
                       
                         <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
-                        <span className=' text-[#1D1B20] md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular'>{step.title}</span>
+                        <span className=' md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular' style={{color: colors.text.primary}}>{step.title}</span>
                          <div onClick={() => openSubtaskPage(step)} >
                         <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }} />
                          </div>
@@ -952,9 +953,9 @@ const AiGoal = () => {
                       
                       
                       
-                      <Box className=' 2xl:h-6 h-6  flex items-center  gap-2  text-[#4F378A] '>
-                      <AccessTimeIcon fontSize='small'/>
-                          <p className='md:text-xs xl:text-xs text-xs font-medium gap-4 '
+                      <Box className=' 2xl:h-6 h-6  flex items-center  gap-2   '>
+                      <AccessTimeIcon fontSize='small' sx={{color: colors.text.secondary}}/>
+                          <p className='md:text-xs xl:text-xs text-xs font-medium gap-4 ' style={{color: colors.text.secondary}}
                           >
                            
                           {timeline}

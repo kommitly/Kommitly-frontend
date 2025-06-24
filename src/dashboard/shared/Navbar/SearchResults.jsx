@@ -27,7 +27,7 @@ const SearchResults = ({ results = [], onClose }) => {
         
       <Box
         ref={resultsRef}
-        className="absolute mt-2 top-12 w-88 h-auto max-h-40 overflow-y-auto shadow-md no-scrollbar rounded-lg p-2"
+        className="absolute mt-2 top-12 w-130 h-auto max-h-40 overflow-y-auto shadow-md no-scrollbar rounded-lg p-2"
         sx={{ backgroundColor: colors.primary[200] }}
       >
         {results.map((item, index) => {

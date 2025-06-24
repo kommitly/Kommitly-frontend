@@ -63,10 +63,11 @@ const Dashboard = () => {
         <main
   className="w-full scrollbar-hide"
   style={{
+ 
     paddingLeft: !isMobile
       ? isCollapsed
-        ? (isXl ? '40px' : '20px')
-        : (isXl ? '20px' : '20px')
+        ? (isXl ? '60px' : '20px')
+        : (isXl ? '40px' : '0px')
       : '0px',
     position: isMobile ? 'fixed' : 'relative',
     height: isMobile ? '100vh' : 'auto',

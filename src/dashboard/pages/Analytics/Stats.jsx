@@ -162,7 +162,7 @@ export default function Stats() {
 
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-2 space-y-6">
       <span className="flex items-center space-x-2 mb-4">
           <PiChartBarFill size={24} className="text-[#4F378A]"/>
       <h1 className="md:text-2xl text-xl  font-semibold"> Progress Overview</h1>
@@ -204,7 +204,7 @@ export default function Stats() {
             <CardContent className="md:h-[300px] h-[400px] w-full  p-4">
               <div className="md:flex md:mb-2 mb-8   w-full justify-between items-center">
                <h2 className="text-lg font-semibold mb-2">{aiView} AI Goal Activity</h2>
-          <div className="relative flex bg-gray-100 p-1 md:w-3/12 w-11/12 rounded-md md:overflow-hidden">
+          <div className="relative flex p-1 md:w-3/12 w-11/12 rounded-md md:overflow-hidden" style={{backgroundColor: colors.tag.primary}}>
                     {/* Sliding Background */}
                     <div
                       className={`absolute top-1 bottom-1 mx-1   md:w-20 w-20 bg-[#4F378A] shadow-sm shadow-[#4F378A] shadow-opacity-50 rounded-sm transition-all duration-300 ease-in-out`}
@@ -219,8 +219,8 @@ export default function Stats() {
                         key={v}
                         onClick={() => setAiView(v)}
                         className={`
-                          relative z-10 w-1/3 px-4 py-1 md:text-sm text-xs text-center transition-colors duration-200
-                          ${aiView === v ? "text-white" : "text-gray-800"}
+                          relative z-10 w-1/3 px-4 py-1 md:text-sm text-xs text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+                          ${aiView === v ? "text-white" :  colors.text.primary}
                         `}
                       >
                         {v.charAt(0).toUpperCase() + v.slice(1)}
@@ -252,7 +252,7 @@ export default function Stats() {
             <CardContent className="md:h-[300px] h-[400px] p-4">
              <div className="md:flex md:mb-2 mb-8  w-full justify-between items-center">
                <h2 className="text-lg font-semibold mb-2">{view} Goal Activity</h2>
-          <div className="relative flex bg-gray-100 p-1 md:w-3/12 w-11/12 rounded-md overflow-hidden">
+          <div className="relative flex  p-1 md:w-3/12 w-11/12 rounded-md overflow-hidden" style={{backgroundColor: colors.tag.primary}}>
                     {/* Sliding Background */}
                     <div
                       className={`absolute top-1 bottom-1 mx-1  w-20 bg-[#4F378A] shadow-sm shadow-[#4F378A] shadow-opacity-50 rounded-sm transition-all duration-300 ease-in-out`}
@@ -267,8 +267,8 @@ export default function Stats() {
                         key={v}
                         onClick={() => setView(v)}
                         className={`
-                          relative z-10 w-1/3 px-4 py-1 text-sm text-center transition-colors duration-200
-                          ${view === v ? "text-white" : "text-gray-800"}
+                          relative z-10 w-1/3 px-4 py-1 text-sm text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+                          ${view === v ? "text-white" :  colors.text.primary}
                         `}
                       >
                         {v.charAt(0).toUpperCase() + v.slice(1)}

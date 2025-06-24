@@ -9,18 +9,23 @@ export const tokens = (mode) => ({
           100: "#D6CFFF", // Muted Lavender
           200: "#A89FE3", // Dusty Periwinkle
           300: "#6D5BA6", // Deep Violet
-          400: "#4F378A", // Rich Purple
-          500: "#2C2640", // Muted Eggplant (Surface)
-          600: "#1E1A2A", // Deep Midnight Purple (Background)
+          400: "#4C4466", // Rich Purple
+          500: "#6D5BA6", // Muted Eggplant (Surface)
+          600: "#F6F3F3", // Deep Midnight Purple (Background)
+
         },
         text: {
           primary: "#F4F1FF", // Soft Lavender-White
           secondary: "#D6CFFF", // Muted Lavender
         },
         background: {
+          sidebar: "#2C2640",
           default: "#1E1A2A", // Dark mode background
           paper: "#2C2640", // Darker surface
         },
+        tag:{
+          primary: "#13101B"
+        }
       }
     : {
         primary: {
@@ -39,8 +44,12 @@ export const tokens = (mode) => ({
         background: {
           default: "#FBF9FF", // Light mode background
           paper: "#D6CFFF", // Muted Lavender (for surfaces)
-          warning: "#E60178"
+          warning: "#E60178",
+          sidebar: "#4F378A"
         },
+         tag:{
+          primary: "#EEEEEE"
+        }
 
       }),
 });

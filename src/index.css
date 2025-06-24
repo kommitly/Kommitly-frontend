@@ -351,22 +351,9 @@ input[type="checkbox"] {
 
 
 
-div.ps-submenu-content.ps-active.css-wlra1l {
-  background-color: #4F378A !important; /* Add !important to override inline styles */
-  border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 8px;
-  overflow: hidden;
-}
-div.ps-submenu-content.ps-active.css-18unl23 {
-  background-color: #4F378A !important; /* Add !important to override inline styles */
-  overflow: hidden;
-}
 
-.css-18unl23 {
-  background-color: #4F378A !important; /* Add !important to override inline styles */
- 
-}
+
+
 
 aside.ps-sidebar-root.ps-collapsed.css-1um7rol {
   border: none !important;

@@ -8,6 +8,7 @@ import { GoalsContext } from '../../../context/GoalsContext';
 import { createGoal, createTask, deleteGoalById, deleteAiGoalById, deleteTaskById} from '../../../utils/Api';
 import { TasksContext } from '../../../context/TasksContext';
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import HomeIcon from "@mui/icons-material/Home";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContatcsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
@@ -25,7 +26,12 @@ import  DarkModeOutlinedIcon  from "@mui/icons-material/DarkModeOutlined";
 import { motion } from "framer-motion";
 import { AnimatePresence } from 'framer-motion';
 import {  X } from "lucide-react"; // or use any icons you prefer
-
+import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
+import FlagIcon from '@mui/icons-material/Flag';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 
 const Item = ({title, to, icon, selected, setSelected}) => {
     const theme = useTheme();
@@ -57,13 +63,17 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
     const { taskId } = useParams();
     const location = useLocation();
   
-    const [selected, setSelected] = useState("Dashboard");
+    const [selected, setSelected] = useState("Home");
     const isSm = useMediaQuery(theme.breakpoints.only("sm"));
     const isLg = useMediaQuery(theme.breakpoints.only("lg"));
     const isXl = useMediaQuery(theme.breakpoints.only("xl"));
     const isMd = useMediaQuery(theme.breakpoints.only("md"));
     const isXs = useMediaQuery(theme.breakpoints.only("xs"));
-    const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
+    const isXxl = useMediaQuery(theme.breakpoints.only("2xl"));
+
+
+
+
     const {goals, setGoals} = useContext(GoalsContext);
     const {pinnedGoals, hiddenGoals, removeGoalFromSidebar } = useContext(GoalsContext);
     const [isGoalInputVisible, setIsGoalInputVisible] = useState(false);
@@ -221,10 +231,16 @@ sx={{
   collapsed={isCollapsed}
   rootStyles={{
     [`.${sidebarClasses.container}`]: {
-      backgroundColor: `${colors.primary[500]} !important`,
+      backgroundColor: `${colors.background.sidebar} !important`,
       height: isCollapsed ? "98vh" : "98vh",
-      borderRadius: isCollapsed ? '20px' : '24px',
+      borderRadius: isCollapsed ? '12px' : '12px',
       border: 'none',
+      paddingTop: isCollapsed ? (
+        isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
+      ) : (
+        isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px" 
+
+      ),
     
       position: isMobile ? 'absolute' : 'fixed',
       top: '0',
@@ -232,8 +248,8 @@ sx={{
       zIndex: 2000,
       transition: 'left 0.3s ease-in-out, width 0.3s ease-in-out',
       width: isCollapsed
-      ? (isXs ? "0px" : isSm ? "80px" : isMd ? "80px" : isLg ? "80px" : isXl ? "80px" : "80px")
-      : (isXs ? "220px" : isSm ? "220px" : isMd ? "230px" : isLg ? "240px" : isXl ? "260px" : "220px"),
+      ? (isXs ? "0px" : isSm ? "80px" : isMd ? "70px" : isLg ? "80px" : isXl ? "120px" : "80px")
+      : (isXs ? "220px" : isSm ? "158px" : isMd ? "200px" : isLg ? "220px" : isXl ? "280px" : isXxl ? "200px" : "280px"),
       overflow: 'hidden',
       margin: '8px',
       boxShadow: isCollapsed
@@ -247,40 +263,55 @@ sx={{
   }}
 >
 
-            <Menu iconShape="square"
+           <div className=' flex flex-col '>
+             <Menu iconShape="square"
             rootStyles={{
+              [`.${menuClasses.SubMenu}`]: {
+                backgroundColor: colors.background.sidebar,
+              },
+              [`.${menuClasses.subMenuContent}`]: {
+                backgroundColor: colors.background.sidebar,
+              },
+
               [`.${menuClasses.button}`]: {
                 color: colors.primary[100],
-                backgroundColor: colors.primary[500],
+                backgroundColor: colors.background.sidebar,
+                marginBottom: isCollapsed ? (
+                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
+                ) : (   
+                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
+                ),
+
                 
                 '&:hover': {
                   backgroundColor: colors.primary[400],
                 },
               },
-              [`.${menuClasses.subMenu}`]: {
-                backgroundColor: colors.primary[500],
+              [`.${menuClasses.icon}`]: {
                 color: colors.primary[100],
+                marginRight: isCollapsed ? (
+                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "100px" : "100px"
+                ) : (
+                  isXs ? "10px" : isSm ? "10px" : isMd ? "10px" : isLg ? "10px" : isXl ? "60px" : isXxl ? "10px" : "10px"
+                ),
+          
+              marginLeft: isCollapsed ? (
+                isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "16px" : "0px"
+              ) : (
+                isXs ? "10px" : isSm ? "10px" : isMd ? "10px" : isLg ? "10px" : isXl ? "10px" : isXxl ? "10px" : "10px"
+              ),
+             
+            },
+
+              [`.${menuClasses.label}`]: {
+                color: colors.primary[100],
+            
                 '&:hover': {
                   backgroundColor: colors.primary[400],
                 },
               },
-              [`.${menuClasses.subMenuArrow}`]: {
-                color: colors.primary[100],
-              },
-              [`.${menuClasses.subMenuIcon}`]: {
-                color: colors.primary[100],
-              },
-              [`.${menuClasses.buttonActive}`]: {
-                backgroundColor: colors.primary[600],
-                color: colors.primary[100],
-              },
-              [`.${menuClasses.buttonDisabled}`]: {
-                backgroundColor: colors.primary[500],
-                color: colors.primary[100],
-              },
-              [`.${menuClasses.buttonIcon}`]: {
-                color: colors.primary[100],
-              },  
+              
+              
             }}
 
   menuItemStyles={{
@@ -288,9 +319,13 @@ sx={{
       if (level !== 0) {
         return { 
           color: disabled ? '#ffffff' : '#ffffff',
-          backgroundColor: active ? '#000000' : '#4F378A', 
+          backgroundColor: active ? '#000000' : 'transparent', // submenu background color
           borderRadius: '5px',
           margin: '5px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          justifyItems: 'center',
           
         };
       } else {
@@ -298,7 +333,7 @@ sx={{
           margin: '5px',
           borderRadius: '5px',
           color: disabled ? '#ffffff' : '#ffffff',// submenu text color
-          backgroundColor: active ? '#000000' : '#4F378A', // submenu bg color (adjust as needed)
+          backgroundColor: active ? '#000000' : 'transparent', // submenu background color
         };
       }
     },
@@ -310,10 +345,20 @@ sx={{
     setIsCollapsed(newValue);
     console.log("isCollapsed:", newValue);
   }}
-  icon={isCollapsed ? <MapOutlinedIcon /> : undefined}
+  icon={isCollapsed ? <MapOutlinedIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+  marginTop: "5px"
+ }} /> : undefined}
   style={{
-    margin: "15px 0 20px 0",
-    color: colors.primary[100],
+
+  
+
   }}
 >
 
@@ -349,13 +394,45 @@ sx={{
                         setSelected("Home");
                       }}
                       title='Home'
-                      icon={<HomeOutlinedIcon/>}
+                      icon={selected === "Home" ? <HomeIcon  sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }}  /> : <HomeOutlinedIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }}/>}
                       active={selected === "Home"}>
                       Home
                       </MenuItem>
                        
                         <SubMenu 
-                            icon={<PersonOutlinedIcon/>}
+                            icon={selected === "Goals" ? <FlagIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} /> : <OutlinedFlagIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} />}
                             title="Goals"
                             label="Goals"
                             active={selected === "Goals"}
@@ -387,7 +464,23 @@ sx={{
 
                         </SubMenu>
                         <SubMenu
-                            icon={<PeopleOutlinedIcon/>}
+                            icon={ selected === "Tasks" ? <AssignmentIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} /> : <AssignmentOutlinedIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} />}
                             title="Tasks"
                             label="Tasks"
                             active={selected === "Tasks"}
@@ -425,7 +518,24 @@ sx={{
                                 navigate("/dashboard/analytics");
                                 setSelected("Stats");
                             }}
-                            icon={<ReceiptOutlinedIcon/>}
+                            icon={selected === "Stats" ? <LeaderboardIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",     
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} /> : <LeaderboardOutlinedIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",   
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} />}
+                            
                             active={selected === "Stats"}
                         >
                           Stats
@@ -452,8 +562,8 @@ sx={{
    sx={{
      position: "relative",
      marginRight: "10px",
-     width: "100px",
-     height: "40px",
+     width: "80px",
+     height: "32px",
      padding: "5px",
      borderRadius: "100px",
      backgroundColor: colors.primary[400],
@@ -474,7 +584,7 @@ sx={{
      transition={{ type: "spring", stiffness: 300, damping: 25 }}
      style={{
        position: "absolute",
-       top: "25%",
+       top: "15%",
        left: 8,
        transform: "translateY(-50%)",
      }}
@@ -482,7 +592,7 @@ sx={{
      {theme.palette.mode === "dark" ? (
        <DarkModeOutlinedIcon />
      ) : (
-       <LightModeOutlinedIcon />
+       <LightModeOutlinedIcon className='text-[#FFF82A]' />
      )}
    </motion.div>
  </Box>
@@ -497,20 +607,21 @@ sx={{
                       marginBottom: "15px",
                       position: "absolute", 
                       top: '80%',
-                      left: "15%",
+                      left: "8%",
                     }}>
 
                  <IconButton onClick = {colorMode.toggleColorMode}>
                  {theme.palette.mode === "dark" ? (
                      <DarkModeOutlinedIcon/>
                  ): (
-                     <LightModeOutlinedIcon/>
+                     <LightModeOutlinedIcon className='text-[#FFF82A]'/>
  
                  )}
                  
              </IconButton>
              </Box>
                )}
+           </div>
             </Sidebar>
 
           

@@ -1,20 +1,24 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { Box, Button, IconButton, Typography, useTheme, Menu, MenuItem, TextField } from "@mui/material";
 import  {tokens} from "../../../theme";
 import { fetchAllNotifications } from '../../../utils/Api';
 import { ProfileContext } from '../../../context/ProfileContext';
+import SearchIcon from '@mui/icons-material/Search';
 import { IoSearch } from "react-icons/io5";
 import { motion } from 'framer-motion';
 import { useMediaQuery } from '@mui/material';
-import { useEffect } from 'react';
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 import SearchResults from './SearchResults';
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import Notifications from '../../components/Notifications';
 import Badge from '@mui/material/Badge';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import PersonIcon from '@mui/icons-material/Person';
+import CheckIcon from '@mui/icons-material/Check';
+
 
 export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +27,10 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   const colors =tokens(theme.palette.mode);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState([])
- 
+  const dropdownRef = useRef(null);
+  const notifRef = useRef(null); // For the notifications dropdown
+  const searchRef = useRef(null);
+  const filterMenuRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null); // For the filter menu
   const [searchType, setSearchType] = useState(""); // "goal" or "task"
   const [searchQuery, setSearchQuery] = useState(""); // User's search input
@@ -45,6 +52,8 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
   const [filteredResults, setFilteredResults] = useState([]);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+
+
   const handleFilterClick = (event) => {
     setAnchorEl(event.currentTarget); // Open the menu
   };
@@ -57,6 +66,9 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     setSearchType(type); // Set the search type to "goal" or "task"
     setAnchorEl(null); // Close the menu
   };
+
+
+
 
   const quotes = [
     "A goal without a plan is just a wish. ",
@@ -137,16 +149,43 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     console.log("Navbar isCollapsed:", isCollapsed);
   }, [isCollapsed]); // Run this whenever isCollapsed changes
 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+      setIsNotifOpen(false);
+    }
+
+    const clickedInsideSearch =
+      searchRef.current && searchRef.current.contains(event.target);
+
+    const clickedFilterMenu =
+      filterMenuRef.current && filterMenuRef.current.contains(event.target);
+
+    if (!clickedInsideSearch && !clickedFilterMenu) {
+      setIsSearchExpanded(false);
+    }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   
   return (
-  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 ' : 'md:left-62 left-0'}  right-0 z-50 transition-width duration-300 ease-in-out `} style={{backgroundColor: colors.background.default}}>
+  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 xl:left-30' : 'md:left-62 xl:left-62 2xl:left-60 '}  right-0 z-50 transition-width duration-300 ease-in-out `} style={{backgroundColor: colors.background.default}}>
 
-      <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 2 : isSm ? 2 : isMd ? 2 : isLg ? 2 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
+      <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 2 : isSm ? 2 : isMd ? 0 : isLg ? 0 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
       {/* Logo */}
       <div className='flex items-center  grid grid-cols-12   w-full ' style={{ paddingRight: isCollapsed ? 0 : isXs ? 0 : isSm ? 0 : isMd ? 0 : isLg ? 0 : isXl ? 0 : isXxl ? 0 : 0 }}>
-          <Box className='col-span-5 md:col-span-5 flex items-center'
+          <Box className='col-span-5  flex items-center'
             sx={{
-              gridColumn: isXs ? 'span 11' : isSm ? 'span 4' : isMd ? 'span 4' : isLg ? 'span 5' : isXl ? 'span 5' : isXxl ? 'span 5' : 'span 5',
+              gridColumn: isXs ? 'span 11' : isSm ? 'span 5' : isMd ? 'span 5' : isLg ? 'span 5' : isXl ? 'span 5' : isXxl ? 'span 5' : 'span 5',
             }}
           >
               <IconButton onClick={()=> setIsCollapsed(!isCollapsed)} sx={{alignItems: "center",  color: colors.primary,  display: {
@@ -155,41 +194,40 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     },}}>
                     <MapOutlinedIcon/>
                 </IconButton>
-              <div className='flex flex-col mb-0'>
+              <div className='flex space-x-1  mb-0'>
                   {profile.user && (
-                <h1 className=' space-x-1 font-semibold text-xl mb-0'>
-                  <span >
-                    <Typography
-                  component="span"
-                  variant="h3"
-                  className=" text-semibold"
-                  color='text.primary' 
+                    <>
+                     <span className=' items-center'>
+                    <p
+                 
+                  style={{ color: colors.text.primary }}
+                  className=' font-medium mb-0 md:text-base text-lg 2xl:text-3xl lg:text-lg xl:text-xl'
                 >
                 Hello
       
-                </Typography>
+                </p>
              
-      
+
               </span>
               <span className='text-secondary'>
-              <Typography
-                  component="span"
-                  variant="h3"
-                  className=" text-semibold"
-                  
-                  sx={{ color: colors.primary[400] }}
+              <p
+                  style={{ color: colors.primary[500] }}
+                  className='font-medium mb-0 text-lg 2xl:text-3xl md:text-base lg:text-lg xl:text-xl'
                 >
                  {profile.user.first_name}
       
-                </Typography>
+                </p>
       
              
       
               </span>
-              <span role="img" aria-label="waving hand" className='ml-2'>
+              <span role="img" aria-label="waving hand" className='ml-2 text-lg 2xl:text-3xl xl:text-base md:text-base lg:text-lg'>
             👋
               </span>
-             </h1>
+          
+                    </>
+             
+                 
               )}
             
            {/* {   <Typography
@@ -232,34 +270,69 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
              
             >
               <motion.div
-                initial={{ width: 36,height: 36, justifyContent: "center", alignItems: "center"  }}
-                animate={{ width: isSearchExpanded ? "100%" : 36, justifyContent: "space-between", alignItems: "center", height: 36 }}
+                ref={searchRef}
+                initial={{ justifyContent: "center", alignItems: "center" }}
+                animate={{
+                  width: isSearchExpanded ? "100%" : undefined,
+                  height: isSearchExpanded ? undefined : undefined,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+
                 transition={{ duration: 0.3 }}
-                className="rounded-full bg-[#F4F1FF] flex  p-1  items-center  w-full relative overflow-hidden "
+                className={`rounded-full bg-[#F4F1FF]  w-8 h-8                    
+                sm:w-10 sm:h-10            // small
+                md:w-6 md:h-6            // medium
+                lg:w-8 lg:h-8            // large
+                xl:w-8 xl:h-8           // extra large
+                2xl:w-12 2xl:h-12
+                3xl:w-12 3xl:h-12
+                 ${isSearchExpanded ? 'w-full' : ''}`}
                 style={{ backgroundColor: colors.background.paper, overflow:"visible" }}
                 onMouseEnter={() => setIsSearchExpanded(true)}
-                onMouseLeave={() => {
-                  if (filteredResults.length === 0) {
-                    setIsSearchExpanded(false);
-                  }
-                }}
+              
                 
               >
             
             <motion.div
                 initial={{ width: 0, opacity: 0 }}
-                animate={{ width: isSearchExpanded ? "auto" : 0, opacity: isSearchExpanded ? 1 : 0 }}
+                animate={{ width: isSearchExpanded ? "100%" : 0, opacity: isSearchExpanded ? 1 : 0, }}
                 transition={{ duration: 0.3 }}
-                className="overflow-hidden flex items-center gap-2"
+                 className="overflow-hidden flex items-center gap-2 flex-grow "
               >
-                <IconButton onClick={handleFilterClick}>
-                  <FilterListOutlinedIcon sx={{ fontSize: "16px", color: colors.primary[500] }} />
+                <IconButton  onClick={handleFilterClick}>
+                  <FilterListOutlinedIcon sx={{ fontSize: {
+                             xs: "20px",  // extra-small screens
+                          sm: "16px",  // small screens
+                          md: "20px",  // medium screens
+                          lg: "24px",  // large screens
+                          xl: "28px",  // extra-large screens
+                          
+                        }, color: colors.primary[500] }} />
                 </IconButton>
             
-                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleFilterClose}>
-                  <MenuItem onClick={() => handleSearchType("goal")}>Goal</MenuItem>
-                  <MenuItem onClick={() => handleSearchType("task")}>Task</MenuItem>
-                </Menu>
+                <Menu ref={filterMenuRef} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleFilterClose} className="mt-1">
+                    <MenuItem
+                      onClick={() => handleSearchType("goal")}
+                      selected={searchType === "goal"}
+                      className='gap-4 flex items-center '
+                    >
+                      Goal
+                      {searchType === "goal" && (
+                        <CheckIcon sx={{ fontSize: 16, color: colors.primary[500] }} />
+                      )}
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => handleSearchType("task")}
+                      selected={searchType === "task"}
+                      className='gap-4 flex items-center '
+                    >
+                      Task
+                      {searchType === "task" && (
+                        <CheckIcon sx={{ fontSize: 16,  color: colors.primary[500] }} />
+                      )}
+                    </MenuItem>
+                  </Menu>
             
                 <TextField
                   variant="standard"
@@ -272,21 +345,42 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                   onFocus={() => setIsSearchExpanded(true)}
                   InputProps={{
                     disableUnderline: true,
-                    style: { color: colors.primary[500], fontSize: "12px" },
+                  sx: { color: colors.primary[500], fontSize: {
+                            xs: "12px",  // extra-small screens
+                            sm: "10px",  // small screens
+                            md: "12px",  // medium screens
+                            lg: "12px",  // large screens
+                            xl: "18px",  // extra-large screens
+                    } },
                   }}
-                  className="bg-transparent outline-none text-sm w-full"
+                  className="bg-transparent  outline-none text-sm  w-full"
+               
                 />
               </motion.div>
                 
                 {/* Search Icon - Always Visible */}
-                <IconButton className="p-0.5 " onClick={handleSearch}>
-                  <IoSearch size={16} className="text-[#4F378A]" />
-                </IconButton>
+             <div className='flex items-center justify-center h-full w-9 md:w-10 2xl:w-12'>
+                <div className={`${isSearchExpanded ? 'justify-end w-auto ' : 'justify-center w-full' } flex items-center h-full transition-all duration-300 ease-in-out`}
+>
+                <SearchIcon  className="text-[#4F378A]" onClick={handleSearch} sx={{fontSize: {
+                           xs: "20px",  // extra-small screens
+                          sm: "16px",  // small screens
+                          md: "20px",  // medium screens
+                          lg: "24px",  // large screens
+                          xl: "28px",  // extra-large screens
+                          
+                        }}}/>
+
+               </div>
+             </div>
+                  
+               
             
               
             
                 <SearchResults
                           results={filteredResults || []}
+                        
                           
                         
                           onClose={() => setFilteredResults([])}
@@ -297,19 +391,38 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
 
 
-         <Box className='flex col-span-1 md:col-span-1 justify-end items-center space-x-4 pr-2 '
-         sx={{
-          gridColumn: isXs ? 'span 1' : isSm ? 'span 1' : isMd ? 'span 2' : isLg ? 'span 1' : isXl ? 'span 1' : isXxl ? 'span 1' : 'span 1',
-         }}>
-           
-                <Badge badgeContent={unreadCount} color="error">
-           
-                  <NotificationsNoneIcon sx={{ fontSize: "20px", color: colors.primary[400] }} onClick={() => setIsNotifOpen(!isNotifOpen)} />
-            
-              </Badge>
+                <Box className='flex col-span-1 md:col-span-1 justify-end items-center xl:space-x-6 md:space-x-6  2xl:space-x-8  space-x-4 xl:pr-6 lg:pr-6 md:pr-4 2xl:pr-8 pr-4'
+                sx={{
+                  gridColumn: isXs ? 'span 1' : isSm ? 'span 1' : isMd ? 'span 1' : isLg ? 'span 1' : isXl ? 'span 1' : isXxl ? 'span 1' : 'span 1',
+                }}>
+                  
+                        <div className="cursor-pointer" onClick={() => setIsNotifOpen(!isNotifOpen)}>
+                          <Badge badgeContent={unreadCount} color="error">
+                            {isNotifOpen ? (
+                              <NotificationsIcon sx={{ fontSize: {
+                           xs: "20px",  // extra-small screens
+                          sm: "18px",  // small screens
+                          md: "20px",  // medium screens
+                          lg: "24px",  // large screens
+                          xl: "36px",  // extra-large screens
+                          
+                        }, color: colors.primary[500] }} />
+                            ) : (
+                              <NotificationsNoneIcon sx={{ fontSize: {
+                           xs: "20px",  // extra-small screens
+                          sm: "18px",  // small screens
+                          md: "20px",  // medium screens
+                          lg: "24px",  // large screens
+                          xl: "36px",  // extra-large screens
+                          
+                        }, color: colors.primary[500] }} />
+                            )}
+                          </Badge>
+                        </div>
+
 
                      {isNotifOpen && (
-                <div className="absolute md:right-2 -right-2 top-1/2 mt-8 md:w-96 w-90 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
+                <div    ref={notifRef} className="absolute md:right-2 -right-2 top-1/2 mt-8 md:w-96 w-90  shadow-lg rounded-lg  z-50" style={{ backgroundColor: colors.background.default }}>
                   <Notifications
                     notifications={notifications}
                     setNotifications={setNotifications}
@@ -319,31 +432,55 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
 
                  
-                <div className='flex items-center  rounded-full cursor-pointer'
-                onClick={() => setIsOpen(!isOpen)}>
-                  <IconButton>
-                  <AccountCircleOutlinedIcon sx={{ fontSize: "20px", color: colors.primary[400] }}/>
-                    </IconButton>
-                    
-                </div>
-                {/* Dropdown Menu */}
-              {isOpen && (
-                <div className="absolute right-2 mt-32 w-40 bg-white shadow-lg rounded-lg border border-gray-200">
-                  <Link
-                        to="/dashboard/settings">
-                            <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    ⚙️ Settings
-                  </button>
+               <div className="relative" ref={dropdownRef}>
+                  <div
+                    className="flex items-center rounded-full cursor-pointer"
+                    onClick={() => setIsOpen(!isOpen)}
 
-                        </Link>
-                        
-                
-                  <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={handleLogout}>
-                    🚪 Logout
-                  </button>
+                  >
+                    {isOpen ? (
+                      <PersonIcon sx={{
+                        fontSize: {
+                           xs: "20px",  // extra-small screens
+                          sm: "18px",  // small screens
+                          md: "20px",  // medium screens
+                          lg: "24px",  // large screens
+                          xl: "36px",  // extra-large screens
+                          
+                        }, color: colors.primary[500] }} />
+                    ) : (
+                      <PersonOutlineIcon sx={{ fontSize: {
+                          xs: "20px",  // extra-small screens
+                          sm: "18px",  // small screens
+                          md: "20px",  // medium screens
+                          lg: "24px",  // large screens
+                          xl: "36px",  // extra-large screens
+                          
+
+                        }, color: colors.primary[500] }} />
+                    )}
+                   
+                  </div>
+
+                  {isOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-32  shadow-lg rounded-lg   z-50" style={{ backgroundColor: colors.background.default }}>
+                      <Link to="/dashboard/settings">
+                        <button className="block w-full text-left px-4 py-2 text-sm cursor-pointer hover:text-[#6D5BA6]" style={{ color: colors.text.primary }}>
+                          ⚙️ Settings
+                        </button>
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm cursor-pointer hover:text-[#6D5BA6]" style={{ color: colors.text.primary }}
+                        >
+                      
+                        🚪 Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
+
               
           </Box>
 
