@@ -449,11 +449,11 @@ const AiGoal = () => {
                  <div className='flex justify-between items-center mb-2 gap-4 w-full pr-2'
                  >
                  <p className="md:text-sm lg:text-md flex items-center m-2 gap-2 w-full  text-[#000000] font-normal">
-                 <span className="text-[#B3B3B3] md:text-sm lg:text-base">📌</span>
+                 <span className=" md:text-sm lg:text-base">📌</span>
                     {activeTask ? (
                       <>
-                       <span className="font-medium text-[#1D1B20] text-lg md:text-sm xl:text-sm 2xl:text-base 
-                        ">{activeTask.title}</span>
+                       <span className="font-medium  text-lg md:text-sm xl:text-sm 2xl:text-base 
+                        " style={{color: colors.text.primary}}>{activeTask.title}</span>
                       </>
                     ) : (
                       "Select a task"
@@ -503,7 +503,7 @@ const AiGoal = () => {
                         <div className="flex flex-col w-full ">
                       
                         <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
-                        <span className=' text-[#1D1B20] md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular'>{step.title}</span>
+                        <span className=' md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular' style={{color: colors.text.primary }}>{step.title}</span>
                          <div onClick={() => navigate(`/dashboard/ai-goal/${goal.id}/task/${activeTask.id}/subtask/${step.id}`, { state: { step } })} >
                         <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }} />
                          </div>
@@ -513,7 +513,7 @@ const AiGoal = () => {
                       
                       
                       
-                      <Box className=' 2xl:h-6 h-6  flex items-center  gap-2  text-[#4F378A] '>
+                      <Box className=' 2xl:h-6 h-6  flex items-center  gap-2   ' sx={{ color: colors.text.secondary }}>
                       <AccessTimeIcon fontSize='small'/>
                           <p className='md:text-xs xl:text-xs text-sm font-medium gap-4 '
                           >
@@ -603,24 +603,24 @@ const AiGoal = () => {
                 <circle cx="12" cy="19" r="1"></circle>
               </svg>
                {menuVisible && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                  <div className="absolute right-0 mt-2 w-48  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.background.default }}>
                     <button 
                       onClick={() => {
                         setIsRenaming(true);
                         setTimeout(() => inputRef.current?.focus(), 0); // Ensure focus on input
                       }} 
-                      className="block w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-[#F4F1FF]"
+                      className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#F4F1FF]" style={{ color: colors.text.primary }}
                     >
                       Rename goal
                     </button>
-                    <button onClick={() => setTaskOpen(true)} className='block w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-[#F4F1FF]'>
+                    <button onClick={() => setTaskOpen(true)} className='block w-full text-left px-4 py-2 text-xs  hover:bg-[#F4F1FF]' style={{ color: colors.text.primary }}>
                       Add Task 
                     </button>
-                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-xs text-[#006FDB] hover:bg-[#F4F1FF]">
+                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#F4F1FF]" style={{ color: colors.text.primary }}>
                       Pin to Sidebar
                     </button>
 
-                    <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-xs text-[#E60178] hover:bg-[#F4F1FF]">Delete</button>
+                    <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#F4F1FF]" style={{color: colors.background.warning }}>Delete</button>
                   </div>
                 )}
               </div>
@@ -629,10 +629,10 @@ const AiGoal = () => {
              {isXs && (
           <>
           <div className='flex flex-col items-center w-full  '>
-              <div className='flex items-center gap-4 w-10/12  mb-2'>
+              <div className='flex items-center justify-between  gap-4 w-10/12  mb-2'>
                 <span className=' font-regular text-[#00000] text-base xl:text-sm 2xl:text-base'
                 >Progress</span>
-                <span className='text-[#49454F] font-regular text-base xl:text-xs 2xl:text-base'>
+                <span className=' font-regular text-base xl:text-xs 2xl:text-base' style={{color: colors.text.secondary}}>
                   {goal.progress}%
                 </span>
                 </div>
@@ -730,17 +730,17 @@ const AiGoal = () => {
                                             <circle cx="12" cy="19" r="1"></circle>
                                           </svg>
                                           {taskMenuVisible === task.id && (
-                                                    <div className="absolute z-[1000] -left-20 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg">
+                                                    <div className="absolute z-[1000] -left-20 mt-2 w-32  rounded-md shadow-lg" style={{ backgroundColor: colors.background.default }}>
                                                       <button 
                                                         onClick={() => {
                                                           setIsRenaming(true);
                                                           setTimeout(() => inputRef.current?.focus(), 0); // Ensure focus on input
                                                         }} 
-                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F4F1FF]"
+                                                        className="block w-full text-left px-4 py-2 text-sm  hover:bg-[#F4F1FF]" style={{ color: colors.text.primary }}
                                                       >
                                                         Rename
                                                       </button>
-                                                      <button onClick={() => handleTaskDelete(task.id)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F4F1FF]">Delete</button>
+                                                      <button onClick={() => handleTaskDelete(task.id)} className="block w-full text-left px-4 py-2 text-sm  hover:bg-[#F4F1FF]" style={{ color: colors.background.warning }}>Delete</button>
                                                     </div>
                                                   )}
                                  </div>
@@ -898,7 +898,7 @@ const AiGoal = () => {
                  <div className='flex justify-between items-center mb-2 gap-4 w-full pr-2'
                  >
                  <p className="md:text-sm lg:text-md flex items-center m-2 gap-2 w-full  text-[#000000] font-normal">
-                 <span className="text-[#B3B3B3] md:text-sm lg:text-base">📌</span>
+                 <span className=" md:text-sm lg:text-base" >📌</span>
                     {activeTask ? (
                       <>
                        <span className="font-medium md:text-sm xl:text-sm 2xl:text-base 

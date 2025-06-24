@@ -490,7 +490,7 @@ const Goals = () => {
             >AI Goals </Typography></h1>
             
      {/* Buttons for medium and larger screens */}
-<div className="flex mt-4 relative  p-1  rounded-md md:w-7/12 w-11/12" style={{ backgroundColor: colors.tag.primary}}>
+<div className="flex mt-4 relative  p-1  rounded-md md:w-7/12 w-full" style={{ backgroundColor: colors.tag.primary}}>
 
   {/* Sliding Background */}
   <div
@@ -506,7 +506,7 @@ const Goals = () => {
       key={category}
       onClick={() => setSelectedAiCategory(category)}
       className={`
-        relative z-10 w-1/3  px-4 py-1 md:text-sm  text-xs text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+        relative z-10 w-2/3  px-4 py-1 text-sm   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
         ${selectedAiCategory === category ? "text-white" : colors.text.primary}
       `}
     >
@@ -650,7 +650,7 @@ const Goals = () => {
             </Typography>
             </h1>
              {/* Buttons for medium and larger screens */}
-<div className="flex mt-4 relative p-1 rounded-md md:w-7/12 w-11/12" style={{backgroundColor: colors.tag.primary}} >
+<div className="flex mt-4 relative p-1 rounded-md md:w-7/12 w-full" style={{backgroundColor: colors.tag.primary}} >
 
   {/* Sliding Background */}
   <div
@@ -666,7 +666,7 @@ const Goals = () => {
       key={category}
       onClick={() => setSelectedCategory(category)}
       className={`
-        relative z-10 w-2/3  px-4 py-1 md:text-sm text-xs text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+        relative z-10 w-2/3  px-4 py-1 text-sm text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
         ${selectedCategory === category ? "text-white" :  colors.text.primary}
       `}
     >
@@ -719,7 +719,7 @@ const Goals = () => {
                                 textColor={colors.text.primary}
                                 size={50}
                                 fontSize={
-                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
+                                  isXs ? '0.5rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
                                 } 
                                 />
 
@@ -832,7 +832,7 @@ const Goals = () => {
       key={period}
       onClick={() => setSelectedPeriod(period)}
       className={`
-        relative z-10 w-1/3  px-4 py-1 md:text-sm text-xs text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+        relative z-10 w-1/3  px-4 py-1 text-sm text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
         ${selectedPeriod === period ? "text-white" : colors.background.paper}
       `}
     >
@@ -879,7 +879,7 @@ const Goals = () => {
                                 textColor={colors.text.primary}
                                 size={50}
                                 fontSize={
-                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
+                                  isXs ? '0.5rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
                                 } 
                                 />
               </div>

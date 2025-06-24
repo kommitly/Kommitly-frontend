@@ -22,6 +22,7 @@ export const tokens = (mode) => ({
           sidebar: "#2C2640",
           default: "#1E1A2A", // Dark mode background
           paper: "#2C2640", // Darker surface
+          warning: "#E60178",
         },
         tag:{
           primary: "#13101B"
