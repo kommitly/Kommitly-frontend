@@ -251,7 +251,7 @@ const Goals = () => {
           onClick={handleCloseCreateGoal} // Clicking outside should close it
         >
           <div 
-            className="bg-white md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center" 
+            className=" md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.background.default }} 
             onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
           >
             <div className='flex w-full mb-4 justify-end'>
@@ -314,7 +314,7 @@ const Goals = () => {
           </div>
         </Backdrop>
         <div>
-          <Button onClick={openCreateGoal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{backgroundColor:colors.primary[500], borderRadius: '6px', paddingX: '12px'}}>
+          <Button onClick={openCreateGoal}  className=' flex items-center bg-[#4F378A] text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{ borderRadius: '6px', paddingX: '12px'}}>
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -364,7 +364,7 @@ const Goals = () => {
           onClick={handleClose} // Clicking outside should close it
         >
           <div 
-            className="bg-white md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center" 
+            className=" md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center"  style={{backgroundColor: colors.background.default }}
             onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
           >
             <div className='flex w-full mb-4 justify-end'>
@@ -378,7 +378,7 @@ const Goals = () => {
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#000000"
+              stroke={colors.text.primary}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -399,24 +399,24 @@ const Goals = () => {
            
 
             <div className="flex items-center mb-4 gap-4">
-              <p className='text-sm text-start w-20 text-[#000000]'>Title</p>
+              <p className='text-sm text-start w-20 ' style={{color:colors.text.primary}}>Title</p>
               <input
                 type="text"
                 placeholder="Enter goal title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 border text-black border-gray-200 rounded-lg focus:outline-none"
+                className="w-full p-2 border  border-gray-200 rounded-lg focus:outline-none" style={{color:colors.text.primary}}
               />
             </div>
 
             <div className="flex items-center mb-4 gap-4">
-              <p className='text-sm w-20 text-[#000000]'>Category</p>
+              <p className='text-sm w-20 ' style={{color:colors.text.primary}}>Category</p>
               <input
                 type="text"
                 placeholder="Weekly, Monthly, Yearly"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-2 border border-gray-200 rounded-lg text-black focus:outline-none"
+                className="w-full p-2 border border-gray-200 rounded-lg  focus:outline-none" style={{color: colors.text.primary}}
               />
             </div>
 
@@ -442,13 +442,13 @@ const Goals = () => {
             >Manage your Goals 
             </p>
             </h1>
-                    <p
+           {/* {         <p
             className="hidden md:block font-regular md:text-xs xl:text-sm 2xl:text-lg 2xl:mb-12 xl:mb-6 mb-6 text-lg"
             style={{ color: colors.text.secondary }}
           >
             Track your progress, and achieve more with AI assistance.
-          </p>
-            <Button onClick={openModal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{backgroundColor:colors.primary[500], borderRadius: '6px', paddingX: '12px'}}>
+          </p>} */}
+            <Button onClick={openModal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{backgroundColor:"#4F378A", borderRadius: '6px', paddingX: '12px'}}>
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"

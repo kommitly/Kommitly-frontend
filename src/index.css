@@ -349,7 +349,10 @@ input[type="checkbox"] {
   }
 }
 
-
+input::placeholder {
+  color: var(--color-placeholder, #909090); /* Default placeholder color */
+  opacity: 1; /* Very important for cross-browser consistency */
+}
 
 
 

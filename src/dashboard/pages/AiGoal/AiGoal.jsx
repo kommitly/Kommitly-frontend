@@ -681,11 +681,11 @@ const AiGoal = () => {
         backgroundColor: allTasksCompleted
           ? theme.palette.background.paper // Adjust to your theme color
           : isActive
-          ? colors.primary[500] // White background for active
+          ? "#4F378A" // White background for active
           : theme.palette.background.paper,
         borderLeftColor: theme.palette.primary.main, // Replace with the desired theme color
-        boxShadow:
-          "2px 3px 8px 2px rgba(101, 85, 143, 0.2), 0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+        // boxShadow:
+        //  "2px 3px 8px 2px rgba(101, 85, 143, 0.2), 0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
       }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{

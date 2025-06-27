@@ -231,7 +231,7 @@ sx={{
   collapsed={isCollapsed}
   rootStyles={{
     [`.${sidebarClasses.container}`]: {
-      backgroundColor: `${colors.background.sidebar} !important`,
+      backgroundColor: `#4F378A !important`,
       height: isCollapsed ? "98vh" : "98vh",
       borderRadius: isCollapsed ? '12px' : '12px',
       border: 'none',
@@ -267,15 +267,15 @@ sx={{
              <Menu iconShape="square"
             rootStyles={{
               [`.${menuClasses.SubMenu}`]: {
-                backgroundColor: colors.background.sidebar,
+                backgroundColor: "#4F378A",
               },
               [`.${menuClasses.subMenuContent}`]: {
-                backgroundColor: colors.background.sidebar,
+                backgroundColor:" #4F378A",
               },
 
               [`.${menuClasses.button}`]: {
                 color: colors.primary[100],
-                backgroundColor: colors.background.sidebar,
+                backgroundColor: "#4F378A",
                 marginBottom: isCollapsed ? (
                   isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
                 ) : (   
@@ -284,7 +284,7 @@ sx={{
 
                 
                 '&:hover': {
-                  backgroundColor: colors.primary[400],
+                  backgroundColor: "#6D5BA6",
                 },
               },
               [`.${menuClasses.icon}`]: {
@@ -307,7 +307,7 @@ sx={{
                 color: colors.primary[100],
             
                 '&:hover': {
-                  backgroundColor: colors.primary[400],
+                  backgroundColor: "#6D5BA6",
                 },
               },
               
@@ -566,7 +566,7 @@ sx={{
      height: "32px",
      padding: "5px",
      borderRadius: "100px",
-     backgroundColor: colors.primary[400],
+     backgroundColor: "#6D5BA6",
      color: colors.primary[100],
      cursor: "pointer",
      overflow: "hidden",

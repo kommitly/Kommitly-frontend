@@ -17,15 +17,17 @@ export const tokens = (mode) => ({
         text: {
           primary: "#F4F1FF", // Soft Lavender-White
           secondary: "#D6CFFF", // Muted Lavender
+          placeholder: "#B4B4B4"
         },
         background: {
           sidebar: "#2C2640",
-          default: "#1E1A2A", // Dark mode background
+          // default: "#1E1A2A", // Dark mode background
+          default: "#13101B",
           paper: "#2C2640", // Darker surface
           warning: "#E60178",
         },
         tag:{
-          primary: "#13101B"
+          primary: "#1E1A2A"
         }
       }
     : {
@@ -40,6 +42,7 @@ export const tokens = (mode) => ({
         text: {
           primary: "#1E1A2A", // Dark Purple (for contrast in light mode)
           secondary: "#4F378A", //Deep Violet
+          placeholder: "#636363" // Placeholder text color
 
         },
         background: {
