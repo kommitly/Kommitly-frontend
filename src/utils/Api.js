@@ -555,7 +555,7 @@ const markNotificationAsRead = async (notificationId) => {
 }
 
 const answerAiSubtask = async (subtaskId) => {
-  const url = `https://kommitly-backend.onrender.com/api/tasks/ai-subtasks/${subtaskId}/answer/`;
+  const url = `https://kommitly-backend.onrender.com/api/tasks/ai-subtask/${subtaskId}/answer/`;
   try {
     const token = getToken();
     const response = await axios.post(url, {}, {

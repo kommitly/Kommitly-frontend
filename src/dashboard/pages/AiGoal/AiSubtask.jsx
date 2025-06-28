@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState, useContext } from "react";
 import { TasksContext } from "../../../context/TasksContext";
 import PropTypes from 'prop-types';
-import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById } from "../../../utils/Api";
+import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById, answerAiSubtask } from "../../../utils/Api";
 import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem, colors } from "@mui/material";
 import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -21,6 +21,10 @@ import { Hand } from 'lucide-react';
 import { HiMiniChevronDoubleLeft } from "react-icons/hi2";
 import SubtaskDateTimePicker from './SubtaskDateTimePicker';
 import ReminderTimePicker from './ReminderTimePicker';
+import  Backdrop  from "@mui/material/Backdrop";
+import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
+import { motion } from "framer-motion";
+import AiAssistance from "../../components/AiAssistance";
 
 import utc from 'dayjs/plugin/utc';
 
@@ -32,9 +36,19 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
     const theme = useTheme();
     const colors =tokens(theme.palette.mode);
     const [selectedFile, setSelectedFile] = useState(null);
-     const showCustomReminderPicker = step.reminder_offset === 'custom';
-
+    const showCustomReminderPicker = step.reminder_offset === 'custom';
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [aiAnswer, setAiAnswer] = useState(null);
+
+    useEffect(() => {
+  if (step?.ai_answer) {
+    setAiAnswer(step.ai_answer);
+  }
+}, [step]);
+
+
 
    const handleCustomReminderChange = (time) => {
   setStep(prev => ({
@@ -42,6 +56,8 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
     custom_reminder_time: time,
   }));
 };
+
+
 
 
 
@@ -57,7 +73,9 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
   const handleDateChange = (date) => {
   if (!date || !dayjs(date).isValid()) return;
 
-  const dueDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss");
+  const dueDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss"); // format to ISO string with timezone
+  console.log("Here is the due date:", dueDate )
+
 
   setStep((prev) => {
     const reminderOffset = prev.reminder_offset ?? "15"; // fallback to 15 if not set
@@ -95,6 +113,10 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
   }
 }, [step?.due_date, step?.reminder_time]);
 
+ const openDeletelModal = () => {
+    setOpenDelete(true);
+  };
+
 
       const handleClose = () => {
     setVisible(false);
@@ -102,6 +124,24 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
       onClose(); // calls setSubtaskOpen(false) and setSelectedStep(null)
     }, 300); // match your transition duration
   };
+
+
+const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  const handleAnswerAiSubtask = async () => {
+  if (aiAnswer) return; // Don't call the API if aiAnswer already exists
+
+  try {
+    const res = await answerAiSubtask(step.id); 
+    setAiAnswer(res.answer); // Assuming `res.answer` is the correct path
+  } catch (error) {
+    console.error("Failed to get AI subtask answer:", error);
+  }
+};
+
+
 
 const handleUpdateSubtask = async () => {
   try {
@@ -143,6 +183,11 @@ const handleUpdateSubtask = async () => {
   }
 };
 
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
 const confirmDeleteSubtask = async () => {
   try {
     await deleteAiSubtaskById(subtaskId);
@@ -160,7 +205,8 @@ const confirmDeleteSubtask = async () => {
 
 
   return (
-    <>
+      <>
+    
     {visible && (
       <div
         className="fixed inset-0 bg-[rgba(0,0,0,0.66)] z-[99] min-h-screen"
@@ -168,10 +214,11 @@ const confirmDeleteSubtask = async () => {
       />
     )}
     
-    <div className={`fixed top-0 right-0 h-full w-full md:w-1/2 bg-white shadow-lg z-[100] transition-transform duration-300 ${visible ? 'translate-x-0' : 'translate-x-full'}`}>
+    <div className={`fixed top-0 right-0 h-full w-full md:w-1/2 shadow-lg z-[100] transition-transform duration-300 ${visible ? 'translate-x-0' : 'translate-x-full'}`} style={{ backgroundColor: colors.background.default }}>
 
-      <div className="w-full h-full flex flex-col p-4">
-  <button
+      <div className="w-full  h-full flex flex-col p-4">
+        <div className="flex justify-between items-center mb-4">
+          <button
  
   className="group p-2 w-10 h-10 flex justify-center items-center cursor-pointer hover:bg-[#4F378A] rounded-full border border-2"
   style={{
@@ -183,8 +230,109 @@ const confirmDeleteSubtask = async () => {
   <HiMiniChevronDoubleLeft className="text-2xl  text-[#4F378A] group-hover:text-white transition-colors duration-300"   />
 </button>
 
-            
-        <div className='flex gap-4 mt-8 items-center '>
+
+
+              <div className="relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#65558F"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="cursor-pointer"
+                onClick={toggleMenu}
+              >
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+
+ {menuVisible && (
+                  <div className="absolute right-0 mt-2 w-48  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.background.default }}>
+                     <button
+             onClick={handleUpdateSubtask}
+               className="block w-full text-left px-4 py-2 text-xs  " style={{ color: colors.text.primary }}
+            >
+              Update
+            </button>
+                    <button
+            onClick={openDeletelModal}
+              className="block w-full text-left px-4 py-2 text-xs  " style={{color: colors.background.warning }}
+            >
+              Delete
+            </button>
+           
+
+
+                  </div>
+                )}
+                </div>
+                 <Backdrop
+                          sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+                          open={openDelete}// Use openCreateGoal state for backdrop
+                          onClick={handleCloseDelete} // Clicking outside should close it
+                        >
+                          <div 
+                            className=" md:w-4/12 xl:w-6/12 p-6  rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.background.default }} 
+                            onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
+                          >
+                            <div className='flex w-full mb-4 justify-end'>
+                            <div className='flex w-2/3 items-center justify-end'>
+                           
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke={colors.text.primary}
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="cursor-pointer"
+                              onClick={handleCloseDelete}
+                            >
+                              <line x1="18" y1="6" x2="6" y2="18"></line>
+                              <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>  
+                            
+                
+                
+                
+                            </div>
+                
+                            </div>
+
+                             <h2 className="text-lg font-semibold mb-4" style={{color:colors.text.primary}}>Delete Subtask?</h2>
+                              <p className="text-sm text-gray-600 mb-6" style={{color:colors.text.primary}}>Are you sure you want to delete this subtask? This action cannot be undone.</p>
+                              
+                                
+                                <button
+                                  onClick={confirmDeleteSubtask}
+                                  className="px-4 py-2  text-white rounded cursor-pointer"
+                                  style={{ backgroundColor: colors.background.warning}}
+                                >
+                                  Delete
+                                </button>
+     
+                            
+                           
+                
+                          
+                          </div>
+                        </Backdrop>
+
+
+
+
+        </div>
+
+        <div className='flex flex-col gap-4 overflow-y-auto h-full no-scrollbar'>
+              <div className='flex gap-4 mt-8 items-center '>
        <span className='flex  items-center gap-2'>
         <span className='bg-[#D6CFFF] p-2 rounded-md'>
          <FaTasks className="text-[#4F378A] " size={12} />
@@ -362,56 +510,59 @@ const confirmDeleteSubtask = async () => {
             </div>
 
           </div>
+
+
+
+
+         
+<div className="w-full  flex justify-end">
+          <IconButton
+            className="text-[#4F378A] hover:text-white "
+            style={{ backgroundColor: colors.primary[500], width: '40px', height: '40px' }}
+            onClick={handleAnswerAiSubtask} 
+          
+          >
+              <motion.div
+      animate={{ scale: [1, 1.2, 1] }}
+      transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <EmojiObjectsIcon
+        sx={{ fontSize: 20 }}
+        className="text-white hover:text-white"
+      />
+    </motion.div>
+            
+          </IconButton>
+         </div>
+
+
+         <AiAssistance answer={aiAnswer} onClose={() => setAiAnswer(null)} />
+
+         
+
+        </div>
+        </div>
+  
+            
+    
     
         
     
           
     
-          <div className="  item-end flex gap-4 fixed bottom-0 right-0">
-            <button
-            onClick={() => setShowDeleteModal(true)}
-              className="bg-red-400 text-red-100 px-4 py-2 rounded hover:bg-red-600"
-            >
-              Delete
-            </button>
-            <button
-             onClick={handleUpdateSubtask}
-              className="bg-[#6246AC] text-white px-4 py-2 rounded hover:bg-purple-600"
-            >
-              Update
-            </button>
-          </div>
+         
         </div>
         </div>
-        {showDeleteModal && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-    <div className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full">
-      <h2 className="text-lg font-semibold mb-4">Delete Subtask?</h2>
-      <p className="text-sm text-gray-600 mb-6">Are you sure you want to delete this subtask? This action cannot be undone.</p>
-      <div className="flex justify-end space-x-2">
-        <button
-          onClick={() => setShowDeleteModal(false)}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={confirmDeleteSubtask}
-          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
-)}
 
+         
+      
         {/* Modal for Subtask Details */}
         <div className="w-1/2 p-4">
           {/* {  <SubtaskDetails subtask={selectedSubtask} />} */}
           </div>
-        </div>
+       
         </>
+        
       );
     }; 
 

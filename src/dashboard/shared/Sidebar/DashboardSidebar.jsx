@@ -32,6 +32,8 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const Item = ({title, to, icon, selected, setSelected}) => {
     const theme = useTheme();
@@ -508,6 +510,40 @@ sx={{
                             ))}
 
                         </SubMenu>
+
+
+                        <MenuItem 
+                            title="Calendar"
+                            
+                            onClick={() => {
+                                navigate("/dashboard/calendar");
+                                setSelected("Calendar");
+                            }}
+                            icon={selected === "Calendar" ? <CalendarMonthIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",     
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} /> : <CalendarMonthOutlinedIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",   
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} />}
+                            
+                            active={selected === "Calendar"}
+                        >
+                          Calendar
+                          </MenuItem>
+                    
+                       
+                  
                      
                        
 

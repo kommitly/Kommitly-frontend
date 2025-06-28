@@ -68,7 +68,7 @@ const TaskComponent = ({ task, index }) => {
                   </Typography>
                   </span>
               ) : (
-                <span className="text-[#4F378A] text-xs flex items-center gap-1">
+                <span className=" text-xs flex items-center gap-1" style={{ color: colors.text.subtitle }}>
                 <AccessTimeIcon className="w-4 h-4" />
                 {task.task_timeline || "No timeline available"}
               </span>
@@ -196,15 +196,15 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                           setShowSteps(true);
                         }}
                       >
-                        <span className="btn-text text-sm text-[#4F378A] font-regular">
+                        <span className="btn-text text-sm  font-regular" style={{ color: colors.text.subtitle }}>
                           Subtasks
-                          <span className="hover-line"></span>
+                          <span className="hover-line"  style={{backgroundColor:colors.text.subtitle}}></span>
                         </span>
                       </button>
                     )}
                     {showSteps && (
                       <div className='flex w-4/12 item-start '>
-                        <p className=' font-medium text-xs text-[#4F378A]'>
+                        <p className=' font-medium text-xs ' style={{ color: colors.text.subtitle }}>
                          <span>
                          <AccessTimeIcon/> {timeline}
                          </span>
@@ -225,7 +225,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
 
           {showSteps && (
             <button
-              className="custom-button font-medium text-sm text-[#4F378A] inline-flex items-center cursor-pointer mt-4 relative overflow-hidden group"
+              className="custom-button font-medium text-sm  inline-flex items-center cursor-pointer mt-4 relative overflow-hidden group" style={{ color: colors.text.subtitle }}
               onClick={() => {
                 setShowSteps(false);
                 setSelectedTask(null);
@@ -238,7 +238,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#4F378A"
+                stroke={colors.text.subtitle}
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -248,7 +248,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                 <polyline points="12 19 5 12 12 5"></polyline>
               </svg> Back to Tasks
               </span>
-                <span className="hover-line"></span>
+                <span className="hover-line" style={{backgroundColor:colors.text.subtitle}}></span>
               </span>
             </button>
           )}

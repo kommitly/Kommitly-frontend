@@ -285,7 +285,7 @@ const confirmDeleteSubtask = async () => {
                </span>
         
             <div className="relative">
-      <SubtaskDateTimePicker value={step.due_date ? dayjs(step.due_date) : null} onChange={handleDateChange}/>
+      <SubtaskDateTimePicker value={step.due_date ? dayjs.utc(step.due_date) : null} onChange={handleDateChange}/>
          
             </div>
           </div>

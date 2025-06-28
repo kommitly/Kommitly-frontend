@@ -244,10 +244,10 @@ const Goals = () => {
       <div className="text-center py-4 text-gray-500">Loading goals...</div>
     ) : goals?.goals?.length === 0 && goals?.ai_goals?.length === 0 ? (
       <>
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center  min-h-screen">
         <Backdrop
           sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-          open={openCreateGoalModal}// Use openCreateGoal state for backdrop
+          open={openCreateGoal}// Use openCreateGoal state for backdrop
           onClick={handleCloseCreateGoal} // Clicking outside should close it
         >
           <div 
@@ -265,7 +265,7 @@ const Goals = () => {
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#000000"
+              stroke={colors.text.primary}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -286,18 +286,18 @@ const Goals = () => {
            
 
             <div className="flex items-center mb-4 gap-4">
-              <p className='text-sm text-start w-20 text-[#000000]'>Title</p>
+              <p className='text-sm text-start w-20 ' style={{color:colors.text.primary}}>Title</p>
               <input
                 type="text"
                 placeholder="Enter goal title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 border text-black border-gray-200 rounded-lg focus:outline-none"
+                className="w-full p-2 border  border-gray-200 rounded-lg focus:outline-none" style={{color:colors.text.primary}}
               />
             </div>
 
             <div className="flex items-center mb-4 gap-4">
-              <p className='text-sm w-20 text-[#000000]'>Category</p>
+              <p className='text-sm w-20 ' style={{color:colors.text.primary}}>Category</p>
               <input
                 type="text"
                 placeholder="Weekly, Monthly, Yearly"
@@ -313,8 +313,8 @@ const Goals = () => {
           
           </div>
         </Backdrop>
-        <div>
-          <Button onClick={openCreateGoal}  className=' flex items-center bg-[#4F378A] text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{ borderRadius: '6px', paddingX: '12px'}}>
+        <div className='fixed right-3 top-18'>
+          <Button onClick={openCreateGoalModal}  className=' flex items-center  text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{ borderRadius: '6px', paddingX: '12px', backgroundColor: "#4F378A" }}>
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"

@@ -3,7 +3,7 @@ import  { useState, useContext, useEffect, useRef } from 'react';
 import { LuSendHorizontal } from "react-icons/lu";
 import GoalBreakdown from '../../components/GoalBreakdown/GoalBreakdown';
 import {  generateInsights } from '../../../utils/Api';
-import { motion } from 'framer-motion';
+import { color, motion } from 'framer-motion';
 import { ProfileContext } from '../../../context/ProfileContext';
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
@@ -147,6 +147,7 @@ const Home = () => {
               style={{ backgroundColor: colors.primary[500],
                 width: isXs ? '10px' : isSm ? '20px' : isMd ? '20px' : isLg ? '20px' : isXl ? '20px' : isXxl ? '20px' : '20px', 
                 height: isXs ? '10px' : isSm ? '20px' : isMd ? '20px' : isLg ? '20px' : isXl ? '20px' : isXxl ? '20px' : '20px',
+                
                }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -286,11 +287,11 @@ const Home = () => {
              height="16"
              viewBox="0 0 24 24"
              fill="none"
-             stroke="#1D1B20"
+             stroke='currentColor'
              strokeWidth="2"
              strokeLinecap="round"
              strokeLinejoin="round"
-             className="text-[#65558F]"
+            style={{color: colors.primary[500]}}
            >
              <line x1="3" y1="12" x2="21" y2="12"></line>
              <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -304,12 +305,12 @@ const Home = () => {
            value={inputValue}
            onChange={handleInputChange}
            onKeyDown={(e) => e.key === 'Enter' && handleFormSubmit()}
-           className='text-[#49454F] outline-none border-none w-full text-xs'
+           className=' outline-none border-none w-full text-xs' style={{color: colors.text.primary}}
          />
 
        </div>
        <IconButton onClick={handleFormSubmit}>
-         <LuSendHorizontal size={16} className='text-[#1D1B20] ' />
+         <LuSendHorizontal size={16} style={{color: colors.primary[500]}} />
        </IconButton>
      </div>
    </Box>

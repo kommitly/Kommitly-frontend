@@ -3,6 +3,8 @@ import { fetchAllNotifications, markNotificationAsRead } from '../../utils/Api'
 import { useTheme } from '@mui/material'
 import { tokens } from '../../theme'
 import dayjs from 'dayjs'
+
+
 const Notifications = ({ notifications, setNotifications }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
@@ -23,7 +25,7 @@ const Notifications = ({ notifications, setNotifications }) => {
   }
 
   return (
-    <div className="p-4 max-h-96 overflow-y-auto shadow-lg rounded-lg" style={{ backgroundColor: colors.tag.primary }}>
+    <div className="p-4 max-h-96 overflow-y-auto no-scrollbar shadow-lg rounded-lg" style={{ backgroundColor: colors.tag.primary }}>
       <h3 className="text-lg font-semibold mb-3" style={{ color: colors.text.primary }}>
         Notifications
       </h3>
@@ -34,7 +36,7 @@ const Notifications = ({ notifications, setNotifications }) => {
             onClick={() => handleNotificationClick(notif, idx)}
             className="rounded-lg px-4 py-3 mb-2 cursor-pointer transition duration-150"
             style={{
-              backgroundColor: notif.is_read ? colors.background.paper : colors.primary[200],
+              backgroundColor: notif.is_read ? colors.background.default : colors.background.paper,
               color: notif.is_read ? colors.text.secondary : colors.text.primary,
               fontWeight: notif.is_read ? 'normal' : 'bold',
               borderLeft: `4px solid ${colors.primary[400]}`

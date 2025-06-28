@@ -29,6 +29,7 @@ import AiSubtask from './AiSubtask';
 import goal from '../../../assets/goal.svg';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AiSubtaskPage from './AiSubtaskPage'; // Adjust the import path as needed
+import AiAssistance from '../../components/AiAssistance';
 
 
 
@@ -102,6 +103,8 @@ const AiGoal = () => {
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
   const [openTaskView, setOpenTaskView] = useState(false);
   const [dueDates, setDueDates] = useState({});
+  const [aiAnswer, setAiAnswer] = useState(null);
+
   
 
 
@@ -485,7 +488,7 @@ const AiGoal = () => {
               
               </div>
               <div className='space-y-6 mt-4'>
-                {activeTask && activeTask.ai_subtasks.map((step, stepIndex) => {
+              {activeTask && activeTask.ai_subtasks.map((step, stepIndex) => {
                   const {timeline, cleanedDetails } = extractTimeline(step.description); // Extract cleaned description for each step
               
                   return (
@@ -692,10 +695,7 @@ const AiGoal = () => {
                           duration: 0.6,
                           ease: "easeOut",
                           delay: index * 0.3, // Staggered delay based on index
-                        }} onClick={() => {
-  setActiveTaskIndex(index);
-  setOpenTaskView(true);
-}}>
+                        }}>
                         <div className="flex   justify-between md:gap-4 gap-2 relative  max-h-full">
                           <div className={`md:w-1/4 w-20 rounded-lg p-4 ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}  style={{
         backgroundColor:isActive
@@ -710,7 +710,10 @@ const AiGoal = () => {
                   
                                  
                                   <h3 className="md:text-sm xl:text-sm 2xl:text-base  font-medium" style={{color: isActive ? colors.primary[100] : colors.text.primary
-                                  }}>{task.title}</h3>
+                                  }}  onClick={() => {
+  setActiveTaskIndex(index);
+  setOpenTaskView(true);
+}} >{task.title}</h3>
                                   <div className="relative overflow-visible">
                                           <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -978,9 +981,17 @@ const AiGoal = () => {
                   );
                 })}
 
-      {selectedStep && (
-        <AiSubtask step={selectedStep} setStep={setSelectedStep} taskId={activeTask?.id}  onClose={closeSubtaskPage} />
-      )}
+    {selectedStep && !aiAnswer && (
+  <AiSubtask
+    step={selectedStep}
+    setStep={setSelectedStep}
+    taskId={activeTask?.id}
+    onClose={closeSubtaskPage}
+   
+  />
+)}
+
+
               </div>
               <div className='flex  my-8 w-full justify-center  '>
              {/* { <button onClick={() => setTaskOpen(true)} className='bg-[#4F378A] w-full max-w-sm text-white py-2 px-8 rounded-lg'>

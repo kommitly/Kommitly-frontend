@@ -1,5 +1,7 @@
 # NOTES
 
+md for tailwind is sm for mui, apply this to all screen sizes
+
 Tailwind
 2xl-(67%-80%)
 xl- my screen
@@ -13,6 +15,7 @@ xl-stanleys
 
 {showGoalBreakdown && goalData && taskData && !isScrolledDown && (
 <>
+
 <div className='flex  w-full  items-center justify-center flex-wrap gap-4'>
 
       <Box

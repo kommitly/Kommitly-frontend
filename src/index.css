@@ -3,6 +3,64 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
+:root {
+  --fc-border-color: #D6CFFF;
+  --fc-daygrid-event-dot-width: 5px;
+ 
+}
+
+
+
+.fc .fc-col-header-cell-cushion {
+  color: #4F378A;
+}
+
+
+.fc .fc-toolbar-title {
+  color: #4F378A;
+}
+
+.fc .fc-button-primary {
+  background-color: #A89FE3;
+  color: #4F378A;
+  border: none; /* Remove default border */
+ 
+}
+
+
+
+
+.fc .fc-button-primary:disabled {
+  background-color:  #4F378A; /* Grey color for disabled button */
+  color: #D6CFFF ; /* Darker shade for disabled text */
+
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #6A4F9A; /* Darker shade on hover */
+  color: white;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
+  background-color: #4F378A; /* Lighter shade when disabled */
+  color: #D6CFFF; /* Grey color for disabled text */
+}
+
+
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #D6CFFF; /* Light purple for today's date */
+  color: #4F378A; /* Darker shade for today's text */
+}
+
+
+
+.fc .fc-timegrid-col.fc-day-today {
+  background-color: #FBF9FF; /* Light purple for today's date */
+  color: #4F378A; /* Darker shade for today's text */
+}
+
+
 
 body {
   font-family: "Poppins", sans-serif;

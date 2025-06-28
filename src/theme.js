@@ -1,5 +1,6 @@
 import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles";
+import { sub } from "date-fns";
 
 // Color design tokens based on mode
 export const tokens = (mode) => ({
@@ -17,7 +18,8 @@ export const tokens = (mode) => ({
         text: {
           primary: "#F4F1FF", // Soft Lavender-White
           secondary: "#D6CFFF", // Muted Lavender
-          placeholder: "#B4B4B4"
+          placeholder: "#B4B4B4",
+          subtitle: "#A89FE3" // Dusty Periwinkle (for contrast in dark mode)    
         },
         background: {
           sidebar: "#2C2640",
@@ -42,7 +44,8 @@ export const tokens = (mode) => ({
         text: {
           primary: "#1E1A2A", // Dark Purple (for contrast in light mode)
           secondary: "#4F378A", //Deep Violet
-          placeholder: "#636363" // Placeholder text color
+          placeholder: "#636363", // Placeholder text color
+          subtitle: "#4F378A" // Deep Violet (for contrast in light mode)
 
         },
         background: {

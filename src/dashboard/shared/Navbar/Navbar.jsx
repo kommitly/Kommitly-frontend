@@ -124,6 +124,13 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
       }
   
       fetchNotificationsData()
+
+       // Poll every 15 seconds
+  const interval = setInterval(() => {
+   fetchNotificationsData();
+  }, 15000);
+
+  return () => clearInterval(interval); // cleanup on unmount
     }, [])
 
     const unreadCount = notifications.filter(n => !n.is_read).length
@@ -362,14 +369,15 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
              <div className='flex items-center justify-center h-full w-9 md:w-10 2xl:w-12'>
                 <div className={`${isSearchExpanded ? 'justify-end w-auto ' : 'justify-center w-full' } flex items-center h-full transition-all duration-300 ease-in-out`}
 >
-                <SearchIcon  className="text-[#4F378A]" onClick={handleSearch} sx={{fontSize: {
+                <SearchIcon  onClick={handleSearch} sx={{fontSize: {
                            xs: "20px",  // extra-small screens
                           sm: "16px",  // small screens
                           md: "20px",  // medium screens
                           lg: "20px",  // large screens
                           xl: "28px",  // extra-large screens
                           
-                        }}}/>
+                        },
+                        color: colors.primary[500] }}/>
 
                </div>
              </div>
