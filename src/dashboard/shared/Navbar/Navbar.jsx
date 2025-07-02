@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { Box, Button, IconButton, Typography, useTheme, Menu, MenuItem, TextField } from "@mui/material";
 import  {tokens} from "../../../theme";
 import { fetchAllNotifications } from '../../../utils/Api';
-import { ProfileContext } from '../../../context/ProfileContext';
+
+import { AuthContext } from '../../../context/AuthContext';
 import SearchIcon from '@mui/icons-material/Search';
 import { IoSearch } from "react-icons/io5";
 import { motion } from 'framer-motion';
@@ -22,7 +23,7 @@ import CheckIcon from '@mui/icons-material/Check';
 
 export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { profile, setProfile } = useContext(ProfileContext);
+  const {user, logout} = useContext(AuthContext);
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -42,13 +43,13 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
   const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
   const goals = [
-    ...(profile?.goals?.map(goal => ({ ...goal, is_ai_goal: false })) || []),
-    ...(profile?.ai_goals?.map(goal => ({ ...goal, is_ai_goal: true })) || [])
+    ...(user?.goals?.map(goal => ({ ...goal, is_ai_goal: false })) || []),
+    ...(user?.ai_goals?.map(goal => ({ ...goal, is_ai_goal: true })) || [])
   ];
 
   
 
-  const tasks = [...(profile?.tasks || []), ...(profile?.ai_goals.ai_tasks || [])];
+  const tasks = [...(user?.tasks || []), ...(user?.ai_goals.ai_tasks || [])];
 
   const [filteredResults, setFilteredResults] = useState([]);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -67,7 +68,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     setAnchorEl(null); // Close the menu
   };
 
-
+ console.log("Profile:", user);
 
 
   const quotes = [
@@ -137,12 +138,10 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   
 
   const handleLogout = () => {
-    // Clear authentication tokens or user session
-    localStorage.removeItem("authToken"); // Adjust based on how you're storing auth info
-    sessionStorage.removeItem("authToken");
+    logout();
+    
   
-    // Redirect to login page or homepage
-    window.location.href = "/"; // Adjust the path as needed
+   
   };
 
   useEffect(() => {
@@ -202,7 +201,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                     <MapOutlinedIcon/>
                 </IconButton>
               <div className='flex space-x-1  mb-0'>
-                  {profile.user && (
+                  {user.user && (
                     <>
                      <span className=' items-center'>
                     <p
@@ -221,7 +220,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                   style={{ color: colors.primary[500] }}
                   className='font-medium mb-0 text-lg 2xl:text-3xl md:text-base lg:text-lg xl:text-xl'
                 >
-                 {profile.user.first_name}
+                 {user.user.first_name}
       
                 </p>
       

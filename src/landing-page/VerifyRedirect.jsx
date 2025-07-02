@@ -8,13 +8,22 @@ const VerifyRedirect = () => {
   const access = searchParams.get("access");
   const { login } = useContext(AuthContext);
 
+ 
+  
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
     if (access) {
+
+        console.log("Access token received:", access);
+        
+    
+
       login(access); // this also saves to localStorage and fetches user
     } else {
-      navigate("/login"); // fallback
+      navigate("/registration"); // fallback
     }
   }, [access, login, navigate]);
 

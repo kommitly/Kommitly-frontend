@@ -69,40 +69,38 @@ const Signup = () => {
     }
   };
 
-//  {
-//   useEffect(() => {
-//     let interval;
-//     if (isCheckingVerification) {
-//       interval = setInterval(async () => {
-//         try {
-//           const res = await fetch(`https://kommitly-backend.onrender.com/api/users/check-verification-status/${email}/`);
-//           if (!res.ok) throw new Error("Failed to check verification status");
+ 
+  useEffect(() => {
+    let interval;
+    if (isCheckingVerification) {
+      interval = setInterval(async () => {
+        try {
+          const res = await fetch(`https://kommitly-backend.onrender.com/api/users/check-verification-status/${email}/`);
+          if (!res.ok) throw new Error("Failed to check verification status");
   
-//           const data = await res.json();
-//           if (data.verified === true) {
-//             clearInterval(interval);
-  
-//             // 🔥 Get access token using the token generation API
-//             const tokenRes = await fetch("https://kommitly-backend.onrender.com/api/token/", {
-//               method: "POST",
-//               headers: { "Content-Type": "application/json" },
-//               body: JSON.stringify({ email, password}), // Send user credentials
-//             });
-  
-//             if (tokenRes.ok) {
-//               const tokenData = await tokenRes.json();
-//               login(tokenData.access); // Call login from AuthContext
-//             } else {
-//               navigate("/login"); // Fallback if token generation fails
-//             }
-//           }
-//         } catch (error) {
-//           console.error("Error checking verification status:", error);
-//         }
-//       }, 5000);
-//     }
-//     return () => clearInterval(interval);
-//   }, [isCheckingVerification, email, password, navigate]);
+          const data = await res.json();
+          console.log("Verification status data:", data); // Debugging line
+          if (data.verified === true && data.token) { // Check for verified and a token
+            clearInterval(interval);
+            login(data.token); // Use the token from the backend response
+            setIsCheckingVerification(false); // Stop polling
+          // The navigate("/dashboard/home") is handled by the login function in AuthProvider
+        } else if (data.verified === true && !data.token) {
+            // This case handles a scenario where verified but token isn't immediately available
+            // You might want to attempt a login with credentials or show a message.
+            // For now, let's assume if verified, token should be there.
+            console.warn("User verified but no token received. Attempting login with credentials if possible or redirect to login.");
+            clearInterval(interval);
+            setIsCheckingVerification(false);
+            navigate("/login"); // Redirect to login if token isn't provided directly
+        }
+        } catch (error) {
+          console.error("Error checking verification status:", error);
+        }
+      }, 5000);
+    }
+    return () => clearInterval(interval);
+  }, [isCheckingVerification, email, password, navigate]);
 
  
   return (
