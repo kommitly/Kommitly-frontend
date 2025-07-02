@@ -187,7 +187,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   return (
   <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 xl:left-26' : 'md:left-62 xl:left-64 2xl:left-60 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
 
-      <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 2 : isSm ? 2 : isMd ? 0 : isLg ? 0 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
+      <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 0 : isSm ? 2 : isMd ? 0 : isLg ? 0 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
       {/* Logo */}
       <div className='flex items-center  grid grid-cols-12   w-full ' style={{ paddingRight: isCollapsed ? 0 : isXs ? 0 : isSm ? 0 : isMd ? 0 : isLg ? 0 : isXl ? 0 : isXxl ? 0 : 0 }}>
           <Box className='col-span-5  flex items-center'
@@ -199,6 +199,14 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
       xs: 'flex',  // show on mobile
       md: 'none',  // hide on medium and larger screens
     },}}>
+                <MenuIcon sx={{ fontSize: {
+                            xs: "20px",  // extra-small screens
+                            sm: "18px",  // small screens
+                            md: "20px",  // medium screens
+                            lg: "24px",  // large screens
+                            xl: "36px",  // extra-large screens
+                            
+                          }, color: colors.text.primary }} />
                 </IconButton>
               <div className='flex space-x-1  mb-0'>
                   {user.user && (
