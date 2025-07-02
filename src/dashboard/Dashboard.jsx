@@ -16,7 +16,7 @@ const Dashboard = () => {
   const colorMode = useMode();
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
    const isSm = useMediaQuery(theme.breakpoints.only("sm"));
     const isLg = useMediaQuery(theme.breakpoints.only("lg"));
     const isXl = useMediaQuery(theme.breakpoints.only("xl"));
@@ -67,7 +67,7 @@ const Dashboard = () => {
     paddingLeft: !isMobile
       ? isCollapsed
         ? (isXl ? '60px' : '20px')
-        : (isXl ? '40px' : '0px')
+        : (isXl ? '60px' : '0px')
       : '0px',
     position: isMobile ? 'fixed' : 'relative',
     height: isMobile ? '100vh' : 'auto',

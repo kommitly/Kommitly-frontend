@@ -19,11 +19,12 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import MenuIcon from '@mui/icons-material/Menu';
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import  LightModeOutlinedIcon  from "@mui/icons-material/LightModeOutlined";
 import  DarkModeOutlinedIcon  from "@mui/icons-material/DarkModeOutlined";
-import { motion } from "framer-motion";
+import { color, hover, motion } from "framer-motion";
 import { AnimatePresence } from 'framer-motion';
 import {  X } from "lucide-react"; // or use any icons you prefer
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
@@ -34,6 +35,7 @@ import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import logo from '../../../assets/logo.svg';
 
 const Item = ({title, to, icon, selected, setSelected}) => {
     const theme = useTheme();
@@ -251,7 +253,7 @@ sx={{
       transition: 'left 0.3s ease-in-out, width 0.3s ease-in-out',
       width: isCollapsed
       ? (isXs ? "0px" : isSm ? "80px" : isMd ? "70px" : isLg ? "80px" : isXl ? "120px" : "80px")
-      : (isXs ? "220px" : isSm ? "158px" : isMd ? "200px" : isLg ? "220px" : isXl ? "280px" : isXxl ? "200px" : "280px"),
+      : (isXs ? "220px" : isSm ? "158px" : isMd ? "200px" : isLg ? "230px" : isXl ? "280px" : isXxl ? "200px" : "280px"),
       overflow: 'hidden',
       margin: '8px',
       boxShadow: isCollapsed
@@ -309,7 +311,7 @@ sx={{
                 color: colors.primary[100],
             
                 '&:hover': {
-                  backgroundColor: "#6D5BA6",
+                  backgroundColor: "transparent",
                 },
               },
               
@@ -347,17 +349,14 @@ sx={{
     setIsCollapsed(newValue);
     console.log("isCollapsed:", newValue);
   }}
-  icon={isCollapsed ? <MapOutlinedIcon sx={{fontSize:{
-  xs: "1.5rem",
-  sm: "1.5rem",
-  md: "1.5rem",
-  lg: "1.5rem",
-  xl: "2rem",
-  xxl: "1.5rem",
-  },
-  marginTop: "5px"
- }} /> : undefined}
+  icon={isCollapsed ?  <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
+                                    <img src={logo} alt="Kommitly Logo" style={{ width: "20px", height: "20px" }} />
+                                  </div> : undefined}
   style={{
+    backgroundColor: hover ? "transparent" : "transparent",
+    marginTop: "1rem",
+    marginBottom: "1rem"
+
 
   
 
@@ -370,17 +369,26 @@ sx={{
                             justifyContent="space-between"
                             alignItems="center"
                             width={"100%"}
+                            
                          
                             >
-                                <Typography variant="h2" color={colors.primary[100]} sx={{ fontFamily: "Fredoka"}}>
+                                <div style={{display: "flex", alignItems: "center", gap: "10px"}}>
+                                  <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
+                                    <img src={logo} alt="Kommitly Logo" style={{ width: "20px", height: "20px" }} />
+                                  </div>
+                                  <p variant="h2" style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: "medium", fontSize: "1.3rem",  }}>
                                     Kommitly
 
-                                </Typography>
+                                </p>
+                                </div>
                                 <button onClick={()=> setIsCollapsed(!isCollapsed)} sx={{alignItems: "center", color: colors.primary[100]}}>
                                     {isCollapsed ? (
                                         <MenuOutlinedIcon/>
                                     ) : (
-                                        < X size={24}/>
+                                        <MenuIcon  color={"#F6F3F3"} sx={{
+  cursor: "pointer",
+
+ }} />
                                     )}
                                 </button>
 

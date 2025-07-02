@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 import { useMediaQuery } from '@mui/material';
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 import SearchResults from './SearchResults';
+import MenuIcon from '@mui/icons-material/Menu';
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -184,7 +185,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   }, []);
   
   return (
-  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 xl:left-26' : 'md:left-62 xl:left-62 2xl:left-60 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
+  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 xl:left-26' : 'md:left-62 xl:left-64 2xl:left-60 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 2 : isSm ? 2 : isMd ? 0 : isLg ? 0 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
       {/* Logo */}
@@ -198,7 +199,6 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
       xs: 'flex',  // show on mobile
       md: 'none',  // hide on medium and larger screens
     },}}>
-                    <MapOutlinedIcon/>
                 </IconButton>
               <div className='flex space-x-1  mb-0'>
                   {user.user && (
