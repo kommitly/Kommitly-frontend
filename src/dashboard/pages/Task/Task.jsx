@@ -31,6 +31,7 @@ const TaskPage = () => {
     const [task, setTask] = useState(
       {title: "", description: "", due_date: null, reminder_time: "", priority: "Low", subtasks: []}
     );
+    const [isModalOpen, setIsModalOpen] = useState(false);
    
   
     
@@ -61,6 +62,13 @@ const TaskPage = () => {
     }, [taskId]);
     
 
+    const handleSubtaskClick = (subtask) => {
+  setSelectedSubtask(subtask);
+  if (window.innerWidth < 640) {
+    setIsModalOpen(true);
+  }
+};
+
 //change in task properties
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -74,10 +82,24 @@ const TaskPage = () => {
       }));
     };
     const handleReminderTimeChange = (date) => {
-  setTask((prev) => ({
-    ...prev,
-    reminder_time: date instanceof Date && !isNaN(date) ? date.toISOString() : null,
-  }));
+  if (date instanceof Date && !isNaN(date)) {
+    const formattedTime = date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    }); // e.g., "14:30:00"
+
+    setTask((prev) => ({
+      ...prev,
+      reminder_time: formattedTime, // store as formatted string
+    }));
+  } else {
+    setTask((prev) => ({
+      ...prev,
+      reminder_time: null,
+    }));
+  }
 };
 
 
@@ -353,21 +375,22 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
       {/*Time Picker Input*/}
       <div className="relative">
     <DatePicker
-      id="reminder-time"
-      selected={
-      task.reminder_time && !isNaN(new Date(task.reminder_time))
-        ? new Date(task.reminder_time)
-        : null
-    }
-      onChange={handleReminderTimeChange}
-      showTimeSelect
-      showTimeSelectOnly
-      timeIntervals={15}
-      timeCaption="Time"
-      dateFormat="h:mm aa" // Or "HH:mm" for 24-hour format
-      placeholderText=""
-      className="p-2 pl-10 rounded border-gray-300 w-full"
-    />
+  id="reminder-time"
+  selected={
+    task.reminder_time
+      ? new Date(`1970-01-01T${task.reminder_time}`) // time-only string → Date
+      : null
+  }
+  onChange={handleReminderTimeChange}
+  showTimeSelect
+  showTimeSelectOnly
+  timeIntervals={15}
+  timeCaption="Time"
+  dateFormat="HH:mm:ss"
+  placeholderText="Reminder"
+  className="p-2  pl-10 rounded-md "
+/>
+
     
     
   </div>
@@ -414,7 +437,7 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
           <ul className="mt-2">
             {task.subtasks.map((subtask, index) => (
               <li key={index} className="flex items-center gap-2 mt-1"
-              onClick={() => setSelectedSubtask(subtask)}
+              onClick={() => handleSubtaskClick(subtask)}
               >
                 <input
                   type="checkbox"
@@ -481,14 +504,37 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
     </div>
 
     <div className="hidden sm:block w-1/2 p-4">
+     {selectedSubtask && (
   <SubtaskDetails
     subtask={selectedSubtask}
     taskId={String(taskId)}
     onUpdateSubtask={handleSubtaskUpdate}
     onDeleteSubtask={handleSubtaskDelete}
   />
-
+     )}
       </div>
+
+
+  {/* Modal for mobile */}
+{isModalOpen && selectedSubtask && (
+  
+  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center sm:hidden">
+    <div className="bg-white w-11/12 max-h-[90vh] rounded-xl p-4 shadow-lg overflow-y-auto relative">
+      <button
+        className="absolute top-2 right-4 text-gray-600 text-xl"
+        onClick={() => setIsModalOpen(false)}
+      >
+        &times;
+      </button>
+      <SubtaskDetails
+        subtask={selectedSubtask}
+        taskId={String(taskId)}
+        onUpdateSubtask={handleSubtaskUpdate}
+        onDeleteSubtask={handleSubtaskDelete}
+      />
+    </div>
+  </div>
+)}
     </div>
    
 

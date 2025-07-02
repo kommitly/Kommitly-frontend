@@ -246,9 +246,9 @@ const updateSubtask = async (taskId, subtaskId, updatedData) => {
 }
 
 
-const createTask = async ({ goal, title, task}) => {
+const createTask = async ({ goal, title, priority, due_date, reminder_time}) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create/task/";
-  const requestBody = { goal, title, task };
+  const requestBody = { goal, title, priority, due_date, reminder_time };
   try {
     const token = getToken();
     const response = await axios.post(url, requestBody, {
@@ -256,6 +256,7 @@ const createTask = async ({ goal, title, task}) => {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       }
+
     });
     return response.data;
   }
@@ -571,6 +572,22 @@ const answerAiSubtask = async (subtaskId) => {
   }
 }
 
+const loginWithGoogle = async (id_token) => {
+  const url = "https://kommitly-backend.onrender.com/api/auth/google/";
+  try {
+    const response = await axios.post(url, { id_token }, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error logging in with Google:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
 
 export { 
   generateInsights,
@@ -603,5 +620,6 @@ export {
   getAiSubtaskById,
   fetchAllNotifications,
   markNotificationAsRead,
-  answerAiSubtask
+  answerAiSubtask,
+  loginWithGoogle
 };

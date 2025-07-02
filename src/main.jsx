@@ -12,10 +12,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { TasksProvider } from './context/TasksContext.jsx'  
 import { AuthProvider } from './context/AuthContext.jsx'
 import { ProfileProvider } from './context/ProfileContext.jsx'
+import { ImportContactsRounded } from '@mui/icons-material'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
+
+const clientId= "501169252647-til0o67ldlrpmnbd08td1o4anhnkjpr8.apps.googleusercontent.com";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+  <GoogleOAuthProvider clientId={clientId}>
   <BrowserRouter> {/* Router comes first */}
   <ProSidebarProvider>
  
@@ -36,5 +41,6 @@ createRoot(document.getElementById('root')).render(
 
    
   </BrowserRouter>
+  </GoogleOAuthProvider>
 </StrictMode>,
 )

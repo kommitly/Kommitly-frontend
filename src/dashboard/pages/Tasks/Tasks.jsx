@@ -37,7 +37,7 @@ const Tasks = () => {
   const [menuVisible, setMenuVisible] = useState({});
   const {removeTask, addTaskToSidebar} = useContext(TasksContext); // Use the TasksContext
   const [showFilters, setShowFilters] = useState(false);
-  const [task, setTask] = useState({ title: "", description: "", due_date: null, reminder_time: "", priority: "Low", subtasks: [] });
+  const [task, setTask] = useState({ title: "", due_date:null, reminder_time: null, priority: "Low", subtasks: [] });
   const [selectedFile, setSelectedFile] = useState(null); // State for selected file
   const [newSubtask, setNewSubtask] = useState('');
   const [showInput, setShowInput] = useState(false);
@@ -135,7 +135,13 @@ const Tasks = () => {
       }
     
       try {
-        const newTask = await createTask({title: title, task}); // Ensure this returns the goal object with an ID
+        const newTask = await createTask({
+          title: title, 
+          priority: task.priority,
+          due_date: task.due_date,
+          reminder_time: task.reminder_time
+          });
+        console.log("Task details sent for creation:", newTask); // Ensure this returns the goal object with an ID
         for (const subtask of newSubtasks) {
        await createSubtask({ taskId: newTask.id, title: subtask.title });
   }
@@ -207,11 +213,27 @@ const Tasks = () => {
       }));
     };
     const handleReminderTimeChange = (date) => {
-  setTask((prev) => ({
-    ...prev,
-    reminder_time: date instanceof Date && !isNaN(date) ? date.toISOString() : null,
-  }));
+  if (date instanceof Date && !isNaN(date)) {
+    const formattedTime = date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    }); // e.g., "14:30:00"
+
+    setTask((prev) => ({
+      ...prev,
+      reminder_time: formattedTime, // store as formatted string
+    }));
+  } else {
+    setTask((prev) => ({
+      ...prev,
+      reminder_time: null,
+    }));
+  }
 };
+
+
 
 const handleAddSubtask = () => {
   if (newSubtask.trim() !== "") {
@@ -338,22 +360,23 @@ const handleAddSubtask = () => {
               
               {/*Time Picker Input*/}
               <div className="relative">
-            <DatePicker
-              id="reminder-time"
-              selected={
-              task.reminder_time && !isNaN(new Date(task.reminder_time))
-                ? new Date(task.reminder_time)
-                : null
-            }
-              onChange={handleReminderTimeChange}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={15}
-              timeCaption="Time"
-              dateFormat="h:mm aa" // Or "HH:mm" for 24-hour format
-              placeholderText="Reminder"
-              className="p-2  rounded-md border border-gray-200 "
-            />
+           <DatePicker
+  id="reminder-time"
+  selected={
+    task.reminder_time
+      ? new Date(`1970-01-01T${task.reminder_time}`) // time-only string → Date
+      : null
+  }
+  onChange={handleReminderTimeChange}
+  showTimeSelect
+  showTimeSelectOnly
+  timeIntervals={15}
+  timeCaption="Time"
+  dateFormat="HH:mm:ss"
+  placeholderText="Reminder"
+  className="p-2 rounded-md border border-gray-200"
+/>
+
            </div>
           </div> 
 
