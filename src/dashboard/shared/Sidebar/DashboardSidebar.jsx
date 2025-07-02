@@ -36,6 +36,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import logo from '../../../assets/logo.svg';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Item = ({title, to, icon, selected, setSelected}) => {
     const theme = useTheme();
@@ -381,7 +382,7 @@ sx={{
                                   <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
                                     <img src={logo} alt="Kommitly Logo" style={{ width: "20px", height: "20px" }} />
                                   </div>
-                                  <p variant="h2" style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: "medium", fontSize: "1.3rem",  }}>
+                                  <p variant="h2" style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: 500, fontSize: "1.3rem",  }}>
                                     Kommitly
 
                                 </p>
@@ -390,7 +391,7 @@ sx={{
                                     {isCollapsed ? (
                                         <MenuOutlinedIcon/>
                                     ) : (
-                                        <MenuIcon  color={"#F6F3F3"} sx={{
+                                        <ArrowBackIcon  color={"#F6F3F3"} sx={{
   cursor: "pointer",
 
  }} />
