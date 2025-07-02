@@ -280,6 +280,7 @@ sx={{
               [`.${menuClasses.button}`]: {
                 color: colors.primary[100],
                 backgroundColor: "#4F378A",
+                width: "96%",
                 marginBottom: isCollapsed ? (
                   isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
                 ) : (   
@@ -289,6 +290,7 @@ sx={{
                 
                 '&:hover': {
                   backgroundColor: "#6D5BA6",
+                 
                 },
               },
               [`.${menuClasses.icon}`]: {
@@ -354,8 +356,11 @@ sx={{
                                   </div> : undefined}
   style={{
     backgroundColor: hover ? "transparent" : "transparent",
+    margin: "0rem",
     marginTop: "1rem",
-    marginBottom: "1rem"
+    marginBottom: "2rem"
+
+   
 
 
   
@@ -397,7 +402,7 @@ sx={{
                     </MenuItem>
                
                     {/*MENU ITEMS */}
-                    <Box paddingLeft={isCollapsed ? undefined : "0%"}>
+                    <Box paddingLeft={isCollapsed ? "4%" : "4%"}>
                       <MenuItem 
                       onClick={() => {
                         navigate("/dashboard/home");
@@ -412,6 +417,7 @@ sx={{
   xl: "2rem",
   xxl: "1.5rem",
   },
+
  }}  /> : <HomeOutlinedIcon sx={{fontSize:{
   xs: "1.5rem",
   sm: "1.5rem",
@@ -421,11 +427,12 @@ sx={{
   xxl: "1.5rem",
   },
  }}/>}
-                      active={selected === "Home"}>
+                      active={selected === "Home"} style={{margin:"0rem"}}>
                       Home
                       </MenuItem>
                        
                         <SubMenu 
+                        
                             icon={selected === "Goals" ? <FlagIcon sx={{fontSize:{
   xs: "1.5rem",
   sm: "1.5rem",
@@ -453,7 +460,7 @@ sx={{
                              
                             }}
                     
-                            style={{ color: colors.primary[100] }}
+                            style={{ color: colors.primary[100], margin:"0rem" }}
                           
                             >
                             {recentAiGoals?.map((goal)=> (
@@ -500,7 +507,7 @@ sx={{
                               setTaskMenuVisible(!taskMenuVisible); // optionally keep this if you want to toggle the submenu
                             }}
                     
-                            style={{ color: colors.primary[100] }}
+                            style={{ color: colors.primary[100], margin:"0rem" }}
                          
                         >
                             {displayedTasks?.map((task) => (
@@ -546,6 +553,7 @@ sx={{
  }} />}
                             
                             active={selected === "Calendar"}
+                            style={{margin:"0rem"}}
                         >
                           Calendar
                           </MenuItem>
@@ -557,6 +565,7 @@ sx={{
 
                         <MenuItem 
                             title="Stats"
+                            style={{margin:"0rem"}}
                             
                             onClick={() => {
                                 navigate("/dashboard/analytics");
