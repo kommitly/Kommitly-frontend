@@ -69,40 +69,40 @@ const Signup = () => {
     }
   };
 
- 
-  useEffect(() => {
-    let interval;
-    if (isCheckingVerification) {
-      interval = setInterval(async () => {
-        try {
-          const res = await fetch(`https://kommitly-backend.onrender.com/api/users/check-verification-status/${email}/`);
-          if (!res.ok) throw new Error("Failed to check verification status");
+//  {
+//   useEffect(() => {
+//     let interval;
+//     if (isCheckingVerification) {
+//       interval = setInterval(async () => {
+//         try {
+//           const res = await fetch(`https://kommitly-backend.onrender.com/api/users/check-verification-status/${email}/`);
+//           if (!res.ok) throw new Error("Failed to check verification status");
   
-          const data = await res.json();
-          if (data.verified === true) {
-            clearInterval(interval);
+//           const data = await res.json();
+//           if (data.verified === true) {
+//             clearInterval(interval);
   
-            // 🔥 Get access token using the token generation API
-            const tokenRes = await fetch("https://kommitly-backend.onrender.com/api/token/", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, password}), // Send user credentials
-            });
+//             // 🔥 Get access token using the token generation API
+//             const tokenRes = await fetch("https://kommitly-backend.onrender.com/api/token/", {
+//               method: "POST",
+//               headers: { "Content-Type": "application/json" },
+//               body: JSON.stringify({ email, password}), // Send user credentials
+//             });
   
-            if (tokenRes.ok) {
-              const tokenData = await tokenRes.json();
-              login(tokenData.access); // Call login from AuthContext
-            } else {
-              navigate("/login"); // Fallback if token generation fails
-            }
-          }
-        } catch (error) {
-          console.error("Error checking verification status:", error);
-        }
-      }, 5000);
-    }
-    return () => clearInterval(interval);
-  }, [isCheckingVerification, email, password, navigate]);
+//             if (tokenRes.ok) {
+//               const tokenData = await tokenRes.json();
+//               login(tokenData.access); // Call login from AuthContext
+//             } else {
+//               navigate("/login"); // Fallback if token generation fails
+//             }
+//           }
+//         } catch (error) {
+//           console.error("Error checking verification status:", error);
+//         }
+//       }, 5000);
+//     }
+//     return () => clearInterval(interval);
+//   }, [isCheckingVerification, email, password, navigate]);
 
  
   return (
@@ -218,7 +218,7 @@ const Signup = () => {
           >
              <Box className=" w-11/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
               <div className="flex justify-center items-center">
-            <div className="bg-white p-6 rounded-md">
+            <div className="bg-white p-6 rounded-md" style={{ color: colors.text.primary }}>
               <p>Signup successful! Please check your email to verify your account.</p>
              
             </div>
