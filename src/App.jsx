@@ -36,6 +36,7 @@ import Taskpage from './dashboard/pages/Task/Task';
 import AiSubtaskPage from "./dashboard/pages/AiGoal/AiSubtaskPage";
 import Stats from "./dashboard/pages/Analytics/Stats";
 import Calendar from "./dashboard/pages/Calendar/Calendar";
+import VerifyRedirect from "./landing-page/VerifyRedirect";
 
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
              
            
               <Route path="/verify-email/:token" element={<EmailVerificationCheck />} />
+              <Route path="/verify-redirect" element={<VerifyRedirect />} />
 
               {/* ✅ Correct way to wrap ProtectedRoute */}
               <Route

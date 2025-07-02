@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import Backdrop from '@mui/material/Backdrop';
 import { tokens } from "../theme";
 import getLocationAndTimezone from "../utils/location";
 import Card from '@mui/material/Card';
@@ -209,14 +210,27 @@ const Signup = () => {
 
       
 
-        {dialogOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    
+          <Backdrop 
+               sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+          open={dialogOpen}
+          onClick={() => setDialogOpen(false)}
+          >
+             <Box className=" w-11/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
+              <div className="flex justify-center items-center">
             <div className="bg-white p-6 rounded-md">
               <p>Signup successful! Please check your email to verify your account.</p>
              
             </div>
           </div>
-        )}
+             
+             
+             
+             </Box>
+
+
+          
+          </Backdrop>
       </div>
     </div>
   );
