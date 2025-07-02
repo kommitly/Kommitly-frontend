@@ -104,6 +104,7 @@ const AiGoal = () => {
   const [openTaskView, setOpenTaskView] = useState(false);
   const [dueDates, setDueDates] = useState({});
   const [aiAnswer, setAiAnswer] = useState(null);
+  const [lineY2, setLineY2] = useState(230);
 
   
 
@@ -219,6 +220,17 @@ const AiGoal = () => {
   const toggleTaskMenu = (id) => {
     setTaskMenuVisible(prevId => (prevId === id ? null : id)); // Toggle menu for the selected task
   };
+
+  useEffect(() => {
+  const updateY2 = () => {
+    setLineY2(window.innerWidth < 640 ? 200 : 230); // Adjust for small screens (e.g., <640px)
+  };
+
+  updateY2(); // Initial run
+  window.addEventListener("resize", updateY2); // Update on resize
+
+  return () => window.removeEventListener("resize", updateY2);
+}, []);
 
   useEffect(() => {
     if (isRenaming && inputRef.current) {
@@ -508,7 +520,7 @@ const AiGoal = () => {
                         <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
                         <span className=' md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular' style={{color: colors.text.primary }}>{step.title}</span>
                          <div onClick={() => navigate(`/dashboard/ai-goal/${goal.id}/task/${activeTask.id}/subtask/${step.id}`, { state: { step } })} >
-                        <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }} />
+                        <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 , color:colors.text.secondary}} />
                          </div>
                     
                         </Box>
@@ -813,7 +825,7 @@ const AiGoal = () => {
                                               x1="50"
                                               y1="50"  // Start from this circle’s bottom
                                               x2="50"
-                                              y2="230" // End at the next task’s top
+                                              y2={lineY2} // End at the next task’s top
                                               stroke="#4F378A"
                                               strokeWidth="2"
                                               strokeDasharray="6 4"
@@ -948,7 +960,7 @@ const AiGoal = () => {
                         <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
                         <span className=' md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular' style={{color: colors.text.primary}}>{step.title}</span>
                          <div onClick={() => openSubtaskPage(step)} >
-                        <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 }} />
+                        <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 , color:colors.text.secondary}}  />
                          </div>
                     
                         </Box>

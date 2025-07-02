@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 import { IoAdd } from "react-icons/io5";
 import { MdClear } from "react-icons/md";
 
@@ -149,15 +149,12 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
   return (
     <div ref={ref} className="mt-6 w-full flex justify-center pb-4 flex-1 overflow-y-auto scrollbar-hide">
       <Box className=' xl:w-9/12 md:w-8/12 w-full rounded-2xl py-2 px-2 ' sx={{ backgroundColor: colors.background.paper }}>
-        <div className='flex items-center px-4 py-4  '>
+        <div className='flex flex-col  px-4 py-4  '>
           <div className='flex items-center w-full'>
-            <IconButton onClick={handleCreateGoal}>
-              <button className='bg-[#65558F] text-white rounded-md p-1 hover:bg-[#4F378A] transition-colors duration-300'>
-              <IoAdd />
-              </button>
-
+     
+           
              
-            </IconButton>
+      
             <div className='flex w-full items-center gap-1'>
               <Box className=' font-medium text-[#65558F] px-4 py-1 rounded-lg' >
                 <p className='text-lg' style={{ color: colors.text.primary }}>
@@ -165,10 +162,17 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                 </p>
               </Box>
             </div>
-          </div>
-          <IconButton onClick={onClose}>
+             <IconButton onClick={onClose}>
            <MdClear />
           </IconButton>
+          </div>
+         
+
+             <button className='bg-[#65558F] md:w-2/12 w-full flex justify-center items-center cursor-pointer  rounded-md p-2 hover:bg-[#4F378A] transition-colors duration-300' onClick={handleCreateGoal}>
+              <IoAdd size={16} sx={{color:"#FFFFFFF"}}/> <span className='text-xs w-16'>Add Goal</span>
+              </button>
+
+
         </div>
 
         <Divider orientation="horizontal" sx={{ borderColor: colors.primary[500], opacity: 0.8 }} />

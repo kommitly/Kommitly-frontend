@@ -223,7 +223,7 @@ className=""
 sx={{
   width: isCollapsed
     ? (isXs ? "0px" : isSm ? "80px" : isMd ? "80px" : isLg ? "80px" : isXl ? "80px" : "80px")
-    : (isXs ? "220px" : isSm ? "220px" : isMd ? "230px" : isLg ? "240px" : isXl ? "260px" : "220px")
+    : (isXs ? "220px" : isSm ? "220px" : isMd ? "230px" : isLg ? "240px" : isXl ? "280px" : "220px")
 
 }}
 
@@ -254,7 +254,7 @@ sx={{
       transition: 'left 0.3s ease-in-out, width 0.3s ease-in-out',
       width: isCollapsed
       ? (isXs ? "0px" : isSm ? "80px" : isMd ? "70px" : isLg ? "80px" : isXl ? "120px" : "80px")
-      : (isXs ? "220px" : isSm ? "158px" : isMd ? "200px" : isLg ? "230px" : isXl ? "280px" : isXxl ? "200px" : "280px"),
+      : (isXs ? "220px" : isSm ? "158px" : isMd ? "215px" : isLg ? "230px" : isXl ? "320px" : isXxl ? "200px" : "280px"),
       overflow: 'hidden',
       margin: '8px',
       boxShadow: isCollapsed
@@ -287,6 +287,7 @@ sx={{
                 ) : (   
                   isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
                 ),
+               
 
                 
                 '&:hover': {
@@ -299,19 +300,26 @@ sx={{
                 marginRight: isCollapsed ? (
                   isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "100px" : "100px"
                 ) : (
-                  isXs ? "10px" : isSm ? "10px" : isMd ? "10px" : isLg ? "10px" : isXl ? "60px" : isXxl ? "10px" : "10px"
+                  isXs ? "10px" : isSm ? "10px" : isMd ? "10px" : isLg ? "10px" : isXl ? "10px" : isXxl ? "10px" : "10px"
                 ),
           
               marginLeft: isCollapsed ? (
                 isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "16px" : "0px"
               ) : (
-                isXs ? "10px" : isSm ? "10px" : isMd ? "10px" : isLg ? "10px" : isXl ? "10px" : isXxl ? "10px" : "10px"
+                isXs ? "10px" : isSm ? "10px" : isMd ? "0px" : isLg ? "0px" : isXl ? "10px" : isXxl ? "10px" : "10px"
               ),
              
             },
 
               [`.${menuClasses.label}`]: {
                 color: colors.primary[100],
+                 fontSize: "0.8rem", // base font size
+                [theme.breakpoints.up("md")]: {
+                  fontSize: "0.8rem",
+                },
+                [theme.breakpoints.up("xl")]: {
+                  fontSize: "1.2rem",
+                },
             
                 '&:hover': {
                   backgroundColor: "transparent",
@@ -328,7 +336,7 @@ sx={{
           color: disabled ? '#ffffff' : '#ffffff',
           backgroundColor: active ? '#000000' : 'transparent', // submenu background color
           borderRadius: '5px',
-          margin: '5px',
+        
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -337,7 +345,7 @@ sx={{
         };
       } else {
         return {
-          margin: '5px',
+        
           borderRadius: '5px',
           color: disabled ? '#ffffff' : '#ffffff',// submenu text color
           backgroundColor: active ? '#000000' : 'transparent', // submenu background color
@@ -355,11 +363,19 @@ sx={{
   icon={isCollapsed ?  <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
                                     <img src={logo} alt="Kommitly Logo" style={{ width: "20px", height: "20px" }} />
                                   </div> : undefined}
-  style={{
+  sx={{
     backgroundColor: hover ? "transparent" : "transparent",
     margin: "0rem",
     marginTop: "1rem",
-    marginBottom: "2rem"
+    marginBottom: {
+      xs: "1.4rem",
+      sm: "1.4rem",
+      md: "1.4rem",
+      lg: "0.4rem",
+      xl: "0.4rem",
+      
+    }
+    
 
    
 
@@ -380,9 +396,9 @@ sx={{
                             >
                                 <div style={{display: "flex", alignItems: "center", gap: "10px"}}>
                                   <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
-                                    <img src={logo} alt="Kommitly Logo" style={{ width: "20px", height: "20px" }} />
+                                    <img src={logo} alt="Kommitly Logo" className='md:w-4 md:h-4 xl:w-4 xl:h-4 2xl:w-8 2xl:h-8  w-4 h-4' />
                                   </div>
-                                  <p variant="h2" style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: 500, fontSize: "1.3rem",  }}>
+                                  <p className=' 2xl:text-3xl lg:text-xl ' style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: 500,  }}>
                                     Kommitly
 
                                 </p>
@@ -428,7 +444,7 @@ sx={{
   xxl: "1.5rem",
   },
  }}/>}
-                      active={selected === "Home"} style={{margin:"0rem"}}>
+                      active={selected === "Home"} >
                       Home
                       </MenuItem>
                        
@@ -461,7 +477,7 @@ sx={{
                              
                             }}
                     
-                            style={{ color: colors.primary[100], margin:"0rem" }}
+                            style={{ color: colors.primary[100] }}
                           
                             >
                             {recentAiGoals?.map((goal)=> (
@@ -508,7 +524,7 @@ sx={{
                               setTaskMenuVisible(!taskMenuVisible); // optionally keep this if you want to toggle the submenu
                             }}
                     
-                            style={{ color: colors.primary[100], margin:"0rem" }}
+                            style={{ color: colors.primary[100] }}
                          
                         >
                             {displayedTasks?.map((task) => (
@@ -554,7 +570,7 @@ sx={{
  }} />}
                             
                             active={selected === "Calendar"}
-                            style={{margin:"0rem"}}
+                          
                         >
                           Calendar
                           </MenuItem>
@@ -566,7 +582,7 @@ sx={{
 
                         <MenuItem 
                             title="Stats"
-                            style={{margin:"0rem"}}
+                           
                             
                             onClick={() => {
                                 navigate("/dashboard/analytics");
@@ -661,7 +677,14 @@ sx={{
                       marginBottom: "15px",
                       position: "absolute", 
                       top: '80%',
-                      left: "8%",
+                      left: {
+                        xs: "8%",
+                        sm: "8%",
+                        md: "8%",
+                        lg: "8%",
+                        xl: "22%",
+                      
+                      },
                     }}>
 
                  <IconButton onClick = {colorMode.toggleColorMode}>
