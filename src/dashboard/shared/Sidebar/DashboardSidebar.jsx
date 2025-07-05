@@ -268,7 +268,7 @@ sx={{
   }}
 >
 
-           <div className=' flex flex-col '>
+           <div className='mt-4 flex flex-col '>
              <Menu iconShape="square"
             rootStyles={{
               [`.${menuClasses.SubMenu}`]: {
@@ -363,18 +363,23 @@ sx={{
   icon={isCollapsed ?  <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
                                     <img src={logo} alt="Kommitly Logo" style={{ width: "20px", height: "20px" }} />
                                   </div> : undefined}
-  sx={{
+  style={{
     backgroundColor: hover ? "transparent" : "transparent",
-    margin: "0rem",
-    marginTop: "1rem",
-    marginBottom: {
-      xs: "1.4rem",
-      sm: "1.4rem",
-      md: "1.4rem",
-      lg: "0.4rem",
-      xl: "0.4rem",
-      
-    }
+    marginLeft: isCollapsed ? (
+      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "2px" : isXl ? "20px" : "0px"
+    ) : (
+      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "2px" : isXl ? "20px" : "0px"
+    ),
+   
+   
+ 
+    
+    marginBottom: isCollapsed ? (
+      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "20px" : isXl ? "20px" : "0px"
+    ) : (
+      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "20px" : isXl ? "20px" : "0px"
+    ),  
+
     
 
    

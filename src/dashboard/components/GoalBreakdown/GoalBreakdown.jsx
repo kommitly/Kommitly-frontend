@@ -168,8 +168,8 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
           </div>
          
 
-             <button className='bg-[#65558F] md:w-2/12 w-full flex justify-center items-center cursor-pointer  rounded-md p-2 hover:bg-[#4F378A] transition-colors duration-300' onClick={handleCreateGoal}>
-              <IoAdd size={16} sx={{color:"#FFFFFFF"}}/> <span className='text-xs w-16'>Add Goal</span>
+             <button className=' md:w-2/12 w-full flex justify-center items-center cursor-pointer  rounded-md p-2 hover:bg-[#4F378A] transition-colors duration-300' style={{color: colors.tag.primary, backgroundColor: colors.background.sidebar }} onClick={handleCreateGoal}>
+              <IoAdd size={16} /> <span className='text-xs w-16'>Add Goal</span>
               </button>
 
 
