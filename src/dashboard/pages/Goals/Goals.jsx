@@ -475,7 +475,7 @@ const Goals = () => {
               </p>
             </Button>
           </div>
-          <img src={analysis} alt='Analysis' className='md:h-46  h-28 xl:h-52 2xl:h-60' />
+          <img src={analysis} alt='Analysis' className='md:h-46  h-36 xl:h-52 2xl:h-60 ' />
         </Box>
 
 
