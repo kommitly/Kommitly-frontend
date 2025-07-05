@@ -44,7 +44,7 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         await login(data.access);
-        await loadProfile();
+        // await loadProfile();
         getLocationAndTimezone();
       } else {
         setMessage(data.error || "Login failed.");
@@ -60,9 +60,9 @@ const Login = () => {
     try {
       const data =await loginWithGoogle(id_token);
       await login(data.access);
-      await loadProfile();
+      // await loadProfile();
       getLocationAndTimezone();
-      navigate("/dashboard");
+      // navigate("/dashboard");
     } catch (error) {
       setMessage("Google login failed. Try again.");
     }
