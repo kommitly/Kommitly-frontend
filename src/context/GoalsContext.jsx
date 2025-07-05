@@ -1,11 +1,14 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { fetchGoals } from '../utils/Api'; // Adjust the import path as needed
+import { AuthContext } from './AuthContext'; // adjust the path
 
 export const GoalsContext = createContext();
 
 export const GoalsProvider = ({ children }) => {
   const [goals, setGoals] = useState({ goals: [], ai_goals: [] });
+  const { user, loading } = useContext(AuthContext); // get loading + user
+
 
   // Load hidden and pinned goals from localStorage
   const [hiddenGoals, setHiddenGoals] = useState(() => {
@@ -22,7 +25,7 @@ export const GoalsProvider = ({ children }) => {
     const loadGoals = async () => {
       
         const token = localStorage.getItem("token");  // Check if token exists
-        if (!token) return; 
+        if (!token || !user) return;
 
           try {
             const fetchedGoals = await fetchGoals();
@@ -34,8 +37,11 @@ export const GoalsProvider = ({ children }) => {
       }
     };
 
-    loadGoals();
-  }, []);
+    // Only run when user is set and not loading
+    if (!loading && user) {
+      loadGoals();
+    }
+  }, [user, loading]); // Run when user or loading changes
 
   // Function to reload goals from API
 const reloadGoals = async () => {
