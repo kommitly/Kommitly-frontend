@@ -15,7 +15,7 @@ const Hero = () => {
     const [showMore, setShowMore] = useState(false);
 
   return (
-   <section className="bg-[#D6CFFF] rounded-t-4xl justify-center items-center   flex flex-col  md:px-6 px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full">
+   <section className=" rounded-t-4xl justify-center items-center   flex flex-col  md:px-6 px-2 w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full" style={{ backgroundColor: colors.background.paper }}>
       <div className="p-4  w-full h-full flex flex-col-reverse md:flex-row mt-8 sm:w-full md:space-x-8 justify-between">
 
           <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">
@@ -85,15 +85,17 @@ const Hero = () => {
             justifyContent: "center"
           }}
         >
-          <FlareIcon sx={{ color: colors.primary[500] }} />
+          <FlareIcon sx={{ color: colors.text.secondary }} />
         </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
+               color='textPrimary'
                
-               sx={{color: '#000000', fontSize: {
+               
+               sx={{ fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -109,7 +111,7 @@ const Hero = () => {
           </div>
            {showMore && (
            <div>
-            <Divider variant="middle" sx={{ margin: "1rem 0" }} />  
+            <Divider variant="middle" sx={{ margin: "1rem 0", }} />  
              <div className="flex items-center  gap-4 mb-4">
          <Icon
           sx={{
@@ -121,15 +123,15 @@ const Hero = () => {
             justifyContent: "center"
           }}
         >
-          <FlareIcon sx={{ color: colors.primary[500] }} />
+          <FlareIcon sx={{ color: colors.text.secondary }}  />
         </Icon>
 
            <Typography
                variant="body"
                component="p"
                gutterBottom
-               
-               sx={{ color: '#000000', fontSize: {
+               color="textPrimary"
+               sx={{  fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -160,9 +162,9 @@ const Hero = () => {
             }}
           >
             {showMore ? (
-              <RemoveIcon sx={{ color: colors.primary[500] , }} />
+              <RemoveIcon sx={{ color: colors.text.secondary }}  />
             ) : (
-              <AddIcon sx={{ color: colors.primary[500] }} />
+              <AddIcon sx={{ color: colors.text.secondary }} />
             )}
           </Icon>
         </button>

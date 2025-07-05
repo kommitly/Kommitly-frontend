@@ -98,7 +98,7 @@ const Login = () => {
   }; 
 
   return (
-    <div className="flex w-full bg-[#FBF9FF] rounded-xl flex-col items-center">
+    <div className="flex w-full  rounded-xl flex-col items-center">
       <div className="flex w-full flex-col  items-center">
         <div className="flex w-10/12 flex-col gap-4 justify-center ">
           {message && <p style={{color:colors.background.warning}}>{message}</p>}

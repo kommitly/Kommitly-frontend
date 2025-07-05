@@ -49,8 +49,9 @@ const Hero2 = () => {
         variant="body"
         component="p"
         gutterBottom
+        color="textPrimary"
         
-        sx={{marginBottom: "1.8rem", color: '#000000', fontSize: {
+        sx={{marginBottom: "1.8rem", fontSize: {
       xs: '1rem',   // extra-small screens
       sm: '1rem', // small screens
       md: '1rem',   // medium screens

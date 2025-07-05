@@ -62,7 +62,7 @@ const Registration = () => {
   return (
     <Box className="flex items-center p-2 h-screen">
       <div className="flex    rounded-xl w-full items-center h-full">
-        <Box className="w-full h-full p-4  hidden md:block bg-[#D6CFFF]  items-center justify-center bg-no-repeat bg-cover bg-center rounded-xl">
+        <Box className="w-full h-full p-4  hidden md:block   items-center justify-center bg-no-repeat bg-cover bg-center rounded-xl" sx={{backgroundColor: colors.background.paper}}>
 
        {/* { <AnimatedLines />} */}
        <Box 
@@ -129,14 +129,14 @@ const Registration = () => {
 
 
 
-     <div className="flex w-full bg-[#FBF9FF] h-full  rounded-xl flex-col items-center">
+     <div className="flex w-full  h-full  rounded-xl flex-col items-center" style={{ backgroundColor: colors.background.default } }>
        <div className="flex    w-full h-full flex-col items-center relative">
         <p className="block md:hidden fredoka text-2xl font-semibold"
         style={{ color: colors.text.secondary, fontFamily: "Fredoka, sans-serif", marginTop: "20px" }}
         >
           Kommitly
         </p>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", backgroundColor: "#FBF9FF", marginTop: "20px",width: "90%", borderRadius: "8px", justifyContent: "center",  display: "flex" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", backgroundColor: "transparent", marginTop: "20px",width: "90%", borderRadius: "8px", justifyContent: "center",  display: "flex" }}>
           <Tabs value={value} onChange={handleChange} aria-label="Login and Signup Tabs">
             <Tab label="Login" {...a11yProps(0)}  sx={{
            fontSize: {

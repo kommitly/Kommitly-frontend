@@ -62,15 +62,16 @@ const Procrastination = () => {
                   justifyContent: "center"
                 }}
               >
-                <FlareIcon sx={{ color: colors.primary[500] }} />
+                <FlareIcon sx={{ color: colors.text.secondary }}  />
               </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
+               color='textPrimary'
                
-               sx={{color: '#000000', fontSize: {
+               sx={{ fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -100,15 +101,16 @@ const Procrastination = () => {
                   justifyContent: "center"
                 }}
               >
-                <FlareIcon sx={{ color: colors.primary[500] }} />
+                <FlareIcon sx={{ color: colors.text.secondary }}  />
               </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
+                color='textPrimary'
                
-               sx={{color: '#000000', fontSize: {
+               sx={{fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -138,15 +140,16 @@ const Procrastination = () => {
                   justifyContent: "center"
                 }}
               >
-                <FlareIcon sx={{ color: colors.primary[500] }} />
+                <FlareIcon sx={{ color: colors.text.secondary }}  />
               </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
+                color='textPrimary'
                
-               sx={{color: '#000000', fontSize: {
+               sx={{ fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -179,9 +182,9 @@ const Procrastination = () => {
             }}
           >
             {showMore ? (
-              <RemoveIcon sx={{ color: colors.primary[500] , }} />
+              <RemoveIcon sx={{ color: colors.text.secondary }}  />
             ) : (
-              <AddIcon sx={{ color: colors.primary[500] }} />
+              <AddIcon sx={{ color: colors.text.secondary }}  />
             )}
           </Icon>
         </button>

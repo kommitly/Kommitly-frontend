@@ -64,7 +64,7 @@ const Graveyard = () => {
     justifyContent: "center"
   }}
 >
-  <FlareIcon sx={{ color: colors.primary[500] }} />
+  <FlareIcon sx={{ color: colors.text.secondary }}  />
 </Icon>
 
              <Typography

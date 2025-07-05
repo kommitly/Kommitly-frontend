@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import { tokens } from '../theme'; // Ensure the path is correct
 import Divider from '@mui/material/Divider';
 
+
 const Goalmore = () => {
   const [showAlt, setShowAlt] = useState(false);
   const theme = useTheme();
@@ -79,15 +80,15 @@ const Goalmore = () => {
     justifyContent: "center"
   }}
 >
-  <FlareIcon sx={{ color: colors.primary[500] }} />
+  <FlareIcon sx={{ color: colors.text.secondary }}  />
 </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
-               
-               sx={{color: '#000000', fontSize: {
+               color='textPrimary'
+               sx={{ fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -112,15 +113,15 @@ const Goalmore = () => {
     justifyContent: "center"
   }}
 >
-  <FlareIcon sx={{ color: colors.primary[500] }} />
+  <FlareIcon sx={{ color: colors.text.secondary }}  />
 </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
-               
-               sx={{color: '#000000', fontSize: {
+               color='textPrimary'
+               sx={{ fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -186,15 +187,16 @@ const Goalmore = () => {
     justifyContent: "center"
   }}
 >
-  <FlareIcon sx={{ color: colors.primary[500] }} />
+  <FlareIcon sx={{ color: colors.text.secondary }}  />
 </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
+               color='textPrimary'
                
-               sx={{color: '#000000', fontSize: {
+               sx={{fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -220,15 +222,16 @@ const Goalmore = () => {
     justifyContent: "center"
   }}
 >
-  <FlareIcon sx={{ color: colors.primary[500] }} />
+  <FlareIcon sx={{ color: colors.text.secondary }}  />
 </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
+               color='textPrimary'
                
-               sx={{color: '#000000', fontSize: {
+               sx={{ fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens
@@ -254,15 +257,16 @@ const Goalmore = () => {
     justifyContent: "center"
   }}
 >
-  <FlareIcon sx={{ color: colors.primary[500] }} />
+  <FlareIcon sx={{ color: colors.text.secondary }}  />
 </Icon>
 
              <Typography
                variant="body"
                component="p"
                gutterBottom
+               color='textPrimary'
                
-               sx={{color: '#000000', fontSize: {
+               sx={{ fontSize: {
              xs: '1rem',   // extra-small screens
              sm: '1rem', // small screens
              md: '0.9rem',   // medium screens

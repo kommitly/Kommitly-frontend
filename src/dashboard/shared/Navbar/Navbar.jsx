@@ -480,18 +480,18 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                   {isOpen && (
                     <div className="absolute right-0 top-full mt-2 w-32  shadow-lg rounded-lg   z-50" style={{ backgroundColor: colors.background.default }}>
                       <Link to="/dashboard/settings">
-                        <button className="block w-full text-left px-4 py-2 text-sm cursor-pointer hover:text-[#6D5BA6]" style={{ color: colors.text.primary }}>
+                        <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{ color: colors.text.primary, '&:hover': { color: colors.text.secondary }, textTransform: "none",  gap: "10px"  } }>
                           ⚙️ Settings
-                        </button>
+                        </Button>
                       </Link>
 
-                      <button
+                      <Button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm cursor-pointer hover:text-[#6D5BA6]" style={{ color: colors.text.primary }}
+                        className="block w-full   py-2 text-sm cursor-pointer hover:text-[#6D5BA6]" sx={{ color: colors.text.primary, '&:hover': { color: colors.text.secondary }, textTransform: "none", gap: "10px" } }
                         >
                       
                         🚪 Logout
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>
