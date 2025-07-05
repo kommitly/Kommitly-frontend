@@ -27,11 +27,14 @@ const Dashboard = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
 
-    useEffect(() => {
-  if (isMobile && isCollapsed) {
-    setIsCollapsed(true);
+  useEffect(() => {
+  if (isMobile) {
+    setIsCollapsed(true);  // collapsed on mobile
+  } else {
+    setIsCollapsed(false); // expanded on desktop/laptop
   }
-}, [location.pathname]);
+}, [isMobile]);
+
 
  
 

@@ -403,7 +403,7 @@ sx={{
                                   <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
                                     <img src={logo} alt="Kommitly Logo" className='md:w-4 md:h-4 xl:w-4 xl:h-4 2xl:w-8 2xl:h-8  w-4 h-4' />
                                   </div>
-                                  <p className=' 2xl:text-3xl lg:text-xl ' style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: 500,  }}>
+                                  <p className=' 2xl:text-3xl lg:text-xl text-lg ' style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: 500,  }}>
                                     Kommitly
 
                                 </p>
