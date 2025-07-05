@@ -70,7 +70,7 @@ const Dashboard = () => {
     paddingLeft: !isMobile
       ? isCollapsed
         ? (isXl ? '60px' : '20px')
-        : (isXl ? '60px' : '0px')
+        : (isXl ? '60px' : '10px')
       : '0px',
     position: isMobile ? 'fixed' : 'relative',
     height: isMobile ? '100vh' : 'auto',

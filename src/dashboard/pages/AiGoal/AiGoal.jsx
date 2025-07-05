@@ -500,9 +500,12 @@ const AiGoal = () => {
               
               </div>
               <div className='space-y-6 mt-4'>
-              {activeTask && activeTask.ai_subtasks.map((step, stepIndex) => {
-                  const {timeline, cleanedDetails } = extractTimeline(step.description); // Extract cleaned description for each step
-              
+              {activeTask &&
+  [...activeTask.ai_subtasks] // make a shallow copy
+    .sort((a, b) => a.id - b.id) // sort by ID
+    .map((step, stepIndex) => {
+      const { timeline, cleanedDetails } = extractTimeline(step.description);
+      
                   return (
                     <Box key={stepIndex}  className="step  p-4 rounded-xl cursor-pointer flex items-center gap-4" sx={{ backgroundColor: colors.background.paper }}>
                     <label className="custom-checkbox">
@@ -940,9 +943,12 @@ const AiGoal = () => {
               
               </div>
               <div className='space-y-6 mt-4'>
-                {activeTask && activeTask.ai_subtasks.map((step, stepIndex) => {
-                  const {timeline, cleanedDetails } = extractTimeline(step.description); // Extract cleaned description for each step
-              
+                {activeTask &&
+  [...activeTask.ai_subtasks] // make a shallow copy
+    .sort((a, b) => a.id - b.id) // sort by ID
+    .map((step, stepIndex) => {
+      const { timeline, cleanedDetails } = extractTimeline(step.description);
+      
                   return (
                     <Box key={stepIndex}  className="step  p-4 rounded-xl cursor-pointer flex items-center gap-4" sx={{ backgroundColor: colors.background.paper }}>
                     <label className="custom-checkbox">

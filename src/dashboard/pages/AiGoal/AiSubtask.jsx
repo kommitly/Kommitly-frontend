@@ -25,7 +25,7 @@ import  Backdrop  from "@mui/material/Backdrop";
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import { motion } from "framer-motion";
 import AiAssistance from "../../components/AiAssistance";
-
+import EastIcon from '@mui/icons-material/East';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
@@ -220,14 +220,12 @@ const confirmDeleteSubtask = async () => {
         <div className="flex justify-between items-center mb-4">
           <button
  
-  className="group p-2 w-10 h-10 flex justify-center items-center cursor-pointer hover:bg-[#4F378A] rounded-full border border-2"
-  style={{
-    borderColor: colors.primary[500],
-  }}
+  className="group p-2 w-10 h-10 flex justify-center items-center cursor-pointer  "
+ 
        onClick={handleClose}
 
 >
-  <HiMiniChevronDoubleLeft className="text-2xl  text-[#4F378A] group-hover:text-white transition-colors duration-300"   />
+  <EastIcon className="text-2xl  text-[#4F378A]  transition-colors duration-300"   />
 </button>
 
 
