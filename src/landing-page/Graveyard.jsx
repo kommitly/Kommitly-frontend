@@ -57,7 +57,7 @@ const Graveyard = () => {
          <Icon
   sx={{
     padding: "1.2rem",
-    backgroundColor: colors.primary[300],
+    backgroundColor: "#A89FE3",
     borderRadius: "30%",
     display: "flex",
     alignItems: "center",
