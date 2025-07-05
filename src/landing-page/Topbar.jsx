@@ -3,9 +3,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Signup from "./Signup";
 import { Menu, X } from "lucide-react"; // or use any icons you prefer
+import { useTheme } from "@mui/material/styles";
+import { tokens } from "../theme"; // Ensure the path is correct
 
 const Topbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   return (
     <nav className="w-full sm:w-full rounded-md mt-2 shadow-[#4F378A] px-6 py-3 flex items-center justify-between">
@@ -40,7 +44,7 @@ const Topbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="absolute top-16 right-6 bg-white shadow-lg rounded-lg p-4 flex flex-col gap-4 sm:hidden z-50">
+        <div className="absolute top-16 right-6  shadow-lg rounded-lg p-4 flex flex-col gap-4 sm:hidden z-50" style={{ backgroundColor: colors.background.paper }}>
           <Link
             to="/registration?tab=login"
             className="text-[#6F2DA8] px-4 py-2 rounded-lg hover:bg-gray-100 transition"
