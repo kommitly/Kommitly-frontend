@@ -195,7 +195,7 @@ const handleReschedule = () => {
 
     return (
         <Box m="20px">
-            <Header title="CALENDAR" subtitle="Full Calendar Interactive Page" />
+            <Header title="CALENDAR" subtitle="" />
             <Box display="flex" justifyContent="space-between" flexDirection={isSmallScreen ? 'column' : 'row'}>
                 {/*CALENDAR SIDEBAR */}
                 <Box 
