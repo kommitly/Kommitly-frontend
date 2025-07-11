@@ -13,7 +13,7 @@ const Hero2 = () => {
     const colors =tokens(theme.palette.mode);
 
   return (
-    <section className=" flex flex-col  md:px-6 px-2 md:pt-0 pt-12 md:mb-0 mb-8">
+    <section className=" flex flex-col container  md:px-6 px-2 md:pt-0 pt-12 md:mb-0 mb-8">
        <div
       className=" md:p-4 w-full h-full md:flex mt-8 sm:w-full justify-between  "
     >
@@ -96,8 +96,9 @@ const Hero2 = () => {
         src={breakdown}
         alt="Hero"
     
+
         className="w-full h-full object-contain"
-        
+
       />
     </div>
        
