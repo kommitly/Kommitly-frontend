@@ -23,6 +23,8 @@ const Hero = () => {
               <img src={hero} alt="Hero"  
               width="600"     
             height="400"
+             fetchPriority="high" 
+             decoding="async" 
          
           className=" object-contain" />
             </div>
