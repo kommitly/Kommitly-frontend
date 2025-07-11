@@ -97,7 +97,7 @@ const Hero2 = () => {
           width="600"     
           height="400"
          
-          className="w-full h-auto object-contain" />
+          className=" object-contain" />
         </div>
        
       </div>
