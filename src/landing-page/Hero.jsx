@@ -19,14 +19,15 @@ const Hero = () => {
       <div className="p-4  w-full h-full flex flex-col-reverse md:flex-row mt-8 sm:w-full md:space-x-8 justify-between">
 
           <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">
-          <div className="w-10/12 sm:w-full ">
+          <div className="w-10/12 sm:w-full aspect-[3/2]">
               <img src={hero} alt="Hero"  
-              width="600"     
-            height="400"
+             
              fetchPriority="high" 
              decoding="async" 
          
-          className=" object-contain" />
+          className="w-full h-full object-contain"
+        
+       />
             </div>
             </div>
           <div className=" md:w-6/12 sm:w-full flex flex-col md:pl-5  pl-0 sm:justify-center sm:items-center md:items-start md:mb-8 ">
