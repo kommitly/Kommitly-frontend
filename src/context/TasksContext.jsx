@@ -20,6 +20,9 @@ export const TasksProvider = ({ children }) => {
 
     useEffect(() => {
         const loadTasks = async () => {
+        const token = localStorage.getItem("token");  // Check if token exists
+        if (!token || !user) return;
+
             try {
                 const fetchedTasks = await fetchTasks();
                 console.log('Fetched tasks:', fetchedTasks);
