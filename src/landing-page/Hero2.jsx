@@ -92,7 +92,12 @@ const Hero2 = () => {
 
         <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">
         <div className="w-10/12 sm:w-full ">
-         <img src={breakdown} alt="Hero" className="w-full " />
+         <img src={breakdown}
+          alt="Hero"
+          width={600}     
+          height={400}
+          loading="lazy"     
+          className="w-full h-auto" />
         </div>
        
       </div>
