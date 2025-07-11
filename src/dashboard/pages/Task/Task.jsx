@@ -486,7 +486,7 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
   
       </div>
 
-      <div className="mt-6 flex gap-4 pl-38 sm:pl-95">
+      <div className="mt-6 flex gap-4 pl-38 sm:pl-90">
         <button
           onClick={handleDeleteTask}
           className="bg-red-400 text-red-100 px-4 py-2 rounded hover:bg-red-600"

@@ -16,6 +16,7 @@ import { use } from "react";
 import { GoogleLogin} from '@react-oauth/google';
 import { loginWithGoogle} from "../utils/Api"; 
 
+
 const initialValues = {
   first_name: "",
   last_name: "",
@@ -46,7 +47,6 @@ const Signup = () => {
   const [message, setMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isCheckingVerification, setIsCheckingVerification] = useState(false);
-  
 
   const handleFormSubmit = async (values) => {
     try {
@@ -105,19 +105,19 @@ const Signup = () => {
     return () => clearInterval(interval);
   }, [isCheckingVerification, email, password, navigate]);
 
-   const handleGoogleLogin = async (credentialResponse) => {
-    const id_token = credentialResponse.credential;
-    console.log("Google token:", id_token);
-    try {
-      const data =await loginWithGoogle(id_token);
-      await login(data.access);
-      // await loadProfile();
-      getLocationAndTimezone();
-      // navigate("/dashboard");
-    } catch (error) {
-      setMessage("Google login failed. Try again.");
-    }
-  }; 
+  const handleGoogleLogin = async (credentialResponse) => {
+      const id_token = credentialResponse.credential;
+      console.log("Google token:", id_token);
+      try {
+        const data =await loginWithGoogle(id_token);
+        await login(data.access);
+        await loadProfile();
+        getLocationAndTimezone();
+        navigate("/dashboard");
+      } catch (error) {
+        setMessage("Google login failed. Try again.");
+      }
+    }; 
 
  
   return (
@@ -222,8 +222,7 @@ const Signup = () => {
                 </form>
             )}
         </Formik>
-
-          <div className = "flex  justify-center mt-6">
+         <div className = "flex  justify-center mt-6">
                     <GoogleLogin
                       onSuccess={handleGoogleLogin}
                       onError={() => setMessage("Google login failed. Try again.")}
