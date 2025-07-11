@@ -91,15 +91,16 @@ const Hero2 = () => {
       </div>
 
         <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">
-        <div className="w-10/12 sm:w-full aspect-[3/2]">
-      <img
-        src={breakdown}
-        alt="Hero"
-    
-        className="w-full h-full object-contain"
-        
-      />
-    </div>
+        <div className="w-10/12 sm:w-full ">
+         <img src={breakdown}
+          alt="Hero"
+          width="600"     
+          height="400"
+          fetchPriority="high"
+          decoding="async" 
+         
+          className=" object-contain" />
+        </div>
        
       </div>
   
