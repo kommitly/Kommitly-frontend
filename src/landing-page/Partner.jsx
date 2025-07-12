@@ -5,9 +5,12 @@ import { useTheme } from '@mui/material/styles';
 import { tokens } from '../theme'; // Ensure the path is correct
 import FlareIcon from '@mui/icons-material/Flare';
 import Icon from '@mui/material/Icon';
+
+
 const Partner = () => {
-   const theme = useTheme();
-      const colors =tokens(theme.palette.mode);
+
+  const theme = useTheme();
+  const colors =tokens(theme.palette.mode);
     
     
   return (
