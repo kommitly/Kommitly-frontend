@@ -36,6 +36,7 @@ const Topbar = () => {
 
       {/* Mobile Menu Toggle Button */}
       <button
+      aria-label="Menu"
         className="sm:hidden text-[#4F378A]"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >

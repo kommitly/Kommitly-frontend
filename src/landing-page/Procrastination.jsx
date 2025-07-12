@@ -168,7 +168,9 @@ const Procrastination = () => {
         </div>
         {/* Toggle Button */}
       <div className="w-11/12  mb-12 flex justify-end">
-        <button onClick={() => setShowMore(!showMore)}>
+        <button
+        aria-label="Expand"
+         onClick={() => setShowMore(!showMore)}>
           <Icon
             sx={{
              backgroundColor: colors.primary[300],

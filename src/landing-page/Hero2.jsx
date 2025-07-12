@@ -77,6 +77,7 @@ const Hero2 = () => {
                 </Link>
 
                  <button
+                 aria-label="How-it-works"
                  
                   className=" text-[#6F2DA8] px-4 py-2  cursor-pointer hover:text-[#4F378A] transition 2xl:text-xl xl:text-base lg:text-base sm:text-xs"
                 >
