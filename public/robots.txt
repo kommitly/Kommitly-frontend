@@ -1,4 +1,3 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://kommitly-frontend.vercel.app/sitemap.xml
