@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ProfileContext } from "../context/ProfileContext";
 import { TextField } from "@mui/material";
 import { Formik } from "formik";
@@ -11,8 +11,7 @@ import { useTheme } from "@mui/material/styles";
 import { tokens } from "../theme";
 import { Box } from "@mui/material";
 import getLocationAndTimezone from "../utils/location";
-import { GoogleLogin} from '@react-oauth/google';
-import { loginWithGoogle} from "../utils/Api"; 
+
 import { motion } from "framer-motion";
 
 const initialValues = {
@@ -33,7 +32,7 @@ const Login = () => {
   const { loadProfile } = useContext(ProfileContext);
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
-
+  const [submitting, setSubmitting] = useState(false);
     // redirect if logged in
   useEffect(() => {
     if (!loading && user) {
@@ -42,7 +41,7 @@ const Login = () => {
   }, [user, loading, navigate]);
 
   // show loading screen if still checking auth state
- if (loading) {
+ if (loading ||  submitting) {
     return (
       <div className='w-full mt-8 flex min-h-screen'>
       <div className="w-11/12 p-8 mt-8 py-8 flex-1 flex justify-center items-center overflow-y-auto scrollbar-hide max-h-[75vh] no-scrollbar">
@@ -64,6 +63,7 @@ const Login = () => {
   }
 
   const handleLogin = async (values) => {
+    setSubmitting(true);
     try {
       const response = await fetch("https://kommitly-backend.onrender.com/api/users/login", {
         method: "POST",
@@ -82,25 +82,18 @@ const Login = () => {
     } catch (error) {
       setMessage("Error logging in. Try again.");
     }
+    finally {
+    setSubmitting(false);
+  }
   };
 
-  const handleGoogleLogin = async (credentialResponse) => {
-    const id_token = credentialResponse.credential;
-    console.log("Google token:", id_token);
-    try {
-      const data =await loginWithGoogle(id_token);
-      await login(data.access);
-      getLocationAndTimezone();
-  
-    } catch (error) {
-      setMessage("Google login failed. Try again.");
-    }
-  }; 
+ 
 
   return (
     <div className="flex w-full  rounded-xl flex-col items-center">
       <div className="flex w-full flex-col  items-center">
         <div className="flex w-10/12 flex-col gap-4 justify-center ">
+         
           {message && <p style={{color:colors.background.warning}}>{message}</p>}
           <Formik onSubmit={handleLogin} initialValues={initialValues} validationSchema={userSchema}>
             {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
@@ -122,7 +115,19 @@ const Login = () => {
                     name="email"
                     error={!!touched.email && !!errors.email}
                     helperText={touched.email && errors.email}
-                    sx={{ gridColumn: "span 4",  }}
+                    sx={{ gridColumn: "span 4", "& .MuiFilledInput-root": {
+  backgroundColor: "#f5f5f5",
+  "&:hover": {
+    backgroundColor: "#ebebeb",
+  },
+  "&.Mui-focused": {
+    backgroundColor: "#e0e0e0",
+  },
+  input: {
+    color: "#333",
+  },
+},
+  }}
                   />
                   <TextField
                     fullWidth
@@ -138,20 +143,31 @@ const Login = () => {
                     sx={{ gridColumn: "span 4" }}
                   />
                 </Box>
+                <div className="w-full flex justify-end mt-3">
+                  <Link>
+                  <p className="text-xs font-medium " style={{color: colors.primary[500]}}>
+                    Forgot password?</p></Link>
+
+                </div>
                 <Box display="flex" justifyContent="center" mt="20px" width="100%">
-                  <Button type="submit" color="secondary" variant="contained" sx={{ width: "100%", padding: 1.5 }}>
-                    Login
+                  <Button type="submit"  sx={{ width: "100%", padding: 1.5, backgroundColor: colors.primary[500], color:"#FFFFFF" }}>
+                   <span > Login</span>
                   </Button>
                 </Box>
               </form>
+              
             )}
           </Formik>
-          <div className = "flex  justify-center mt-6">
-            <GoogleLogin
-              onSuccess={handleGoogleLogin}
-              onError={() => setMessage("Google login failed. Try again.")}
-              />
-            </div>
+
+            <div className="w-full flex justify-center mt-3">
+                  <Link className="flex gap-2"
+                       to="/registration?tab=signup">
+                  <p className="text-xs " style={{color: colors.text.primary}}>
+                    Dont have an account?</p>
+                    <span  className="text-xs font-semibold " style={{color: colors.text.secondary}} >Sign up</span></Link>
+
+                </div>
+        
         </div>
       </div>
     </div>

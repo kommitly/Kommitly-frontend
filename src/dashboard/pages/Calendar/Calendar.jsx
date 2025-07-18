@@ -196,7 +196,7 @@ const handleReschedule = () => {
     return (
         <Box m="20px">
             <Header title="CALENDAR" subtitle="" />
-            <Box display="flex" justifyContent="space-between" flexDirection={isSmallScreen ? 'column' : 'row'}>
+            <div className="flex flex-col-reverse md:flex-row justify-between gap-4">
                 {/*CALENDAR SIDEBAR */}
                 <Box 
                 flex={isSmallScreen ? 'none' : '1 1 30%'}
@@ -204,12 +204,17 @@ const handleReschedule = () => {
                 p="15px"
                 borderRadius="8px"
                 width="100%"
-                height={calendarHeight}
+                height="auto"
                 overflow="hidden"
                 >
                     <Typography variant="h5" sx={{color: colors.text.primary}}>Events</Typography>
                     <List overflowY="auto"  sx={{ maxHeight: 'calc(100% - 50px)', overflowY: 'auto', marginTop: '10px' }}>
-                        {currentEvents
+                        {currentEvents.length === 0 ? (
+    <Typography sx={{ padding: '10px', color: colors.text.secondary }}>
+      No scheduled events
+    </Typography>
+  ) : (
+    currentEvents
   .slice() // make a shallow copy to avoid mutating state directly
   .sort((a, b) => new Date(b.start) - new Date(a.start)) // newest first
   .map((event) => (
@@ -236,7 +241,8 @@ const handleReschedule = () => {
         <MoreVertIcon sx={{ color: colors.text.primary, }} onClick={(e) => handleMenuOpen(e, event)} />
       
     </ListItem>
-))}
+))
+  )}
 
                     </List>
                     <Menu
@@ -291,7 +297,7 @@ const handleReschedule = () => {
                     />
                 </Box>
 
-            </Box>
+            </div>
         </Box>
     );
 

@@ -451,7 +451,7 @@ const handleAddSubtask = () => {
         </div>
 
                       
-               <div className="pl-40 sm:pl-120"> 
+               <div className="flex justify-end w-full"> 
             <button onClick={handleAddTask} className="mt-4 px-4 py-2 bg-[#6246AC] hover:bg-purple-600 text-white rounded-lg">
               Create Task
             </button>

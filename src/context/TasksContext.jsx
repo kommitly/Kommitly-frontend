@@ -1,11 +1,14 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { fetchTasks } from '../utils/Api'; // Adjust the import path as needed
+import { AuthContext } from './AuthContext'; // adjust the path
 
 export const TasksContext = createContext();
 
 export const TasksProvider = ({ children }) => {    
     const [tasks, setTasks] = useState([]);
+     const { user, loading } = useContext(AuthContext); // get loading + user
+    
 
     const [hiddenTasks, setHiddenTasks] = useState(() => {
         const storedHiddenTasks = localStorage.getItem("hiddenTasks");

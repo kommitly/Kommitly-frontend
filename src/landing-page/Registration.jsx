@@ -1,4 +1,7 @@
-import * as React from "react";
+
+import { useState, useContext, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -14,50 +17,40 @@ import { tokens } from "../theme";
 import { useMediaQuery } from "@mui/material";
 import banner from "../assets/banner.svg";
 import { motion } from "framer-motion";
+import { GoogleLogin} from '@react-oauth/google';
+import { loginWithGoogle} from "../utils/Api"; 
+import getLocationAndTimezone from "../utils/location";
 
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
 
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+
 
 const Registration = () => {
   const location = useLocation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { login, loading, user } = useContext(AuthContext);
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab") || "login"; // fallback to login
 
-  // Determine the initial tab based on the query parameter
-  const queryParams = new URLSearchParams(location.search);
-  const initialTab = queryParams.get("tab") === "signup" ? 1 : 0;
 
-  const [value, setValue] = React.useState(initialTab);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+
+
+
+   const handleGoogleLogin = async (credentialResponse) => {
+      const id_token = credentialResponse.credential;
+      console.log("Google token:", id_token);
+      try {
+        const data =await loginWithGoogle(id_token);
+        await login(data.access);
+        getLocationAndTimezone();
+    
+      } catch (error) {
+        setMessage("Google login failed. Try again.");
+      }
+    }; 
 
   return (
     <Box className="flex items-center p-2 h-screen">
@@ -107,7 +100,7 @@ const Registration = () => {
        
 
         <p
-          className="mt-4 mb-4 md:text-xs lg:text-sm  sm:text-2xl xl:text-base 2xl:text-xl"
+          className="mt-4 mb-4 md:text-xs lg:text-sm text-xs  sm:text-2xl xl:text-base 2xl:text-xl"
           style={{ color: colors.text.secondary, fontFamily: "Poppins, sans-serif" }}
 
         >
@@ -119,7 +112,7 @@ const Registration = () => {
          <img
           src={breakdown}
           alt="Logo"
-          className="justify-end w-10/12 md:w-9/12 sm;w-8/12 xs-w-6/12    h-auto "
+          className="justify-end w-10/12 md:w-8/12 sm;w-8/12 xs-w-6/12    h-auto "
         />
      </div>
       </Box>
@@ -136,32 +129,36 @@ const Registration = () => {
         >
           Kommitly
         </p>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", backgroundColor: "transparent", marginTop: "20px",width: "90%", borderRadius: "8px", justifyContent: "center",  display: "flex" }}>
-          <Tabs value={value} onChange={handleChange} aria-label="Login and Signup Tabs">
-            <Tab label="Login" {...a11yProps(0)}  sx={{
-           fontSize: {
-      xs: '1rem',  
-      md: '0.8rem',  // ~text-base on small screens
-      xl: '1.2rem', // ~text-xl on extra large screens
-      lg: '0.8rem' // not standard, just showing possible logic
-    }
-        }}/>
-            <Tab label="Signup" {...a11yProps(1)}  sx={{
-    fontSize: {
-      xs: '1rem', 
-      md: '0.8rem',   // ~text-base on small screens
-      xl: '1.2rem', // ~text-xl on extra large screens
-      lg: '0.8rem' // not standard, just showing possible logic
-    }
-  }}/>
-          </Tabs>
-        </Box>
-        <CustomTabPanel value={value} index={0} className="w-full">
-          <Login />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1} className="w-full">
-          <Signup />
-        </CustomTabPanel>
+        
+               {tab === "login" ? <>
+               <div className="w-full p-12 " >
+                <p className="text-3xl font-medium" style={{color:colors.text.secondary}}>Log in to your Account</p>
+              
+               </div>
+               </> 
+                 : <>
+                  <div className="w-full p-12 " >
+                <p className="text-3xl font-medium" style={{color:colors.text.secondary}}>Create your Account</p>
+              
+               </div>
+                 
+                 
+                 </>}
+       
+                      {tab === "login" ? <Login /> : <Signup />}
+                      <div className="w-full flex m-2 justify-center itens-center">
+                      <p>or</p>
+                      </div>
+
+                        <div className = "flex w-full  justify-center ">
+                    <GoogleLogin
+                      onSuccess={handleGoogleLogin}
+                      onError={() => setMessage("Google login failed. Try again.")}
+                      />
+                    </div>
+                    
+
+    
       </div>
      </div>
       </div>

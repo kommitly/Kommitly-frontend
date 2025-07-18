@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import Backdrop from '@mui/material/Backdrop';
@@ -13,8 +13,6 @@ import {Formik} from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { use } from "react";
-import { GoogleLogin} from '@react-oauth/google';
-import { loginWithGoogle} from "../utils/Api"; 
 
 
 const initialValues = {
@@ -105,23 +103,12 @@ const Signup = () => {
     return () => clearInterval(interval);
   }, [isCheckingVerification, email, password, navigate]);
 
-  const handleGoogleLogin = async (credentialResponse) => {
-      const id_token = credentialResponse.credential;
-      console.log("Google token:", id_token);
-      try {
-        const data =await loginWithGoogle(id_token);
-        await login(data.access);
-        await loadProfile();
-        getLocationAndTimezone();
-        navigate("/dashboard");
-      } catch (error) {
-        setMessage("Google login failed. Try again.");
-      }
-    }; 
-
+ 
  
   return (
     <div className="flex w-full   flex-col items-center  ">
+          <div className="flex w-full flex-col  items-center">
+        <div className="flex w-10/12 flex-col gap-4 justify-center ">
    
 
  
@@ -129,7 +116,7 @@ const Signup = () => {
      
         {message && <p style={{color:colors.background.warning}}>{message}</p>}
 
-        <div className="h-8/12 w-10/12 flex flex-col items-center justify-center">
+ 
 
         <Formik
         onSubmit={handleFormSubmit}
@@ -165,7 +152,7 @@ const Signup = () => {
                   error={!!touched.first_name && !!errors.first_name}
                   helperText={touched.first_name && errors.first_name}
                   sx={{gridColumn: "span 2"}}
-                  InputProps={{ style: { color: "#fff" } }} 
+               
 
                   />
                     <TextField 
@@ -180,7 +167,7 @@ const Signup = () => {
                         error={!!touched.first_name && !!errors.last_name}
                         helperText={touched.first_name && errors.last_name}
                         sx={{ gridColumn: "span 2" }}
-                        InputProps={{ style: { color: "#fff" } }} 
+                  
                         />
                         <TextField
                         fullWidth
@@ -214,7 +201,7 @@ const Signup = () => {
 
                     </Box>
                     <Box display="flex" justifyContent="end" mt="20px" width="100%"  >
-                        <Button type="submit" color="secondary" variant="contained"  sx={{width: '100%', padding: 1.5 }}>
+                         <Button type="submit"  sx={{ width: "100%", padding: 1.5, backgroundColor: colors.primary[500], color:"#FFFFFF" }}>
                             Create New User
                         </Button>
                     </Box>
@@ -222,12 +209,16 @@ const Signup = () => {
                 </form>
             )}
         </Formik>
-         <div className = "flex  justify-center mt-6">
-                    <GoogleLogin
-                      onSuccess={handleGoogleLogin}
-                      onError={() => setMessage("Google login failed. Try again.")}
-                      />
-                    </div>
+
+            <div className="w-full flex justify-center mt-3">
+                          <Link className="flex gap-2"
+                               to="/registration?tab=login">
+                          <p className="text-xs " style={{color: colors.text.primary}}>
+                            Already have an account?</p>
+                            <span  className="text-xs font-semibold " style={{color: colors.text.secondary}} >Login</span></Link>
+        
+                        </div>
+      
 
       
 
@@ -252,6 +243,8 @@ const Signup = () => {
 
           
           </Backdrop>
+   
+      </div>
       </div>
     </div>
   );

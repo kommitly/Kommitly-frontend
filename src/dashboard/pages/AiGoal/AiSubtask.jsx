@@ -250,19 +250,20 @@ const confirmDeleteSubtask = async () => {
               </svg>
 
  {menuVisible && (
-                  <div className="absolute right-0 mt-2 w-48  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.background.default }}>
-                     <button
+                  <div className="absolute right-0 mt-2 w-40   rounded-md shadow-lg z-50" style={{ backgroundColor: colors.background.default }}>
+                     <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{ color: colors.text.primary, '&:hover': { color: colors.text.secondary }, textTransform: "none",  gap: "10px"  } }
              onClick={handleUpdateSubtask}
-               className="block w-full text-left px-4 py-2 text-xs  " style={{ color: colors.text.primary }}
+
             >
-              Update
-            </button>
-                    <button
+                   Update
+            </Button>
+       
+                                 <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{ color: colors.background.warning, '&:hover': { color: colors.text.secondary }, textTransform: "none",  gap: "10px"  } }
             onClick={openDeletelModal}
-              className="block w-full text-left px-4 py-2 text-xs  " style={{color: colors.background.warning }}
+
             >
               Delete
-            </button>
+            </Button>
            
 
 

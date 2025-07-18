@@ -132,11 +132,11 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
 
 
       navigate(`/dashboard/ai-goal/${response.ai_goal.id}`);
-    } catch (error) {
-      console.error('Error creating goal:', error);
-    } finally {
-      setLoading(false);
-    }
+    return; // ✅ ensures no further code runs after navigation
+  } catch (error) {
+    console.error('Error creating goal:', error);
+    setLoading(false);
+  }
   };
 
   const displayData = showSteps && selectedTask

@@ -89,7 +89,7 @@ const Goals = () => {
   const goalId = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { goals, addGoal } = useContext(GoalsContext);
+  const { goals, addGoal, reloadGoals } = useContext(GoalsContext);
   const [loading, setLoading] = useState(true);
   const [selectedAiCategory, setSelectedAiCategory] = useState("inProgress");
   const [selectedCategory, setSelectedCategory] = useState("inProgress");
@@ -116,6 +116,11 @@ const Goals = () => {
       setLoading(false);
     }
   }, [goals]);
+
+  useEffect(() => {
+    reloadGoals();
+
+  }, [location.pathname])
 
 
   const handleClose = () => {

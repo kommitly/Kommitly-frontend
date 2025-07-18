@@ -13,7 +13,7 @@ const Hero2 = () => {
     const colors =tokens(theme.palette.mode);
 
   return (
-    <section className=" flex flex-col container  md:px-6 px-2 md:pt-0 pt-12 md:mb-0 mb-8">
+    <section className=" flex flex-col container  md:px-6 px-2 md:pt-0 pt-12 md:mb-8 mb-8">
        <div
       className=" md:p-4 w-full h-full md:flex mt-8 sm:w-full justify-between  "
     >
@@ -26,7 +26,7 @@ const Hero2 = () => {
   gutterBottom
   color="primary"
   sx={{
-    marginBottom: "1rem",
+    marginBottom: "3rem",
     fontWeight: 'medium',
     fontSize: {
       xs: '2rem',
@@ -45,7 +45,7 @@ const Hero2 = () => {
   Clear Mind. Focused Days. Real Progress.
 </Typography>
   
-      <Typography
+    {/* {  <Typography
         variant="body"
         component="p"
         gutterBottom
@@ -65,7 +65,7 @@ const Hero2 = () => {
         >
        Set goals, break them down with AI, and stay accountable—one step at a time.
 
-        </Typography>
+        </Typography>} */}
 
         <div className="flex gap-4 mb-8 md:mb-0 mt-4 sm:w-full md:w-full md:justify-start justify-center  md:mb-8">
              <Link
@@ -96,7 +96,7 @@ const Hero2 = () => {
          <img src={breakdown}
           alt="Hero"
           
-          fetchPriority="high"
+          fetchpriority="high"
           decoding="async" 
          
           className="w-full h-full object-contain"/>
