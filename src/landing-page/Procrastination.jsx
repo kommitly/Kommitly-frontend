@@ -80,7 +80,7 @@ const Procrastination = () => {
              '2xl': '1rem' // 2xl screens
            } }}
                >
-           Juma doesn’t talk about his goals — he keeps them in his Notes app
+           Juma doesn’t talk about his goals, he keeps them in his Notes app
            </Typography>
            </div>
 
@@ -160,7 +160,7 @@ const Procrastination = () => {
                >
 
           
-          But when tasks feel vague or too big, he freezes. He’s not lazy — he’s just stuck and unsure where to begin. </Typography>
+          But when tasks feel vague or too big, he freezes. He’s not lazy, he’s just stuck and unsure where to begin. </Typography>
 
            </div>
              </div>
