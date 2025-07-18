@@ -131,14 +131,14 @@ const Registration = () => {
         </p>
         
                {tab === "login" ? <>
-               <div className="w-full p-12 " >
-                <p className="text-3xl font-medium" style={{color:colors.text.secondary}}>Log in to your Account</p>
+               <div className="w-full md:p-12 p-8 " >
+                <p className="md:text-3xl text-xl font-medium" style={{color:colors.text.secondary}}>Log in to your Account</p>
               
                </div>
                </> 
                  : <>
-                  <div className="w-full p-12 " >
-                <p className="text-3xl font-medium" style={{color:colors.text.secondary}}>Create your Account</p>
+                <div className="w-full md:p-12 p-8 " >
+                <p className="md:text-3xl text-xl font-medium" style={{color:colors.text.secondary}}>Create your Account</p>
               
                </div>
                  
