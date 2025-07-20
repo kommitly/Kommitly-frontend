@@ -67,6 +67,7 @@ function ButtonDatePicker(props) {
       open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
+      PopperProps={props.PopperProps}
     />
   );
 }

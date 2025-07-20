@@ -30,6 +30,9 @@ export const tokens = (mode) => ({
         },
         tag:{
           primary: "#1E1A2A"
+        },
+           menu:{
+          primary: "#000000"
         }
       }
     : {
@@ -56,7 +59,11 @@ export const tokens = (mode) => ({
         },
          tag:{
           primary: "#EEEEEE"
+        },
+           menu:{
+          primary: "#FFFFFF"
         }
+
 
       }),
 });

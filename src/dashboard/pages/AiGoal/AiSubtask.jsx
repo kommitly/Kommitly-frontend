@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { TasksContext } from "../../../context/TasksContext";
 import PropTypes from 'prop-types';
 import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById, answerAiSubtask } from "../../../utils/Api";
@@ -41,11 +41,13 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
     const colors =tokens(theme.palette.mode);
     const [selectedFile, setSelectedFile] = useState(null);
     const showCustomReminderPicker = step.reminder_offset === 'custom';
-  
+    const dateTimePickerRef = useRef();
     const [openDelete, setOpenDelete] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [aiAnswer, setAiAnswer] = useState(null);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [showDateTimePicker,setShowDateTimePicker] = useState(false);
+    const scrollContainerRef = useRef();
 
 
     useEffect(() => {
@@ -53,6 +55,21 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
     setAiAnswer(step.ai_answer);
   }
 }, [step]);
+
+const handleDatePickerOpen = () => {
+  setShowDateTimePicker(true);
+  setTimeout(() => {
+    if (scrollContainerRef.current && dateTimePickerRef.current) {
+      const scrollParent = scrollContainerRef.current;
+      const pickerOffsetTop = dateTimePickerRef.current.offsetTop;
+      scrollParent.scrollTo({
+        top: pickerOffsetTop - 100,
+        behavior: "smooth",
+      });
+    }
+  }, 100); // small delay to wait for the picker to render
+};
+
 
 
 
@@ -239,13 +256,13 @@ const confirmDeleteSubtask = async () => {
           
 
                   <div className='flex'>
-                     <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{ backgroundColor: colors.primary[400], color: colors.background.default,   '&:hover': {
+                     <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{border: "1px solid #0D81E0"  , backgroundColor: colors.primary[400], color: colors.background.default,   '&:hover': {
       opacity: 0.7, // or any other value < 1
     }, textTransform: "none",  gap: "10px"  } }
              onClick={handleUpdateSubtask}
 
             >
-                   Update
+                   UPDATE
             </Button>
             <Snackbar
   open={openSnackbar}
@@ -334,16 +351,8 @@ const confirmDeleteSubtask = async () => {
 
 
         </div>
-
-        <div className='flex flex-col gap-4 overflow-y-auto h-full no-scrollbar'>
-              <div className='flex gap-4 mt-8 items-center '>
-       <span className='flex  items-center gap-2'>
-        <span className='bg-[#D6CFFF] p-2 rounded-md'>
-         <FaTasks className="text-[#4F378A] " size={12} />
-        </span>
+        <div className='flex gap-4  items-center '>
       
-       <label className=" w-30 text-base font-regular">Title</label>
-       </span>
         <input
             type="text"
             name="title"
@@ -354,10 +363,16 @@ const confirmDeleteSubtask = async () => {
                 color: colors.primary[500],
               }
               }
-            className="w-full   text-xl focus:outline-none focus:ring-none focus:bg-purple-300"
+            className="w-full font-medium   text-xl focus:outline-none focus:ring-none focus:bg-purple-300"
           />
         </div>
     
+
+        <div
+        ref={scrollContainerRef}
+        
+         className='flex flex-col gap-4 overflow-y-auto  pb-48 no-scrollbar'>
+              
          
           
     
@@ -407,9 +422,54 @@ const confirmDeleteSubtask = async () => {
 
                </span>
         
-            <div className="relative">
-      <SubtaskDateTimePicker value={step.due_date ? dayjs.utc(step.due_date) : null}
- onChange={handleDateChange}/>
+            <div className="relative" ref={dateTimePickerRef} onClick={handleDatePickerOpen}>
+      <SubtaskDateTimePicker
+      slotProps={{
+    popper: {
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 8],
+          },
+        },
+        {
+          name: 'preventOverflow',
+          options: {
+            boundary: 'viewport',
+          },
+        },
+      ],
+    },
+  }}
+PopperProps={{
+  placement: 'bottom-end',
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        boundary: 'window',
+      },
+    },
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 8],
+      },
+    },
+    {
+      name: 'computeStyles',
+      options: {
+        adaptive: false, // disables dynamic repositioning on scroll
+      },
+    },
+  ],
+}}
+
+       value={step.due_date ? dayjs.utc(step.due_date) : null}
+ onChange={handleDateChange}
+ 
+  />
          
             </div>
           </div>

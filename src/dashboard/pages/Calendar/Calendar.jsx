@@ -199,7 +199,7 @@ const handleReschedule = () => {
             <div className="flex flex-col-reverse md:flex-row justify-between gap-4">
                 {/*CALENDAR SIDEBAR */}
                 <Box 
-                flex={isSmallScreen ? 'none' : '1 1 30%'}
+                flex={isSmallScreen ? 'none' : '1 1 40%'}
                 backgroundColor = {colors.background.paper}
                 p="15px"
                 borderRadius="8px"
@@ -207,7 +207,7 @@ const handleReschedule = () => {
                 height="auto"
                 overflow="hidden"
                 >
-                    <Typography variant="h5" sx={{color: colors.text.primary}}>Events</Typography>
+                    <Typography variant="h4" sx={{color: colors.text.primary}}>Events</Typography>
                     <List overflowY="auto"  sx={{ maxHeight: 'calc(100% - 50px)', overflowY: 'auto', marginTop: '10px' }}>
                         {currentEvents.length === 0 ? (
     <Typography sx={{ padding: '10px', color: colors.text.secondary }}>
@@ -218,29 +218,71 @@ const handleReschedule = () => {
   .slice() // make a shallow copy to avoid mutating state directly
   .sort((a, b) => new Date(b.start) - new Date(a.start)) // newest first
   .map((event) => (
-    <ListItem
-      key={event.id}
-      sx={{
-        backgroundColor: colors.background.default,
-        margin: "10px 0",
-        borderRadius: "4px",
+  <ListItem
+  key={event.id}
+  sx={{
+    backgroundColor: colors.background.default,
+    margin: "10px 0",
+    borderRadius: "8px",
+    color: colors.text.primary,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    paddingTop: "2px",
+    paddingRight: "10px",
+  }}
+>
+  {/* Left section: title, time, and View button */}
+  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    <ListItemText
+      primary={event.title}
+      primaryTypographyProps={{
+        fontSize: '0.9rem',
+        fontWeight: 500,
         color: colors.text.primary,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "start",
-       
+        margin: "0px"
       }}
+      secondaryTypographyProps={{
+        fontSize: '0.65rem',
+        fontWeight: 400,
+        color: colors.text.placeholder,
+        marginY: '4px',
+      }}
+      secondary={formatDate(event.start)}
+    />
+<div
+className="w-full flex justify-center "
+>
+      <Button
+      size="small"
+      sx={{
+        alignSelf: 'start',
+        marginBottom: '4px',
+        textTransform: 'none',
+        fontSize: '0.85rem',
+        border: "1px solid #4F378A",
+        width:"100%"
+      }}
+     onClick={() => handleEventClick({ event })}
+
     >
-      <ListItemText
-        primary={event.title}
-        secondary={
-          <Typography>{formatDate(event.start)}</Typography>
-        }
-      />
-   
-        <MoreVertIcon sx={{ color: colors.text.primary, }} onClick={(e) => handleMenuOpen(e, event)} />
-      
-    </ListItem>
+      View Event
+    </Button>
+</div>
+  </Box>
+
+  {/* Right section: More icon */}
+  <MoreVertIcon
+    sx={{
+      color: colors.text.secondary,
+      marginLeft: 'auto',
+      cursor: 'pointer',
+      marginTop: "10px"
+    }}
+    onClick={(e) => handleMenuOpen(e, event)}
+  />
+</ListItem>
+
 ))
   )}
 

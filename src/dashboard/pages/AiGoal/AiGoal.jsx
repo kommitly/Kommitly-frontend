@@ -105,6 +105,7 @@ const AiGoal = () => {
   const [dueDates, setDueDates] = useState({});
   const [aiAnswer, setAiAnswer] = useState(null);
   const [lineY2, setLineY2] = useState(230);
+  const [visible, setVisible] = useState(true); // Or false initially depending on your logic
 
   
 
@@ -226,6 +227,8 @@ const AiGoal = () => {
     setLineY2(window.innerWidth < 640 ? 200 : 230); // Adjust for small screens (e.g., <640px)
   };
 
+
+
   updateY2(); // Initial run
   window.addEventListener("resize", updateY2); // Update on resize
 
@@ -237,6 +240,14 @@ const AiGoal = () => {
       inputRef.current.focus();
     }
   }, [isRenaming]);
+
+
+  useEffect(() => {
+  document.body.style.overflow = subtaskOpen ? 'hidden' : 'auto';
+  return () => {
+    document.body.style.overflow = 'auto';
+  };
+}, [subtaskOpen]);
 
   const handleUpdate = async () => {
     if (!newTitle.trim() || newTitle === goal.title) {
@@ -417,7 +428,7 @@ const AiGoal = () => {
     <div className='w-full  flex min-h-screen px-4'>
       
 
-      <div className="w-full    overflow-y-auto  no-scrollbar  ">
+      <div className="w-full h-full overflow-y-auto  ">
         
         
         <div className=' flex  w-full '>
@@ -909,7 +920,7 @@ const AiGoal = () => {
               </p>
             </Box>
            
-            <Box className="text-lg container w-full px-4 py-2 mb-4 rounded-xl bg-[#FFFFFF] relative" sx={{ backgroundColor: colors.background.default }}>
+            <Box className="text-lg container w-full px-4 py-2 mb-4 rounded-lg bg-[#FFFFFF] relative" sx={{ backgroundColor: colors.background.default }}>
               {isVisible ? (<TrophyAnimation />) : 
               (
                   <>
