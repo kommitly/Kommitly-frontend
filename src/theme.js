@@ -8,8 +8,8 @@ export const tokens = (mode) => ({
     ? {
         primary: {
           100: "#D6CFFF", // Muted Lavender
-          200: "#A89FE3", // Dusty Periwinkle
-          300: "#6D5BA6", // Deep Violet
+          200: "#E60178", // Dusty Periwinkle
+          300: "#0D81E06", // Deep Violet
           400: "#4C4466", // Rich Purple
           500: "#6D5BA6", // Muted Eggplant (Surface)
           600: "#F6F3F3", // Deep Midnight Purple (Background)
@@ -36,8 +36,8 @@ export const tokens = (mode) => ({
         primary: {
           100: "#F6F3F3", // Soft Lavender-White
           200: "#D6CFFF", // Muted Lavender
-          300: "#A89FE3", // Dusty Periwinkle
-          400: "#6D5BA6", // Deep Violet
+          300: "#E60178", // Dusty Periwinkle
+          400: "#0D81E0", // Deep Violet
           500: "#4F378A", // Rich Purple
           600: "#2C2640", // Muted Eggplant (Surface)
         },

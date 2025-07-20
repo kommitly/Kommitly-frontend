@@ -157,13 +157,13 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   }, [isCollapsed]); // Run this whenever isCollapsed changes
 
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
+ useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
 
-      if (notifRef.current && !notifRef.current.contains(event.target)) {
+    if (notifRef.current && !notifRef.current.contains(event.target)) {
       setIsNotifOpen(false);
     }
 
@@ -173,16 +173,24 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     const clickedFilterMenu =
       filterMenuRef.current && filterMenuRef.current.contains(event.target);
 
+    // If click is outside both search and filter menus
     if (!clickedInsideSearch && !clickedFilterMenu) {
-      setIsSearchExpanded(false);
-    }
-    };
+      // Step 1: Clear the search results
+      setFilteredResults([]);
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      // Step 2: Collapse search bar after a short delay (e.g., 100ms)
+      setTimeout(() => {
+        setIsSearchExpanded(false);
+      }, 100); 
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
   
   return (
   <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 xl:left-24' : 'md:left-58 xl:left-62 2xl:left-80 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
@@ -357,6 +365,11 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                     setIsSearchExpanded(true);
                   }}
                   onFocus={() => setIsSearchExpanded(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearch();
+                    }
+                  }}
                   InputProps={{
                     disableUnderline: true,
                   sx: { color: colors.primary[500], fontSize: {

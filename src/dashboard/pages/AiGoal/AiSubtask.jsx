@@ -27,6 +27,10 @@ import { motion } from "framer-motion";
 import AiAssistance from "../../components/AiAssistance";
 import EastIcon from '@mui/icons-material/East';
 import utc from 'dayjs/plugin/utc';
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 dayjs.extend(utc);
 
@@ -37,10 +41,12 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
     const colors =tokens(theme.palette.mode);
     const [selectedFile, setSelectedFile] = useState(null);
     const showCustomReminderPicker = step.reminder_offset === 'custom';
-    const [menuVisible, setMenuVisible] = useState(false);
+  
     const [openDelete, setOpenDelete] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [aiAnswer, setAiAnswer] = useState(null);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+
 
     useEffect(() => {
   if (step?.ai_answer) {
@@ -178,15 +184,14 @@ const handleUpdateSubtask = async () => {
     });
 
     console.log("Subtask updated and reminder triggered.");
+    // ✅ Show snackbar
+    setOpenSnackbar(true);
   } catch (err) {
     console.error("Failed to update subtask:", err);
   }
 };
 
 
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
 
 const confirmDeleteSubtask = async () => {
   try {
@@ -209,7 +214,7 @@ const confirmDeleteSubtask = async () => {
     
     {visible && (
       <div
-        className="fixed inset-0 bg-[rgba(0,0,0,0.66)] z-[99] min-h-screen"
+        className="fixed inset-0 bg-[rgba(0,0,0,0.66)] z-[99] min-h-screen mb-8"
         onClick={handleClose}
       />
     )}
@@ -231,44 +236,44 @@ const confirmDeleteSubtask = async () => {
 
 
               <div className="relative">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#65558F"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="cursor-pointer"
-                onClick={toggleMenu}
-              >
-                <circle cx="12" cy="5" r="1"></circle>
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="12" cy="19" r="1"></circle>
-              </svg>
+          
 
- {menuVisible && (
-                  <div className="absolute right-0 mt-2 w-40   rounded-md shadow-lg z-50" style={{ backgroundColor: colors.background.default }}>
-                     <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{ color: colors.text.primary, '&:hover': { color: colors.text.secondary }, textTransform: "none",  gap: "10px"  } }
+                  <div className='flex'>
+                     <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{ backgroundColor: colors.primary[400], color: colors.background.default,   '&:hover': {
+      opacity: 0.7, // or any other value < 1
+    }, textTransform: "none",  gap: "10px"  } }
              onClick={handleUpdateSubtask}
 
             >
                    Update
             </Button>
+            <Snackbar
+  open={openSnackbar}
+  autoHideDuration={3000}
+  onClose={() => setOpenSnackbar(false)}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+>
+  <MuiAlert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+    Subtask successfully updated!
+  </MuiAlert>
+</Snackbar>
+
        
-                                 <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{ color: colors.background.warning, '&:hover': { color: colors.text.secondary }, textTransform: "none",  gap: "10px"  } }
+                                 <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{ color: colors.background.warning,  opacity: 1,
+    '&:hover': {
+      opacity: 0.7, // or any other value < 1
+    }, textTransform: "none",   } }
             onClick={openDeletelModal}
 
             >
-              Delete
+              
+               {openDelete ? <FaTrashAlt size={24} /> : <FaRegTrashAlt size={24} />}
             </Button>
            
 
 
                   </div>
-                )}
+       
                 </div>
                  <Backdrop
                           sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
