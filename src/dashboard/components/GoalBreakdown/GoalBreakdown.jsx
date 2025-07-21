@@ -150,13 +150,24 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
     <div ref={ref} className="mt-6 w-full flex justify-center pb-4 flex-1 overflow-y-auto scrollbar-hide">
       <Box className=' xl:w-9/12 md:w-8/12 w-full rounded-2xl py-2 px-2 ' sx={{ backgroundColor: colors.background.paper }}>
         <div className='flex flex-col  px-4 py-4  '>
-          <div className='flex items-center w-full'>
+          <div className='flex items-center w-full p-1'>
      
            
              
       
-            <div className='flex w-full items-center gap-1'>
-              <Box className=' font-medium text-[#65558F] px-4 py-1 rounded-lg' >
+            <div className='flex w-full items-center gap-1 '>
+          <div className='p-2'>
+                  <button
+  aria-label="Add a new goal"
+  className="pulseBtn"
+
+  onClick={handleCreateGoal}
+>
+  <IoAdd size={16} />
+  
+</button>
+          </div>
+              <Box className=' font-medium text-[#65558F]  rounded-lg' >
                 <p className='text-lg' style={{ color: colors.text.primary }}>
                 {goalData.title}
                 </p>
@@ -168,9 +179,8 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
           </div>
          
 
-             <button className=' md:w-2/12 w-full flex justify-center items-center cursor-pointer  rounded-md p-2 hover:bg-[#4F378A] transition-colors duration-300' style={{color: colors.tag.primary, backgroundColor: colors.background.sidebar }} onClick={handleCreateGoal}>
-              <IoAdd size={16} /> <span className='text-xs w-16'>Add Goal</span>
-              </button>
+          
+
 
 
         </div>
@@ -219,7 +229,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                   </div>
                   {index < displayData.length - 1 && (
                       <div className='py-4'>
-                        <Divider orientation="horizontal" sx={{ borderColor: colors.primary[300], opacity: 0.8 }} />
+                        <Divider orientation="horizontal" sx={{ borderColor: colors.text.placeholder, opacity: 0.8 }} />
                       </div>
                     )}
                 </div>
