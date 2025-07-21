@@ -256,7 +256,7 @@ const confirmDeleteSubtask = async () => {
           
 
                   <div className='flex'>
-                     <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{border: "1px solid #0D81E0"  , backgroundColor: colors.primary[400], color: colors.background.default,   '&:hover': {
+                     <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{border: "1px solid #0D81E0"  , color: colors.primary[400],   '&:hover': {
       opacity: 0.7, // or any other value < 1
     }, textTransform: "none",  gap: "10px"  } }
              onClick={handleUpdateSubtask}
@@ -351,7 +351,7 @@ const confirmDeleteSubtask = async () => {
 
 
         </div>
-        <div className='flex gap-4  items-center '>
+        <div className='flex gap-4 mb-8 items-center '>
       
         <input
             type="text"
@@ -377,7 +377,7 @@ const confirmDeleteSubtask = async () => {
           
     
           <div className="mt-0 w-full">
-          <div className="flex items-center justify-center  space-x-2">
+          <div className="flex items-start justify-center  space-x-2">
 
                <span className='flex  items-center gap-2'>
                  {/* Description Icon */}
@@ -395,10 +395,10 @@ const confirmDeleteSubtask = async () => {
 
                </span>
            
-          <div className="relative mt-6 w-11/12">
+          <div className="relative  w-11/12">
       <textarea
           name="description"
-            className=" rounded w-full text-sm  focus:outline-none focus:ring-none focus:bg-purple-100"
+            className=" rounded w-full text-sm h-24 focus:outline-none focus:ring-none focus:bg-purple-100"
             value={step.description}
             onChange={handleChange}
           />
@@ -579,9 +579,9 @@ PopperProps={{
 
 
          
-<div className="w-full  flex justify-end">
+<div className="w-11/12  flex justify-end">
           <IconButton
-            className="text-[#4F378A] hover:text-white "
+            className="pulse text-[#4F378A] hover:text-white "
             style={{ backgroundColor: colors.primary[500], width: '40px', height: '40px' }}
             onClick={handleAnswerAiSubtask} 
           

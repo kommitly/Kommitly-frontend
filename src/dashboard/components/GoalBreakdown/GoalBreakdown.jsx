@@ -148,24 +148,24 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
 
   return (
     <div ref={ref} className="mt-6 w-full flex justify-center pb-4 flex-1 overflow-y-auto scrollbar-hide">
-      <Box className=' xl:w-9/12 md:w-8/12 w-full rounded-2xl py-2 px-2 ' sx={{ backgroundColor: colors.background.paper }}>
-        <div className='flex flex-col  px-4 py-4  '>
+      <Box className=' xl:w-9/12 md:w-8/12 w-full rounded-2xl py-2  ' sx={{ backgroundColor: colors.background.paper }}>
+        <div className='flex flex-col  px-2 py-4  '>
           <div className='flex items-center w-full p-1'>
      
            
              
       
             <div className='flex w-full items-center gap-1 '>
-          <div className='p-2'>
+          <div className='p-2 w-14 relative'>
                   <button
-  aria-label="Add a new goal"
-  className="pulseBtn"
-
-  onClick={handleCreateGoal}
->
-  <IoAdd size={16} />
-  
-</button>
+                aria-label="Add a new goal"
+                className="pulse button"
+              
+                onClick={handleCreateGoal}
+              >
+                <IoAdd size={16} />
+                
+              </button>
           </div>
               <Box className=' font-medium text-[#65558F]  rounded-lg' >
                 <p className='text-lg' style={{ color: colors.text.primary }}>
@@ -185,11 +185,11 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
 
         </div>
 
-        <Divider orientation="horizontal" sx={{ borderColor: colors.primary[500], opacity: 0.8 }} />
+        <Divider orientation="horizontal" sx={{ borderColor: colors.text.primary, opacity: 0.8 }} />
 
         <div className='flex flex-col  p-4 gap-4'>
           <p className='inline-block'>
-            <span className=' font-medium text-[#65558F] text-base px-2 py-1 rounded-lg'>
+            <span className=' font-medium text-base px-2 py-1 rounded-lg' style={{color: colors.text.secondary}}>
               {showSteps && selectedTask ? selectedTask.title : "Tasks"}
             </span>
           </p>
@@ -210,8 +210,8 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                           setShowSteps(true);
                         }}
                       >
-                        <span className="btn-text text-sm  font-regular" style={{ color: colors.text.subtitle }}>
-                          Subtasks
+                        <span className="btn-text text-xs p-1 font-regular" style={{ color: colors.text.secondary, background: "rgba(101, 55, 215, 0.14)" }}>
+                          View Subtasks
                           <span className="hover-line"  style={{backgroundColor:colors.text.subtitle}}></span>
                         </span>
                       </button>
@@ -229,7 +229,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                   </div>
                   {index < displayData.length - 1 && (
                       <div className='py-4'>
-                        <Divider orientation="horizontal" sx={{ borderColor: colors.text.placeholder, opacity: 0.8 }} />
+                        <Divider orientation="horizontal" sx={{ borderColor: colors.primary[500], opacity: 0.8 }} />
                       </div>
                     )}
                 </div>

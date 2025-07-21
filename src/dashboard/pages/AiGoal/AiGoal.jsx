@@ -106,7 +106,8 @@ const AiGoal = () => {
   const [aiAnswer, setAiAnswer] = useState(null);
   const [lineY2, setLineY2] = useState(230);
   const [visible, setVisible] = useState(true); // Or false initially depending on your logic
-
+  const menuRef = useRef(null);
+  const goalMenuRef = useRef(null);
   
 
 
@@ -264,7 +265,28 @@ const AiGoal = () => {
       setError(error.message);
     }
   };
-  
+
+    useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setTaskMenuVisible(null); // Close the menu
+      }
+      if (goalMenuRef.current && !goalMenuRef.current.contains(event.target)) {
+        setMenuVisible(null); // Close the menu
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+
+
+
+
   const handleTaskUpdate = async () => {
     if (!newTaskTitle.trim() || newTaskTitle === task.title) {
       setIsTaskRenaming(false); // Cancel rename if empty or unchanged
@@ -460,7 +482,12 @@ const AiGoal = () => {
     <Backdrop 
      sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
         open={openTaskView}
-        onClick={handleCloseTaskView}>
+         onClick={(e) => {
+    // Only close if user clicks directly on the backdrop (not on the children inside it)
+    if (e.target === e.currentTarget) {
+      handleCloseTaskView();
+    }
+  }}>
        <Box className=" actionable-steps w-11/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
               
                
@@ -613,7 +640,7 @@ const AiGoal = () => {
 
               </div>
 
-              <div className="relative">
+              <div className="relative" ref={goalMenuRef}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -702,7 +729,10 @@ const AiGoal = () => {
                   const isLastTask = index === goal.ai_tasks.length - 1;
                   open
                   return (
-                    <div className="mx-auto" key={task.id} 
+                    <div className="mx-auto" key={task.id}  onClick={() => {
+  setActiveTaskIndex(index);
+  setOpenTaskView(true);
+}}
 >
                          <motion.div
       className={`task ${isCompleted ? "completed" : ""} relative mt-8 border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12`}
@@ -736,11 +766,8 @@ const AiGoal = () => {
                   
                                  
                                   <h3 className="md:text-sm xl:text-sm 2xl:text-base  font-medium" style={{color: isActive ? colors.primary[100] : colors.text.primary
-                                  }}  onClick={() => {
-  setActiveTaskIndex(index);
-  setOpenTaskView(true);
-}} >{task.title}</h3>
-                                  <div className="relative overflow-visible">
+                                  }}  >{task.title}</h3>
+                                  <div className="relative overflow-visible" ref={menuRef}>
                                           <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="24"
@@ -752,7 +779,11 @@ const AiGoal = () => {
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
                                             className="cursor-pointer"
-                                            onClick={() => toggleTaskMenu(task.id)} // Pass task ID
+                                            onClick={(e) => {
+                                            e.stopPropagation();
+                                            toggleTaskMenu(task.id);
+                                          }}
+                                          // Pass task ID
                                           >
                                             <circle cx="12" cy="5" r="1"></circle>
                                             <circle cx="12" cy="12" r="1"></circle>

@@ -28,7 +28,7 @@ const SearchResults = ({ results = [], onClose }) => {
       <div
         ref={resultsRef}
         className="absolute mt-2 top-12 w-130 h-auto max-h-40 overflow-y-auto shadow-xl no-scrollbar rounded-lg p-2"
-        style={{ backgroundColor: colors.primary[200] }}
+        style={{ backgroundColor: colors.background.paper }}
       >
         {results.map((item, index) => {
           const isTask = item.hasOwnProperty("is_task") && item.is_task;
@@ -48,12 +48,12 @@ const SearchResults = ({ results = [], onClose }) => {
     sx={{
       color: colors.text.primary,
       "&:hover": {
-        backgroundColor: colors.primary[300],
+        backgroundColor: colors.background.default,
         color: colors.text.primary, // Optional: change to contrast color if needed
       },
       "&:active": {
-        backgroundColor: colors.primary[400],
-        color: colors.background.default,
+        backgroundColor: colors.primary[500],
+        color: colors.primary[100],
       },
     }}
   >

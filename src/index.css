@@ -436,26 +436,36 @@ aside.ps-sidebar-root.ps-collapsed {
   border: none !important;
 }
 
-/* Remove the ::before and ::after rules */
-.pulseBtn {
-background: #4F378A;
-color:#fff;
-border-radius: 0.25rem;
-padding:0.4rem;
-box-shadow: 0 0 0 0 rgba(88, 120, 243, 0.4);
--moz-animation: pulse 2s infinite;
--webkit-animation: pulse 2s infinite;
-animation: pulse 2s infinite;
+.button{
+  width:1.6rem;
+  height: 1.6rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 16%;
+  background-color: #4F378A;
+  color: #fff;
+  box-shadow: 0px 0px 1px 1px #0000001a;
+  animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(88, 120, 243, 1);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(88, 120, 243, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 50px rgba(88, 120, 243, 0);
-    }
+.button:hover{
+  opacity: 0.7;
+}
+
+
+.pulse {
+  animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(101, 55, 215, 0.54);
   }
+  100% {
+    box-shadow: 0 0 0 10px rgba(101, 55, 215, 0);
+  }
+}
+
