@@ -285,7 +285,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
               <Box
               className=" col-span-6 md:col-span-6   flex w-full justify-end  "
               sx={{
-                paddingRight: isXs ? 4: isSm ? 4 : isMd ? 4 : isLg ? 4 : isXl ? 4 : isXxl ? 4 : 4,
+                paddingRight: isXs ? 4: isSm ? 4 : isMd ? 6 : isLg ? 4 : isXl ? 5 : isXxl ? 5 : 4,
               }
               
               }

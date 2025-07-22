@@ -657,24 +657,24 @@ const AiGoal = () => {
                 <circle cx="12" cy="19" r="1"></circle>
               </svg>
                {menuVisible && (
-                  <div className="absolute right-0 mt-2 w-48  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.background.default }}>
+                  <div className="absolute right-0 mt-2 w-48  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.menu.primary }}>
                     <button 
                       onClick={() => {
                         setIsRenaming(true);
                         setTimeout(() => inputRef.current?.focus(), 0); // Ensure focus on input
                       }} 
-                      className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#F4F1FF]" style={{ color: colors.text.primary }}
+                      className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20" style={{ color: colors.text.primary }}
                     >
                       Rename goal
                     </button>
-                    <button onClick={() => setTaskOpen(true)} className='block w-full text-left px-4 py-2 text-xs  hover:bg-[#F4F1FF]' style={{ color: colors.text.primary }}>
+                    <button onClick={() => setTaskOpen(true)} className='block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20' style={{ color: colors.text.primary }}>
                       Add Task 
                     </button>
-                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#F4F1FF]" style={{ color: colors.text.primary }}>
+                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20" style={{ color: colors.text.primary }}>
                       Pin to Sidebar
                     </button>
 
-                    <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#F4F1FF]" style={{color: colors.background.warning }}>Delete</button>
+                    <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20" style={{color: colors.background.warning }}>Delete</button>
                   </div>
                 )}
               </div>
@@ -741,7 +741,7 @@ const AiGoal = () => {
                           ease: "easeOut",
                           delay: index * 0.3, // Staggered delay based on index
                         }}>
-                        <div className="flex  transition-transform duration-300 hover:scale-[1.05] cursor-pointer justify-between md:gap-4 gap-2 relative  max-h-full  border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12"   style={{
+                        <div className="flex  transition-transform duration-300 hover:scale-[0.95] cursor-pointer justify-between md:gap-4 gap-2 relative  max-h-full  border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12"   style={{
         backgroundColor: allTasksCompleted
           ? theme.palette.background.paper // Adjust to your theme color
           : isActive
@@ -788,17 +788,17 @@ const AiGoal = () => {
                                             <circle cx="12" cy="19" r="1"></circle>
                                           </svg>
                                           {taskMenuVisible === task.id && (
-                                                    <div className="absolute z-[1000] -left-20 mt-2 w-32  rounded-md shadow-lg" style={{ backgroundColor: colors.background.default }}>
+                                                    <div className="absolute z-[1000] -left-20 mt-2 w-32  rounded-md shadow-lg" style={{ backgroundColor: colors.menu.primary }}>
                                                       <button 
                                                         onClick={() => {
                                                           setIsRenaming(true);
                                                           setTimeout(() => inputRef.current?.focus(), 0); // Ensure focus on input
                                                         }} 
-                                                        className="block w-full text-left px-4 py-2 text-sm  hover:bg-[#F4F1FF]" style={{ color: colors.text.primary }}
+                                                        className="block w-full text-left px-4 py-2 text-sm  hover:bg-[#D6CFFF]/20" style={{ color: colors.text.primary }}
                                                       >
                                                         Rename
                                                       </button>
-                                                      <button onClick={() => handleTaskDelete(task.id)} className="block w-full text-left px-4 py-2 text-sm  hover:bg-[#F4F1FF]" style={{ color: colors.background.warning }}>Delete</button>
+                                                      <button onClick={() => handleTaskDelete(task.id)} className="block w-full text-left px-4 py-2 text-sm  hover:bg-[#D6CFFF]/20" style={{ color: colors.background.warning }}>Delete</button>
                                                     </div>
                                                   )}
                                  </div>
@@ -990,7 +990,7 @@ const AiGoal = () => {
       const { timeline, cleanedDetails } = extractTimeline(step.description);
       
                   return (
-                    <Box key={stepIndex}  className="step  rounded-xl transition-transform duration-300 hover:scale-[1.05] cursor-pointer flex items-center " sx={{ backgroundColor: colors.background.paper }}>
+                    <Box key={stepIndex}  className="step  rounded-xl transition-transform duration-300 hover:scale-[0.95] cursor-pointer flex items-center " sx={{ backgroundColor: colors.background.paper }}>
                     <label className="custom-checkbox  p-4 ">
                         <input
                         type="checkbox"

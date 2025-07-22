@@ -256,12 +256,12 @@ const Goals = () => {
           onClick={handleCloseCreateGoal} // Clicking outside should close it
         >
           <div 
-            className=" md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.background.default }} 
+            className=" md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.menu.primary }} 
             onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
           >
             <div className='flex w-full mb-4 justify-end'>
             <div className='flex w-2/3 items-center justify-between'>
-            <h1 className='text-xl font-bold text-[#6F2DA8] mt-4 flex items-center justify-center gap-2'>
+            <h1 className='text-xl font-bold  mt-4 flex items-center justify-center gap-2' style={{ color: colors.text.secondary }} >
               New Goal
             </h1>
             <svg
@@ -312,7 +312,7 @@ const Goals = () => {
               />
             </div>
 
-            <button onClick={handleAddGoal} className="mt-4 px-4 py-2 bg-[#6200EE] text-white rounded-lg cursor-pointer">
+            <button onClick={handleAddGoal} className="mt-4 px-4 py-2  text-white rounded-lg cursor-pointer"  style={{backgroundColor: colors.primary[400], '&:hover':{ opacity: 0.7} }}>
               Add Goal
             </button>
           
@@ -369,12 +369,12 @@ const Goals = () => {
           onClick={handleClose} // Clicking outside should close it
         >
           <div 
-            className=" md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center"  style={{backgroundColor: colors.background.default }}
+            className=" md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center"  style={{backgroundColor: colors.menu.primary }}
             onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
           >
             <div className='flex w-full mb-4 justify-end'>
             <div className='flex w-2/3 items-center justify-between'>
-            <h1 className='text-xl font-bold text-[#6F2DA8] mt-4 flex items-center justify-center gap-2'>
+            <h1 className='text-xl font-semibold  mt-4 flex items-center justify-center gap-2' style={{ color: colors.text.secondary }}>
               New Goal
             </h1>
             <svg
@@ -424,10 +424,14 @@ const Goals = () => {
                 className="w-full p-2 border border-gray-200 rounded-lg  focus:outline-none" style={{color: colors.text.primary}}
               />
             </div>
+<button
+  onClick={handleAddGoal}
+  className="mt-4 px-4 py-2 text-white rounded-lg cursor-pointer hover:opacity-70"
+  style={{ backgroundColor: colors.primary[500] }}
+>
+  Add Goal
+</button>
 
-            <button onClick={handleAddGoal} className="mt-4 px-4 py-2 bg-[#6200EE] text-white rounded-lg cursor-pointer">
-              Add Goal
-            </button>
           
           </div>
         </Backdrop>
@@ -700,7 +704,7 @@ const Goals = () => {
             {filteredGoals.map((goal) => (
               <Link key={goal.id} to={`/dashboard/goal/${goal.id}`}>
               <li className='w-1/3 min-w-[280px] min-h-[100px] list-none '>
-              <Box className='flex w-full   px-2 py-4 h-full rounded-xl transition-transform duration-300 hover:scale-[1.02]' sx={{backgroundColor:colors.background.paper}}>
+              <Box className='flex w-full   px-2 py-4 h-full rounded-xl transition-transform duration-300 hover:scale-[0.95]' sx={{backgroundColor:colors.background.paper}}>
                    <div className='w-1/4  full    overflow-hidden'>
                                   {/* { <img src={background } alt="goals"  className='h-full'/>} */}
                                                    <CircularProgressWithLabel  value={goal.progress}
@@ -831,9 +835,9 @@ const Goals = () => {
           filteredPeriods.map((goal, index) => (
             <>
             <Link to={`/dashboard/ai-goal/${goal.id}`} className='w-full'>
-             <li key={goal.id} className='p-4 gap-2 flex   rounded-xl  ' style={{ backgroundColor: colors.background.paper }}>
+             <li key={goal.id} className='p-4 gap-2 flex   rounded-xl  transition-transform duration-300 hover:scale-[0.95] ' style={{ backgroundColor: colors.background.paper }}>
              
-             <div className=' flex justify-center items-center'>
+             <div className=' flex justify-center items-center  '>
                 <CircularProgressWithLabel  value={goal.progress}
                                 progressColor={colors.primary[500]}
                                 textColor={colors.text.primary}

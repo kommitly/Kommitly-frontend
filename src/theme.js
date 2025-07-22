@@ -32,7 +32,7 @@ export const tokens = (mode) => ({
           primary: "#1E1A2A"
         },
            menu:{
-          primary: "#000000"
+          primary: "#3F375C"
         }
       }
     : {

@@ -18,7 +18,7 @@ const extractTimeline = (details) => {
   console.log('Details:', details); // Debugging
 
   // Updated regex to match time expressions with an optional "within" before them
-  const match = details.match(/\b(within\s+)?(\d+-\d+ (days|weeks|months|years)|\d+ (day|week|month|year)|On-going|\d+\s*(days|weeks|months|years))\b/i);
+   const match = details.match(/\b(within\s+)?((Days|Weeks|Months|Years)\s*\d+-\d+|\d+-\d+\s*(days|weeks|months|years)|\d+(Days|Weeks|Months|Years)|\d+\s*(day|week|month|year)|On-going)\b/i);
 
   console.log('Match:', match); // Debugging
 
