@@ -162,7 +162,7 @@ export default function Stats() {
 
 
   return (
-    <div className="p-2 space-y-6">
+    <div className="p-2 space-y-6 ">
       <span className="flex items-center space-x-2 mb-4">
           <PiChartBarFill size={24} className="text-[#4F378A]"/>
       <h1 className="md:text-2xl text-xl  font-semibold"> Progress Overview</h1>
@@ -191,7 +191,7 @@ export default function Stats() {
       ) : (
         <>
           {/* Stat Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid mt-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard icon={<FaUser />} title="Goals Created" value={totalGoals} />
             <StatCard icon={<FaCheck />} title="Goals Completed" value={completedGoals} />
             <StatCard icon={<FaTasks />} title="Tasks Created" value={totalTasksCount} />
@@ -248,7 +248,7 @@ export default function Stats() {
 
 
           {chartData.length > 0 && (
-             <Card className="mt-6">
+             <Card className="mt-6 mb-8">
             <CardContent className="md:h-[300px] h-[400px] p-4">
              <div className="md:flex md:mb-2 mb-8  w-full justify-between items-center">
                <h2 className="text-lg font-semibold mb-2">{view} Goal Activity</h2>

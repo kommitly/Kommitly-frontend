@@ -555,14 +555,12 @@ const AiGoal = () => {
                         />
 
                         </label>
-                        <div className='w-full'>
+                        <div className='w-full' onClick={() => navigate(`/dashboard/ai-goal/${goal.id}/task/${activeTask.id}/subtask/${step.id}`, { state: { step } })}>
                         <div className="flex flex-col w-full ">
                       
                         <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
                         <span className=' md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular' style={{color: colors.text.primary }}>{step.title}</span>
-                         <div onClick={() => navigate(`/dashboard/ai-goal/${goal.id}/task/${activeTask.id}/subtask/${step.id}`, { state: { step } })} >
-                        <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 , color:colors.text.secondary}} />
-                         </div>
+                        
                     
                         </Box>
                     
@@ -720,7 +718,7 @@ const AiGoal = () => {
 
          
            
-            <div className="ai-tasks overflow-visible overflow-y-clip  px-4 w-full  flex flex-col items-center  justify-center  " >
+            <div className="ai-tasks overflow-visible overflow-y-clip  px-6 w-full  flex flex-col items-center  justify-center  " >
               <div className="md:w-full w-full gap-4 pl-4 pb-10 md:pl-36 xl:pl-10 2xl:pl-26 m-2">
                 {goal.ai_tasks.map((task, index) => {
                   const isCompleted = taskCompletionStatus[index];
@@ -735,8 +733,15 @@ const AiGoal = () => {
 }}
 >
                          <motion.div
-      className={`task ${isCompleted ? "completed" : ""} relative mt-8 border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12`}
-      style={{
+      className={`task ${isCompleted ? "completed" : ""} relative mt-8`}
+    
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 0.6,
+                          ease: "easeOut",
+                          delay: index * 0.3, // Staggered delay based on index
+                        }}>
+                        <div className="flex  transition-transform duration-300 hover:scale-[1.05] cursor-pointer justify-between md:gap-4 gap-2 relative  max-h-full  border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 md:w-11/12"   style={{
         backgroundColor: allTasksCompleted
           ? theme.palette.background.paper // Adjust to your theme color
           : isActive
@@ -745,14 +750,7 @@ const AiGoal = () => {
         borderLeftColor: theme.palette.primary.main, // Replace with the desired theme color
         // boxShadow:
         //  "2px 3px 8px 2px rgba(101, 85, 143, 0.2), 0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
-      }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          duration: 0.6,
-                          ease: "easeOut",
-                          delay: index * 0.3, // Staggered delay based on index
-                        }}>
-                        <div className="flex   justify-between md:gap-4 gap-2 relative  max-h-full">
+      }}>
                           <div className={`md:w-1/4 w-20 rounded-lg p-4 ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}  style={{
         backgroundColor:isActive
           ? theme.palette.background.paper // White background for active
@@ -992,8 +990,8 @@ const AiGoal = () => {
       const { timeline, cleanedDetails } = extractTimeline(step.description);
       
                   return (
-                    <Box key={stepIndex}  className="step  p-4 rounded-xl cursor-pointer flex items-center gap-4" sx={{ backgroundColor: colors.background.paper }}>
-                    <label className="custom-checkbox">
+                    <Box key={stepIndex}  className="step  rounded-xl transition-transform duration-300 hover:scale-[1.05] cursor-pointer flex items-center " sx={{ backgroundColor: colors.background.paper }}>
+                    <label className="custom-checkbox  p-4 ">
                         <input
                         type="checkbox"
                         checked={step.status === "completed"}
@@ -1002,13 +1000,13 @@ const AiGoal = () => {
                         />
 
                         </label>
-                        <div className='w-full'>
+                        <div className='w-full py-4 ' onClick={() => openSubtaskPage(step)}>
                         <div className="flex flex-col w-full ">
                       
-                        <Box width={"100%"} justifyContent={"space-between"} display={"flex"} alignItems={"center"} >
+                        <Box width={"100%"}  display={"flex"} alignItems={"center"} >
                         <span className=' md:text-sm xl:text-sm xl:w-full 2xl:text-base font-regular' style={{color: colors.text.primary}}>{step.title}</span>
-                         <div onClick={() => openSubtaskPage(step)} >
-                        <ArrowForwardIosOutlinedIcon sx={{ fontSize: 12 , color:colors.text.secondary}}  />
+                         <div  >
+                      
                          </div>
                     
                         </Box>

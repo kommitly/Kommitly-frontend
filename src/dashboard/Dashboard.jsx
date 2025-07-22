@@ -64,7 +64,7 @@ const Dashboard = () => {
 
         {/* Push Outlet Content Below Navbar */}
         <main
-  className="w-full scrollbar-hide"
+  className="w-full no-scrollbar"
   style={{
  
     paddingLeft: !isMobile

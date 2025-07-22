@@ -351,7 +351,7 @@ const confirmDeleteSubtask = async () => {
 
 
         </div>
-        <div className='flex gap-4 mb-8 items-center '>
+        <div className='flex gap-4  items-center '>
       
         <input
             type="text"
@@ -371,7 +371,7 @@ const confirmDeleteSubtask = async () => {
         <div
         ref={scrollContainerRef}
         
-         className='flex flex-col gap-4 overflow-y-auto  pb-48 no-scrollbar'>
+         className='flex flex-col gap-4 overflow-y-auto pt-8  pb-48 no-scrollbar'>
               
          
           
@@ -581,7 +581,7 @@ PopperProps={{
          
 <div className="w-11/12  flex justify-end">
           <IconButton
-            className="pulse text-[#4F378A] hover:text-white "
+            className="pulse text-[#4F378A] hover:text-white  "
             style={{ backgroundColor: colors.primary[500], width: '40px', height: '40px' }}
             onClick={handleAnswerAiSubtask} 
           

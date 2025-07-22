@@ -554,7 +554,7 @@ const Goals = () => {
             {filteredAiGoals.map((goal) => (
               <Link key={goal.id} to={`/dashboard/ai-goal/${goal.id}`}>
               <li  className=' w-1/3 min-w-[280px] min-h-[100px] list-none  '  >
-                <div className='flex w-full   px-2 py-4 h-full rounded-xl' style={{backgroundColor:colors.background.paper}}>
+                <div className='flex w-full   px-2 py-4 h-full rounded-xl transition-transform duration-300 hover:scale-[0.95]' style={{backgroundColor:colors.background.paper}}>
                             <div className='w-1/4  full    overflow-hidden'>
                                   {/* { <img src={background } alt="goals"  className='h-full'/>} */}
                                                 <CircularProgressWithLabel  value={goal.progress}
@@ -573,23 +573,7 @@ const Goals = () => {
                                                       <span className='w-full h-auto font-regular'>
                                                       {goal.title}
                                                       </span>
-                                                      <div className='flex item-start'>  <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="18"
-                                                                height="18"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="#65558F"
-                                                                strokeWidth="2"
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                                className="cursor-pointer"
-                                                                onClick={() => toggleTaskMenu(task.id)} // Pass task ID
-                                                              >
-                                                                <circle cx="12" cy="5" r="1"></circle>
-                                                                <circle cx="12" cy="12" r="1"></circle>
-                                                                <circle cx="12" cy="19" r="1"></circle>
-                                                              </svg></div>
+                                                     
                                                     
                                                       </div>
                                                       <div className='flex items-center gap-2'>
@@ -716,7 +700,7 @@ const Goals = () => {
             {filteredGoals.map((goal) => (
               <Link key={goal.id} to={`/dashboard/goal/${goal.id}`}>
               <li className='w-1/3 min-w-[280px] min-h-[100px] list-none '>
-              <Box className='flex w-full   px-2 py-4 h-full rounded-xl' sx={{backgroundColor:colors.background.paper}}>
+              <Box className='flex w-full   px-2 py-4 h-full rounded-xl transition-transform duration-300 hover:scale-[1.02]' sx={{backgroundColor:colors.background.paper}}>
                    <div className='w-1/4  full    overflow-hidden'>
                                   {/* { <img src={background } alt="goals"  className='h-full'/>} */}
                                                    <CircularProgressWithLabel  value={goal.progress}
@@ -735,23 +719,7 @@ const Goals = () => {
                                                       <span className='w-full h-auto font-regular'>
                                                       {goal.title}
                                                       </span>
-                                                      <div className='flex item-start'>  <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="18"
-                                                                height="18"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="#65558F"
-                                                                strokeWidth="2"
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                                className="cursor-pointer"
-                                                                onClick={() => toggleTaskMenu(task.id)} // Pass task ID
-                                                              >
-                                                                <circle cx="12" cy="5" r="1"></circle>
-                                                                <circle cx="12" cy="12" r="1"></circle>
-                                                                <circle cx="12" cy="19" r="1"></circle>
-                                                              </svg></div>
+                                                      
                                                     
                                                       </div>
                                                       <div className='flex items-center gap-2'>
@@ -864,9 +832,18 @@ const Goals = () => {
             <>
             <Link to={`/dashboard/ai-goal/${goal.id}`} className='w-full'>
              <li key={goal.id} className='p-4 gap-2 flex   rounded-xl  ' style={{ backgroundColor: colors.background.paper }}>
-              <div className='w-[4px] bg-[#4F378A] h-auto rounded-full flex items-center justify-center'>
-
-              </div>
+             
+             <div className=' flex justify-center items-center'>
+                <CircularProgressWithLabel  value={goal.progress}
+                                progressColor={colors.primary[500]}
+                                textColor={colors.text.primary}
+                                size={50}
+                                fontSize={
+                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
+                                } 
+                                />
+             </div>
+                                
               <div className='flex items-center px-2 w-full gap-4'>
                 <div className='flex-1 '>
                 <h2 className='font-regular text-sm mb-2' style={{ color: colors.text.primary }}>{goal.title}</h2>
@@ -879,14 +856,7 @@ const Goals = () => {
                 </div>
                  {/* { <p className='text-sm text-gray-600'>{goal.description}</p>} */}
                 </div>
-                       <CircularProgressWithLabel  value={goal.progress}
-                                progressColor={colors.primary[500]}
-                                textColor={colors.text.primary}
-                                size={50}
-                                fontSize={
-                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
-                                } 
-                                />
+                     
               </div>
             </li>
 
