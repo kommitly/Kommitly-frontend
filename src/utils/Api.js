@@ -42,9 +42,9 @@ const createAiGoal = async (ai_goal, ai_tasks) => {
 };
 
 
-const createGoal = async (title) => {
+const createGoal = async (title, category) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/create/goal/";
-  const requestBody = { title };
+  const requestBody = { title, category };
   try {
     const token = getToken();
     const response = await axios.post(url, requestBody, {

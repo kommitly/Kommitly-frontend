@@ -301,16 +301,20 @@ const Goals = () => {
               />
             </div>
 
-            <div className="flex items-center mb-4 gap-4">
-              <p className='text-sm w-20 ' style={{color:colors.text.primary}}>Category</p>
-              <input
-                type="text"
-                placeholder="Weekly, Monthly, Yearly"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-2 border border-gray-200 rounded-lg text-black focus:outline-none"
-              />
-            </div>
+          <div className="flex items-center mb-4 gap-4">
+            <p className="text-sm w-20" style={{ color: colors.text.primary }}>Category</p>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full p-2 border border-gray-200 rounded-lg text-black focus:outline-none"
+            >
+              <option value="">Select</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+            </select>
+          </div>
+
 
             <button onClick={handleAddGoal} className="mt-4 px-4 py-2  text-white rounded-lg cursor-pointer"  style={{backgroundColor: colors.primary[400], '&:hover':{ opacity: 0.7} }}>
               Add Goal
@@ -413,20 +417,23 @@ const Goals = () => {
                 className="w-full p-2 border  border-gray-200 rounded-lg focus:outline-none" style={{color:colors.text.primary}}
               />
             </div>
+<div className="flex items-center mb-4 gap-4">
+  <p className="text-sm w-20" style={{ color: colors.text.primary }}>Category</p>
+  <select
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    className="w-full p-2 border border-gray-200 rounded-lg text-black focus:outline-none"
+  >
+    
+    <option value="weekly">Weekly</option>
+    <option value="monthly">Monthly</option>
+    <option value="yearly">Yearly</option>
+  </select>
+</div>
 
-            <div className="flex items-center mb-4 gap-4">
-              <p className='text-sm w-20 ' style={{color:colors.text.primary}}>Category</p>
-              <input
-                type="text"
-                placeholder="Weekly, Monthly, Yearly"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-2 border border-gray-200 rounded-lg  focus:outline-none" style={{color: colors.text.primary}}
-              />
-            </div>
 <button
   onClick={handleAddGoal}
-  className="mt-4 px-4 py-2 text-white rounded-lg cursor-pointer hover:opacity-70"
+  className="mt-8 px-4 py-2 text-white rounded-lg cursor-pointer hover:opacity-70"
   style={{ backgroundColor: colors.primary[500] }}
 >
   Add Goal

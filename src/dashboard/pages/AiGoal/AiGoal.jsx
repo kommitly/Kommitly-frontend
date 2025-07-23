@@ -698,13 +698,13 @@ const AiGoal = () => {
 
               {/* Modal for AI Task Form */}
               <Modal open={taskOpen} onClose={() => setTaskOpen(false)}>
-                  <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 bg-white rounded-xl w-96'>
+                  <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6  rounded-xl w-96' sx={{backgroundColor: colors.menu.primary}}>
                     <h2 className='text-xl font-semibold mb-4'>Add  Task</h2>
                     <TextField fullWidth label='Title' name='title' value={formData.title} onChange={handleChange} margin='normal' />
                     <TextField fullWidth label='Description' name='description' value={formData.description} onChange={handleChange} margin='normal' />
-                    <TextField fullWidth label='Due Date' type='datetime-local' name='due_date' value={formData.due_date} onChange={handleChange} margin='normal' />
+                    <TextField fullWidth label='Due Date' type='datetime-local' name='due_date' value={formData.due_date} onChange={handleChange} margin='normal' InputLabelProps={{ shrink: true }} />
                     <TextField fullWidth label='Task Timeline' name='task_timeline' value={formData.task_timeline} onChange={handleChange} margin='normal' />
-                    <TextField fullWidth label='Reminder Time' name='reminder_time' value={formData.reminder_time} onChange={handleChange} margin='normal' />
+                   
                     <div className='flex justify-end gap-4 mt-4'>
                       <Button onClick={() => setTaskOpen(false)} variant='outlined'>Cancel</Button>
                       <Button onClick={handlesumbitAiTask} variant='contained' color='primary'>Submit</Button>
