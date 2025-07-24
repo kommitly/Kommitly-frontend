@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import landing from "../assets/landing6.png"; // Ensure the path is correct
+import landing from "../assets/landing7.png"; // Ensure the path is correct
 import { MdOutlineArrowOutward } from "react-icons/md";
 import { FaCirclePlay } from "react-icons/fa6";
 
@@ -42,7 +42,7 @@ const Hero2 = () => {
     }
   }}
 >
-  Clear Mind <br/>  Focused Day <br/> Real Progress.
+  Clear Mind.  Focused Day. Real Progress.
 </Typography>
   
  

@@ -956,7 +956,7 @@ const AiGoal = () => {
                  <div className='flex justify-between items-center mb-2 gap-4 w-full pr-2'
                  >
                  <p className="md:text-sm lg:text-md flex items-center m-2 gap-2 w-full  text-[#000000] font-normal">
-                 <span className=" md:text-sm lg:text-base" >📌</span>
+               
                     {activeTask ? (
                       <>
                        <span className="font-medium md:text-sm xl:text-sm 2xl:text-base 
