@@ -56,6 +56,9 @@ const Registration = () => {
     </div>
   );
 }
+if (user) {
+  return null; // prevent rendering registration UI
+}
 
 
 

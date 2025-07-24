@@ -34,6 +34,7 @@ const extractTimeline = (details) => {
   cleanedDetails = cleanedDetails.replace(/\bwithin\s*$/, ''); // Remove hanging "within" if left alone
   cleanedDetails = cleanedDetails.replace(/\b(for|in|at|on|by|Allocate)\s*[.,]*\s*$/, ''); // Remove orphaned prepositions and "Allocate" if at the end
 
+  console.log("cleaned details :", cleanedDetails)
   return { timeline, cleanedDetails };
 };
 
@@ -218,7 +219,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                     )}
                     {showSteps && (
                       <div className='flex w-4/12 item-start '>
-                        <p className=' font-medium text-xs ' style={{ color: colors.text.subtitle }}>
+                        <p className=' font-medium text-xs  md:pl-8 pl-0 ' style={{ color: colors.text.subtitle }}>
                          <span>
                          <AccessTimeIcon/> {timeline}
                          </span>

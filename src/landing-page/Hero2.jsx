@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import breakdown from "../assets/breakdown.svg"; // Ensure the path is correct
+import landing from "../assets/landing6.png"; // Ensure the path is correct
 import { MdOutlineArrowOutward } from "react-icons/md";
 import { FaCirclePlay } from "react-icons/fa6";
 
@@ -13,13 +13,13 @@ const Hero2 = () => {
     const colors =tokens(theme.palette.mode);
 
   return (
-    <section className=" flex flex-col container  md:px-6 px-2 md:pt-0 pt-12 md:mb-8 mb-8">
+    <section className=" flex flex-col container md:pt-0 pt-12 md:mb-8 mb-8">
        <div
-      className=" md:p-4 w-full h-full md:flex mt-8 sm:w-full justify-between  "
+      className="  w-full h-full md:flex mt-8 sm:w-full justify-between"
     >
     
-      <div className=" md:w-6/12 sm:w-full flex flex-col pl-5 sm:justify-center sm:items-center md:items-start md:mb-8 sm:mb-8 ">
-         <div className="md:w-10/12 sm:w-full flex flex-col sm:justify-center  sm:items-center md:items-start">
+      <div className=" md:w-6/12  sm:w-full flex flex-col pl-5 sm:justify-center sm:items-center md:items-start md:mb-8 sm:mb-8 ">
+         <div className="md:w-full md:p-8 p-0  sm:w-full flex flex-col sm:justify-center  sm:items-center md:items-start">
             <Typography 
   variant="h1"
   component="h1"
@@ -31,7 +31,7 @@ const Hero2 = () => {
     fontSize: {
       xs: '2rem',
       sm: '2.5rem',
-      md: '2.5rem',
+      md: '2.4rem',
       lg: '2.8rem',
       xl: '4rem',
       '2xl': '4rem'
@@ -42,30 +42,10 @@ const Hero2 = () => {
     }
   }}
 >
-  Clear Mind. Focused Days. Real Progress.
+  Clear Mind <br/>  Focused Day <br/> Real Progress.
 </Typography>
   
-    {/* {  <Typography
-        variant="body"
-        component="p"
-        gutterBottom
-        color="textPrimary"
-        
-        sx={{marginBottom: "1.8rem", fontSize: {
-      xs: '1rem',   // extra-small screens
-      sm: '1rem', // small screens
-      md: '1rem',   // medium screens
-      lg: '1rem',  // large screens and up
-      xl: '1.5rem' , // extra-large screens
-      '2xl': '1rem' // 2xl screens
-    },   textAlign: {
-      xs: 'center',
-      md: 'left'
-    } }}
-        >
-       Set goals, break them down with AI, and stay accountable—one step at a time.
-
-        </Typography>} */}
+ 
 
         <div className="flex gap-4 mb-8 md:mb-0 mt-4 sm:w-full md:w-full md:justify-start justify-center  md:mb-8">
              <Link
@@ -91,15 +71,15 @@ const Hero2 = () => {
       
       </div>
 
-        <div className="md:w-6/12 sm:w-full flex justify-center  items-center ">
-        <div className="w-10/12 sm:w-full aspect-[3/2]">
-         <img src={breakdown}
+        <div className="md:w-6/12 sm:w-full  -mt-8 flex justify-center  items-center ">
+        <div className="w-full sm:w-full     aspect-[3/2]">
+         <img src={landing}
           alt="Hero"
           
           fetchpriority="high"
           decoding="async" 
          
-          className="w-full h-full object-contain"/>
+          className="w-full h-full  object-contain item-start"/>
         </div>
        
       </div>
