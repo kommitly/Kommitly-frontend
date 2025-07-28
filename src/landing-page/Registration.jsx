@@ -56,9 +56,9 @@ const Registration = () => {
     </div>
   );
 }
-if (user) {
-  return   navigate("/dashboard/home"); // Navigate after user is fully set; // prevent rendering 
-}
+// {if (user) {
+//   return   navigate("/dashboard/home"); // Navigate after user is fully set; // prevent rendering 
+// }}
 
 
 
