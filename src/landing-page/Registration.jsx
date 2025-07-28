@@ -1,6 +1,6 @@
 
 import { useState, useContext, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -34,7 +34,7 @@ const Registration = () => {
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab") || "login"; // fallback to login
   const [submitting, setSubmitting] = useState(false);
-
+  const navigate = useNavigate();
 
 
   if (submitting || loading) {
@@ -56,9 +56,9 @@ const Registration = () => {
     </div>
   );
 }
-// {if (user) {
-//   return null; // prevent rendering registration UI
-// }}
+if (user) {
+  return   navigate("/dashboard/home"); // Navigate after user is fully set; // prevent rendering 
+}
 
 
 
@@ -180,12 +180,12 @@ const Registration = () => {
                       <p>or</p>
                       </div>
 
-                   {/* {     <div className = "flex w-full  justify-center ">
+                        <div className = "flex w-full  justify-center ">
                     <GoogleLogin
                       onSuccess={handleGoogleLogin}
                       onError={() => setMessage("Google login failed. Try again.")}
                       />
-                    </div>} */}
+                    </div>
                     
 
     
