@@ -34,6 +34,7 @@ const Home = () => {
   const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
   const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
   const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
    
   
    
@@ -66,6 +67,7 @@ const Home = () => {
   const handleFormSubmit = async () => {
     // Prevent empty goal submission
     setLoading(true);
+    setErrorMessage(null); 
     try {
       const response = await generateInsights('string', inputValue); // pass the input value as the description
       console.log("API Response:", response); // Debugging
@@ -76,6 +78,8 @@ const Home = () => {
       setShowGoalBreakdown(true); // Show the GoalBreakdown component
     } catch (error) {
       console.error('Error creating goal:', error);
+      const message = error?.response?.data?.error || "Something went wrong.";
+      setErrorMessage(message);
     } finally {
       setLoading(false);
     }
@@ -126,6 +130,8 @@ const Home = () => {
 
       <div className="w-full   flex-1 overflow-y-auto scrollbar-hide xl:max-h-[76vh] md:max-h-[70vh]  no-scrollbar">
       
+      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+
           {/* Problem Statement Section */}
       {!showGoalBreakdown && (
         <motion.div 
