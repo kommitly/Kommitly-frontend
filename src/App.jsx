@@ -62,6 +62,8 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/registration" element={<Registration />} />
+              <Route path="/registration?tab=signup" element={<Signup />} />
+              <Route path="/registration?tab=login" element={<Login />} />
              
            
               <Route path="/verify-email/:token" element={<EmailVerificationCheck />} />

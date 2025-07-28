@@ -573,7 +573,7 @@ const answerAiSubtask = async (subtaskId) => {
 }
 
 const loginWithGoogle = async (id_token) => {
-  const url = "https://kommitly-backend.onrender.com/api/auth/google/";
+  const url = "http://127.0.0.1:8000/api/auth/google/";
   try {
     const response = await axios.post(url, { id_token }, {
       headers: {

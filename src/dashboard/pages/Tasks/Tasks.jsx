@@ -55,6 +55,10 @@ const Tasks = () => {
     if (tasks.length > 0) { // Check if tasks array has items
       setLoading(false);
       console.log("tasks", tasks);
+      
+    }
+    if (tasks.length ===0){
+      console.log("No tasks found");
     }
     if (goals.goals && goals.ai_goals) {
       setLoading(false);
@@ -63,8 +67,7 @@ const Tasks = () => {
   }, [tasks, goals]);
   
   
-
-  // Filter tasks based on selected date
+// Filter tasks based on selected date
   const filteredTasksByDate = tasks.filter((task) => {
     if (!task.due_date) return false; // Ensure task has a due date
   
@@ -74,6 +77,44 @@ const Tasks = () => {
     return taskDate === selectedDateFormatted;
   });
   
+  // Filter tasks based on selected date
+  const hours = Array.from({ length: 24 }, (_, i) => {
+  const suffix = i < 12 ? "am" : "pm";
+  const hour = i % 12 === 0 ? 12 : i % 12;
+  return `${hour}${suffix}`;
+});
+
+const renderTaskBlock = (hour) => {
+  return filteredTasksByDate
+    .filter((task) => {
+      const taskHour = new Date(task.due_date).getHours();
+      return taskHour === hour;
+    })
+    .map((task, index) => {
+      const taskTime = new Date(task.due_date);
+      const topOffset = (taskTime.getMinutes() / 60) * 100;
+
+      return (
+        <div
+          key={index}
+          className="absolute left-[100px] right-4 bg-[#6246AC] text-white text-xs px-2 py-1 rounded shadow"
+          style={{
+            top: `${topOffset}%`,
+            height: "32px", // You can adjust or make this dynamic if needed
+          }}
+        >
+          {task.title} — {taskTime.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+          })}
+        </div>
+      );
+    });
+};
+
+
+
   //filter ai tasks
   const filterAiTasks = (category) => {
     if (!goals.ai_goals || goals.ai_goals.length === 0) return [];
@@ -84,8 +125,12 @@ const Tasks = () => {
     switch (category) {
       //case 'recentlyAdded':
        // return [...aiTasks].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      case 'inProgress':
-        return aiTasks.filter(task => task.progress > 0 && task.progress < 100);
+      //case 'inProgress':
+        //return aiTasks.filter(task => task.progress > 0 && task.progress < 100);
+
+        case 'inProgress':
+        return aiTasks.filter(task => task.status === 'in-progress');
+
       //case 'pending':
         //return aiTasks.filter(task => task.progress === 0);
         case 'pending':
@@ -552,7 +597,7 @@ const handleAddSubtask = () => {
 ) : (
   <>
 
-       {filteredAiTasks.length > 3 && ( // Show left scroll button only if there are more than 3 tasks
+       {filteredAiTasks.length > 0 && ( // Show left scroll button only if there are more than 3 tasks
   <button 
     onClick={() => scrollAiTasks('left')} 
     className="absolute cursor-pointer left-0 top-8 transform -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center"
@@ -580,15 +625,17 @@ const handleAddSubtask = () => {
         {filteredAiTasks.map((task) => (
           <Link key={task.id} to={`/dashboard/ai-task/${task.id}`}>
           <li className=' w-1/3 min-w-[280px] min-h-[100px] list-none '>
-          <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl'sx={{backgroundColor:colors.background.paper}}>
+          <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl transition-transform duration-300 hover:scale-[0.95]'sx={{backgroundColor:colors.background.paper}}>
             <div className='w-1/4  full overflow-hidden '>
               {/*<img src={aiGoals} alt="goals" className='h-auto'/> */}
             </div>
             <div className='w-full h-auto flex flex-col gap-0'>
-              <div className='flex items-start h-10 mb-1 justify-between'>
+              <div className='flex  items-start h-auto mb-1 justify-between'>
                 <span className='w-full h-auto font-regular' >
                   {task.title}
                 </span>
+
+                
                 <div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#65558F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer" 
                 
@@ -627,8 +674,40 @@ const handleAddSubtask = () => {
                         </div>
                       )}
                       </div>
+                       </div>
 
-              </div>
+                      {/* New subtasks section below title */}
+<div className="flex items-center pl-0 gap-0 mt-2  ">
+  <svg className="mt-1"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#4F378A"
+  strokeWidth="1.5"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+>
+ 
+  <line x1="4" y1="4" x2="18" y2="4" />
+  
+ 
+  <line x1="10" y1="4" x2="10" y2="12" />
+  
+
+  <line x1="10" y1="8" x2="16" y2="8" />
+  
+ 
+  <line x1="10" y1="12" x2="16" y2="12" />
+</svg>
+
+  <span className="text-[#65558F] text-xs">
+   subtasks
+  </span>
+</div>
+
+             
               {/*<div className="flex items-center">
                   <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm font-medium text-[#65558F]">Timeline:</p>
                   <span className="px-3 py-0.5 border border-[#65558F] 2xl:text-sm  rounded-sm md:text-xs xl:text-xs text-[#65558F]">
@@ -695,7 +774,7 @@ const handleAddSubtask = () => {
 
     
     <div className='relative mt-4'>
-      {filteredAiTasks.length > 3 && (
+      {filteredTasks.length > 0 && (
         <button onClick={() => scrollTasks('left')} className='absolute cursor-pointer left-0 top-1/2 transform -translate-y-1/2  w-10 h-10 rounded-full flex items-center justify-center' style={{ backgroundColor: colors.tag.primary }}
         >  <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -716,13 +795,13 @@ const handleAddSubtask = () => {
             {filteredTasks.map((task) => (
               <Link key={task.id} to={`/dashboard/tasks/${task.id}`}> 
               <li className=' w-1/3 min-w-[280px] min-h-[100px] list-none  '>
-                <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl' sx={{backgroundColor:colors.background.paper}}>
+                <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl transition-transform duration-300 hover:scale-[0.95]' sx={{backgroundColor:colors.background.paper}}>
                   <div className='w-1/4 full overflow-hidden '>
                    {/*<img src={aiGoals} alt="goals"  className='h-auto'/> */}
                   </div>
                   <div className='w-full h-auto flex flex-col gap-0'>
-                    <div className='flex h-10 mb-1 items-start  justify-between'>
-                    <span className='w-full h-auto font-medium'>
+                    <div className='flex h-auto mb-1 items-start  justify-between'>
+                    <span className='w-full h-auto font-regular'>
                     {task.title}
                     </span>
 
@@ -764,6 +843,38 @@ const handleAddSubtask = () => {
                       )}
                       </div>
                     </div>
+                      {/* New subtasks section below title */}
+<div className="flex items-center pl-0 gap-0 mt-2  text-gray-600">
+ <svg className="mt-1 "
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#4F378A"
+  strokeWidth="2"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+>
+  
+  <line x1="4" y1="4" x2="18" y2="4" />
+  
+  
+  <line x1="10" y1="4" x2="10" y2="12" />
+  
+  
+  <line x1="10" y1="8" x2="16" y2="8" />
+  
+  
+  <line x1="10" y1="12" x2="16" y2="12" />
+</svg>
+
+
+  <span className=" text-xs text-[#65558F]"  >
+    {task.subtasks.filter(s => s.status === "completed").length}/{task.subtasks.length} 
+  </span>
+</div>
+
                   </div>  
                     
                 </Box>
@@ -772,7 +883,7 @@ const handleAddSubtask = () => {
             ))}
           </div>
 
-          {filteredAiTasks.length === 0 ? (
+          {filteredTasks.length === 0 ? (
   <div className="text-sm text-gray-600 w-full text-center py-4">
     No Tasks fall under this category.
   </div>
@@ -815,65 +926,20 @@ const handleAddSubtask = () => {
                 }}>
           Tasks for {selectedDate.format("YYYY-MM-DD")}
         </h3>
-      <div className="mt-4  rounded-xl  p-4" style={{ backgroundColor: colors.background.default }}>
-        {filteredTasksByDate.length ? (
-          filteredTasksByDate.map((task, index) => (
-            <div
-              key={index}
-              className="p-6  flex justify-between my-3   rounded-xl" 
-              style={{
-  
-             backgroundColor: colors.background.paper,
- 
-}}
+      <div className="mt-4  rounded-xl  p-4 h-[250px] overflow-y-auto border" style={{ backgroundColor: colors.background.default }}>
+        {hours.map((hourLabel, hourIndex) => (
+  <div
+    key={hourIndex}
+    className="border-t border-gray-300 h-16 relative pl-4 text-sm text-gray-600"
+  >
+    <div className="absolute left-0 top-0">{hourLabel}</div>
+    <div className="ml-16 h-full relative">
+      {renderTaskBlock(hourIndex)}
+    </div>
+  </div>
+))}
 
-            > 
-            <div className='flex  gap-2'>
-              <div className='w-[4px] bg-[#4F378A]  rounded-full flex items-center justify-center'>
-
-              </div>
-              <div>
-                <p className=" h-auto p-2 text-1g font-medium text-gray-900" style={{
-                  color: colors.text.primary,
-                }}>{task.title}</p>
-              </div>
-              </div>
-              <button className="px-4 py-2 bg-[#6246AC] text-white text-sm rounded-lg hover:bg-purple-600">
-                {task.due_date ? new Date(task.due_date).toLocaleTimeString([], {
-  hour: 'numeric',
-  minute: '2-digit',
-  hour12: true,
-}) : ''}
-              </button>
-              <div className='py-4'>
-                                <Divider orientation="horizontal" sx={{ borderColor: "#00000", opacity: 0.8 }} />
-                              </div>
-            </div>
-            
-          ))
-        ) : (
-          <p className="text-gray-500 mt-2">No tasks for this day</p>
-        )}
-
-<button onClick={openModal}  className='bg-[#6246AC] flex items-center text-xs sm:text-sm font-light text-white mt-2 px-4 gap-2 py-2 rounded-md'>
-                        <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="#6246AC"
-                        stroke="#FFFFFF"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
-                      >
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                      </svg>
-                      Add New Task
-                    </button>
-      </div>
+    </div>
     
 
 
