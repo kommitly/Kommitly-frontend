@@ -180,12 +180,12 @@ if (user) {
                       <p>or</p>
                       </div>
 
-                        <div className = "flex w-full  justify-center ">
+                   {/* {     <div className = "flex w-full  justify-center ">
                     <GoogleLogin
                       onSuccess={handleGoogleLogin}
                       onError={() => setMessage("Google login failed. Try again.")}
                       />
-                    </div>
+                    </div>} */}
                     
 
     
