@@ -205,7 +205,7 @@ const updateAiTaskStatus = async (taskId, updatedData) => {
   }
 }
 
-const updateSingleTaskStatus = async (taskId, updatedData) => {
+const updateTaskById = async (taskId, updatedData) => {
   console.log ( "for task with ID:", taskId, "with data:", updatedData);
   const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update/`;
   console.log("API URL: ", url); // Log the URL for debugging
@@ -429,6 +429,7 @@ const updateAiTaskById = async (taskId, updatedData) => {
   }
 }
 
+
 const fetchTaskById = async (taskId) => {
   
   const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/`;
@@ -593,7 +594,7 @@ export {
   generateInsights,
   fetchTaskById,
   updateSubtask,
-  updateSingleTaskStatus, 
+  updateTaskById, 
   updateGoalById,
   createSubtask,
   createAiGoal, 
@@ -621,5 +622,6 @@ export {
   fetchAllNotifications,
   markNotificationAsRead,
   answerAiSubtask,
-  loginWithGoogle
+  loginWithGoogle,
+
 };

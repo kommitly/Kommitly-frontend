@@ -7,7 +7,7 @@ import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } fr
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
-import { deleteTaskById, updateSingleTaskStatus, fetchTaskById, createSubtask, updateSubtask, deleteSubtaskById} from "../../../utils/Api";
+import { deleteTaskById, updateTaskById, fetchTaskById, createSubtask, updateSubtask, deleteSubtaskById} from "../../../utils/Api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt, FaClock, FaFlag, FaTasks, } from "react-icons/fa"; // Calendar icon
@@ -128,7 +128,7 @@ const TaskPage = () => {
         ...task,
         subtasks: task.subtasks.map(({ name, completed }) => ({ name, completed })), // Keep subtasks structured
       };
-      await updateSingleTaskStatus(task.id, updatedTask );
+      await updateTaskById(task.id, updatedTask );
       console.log("Updated task:", updatedTask); // ✅ Debug updated task
 
   

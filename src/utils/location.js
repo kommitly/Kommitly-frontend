@@ -33,6 +33,8 @@ const getToken = () => {
       });
 
       const data = await response.json();
+      
+      localStorage.setItem("Timezone",data.timezone)
       console.log('Timezone:', data.timezone);
 
       // Optionally store timezone in localStorage, Redux, or send to backend

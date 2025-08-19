@@ -69,7 +69,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     setAnchorEl(null); // Close the menu
   };
 
- console.log("Profile:", user);
+ // console.log("Profile:", user);
 
 
   const quotes = [

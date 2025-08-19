@@ -100,7 +100,7 @@ const Goals = () => {
   const [open, setOpen] = useState(false);
   const [openCreateGoal, setOpenCreateGoal] = useState(false);
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("weekly");
   const { profile, setProfile } = useContext(ProfileContext);
   const isSm = useMediaQuery(theme.breakpoints.only("sm"));
   const isLg = useMediaQuery(theme.breakpoints.only("lg"));
@@ -305,13 +305,17 @@ const Goals = () => {
             <p className="text-sm w-20" style={{ color: colors.text.primary }}>Category</p>
             <select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => {
+              setCategory(e.target.value);
+              console.log("Selected category:", e.target.value);
+            }}
+
               className="w-full p-2 border border-gray-200 rounded-lg text-black focus:outline-none"
             >
-              <option value="">Select</option>
-              <option value="Weekly">Weekly</option>
-              <option value="Monthly">Monthly</option>
-              <option value="Yearly">Yearly</option>
+            
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
             </select>
           </div>
 
@@ -421,7 +425,11 @@ const Goals = () => {
   <p className="text-sm w-20" style={{ color: colors.text.primary }}>Category</p>
   <select
     value={category}
-    onChange={(e) => setCategory(e.target.value)}
+    onChange={(e) => {
+    setCategory(e.target.value);
+    console.log("Selected category:", e.target.value);
+  }}
+
     className="w-full p-2 border border-gray-200 rounded-lg text-black focus:outline-none"
   >
     
@@ -464,7 +472,7 @@ const Goals = () => {
           >
             Track your progress, and achieve more with AI assistance.
           </p>} */}
-            <Button onClick={openModal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{backgroundColor:"#4F378A", borderRadius: '6px', paddingX: '12px'}}>
+            <Button onClick={openModal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-1 cursor-pointer rounded-lg' sx={{backgroundColor:"#4F378A", borderRadius: '6px', paddingX: '12px'}}>
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -522,7 +530,7 @@ const Goals = () => {
       key={category}
       onClick={() => setSelectedAiCategory(category)}
       className={`
-        relative z-10 w-2/3  px-4 py-1 text-sm   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+        relative z-10 w-2/3  px-4 py-1 text-sm  lg:text-xs  2xl:text-base   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
         ${selectedAiCategory === category ? "text-white" : colors.text.primary}
       `}
     >
@@ -581,7 +589,7 @@ const Goals = () => {
                             </div>
                                           <div className='w-3/4    flex flex-col gap-2'>
                                                     <div className='flex  w-full    justify-between'>
-                                                      <span className='w-full h-auto font-regular'>
+                                                      <span className='w-full h-auto font-regular text-xs lg:text-sm   2xl:text-lg '>
                                                       {goal.title}
                                                       </span>
                                                      
@@ -589,7 +597,7 @@ const Goals = () => {
                                                       </div>
                                                       <div className='flex items-center gap-2'>
                                                         <SellIcon className='text-[#65558F] text-xs' />
-                                                        <span className='text-xs  font-normal' style={{ color: colors.primary[500] }}>
+                                                        <span className='text-xs  lg:text-xs   2xl:text-xs   font-normal' style={{ color: colors.primary[500] }}>
                                                         {goal.tag ? goal.tag : 'No Tag'}
                                                         </span>
 
@@ -666,7 +674,7 @@ const Goals = () => {
       key={category}
       onClick={() => setSelectedCategory(category)}
       className={`
-        relative z-10 w-2/3  px-4 py-1 text-sm text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+        relative z-10 w-2/3   px-4 py-1 text-sm lg:text-xs  2xl:text-base  text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
         ${selectedCategory === category ? "text-white" :  colors.text.primary}
       `}
     >
@@ -727,7 +735,7 @@ const Goals = () => {
                             </div>
                   <div className='w-3/4 flex flex-col gap-2 '>
                    <div className='flex  w-full    justify-between'>
-                                                      <span className='w-full h-auto font-regular'>
+                                                      <span className='w-full h-auto font-regular text-xs lg:text-sm   2xl:text-lg '>
                                                       {goal.title}
                                                       </span>
                                                       
@@ -735,7 +743,7 @@ const Goals = () => {
                                                       </div>
                                                       <div className='flex items-center gap-2'>
                                                         <SellIcon className='text-[#65558F] text-xs' />
-                                                        <span className='text-xs  font-normal' style={{ color: colors.primary[500] }}>
+                                                        <span className='text-xs  lg:text-xs   2xl:text-xs   font-normal' style={{ color: colors.primary[500] }}>
                                                         {goal.tag ? goal.tag : 'No Tag'}
                                                         </span>
 
@@ -816,7 +824,7 @@ const Goals = () => {
       key={period}
       onClick={() => setSelectedPeriod(period)}
       className={`
-        relative z-10 w-1/3  px-4 py-1 text-sm text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+        relative z-10 w-1/3  px-4 py-1 text-base lg:text-xs  2xl:text-base   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
         ${selectedPeriod === period ? "text-white" : colors.background.paper}
       `}
     >
@@ -857,10 +865,10 @@ const Goals = () => {
                                 
               <div className='flex items-center px-2 w-full gap-4'>
                 <div className='flex-1 '>
-                <h2 className='font-regular text-sm mb-2' style={{ color: colors.text.primary }}>{goal.title}</h2>
+                <h2 className='font-regular text-xs lg:text-sm   2xl:text-lg  mb-2' style={{ color: colors.text.primary }}>{goal.title}</h2>
                  <div className='flex items-center gap-2'>
                   <SellIcon className='text-[#65558F] text-xs' />
-                  <span className='text-xs  font-normal' style={{ color: colors.primary[500] }}>
+                  <span className='text-xs  lg:text-xs   2xl:text-xs  font-normal' style={{ color: colors.primary[500] }}>
                   {goal.tag ? goal.tag : 'No Tag'}
                   </span>
 

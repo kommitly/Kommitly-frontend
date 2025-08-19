@@ -204,32 +204,34 @@ export default function Stats() {
             <CardContent className="md:h-[300px] h-[400px] w-full  p-4">
               <div className="md:flex md:mb-2 mb-8   w-full justify-between items-center">
                <h2 className="text-lg font-semibold mb-2">{aiView} AI Goal Activity</h2>
-          <div className="relative flex p-1 md:w-3/12 w-11/12 rounded-md md:overflow-hidden" style={{backgroundColor: colors.tag.primary}}>
+          <div className="relative flex p-1 md:w-3/12 w-9/12    rounded-md md:overflow-hidden" style={{backgroundColor: colors.tag.primary}}>
                     {/* Sliding Background */}
                     <div
-                      className={`absolute top-1 bottom-1 mx-1   md:w-20 w-20 bg-[#4F378A] shadow-sm shadow-[#4F378A] shadow-opacity-50 rounded-sm transition-all duration-300 ease-in-out`}
+                      className={`absolute top-1 bottom-1 md:mx-1.5 mx-1  md:w-18 w-18  bg-[#4F378A] shadow-sm shadow-[#4F378A] shadow-opacity-50 rounded-sm transition-all duration-300 ease-in-out`}
                       style={{
                         left: `${["weekly", "monthly", "yearly"].indexOf(aiView) * 33.3}%`,
                       }}
                     />
 
-                    {/* Buttons */}
+                 <div className="w-full flex ">
+                     {/* Buttons */}
                     {["weekly", "monthly", "yearly"].map((v, i) => (
                       <button
                         key={v}
                         onClick={() => setAiView(v)}
                         className={`
-                          relative z-10 w-1/3 px-4 py-1 md:text-sm text-xs text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+                          relative z-10 w-full py-1 md:text-sm text-xs text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6] border-r border-[#6D5BA6]  last:border-r-0
                           ${aiView === v ? "text-white" :  colors.text.primary}
                         `}
                       >
                         {v.charAt(0).toUpperCase() + v.slice(1)}
                       </button>
                     ))}
+                 </div>
                   </div>
 
              </div>
-             <ResponsiveContainer  height="100%" style={{width: isSm ? "100%": "100%" }} >
+             <ResponsiveContainer  height="90%" style={{width: isSm ? "100%": "100%" }} >
               <LineChart data={chartAiData} style={{right:isSm ? "18px" : "8px",  height: isSm ? "80%" : "100%", }}>
                 <XAxis dataKey="name" />
                 <YAxis allowDecimals={false} />
@@ -277,7 +279,7 @@ export default function Stats() {
                   </div>
 
              </div>
-             <ResponsiveContainer width="100%" height="100%">
+             <ResponsiveContainer width="100%" height="90%">
               <LineChart data={chartData} style={{right:isSm ? "18px" : "8px",  height: isSm ? "80%" : "100%" }}>
                 <XAxis dataKey="name" />
                 <YAxis allowDecimals={false} />
