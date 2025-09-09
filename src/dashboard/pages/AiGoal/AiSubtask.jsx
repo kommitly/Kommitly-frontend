@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState, useContext, useRef } from "react";
 import { TasksContext } from "../../../context/TasksContext";
 import PropTypes from 'prop-types';
-import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById, answerAiSubtask } from "../../../utils/Api";
+import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById, answerAiSubtask,createRoutine } from "../../../utils/Api";
 import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem, colors } from "@mui/material";
 import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -56,6 +56,14 @@ const AiSubtask = ({ step, setStep, taskId, onClose }) => {
     setAiAnswer(step.ai_answer);
   }
 }, [step]);
+
+const handleRoutineChange = (e) => {
+  const { name, value } = e.target;
+  setStep((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
 
 const handleDatePickerOpen = () => {
   setShowDateTimePicker(true);
@@ -185,6 +193,7 @@ const handleUpdateSubtask = async () => {
     const reminderTime = step.reminder_offset === "custom"
   ? dayjs(step.custom_reminder_time).format("HH:mm:ss")
   : dayjs(step.due_date).subtract(Number(step.reminder_offset), 'minute').format("HH:mm:ss");
+
    
    console.log("Selected Date:", step.due_date); // Debugging line
     console.log("Reminder Time:", reminderTime); // Debugging line
@@ -213,6 +222,29 @@ const handleUpdateSubtask = async () => {
       due_date: dayjs(step.due_date).format("YYYY-MM-DD"), // API expects "YYYY-MM-DD"
       reminder_time: reminderTime // always "HH:mm"
     });
+
+     // 3. If repeat is set, create a routine
+    if (step.frequency && step.frequency !== "no-repeat") {
+      const routineData = {
+        tasks: [taskId], // task IDs (int array)
+        subtasks: [step.id], // subtask IDs (int array)
+        ai_subtasks: [step.id], // if your backend expects this too
+        due_date: step.due_date, // full datetime
+        name: step.title,
+        start_date: dayjs(step.due_date).format("YYYY-MM-DD"),
+        frequency: step.frequency, // "daily", "weekly", "custom", etc.
+        time_of_day: dayjs(step.due_date).format("HH:mm:ss"),
+        day_of_week: dayjs(step.due_date).day(), // 0-6 (Sunday-Saturday)
+        end_date: dayjs(step.due_date).add(30, "day").format("YYYY-MM-DD"), // or let user pick
+        is_active: true,
+        subtask_template_title: step.title,
+        subtask_template_description: step.description || "",
+        reminder_time: reminderTime,
+      };
+
+      await createRoutine(routineData);
+      console.log("Routine created:", routineData);
+    }
 
     console.log("Subtask updated and reminder triggered.");
     // ✅ Show snackbar
@@ -564,7 +596,12 @@ PopperProps={{
        
         {/*Time Picker Input*/}
         <div className="flex gap-4 items-center relative">
-          <select   className='text-sm' >
+          <select
+    name="frequency"
+    className="text-sm"
+    value={step.frequency || "no-repeat"}
+    onChange={handleRoutineChange}  // 👈 reuse your handleChange function
+  >
 
   <option value="no-repeat">No Repeat</option>
   <option value="daily">Daily</option>

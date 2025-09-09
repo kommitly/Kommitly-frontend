@@ -613,6 +613,22 @@ const loginWithGoogle = async (id_token) => {
   }
 }
 
+const createRoutine = async (routine_data)=> {
+  const url = "https://kommitly-backend.onrender.com/api/routines/";
+  try {
+    const token = getToken();
+    const response = await axios.post(url, routine_data, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching notifications:", error.response?.data || error.message);
+    throw error;
+  }
+}
 
 export { 
   generateInsights,
@@ -648,5 +664,6 @@ export {
   markNotificationAsRead,
   answerAiSubtask,
   loginWithGoogle,
+  createRoutine
 
 };
