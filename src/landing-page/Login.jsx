@@ -24,14 +24,14 @@ const userSchema = yup.object().shape({
   password: yup.string().required("required"),
 });
 
-const Login = ({ submitting, setSubmitting }) => {
+const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const { login, loading, user } = useContext(AuthContext);
   const { loadProfile } = useContext(ProfileContext);
   const navigate = useNavigate();
-  const [message, setMessage] = useState("");
+  
 
     // redirect if logged in
   useEffect(() => {
@@ -58,9 +58,14 @@ const Login = ({ submitting, setSubmitting }) => {
         getLocationAndTimezone();
       } else {
         setMessage(data.error || "Login failed.");
+        console.log("Login error message", data.error || "Login failed."); 
+        console.log("Message state after update:", message); // Add this line
+        
+
       }
     } catch (error) {
       setMessage("Error logging in. Try again.");
+
     }
     finally {
     setSubmitting(false);
@@ -74,7 +79,7 @@ const Login = ({ submitting, setSubmitting }) => {
       <div className="flex w-full flex-col  items-center">
         <div className="flex w-10/12 flex-col gap-4 justify-center ">
          
-          {message && <p style={{color:colors.background.warning}}>{message}</p>}
+         
           <Formik onSubmit={handleLogin} initialValues={initialValues} validationSchema={userSchema}>
             {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
               <form onSubmit={handleSubmit}>

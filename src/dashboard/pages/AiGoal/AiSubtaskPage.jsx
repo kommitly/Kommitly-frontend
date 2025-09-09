@@ -8,7 +8,7 @@ import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem, colors
 import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-
+import Loading from '../../components/Loading';
 import { deleteTaskById, updateTaskById, fetchTaskById, createSubtask, updateSubtask} from "../../../utils/Api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -78,7 +78,14 @@ const navigate = useNavigate();
   }, [step?.due_date, step?.reminder_time]);
 
   // ✅ Only start conditionals after hooks
-  if (loading) return <div className="p-4 text-center">Loading...</div>;
+  if (loading) {
+    return (
+         <>
+         <Loading/>
+         </>
+      
+    );
+  }
   if (error) return <div className="p-4 text-center text-red-500">{error}</div>;
   if (!step) return <div className="p-4 text-center text-red-500">Subtask data is missing.</div>;
 

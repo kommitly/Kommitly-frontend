@@ -28,7 +28,7 @@ const SearchResults = ({ results = [], onClose, onSelectTask }) => {
         
       <div
         ref={resultsRef}
-        className="absolute top-1/2  ml-8 md:w-100 w-72 h-auto max-h-40 overflow-y-auto shadow-xl no-scrollbar rounded-lg p-2"
+        className="  md:w-full w-72 h-auto max-h-40 overflow-y-auto shadow-xl no-scrollbar rounded-lg p-2"
         style={{ backgroundColor: colors.background.paper }}
       >
         {results.map((item, index) => {

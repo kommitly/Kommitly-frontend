@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useEffect, useState } from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,6 +11,11 @@ import { motion } from "framer-motion";
 import { useTheme } from '@mui/material/styles';
 import { tokens } from '../../../theme';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Loading from "../../components/Loading";
+import SlidingButton from "../../components/SlidingButton";
+import { BorderAll } from "@mui/icons-material";
+import { BarChart } from '@mui/x-charts/BarChart';
+import { animated, useSpring } from '@react-spring/web';
 
 function getCompletionTrends(goals = [], view ) {
   const now = dayjs();
@@ -108,6 +114,7 @@ const trend = Array(range).fill(0).map((_, i) => ({
 
 
 export default function Stats() {
+  
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState([]);
@@ -117,6 +124,8 @@ export default function Stats() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isSm = useMediaQuery(theme.breakpoints.down('sm')); // Check if screen size
+  const [key, animate] = React.useReducer((v) => v + 1, 0);
+
   useEffect(() => {
   const getGoals = async () => {
     try {
@@ -160,6 +169,55 @@ export default function Stats() {
   const totalSubtasksCount = totalSubtasks + totalAiSubtasks;
   const completedSubtasksCount = completedSubtasks + completedAiSubtasks;
 
+  if (loading) {
+    return (
+         <>
+         <Loading/>
+         </>
+      
+    );
+  }
+
+
+  function AnimatedBarLabel(props) {
+  const {
+    seriesId,
+    dataIndex,
+    color,
+    isFaded,
+    isHighlighted,
+    classes,
+    xOrigin,
+    yOrigin,
+    x,
+    y,
+    width,
+    height,
+    layout,
+    skipAnimation,
+    ...otherProps
+  } = props;
+
+  const style = useSpring({
+    from: { y: yOrigin },
+    to: { y: y - 4 },
+    config: { tension: 100, friction: 10 },
+  });
+
+  return (
+    <animated.text
+      {...otherProps}
+      // @ts-ignore
+      fill={color}
+      x={xOrigin + x + width / 2}
+      width={width}
+      height={height}
+      style={style}
+      textAnchor="middle"
+    />
+  );
+}
+
 
   return (
     <div className="p-2 space-y-6 ">
@@ -168,28 +226,7 @@ export default function Stats() {
       <h1 className="md:text-2xl text-xl  font-semibold"> Progress Overview</h1>
 
       </span>
-      {loading ? (
      
-              <div className='w-full mt-8 flex min-h-screen'>
-              <div className="w-11/12 p-8 mt-8 py-8 flex-1 flex justify-center items-center overflow-y-auto scrollbar-hide max-h-[75vh] no-scrollbar">
-              <motion.div className="flex space-x-2">
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="w-2 h-2 bg-[#65558F] rounded-full"
-              initial={{ y: -10 }}
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 0.9, delay: i * 0.2 }}
-            />
-          ))}
-        </motion.div>
-        
-              </div>
-            </div>
-         
-       
-      ) : (
-        <>
           {/* Stat Cards */}
           <div className="grid mt-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard icon={<FaUser />} title="Goals Created" value={totalGoals} />
@@ -198,47 +235,48 @@ export default function Stats() {
             <StatCard icon={<FaCheck />} title="Tasks Completed" value={completedTasksCount} />
           </div>
 
-             {/* AI Goals Chart */}
+        <div className='w-full md:flex gap-4 h-full'>
+               {/* AI Goals Chart */}
           {chartAiData.length > 0 && (
-              <Card className="mt-6">
-            <CardContent className="md:h-[300px] h-[400px] w-full  p-4">
-              <div className="md:flex md:mb-2 mb-8   w-full justify-between items-center">
-               <h2 className="text-lg font-semibold mb-2">{aiView} AI Goal Activity</h2>
-          <div className="relative flex p-1 md:w-3/12 w-9/12    rounded-md md:overflow-hidden" style={{backgroundColor: colors.tag.primary}}>
-                    {/* Sliding Background */}
-                    <div
-                      className={`absolute top-1 bottom-1 md:mx-1.5 mx-1  md:w-18 w-18  bg-[#4F378A] shadow-sm shadow-[#4F378A] shadow-opacity-50 rounded-sm transition-all duration-300 ease-in-out`}
-                      style={{
-                        left: `${["weekly", "monthly", "yearly"].indexOf(aiView) * 33.3}%`,
-                      }}
-                    />
+              <Card className="mt-6 w-full h-full">
+            <CardContent className=" h-auto  w-full">
+              <div className="md:mb-2 mb-0    w-full justify-between items-center">
+              {/* {<h2 className="text-lg font-semibold mb-2">{aiView} AI Goal Activity</h2>} */}
+              <h2 className="text-lg font-semibold "> AI Goal Activity</h2>
+               
+            <div className='w-full -mt-4 flex justify-end'>
+                 <SlidingButton
+  options={["weekly", "monthly", "yearly"]}
+  selected={aiView}
+  onChange={setAiView}
+/>
+            </div>
 
-                 <div className="w-full flex ">
-                     {/* Buttons */}
-                    {["weekly", "monthly", "yearly"].map((v, i) => (
-                      <button
-                        key={v}
-                        onClick={() => setAiView(v)}
-                        className={`
-                          relative z-10 w-full py-1 md:text-sm text-xs text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6] border-r border-[#6D5BA6]  last:border-r-0
-                          ${aiView === v ? "text-white" :  colors.text.primary}
-                        `}
-                      >
-                        {v.charAt(0).toUpperCase() + v.slice(1)}
-                      </button>
-                    ))}
-                 </div>
-                  </div>
+         
+
+                
+                  
+               
+                          
 
              </div>
-             <ResponsiveContainer  height="90%" style={{width: isSm ? "100%": "100%" }} >
-              <LineChart data={chartAiData} style={{right:isSm ? "18px" : "8px",  height: isSm ? "80%" : "100%", }}>
-                <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#7c3aed" strokeWidth={3} />
-              </LineChart>
-            </ResponsiveContainer>
+            
+  <BarChart
+    key={key}
+    dataset={chartAiData} // your [{ name: "...", value: ...}, ...]
+    xAxis={[{ scaleType: "band", dataKey: "name" }]} // ✅ band scale
+    series={[{ dataKey: "value", label: "Value" }]} // ✅ tells it which value to plot
+    colors={[colors.primary[500]]}
+    width={isSm ? 360: 420}
+    height={400}
+    margin={{left: isSm ? 30 : 30}}
+    borderRadius={6}
+    barLabel="value"
+    slots={{ barLabel: AnimatedBarLabel }}
+
+  />
+
+
 
             </CardContent>
           </Card>
@@ -250,52 +288,50 @@ export default function Stats() {
 
 
           {chartData.length > 0 && (
-             <Card className="mt-6 mb-8">
-            <CardContent className="md:h-[300px] h-[400px] p-4">
+             <Card className="mt-6  w-full h-full mb-8">
+            <CardContent className=" h-auto p-4">
              <div className="md:flex md:mb-2 mb-8  w-full justify-between items-center">
-               <h2 className="text-lg font-semibold mb-2">{view} Goal Activity</h2>
-          <div className="relative flex  p-1 md:w-3/12 w-11/12 rounded-md overflow-hidden" style={{backgroundColor: colors.tag.primary}}>
-                    {/* Sliding Background */}
-                    <div
-                      className={`absolute top-1 bottom-1 mx-1  w-20 bg-[#4F378A] shadow-sm shadow-[#4F378A] shadow-opacity-50 rounded-sm transition-all duration-300 ease-in-out`}
-                      style={{
-                        left: `${["weekly", "monthly", "yearly"].indexOf(view) * 33.3}%`,
-                      }}
-                    />
+               {/* {<h2 className="text-lg font-semibold mb-2">{view} Goal Activity</h2>} */}
+               <h2 className="text-lg font-semibold "> Goal Activity</h2>
 
-                    {/* Buttons */}
-                    {["weekly", "monthly", "yearly"].map((v, i) => (
-                      <button
-                        key={v}
-                        onClick={() => setView(v)}
-                        className={`
-                          relative z-10 w-1/3 px-4 py-1 text-sm text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
-                          ${view === v ? "text-white" :  colors.text.primary}
-                        `}
-                      >
-                        {v.charAt(0).toUpperCase() + v.slice(1)}
-                      </button>
-                    ))}
-                  </div>
+               <SlidingButton
+            options={["weekly", "monthly", "yearly"]}
+            selected={view}
+            onChange={setView}
+          />
+
+        
+
+                 
+                  
+                  
+                          
+
 
              </div>
-             <ResponsiveContainer width="100%" height="90%">
-              <LineChart data={chartData} style={{right:isSm ? "18px" : "8px",  height: isSm ? "80%" : "100%" }}>
-                <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#7c3aed" strokeWidth={3} />
-              </LineChart>
-            </ResponsiveContainer>
+             <BarChart
+    key={key}
+    dataset={chartData} // your [{ name: "...", value: ...}, ...]
+    xAxis={[{ scaleType: "band", dataKey: "name" }]} // ✅ band scale
+    series={[{ dataKey: "value", label: "Value" }]} // ✅ tells it which value to plot
+    colors={[colors.primary[500]]}
+    width={isSm ? 360: 420}
+    height={400}
+    margin={{left: isSm ? 30 : 30}}
+    borderRadius={6}
+    barLabel="value"
+    slots={{ barLabel: AnimatedBarLabel }}
+
+  />
 
             </CardContent>
           </Card>
           )}
+        </div>
        
 
-          {/* AI Goals Stats */}
-        </>
-      )}
+       
+    
     </div>
   );
 }

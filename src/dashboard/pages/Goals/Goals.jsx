@@ -10,6 +10,7 @@ import aiGoals from '../../../assets/goals.svg';
 import { createGoal } from '../../../utils/Api';
 import CircularProgress from '@mui/material/CircularProgress';
 import background from '../../../assets/goal.svg';
+import SlidingButton from '../../components/SlidingButton';
 
 import { Divider } from '@mui/material';
 import GoalsPieChart from './GoalsPieChart'; // Import the PieChart component
@@ -514,32 +515,13 @@ const Goals = () => {
             >AI Goals </Typography></h1>
             
      {/* Buttons for medium and larger screens */}
-<div className="flex mt-4 relative  p-1  rounded-md md:w-7/12 w-full" style={{ backgroundColor: colors.tag.primary}}>
+     <SlidingButton
+  options={["inProgress", "pending", "completed"]}
+  selected={selectedAiCategory}
+  onChange={setSelectedAiCategory}
+/>
 
-  {/* Sliding Background */}
-  <div
-    className="absolute top-1 left-2  bottom-1 mx-2 w-1/3 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-sm transition-all duration-300 ease-in-out"
-    style={{
-      left: `${["inProgress", "pending", "completed"].indexOf(selectedAiCategory) * 31.3}%`,
-    }}
-  />
-
-  {/* Buttons */}
-  {["inProgress", "pending", "completed"].map((category,i) => (
-    <button
-      key={category}
-      onClick={() => setSelectedAiCategory(category)}
-      className={`
-        relative z-10 w-2/3  px-4 py-1 text-sm  lg:text-xs  2xl:text-base   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
-        ${selectedAiCategory === category ? "text-white" : colors.text.primary}
-      `}
-    >
-      {category === "inProgress"
-        ? "In Progress"
-        : category.charAt(0).toUpperCase() + category.slice(1)}
-    </button>
-  ))}
-</div>
+ 
 
 
         </div>
@@ -589,7 +571,7 @@ const Goals = () => {
                             </div>
                                           <div className='w-3/4    flex flex-col gap-2'>
                                                     <div className='flex  w-full    justify-between'>
-                                                      <span className='w-full h-auto font-regular text-xs lg:text-sm   2xl:text-lg '>
+                                                      <span className='w-full h-auto font-regular text-sm lg:text-sm   2xl:text-lg '>
                                                       {goal.title}
                                                       </span>
                                                      
@@ -657,35 +639,11 @@ const Goals = () => {
 
             </Typography>
             </h1>
-             {/* Buttons for medium and larger screens */}
-<div className="flex mt-4 relative p-1 rounded-md md:w-7/12 w-full" style={{backgroundColor: colors.tag.primary}} >
-
-  {/* Sliding Background */}
-  <div
-    className="absolute top-1 bottom-1 mx-2 w-1/3 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-sm transition-all duration-300 ease-in-out"
-     style={{
-      left: `${["inProgress", "pending", "completed"].indexOf(selectedCategory) * 31.3}%`,
-    }}
-  />
-
-  {/* Buttons */}
-  {["inProgress", "pending", "completed"].map((category) => (
-    <button
-      key={category}
-      onClick={() => setSelectedCategory(category)}
-      className={`
-        relative z-10 w-2/3   px-4 py-1 text-sm lg:text-xs  2xl:text-base  text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
-        ${selectedCategory === category ? "text-white" :  colors.text.primary}
-      `}
-    >
-      {category === "inProgress"
-        ? "In Progress"
-        : category.charAt(0).toUpperCase() + category.slice(1)}
-    </button>
-  ))}
-</div>
-
-
+   <SlidingButton
+  options={["inProgress", "pending", "completed"]}
+  selected={selectedCategory}
+  onChange={setSelectedCategory}
+/>
         </div>
 
 
@@ -735,7 +693,7 @@ const Goals = () => {
                             </div>
                   <div className='w-3/4 flex flex-col gap-2 '>
                    <div className='flex  w-full    justify-between'>
-                                                      <span className='w-full h-auto font-regular text-xs lg:text-sm   2xl:text-lg '>
+                                                      <span className='w-full h-auto font-regular text-sm lg:text-sm   2xl:text-lg '>
                                                       {goal.title}
                                                       </span>
                                                       
@@ -808,32 +766,14 @@ const Goals = () => {
         <div className=''>
         <div className='w-full flex justify-center mb-3'>
             {/* Buttons for medium and larger screens */}
-<div className=" flex mt-4 relative  p-1  rounded-md md:w-8/12 w-full" style={{ backgroundColor: colors.background.default }}>
 
-  {/* Sliding Background */}
-  <div
-    className="absolute top-1 left-2  bottom-1 mx-1 w-1/3 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-sm transition-all duration-300 ease-in-out"
-    style={{
-      left: `${["weekly", "monthly", "yearly"].indexOf(selectedPeriod) * 31.3}%`,
-    }}
-  />
+          <SlidingButton
+  options={["weekly", "monthly", "yearly"]}
+  selected={selectedPeriod}
+  onChange={setSelectedPeriod}
+/>
 
-  {/* Buttons */}
-  {["weekly", "monthly", "yearly"].map((period,i) => (
-    <button
-      key={period}
-      onClick={() => setSelectedPeriod(period)}
-      className={`
-        relative z-10 w-1/3  px-4 py-1 text-base lg:text-xs  2xl:text-base   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
-        ${selectedPeriod === period ? "text-white" : colors.background.paper}
-      `}
-    >
-      {period === "weekly"
-        ? "weekly"
-        : period.charAt(0).toUpperCase() + period.slice(1)}
-    </button>
-  ))}
-</div>
+
         
 
 
@@ -865,7 +805,7 @@ const Goals = () => {
                                 
               <div className='flex items-center px-2 w-full gap-4'>
                 <div className='flex-1 '>
-                <h2 className='font-regular text-xs lg:text-sm   2xl:text-lg  mb-2' style={{ color: colors.text.primary }}>{goal.title}</h2>
+                <h2 className='font-regular text-sm lg:text-sm   2xl:text-lg  mb-2' style={{ color: colors.text.primary }}>{goal.title}</h2>
                  <div className='flex items-center gap-2'>
                   <SellIcon className='text-[#65558F] text-xs' />
                   <span className='text-xs  lg:text-xs   2xl:text-xs  font-normal' style={{ color: colors.primary[500] }}>

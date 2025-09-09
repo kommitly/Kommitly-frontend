@@ -17,7 +17,7 @@ import TaskItem from '../../components/TaskItem'; // Import TaskItem component
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import { Divider } from '@mui/material';
-
+import SlidingButton from "../../components/SlidingButton";
 
 
 
@@ -557,34 +557,15 @@ const handleAddSubtask = () => {
                         color='text.primary'
                         >AI Tasks </Typography>
           </h1>
-          
-      <div className="flex mt-4 relative  p-1 rounded-md md:w-7/12 w-full" style={{ backgroundColor: colors.tag.primary}}>
+          <SlidingButton
+  options={["inProgress", "pending", "completed"]}
+  selected={selectedAiCategory}
+  onChange={setSelectedAiCategory}
+/>
 
-  {/* Sliding Background */}
-  <div
-    className="absolute top-1 left-2  bottom-1 mx-2 w-1/3 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-sm transition-all duration-300 ease-in-out"
-    style={{
-      left: `${["inProgress", "pending", "completed"].indexOf(selectedAiCategory) * 31.3}%`,
-    }}
-  />
-
-  {/* Buttons */}
-  {["inProgress", "pending", "completed"].map((category,i) => (
-    <button
-      key={category}
-      onClick={() => setSelectedAiCategory(category)}
-      className={`
-        relative z-10 w-2/3  px-4 py-1 text-sm   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
-        ${selectedAiCategory === category ? "text-white" : colors.text.primary}
-      `}
-    >
-      {category === "inProgress"
-        ? "In Progress"
-        : category.charAt(0).toUpperCase() + category.slice(1)}
-    </button>
-  ))}
-</div>
-
+                  
+                  
+                 
 
         </div>
 
@@ -742,35 +723,20 @@ const handleAddSubtask = () => {
                   Tasks
         </Typography>
       </h1>
-      <div className="flex mt-4 relative p-1 rounded-md md:w-7/12 w-full" style={{backgroundColor: colors.tag.primary}} >
+      <SlidingButton
+  options={["inProgress", "pending", "completed"]}
+  selected={selectedCategory}
+  onChange={setSelectedCategory}
+/>
+  
+                  
+                  
+                          
 
-  {/* Sliding Background */}
-  <div
-    className="absolute top-1 bottom-1 mx-2 w-1/3 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-sm transition-all duration-300 ease-in-out"
-     style={{
-      left: `${["inProgress", "pending", "completed"].indexOf(selectedCategory) * 31.3}%`,
-    }}
-  />
-
-  {/* Buttons */}
-  {["inProgress", "pending", "completed"].map((category) => (
-    <button
-      key={category}
-      onClick={() => setSelectedCategory(category)}
-      className={`
-        relative z-10 w-2/3  px-4 py-1 text-sm text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
-        ${selectedCategory === category ? "text-white" :  colors.text.primary}
-      `}
-    >
-      {category === "inProgress"
-        ? "In Progress"
-        : category.charAt(0).toUpperCase() + category.slice(1)}
-    </button>
-  ))}
-</div>
 
 
         </div>
+   
 
     
     <div className='relative mt-4'>

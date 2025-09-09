@@ -11,7 +11,7 @@ import FlowChart from './Flowchart';
 import { animate } from "motion"
 import TypingText from './TypingText';
 import useMediaQuery from '@mui/material/useMediaQuery';
-
+import Loading from '../../components/Loading';
 
 const Home = () => {
   const theme = useTheme();
@@ -98,26 +98,14 @@ const Home = () => {
   ];
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
-   if (loading) {
-      return (
-        <div className='w-full mt-8 flex min-h-screen'>
-        <div className="w-11/12 p-8 mt-8 py-8 flex-1 flex justify-center items-center overflow-y-auto scrollbar-hide max-h-[75vh] no-scrollbar">
-        <motion.div className="flex space-x-2">
-    {[0, 1, 2].map((i) => (
-      <motion.div
-        key={i}
-        className="w-2 h-2 bg-[#65558F] rounded-full"
-        initial={{ y: -10 }}
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 0.9, delay: i * 0.2 }}
-      />
-    ))}
-  </motion.div>
-  
-        </div>
-      </div>
-      );
-    }
+if (loading) {
+    return (
+         <>
+         <Loading/>
+         </>
+      
+    );
+  }
   
     if (error) {
       return <div>Error: {error}</div>;
@@ -216,7 +204,7 @@ const Home = () => {
                 <li>Keeping you accountable and tracking progress</li>
               </ul>
  */}
-          <Typography variant="h4" className="mt-2 w-full" style={{ color: colors.primary[600], fontWeight: '400' ,  fontSize: isXs
+          <Typography variant="h4" className="mt-2 w-full" style={{ color: colors.text.tertiary, fontWeight: '400' ,  fontSize: isXs
         ? "0.8rem" // Smallest size for XS
         : isSm
         ? "1.2rem" // Medium size for SM

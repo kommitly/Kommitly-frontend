@@ -19,7 +19,8 @@ export const tokens = (mode) => ({
           primary: "#F4F1FF", // Soft Lavender-White
           secondary: "#D6CFFF", // Muted Lavender
           placeholder: "#B4B4B4",
-          subtitle: "#A89FE3" // Dusty Periwinkle (for contrast in dark mode)    
+          subtitle: "#A89FE3",
+          tertiary: "#A89FE3"  // Dusty Periwinkle (for contrast in dark mode)    
         },
         background: {
           sidebar: "#2C2640",
@@ -48,7 +49,8 @@ export const tokens = (mode) => ({
           primary: "#1E1A2A", // Dark Purple (for contrast in light mode)
           secondary: "#4F378A", //Deep Violet
           placeholder: "#636363", // Placeholder text color
-          subtitle: "#4F378A" // Deep Violet (for contrast in light mode)
+          subtitle: "#4F378A",
+          tertiary: "#1E1A2A" // Deep Violet (for contrast in light mode)
 
         },
         background: {

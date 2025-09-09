@@ -31,6 +31,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { BsHourglassSplit } from "react-icons/bs";
 
 dayjs.extend(utc);
 
@@ -79,6 +80,19 @@ const handleDatePickerOpen = () => {
     custom_reminder_time: time,
   }));
 };
+
+
+const getParts = (desc) => {
+  const match = desc.split("**Timeline:**");
+  return {
+    text: match[0]?.trim(),
+    timeline: match[1]?.trim() || "",
+  };
+};
+
+const { text, timeline } = getParts(step.description);
+
+
 
 
 
@@ -360,7 +374,7 @@ const confirmDeleteSubtask = async () => {
             onChange={handleChange}
             style={{
             
-                color: colors.primary[500],
+                color: colors.text.primary,
               }
               }
             className="w-full font-medium   text-xl focus:outline-none focus:ring-none focus:bg-purple-300"
@@ -399,11 +413,31 @@ const confirmDeleteSubtask = async () => {
       <textarea
           name="description"
             className=" rounded w-full text-sm h-24 focus:outline-none focus:ring-none focus:bg-purple-100"
-            value={step.description}
+            value={text}
             onChange={handleChange}
           />
           </div>
           </div>
+
+
+          {/* Timeline */}
+{timeline && (
+   <div className="flex items-center space-x-2">
+               <span className='flex  items-center gap-2'>
+                  {/* Calendar Icon */}
+                <span className='bg-[#D6CFFF] p-2 rounded-md'>
+            <BsHourglassSplit className="text-[#4F378A] " size={12} />
+                </span>
+
+  <span className='flex w-full'>
+    <label htmlFor="timeline" className="text-base w-30"> Timeline:</label>
+   <p className='text-sm' style={{color: colors.text.secondary}}> 
+     {timeline}
+   </p>
+  </span>
+  </span>
+  </div>
+)}
      
     
     <div className="mt-2">

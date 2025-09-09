@@ -34,7 +34,7 @@ const userSchema = yup.object().shape({
 
 
 
-const Signup = () => {
+const Signup = ({message, setMessage}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { login } = useContext(AuthContext);
@@ -42,7 +42,7 @@ const Signup = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isCheckingVerification, setIsCheckingVerification] = useState(false);
 
@@ -53,6 +53,7 @@ const Signup = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
+      const data = await response.json();
 
       if (response.ok) {
         setDialogOpen(true);
@@ -62,8 +63,16 @@ const Signup = () => {
         getLocationAndTimezone();
 
       } else {
-        const errorData = await response.json();
-        setMessage(errorData.error || "Signup failed. Try again.");
+        
+              // Extract first error message if it's a validation dict
+          const errorMsg =
+            data.error ||
+            (data.email && data.email[0]) ||
+            (typeof data === "object" ? Object.values(data).flat()[0] : null) ||
+            "Signup failed. Try again.";
+
+          setMessage(errorMsg);
+          console.log("Signup error:", errorMsg);
       }
     } catch (error) {
       setMessage("Error signing up. Please try again.");
@@ -114,9 +123,6 @@ const Signup = () => {
  
       
      
-        {message && <p style={{color:colors.background.warning}}>{message}</p>}
-
- 
 
         <Formik
         onSubmit={handleFormSubmit}
@@ -229,8 +235,8 @@ const Signup = () => {
           onClick={() => setDialogOpen(false)}
           >
              <Box className=" w-11/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
-              <div className="flex justify-center items-center">
-            <div className="bg-white p-6 rounded-md" style={{ color: colors.text.primary }}>
+              <div className="flex   justify-center items-center">
+            <div className="bg-white w-full flex justify-center p-6 rounded-md" style={{ color: colors.text.primary }}>
               <p>Signup successful! Please check your email to verify your account.</p>
              
             </div>

@@ -1,10 +1,12 @@
 import  { useEffect, useState,useCallback, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus,updateAiTaskById, deleteAiTaskById, createAiTask , updateAiSubtaskById} from '../../../utils/Api'; // Adjust the import path as needed
+import { fetchAiGoalById, deleteAiGoalById, updateAiGoalById, updateAiTaskStatus,updateAiTaskById, deleteAiTaskById, createAiTask , updateAiSubtaskById, createAISubtask} from '../../../utils/Api'; // Adjust the import path as needed
 import flag from '../../../assets/flag-dynamic-color.svg';
 import { GoDotFill } from "react-icons/go";
 import { Divider } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -22,7 +24,7 @@ import aiGoals from '../../../assets/goals.svg';
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import TextField from '@mui/material/TextField';
-
+import Loading from '../../components/Loading';
 import * as motion from "motion/react-client"
 import { VisibilityRounded } from '@mui/icons-material';
 import AiSubtask from './AiSubtask';
@@ -31,7 +33,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import AiSubtaskPage from './AiSubtaskPage'; // Adjust the import path as needed
 import AiAssistance from '../../components/AiAssistance';
 import { color } from 'framer-motion';
-
+import { BsHourglassSplit } from "react-icons/bs";
+import { BsHourglassTop } from "react-icons/bs";
 
 
 const extractTimeline = (description) => {
@@ -97,6 +100,7 @@ const AiGoal = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [subtaskOpen, setSubtaskOpen] = useState(false);
   const [taskOpen, setTaskOpen] = useState(false);
+  const [addSubtaskOpen,setAddSubtaskOpen] = useState(false);
   const [taskMenuVisible, setTaskMenuVisible] = useState(false);
   const [isTaskRenaming, setIsTaskRenaming] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -112,6 +116,7 @@ const AiGoal = () => {
   const menuRefs = useRef([]);
   const inputTaskRefs = useRef([]);
   const goalMenuRef = useRef(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   
 
 
@@ -385,6 +390,10 @@ const AiGoal = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+   const handleSubtaskChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handlesumbitAiTask = async () => {
     try {
       const newTask = await createAiTask({ goalId, taskData: formData });
@@ -403,28 +412,43 @@ const AiGoal = () => {
     }
   };
 
-  
-  
-  
 
-  if (loading) {
+const handleSubmitAiSubtask = async () => {
+  try {
+    const activeTask = goal.ai_tasks[activeTaskIndex];
+
+    const newSubtask = await createAISubtask({
+      taskId: activeTask.id,    // 👈 make sure this is .id, not the whole object
+      title: formData.title
+    });
+
+    // Update state with new subtask
+    setGoal((prevGoal) => ({
+      ...prevGoal,
+      ai_tasks: prevGoal.ai_tasks.map((task) =>
+        task.id === activeTask.id
+          ? { ...task, ai_subtasks: [...(task.ai_subtasks || []), newSubtask] }
+          : task
+      ),
+    }));
+
+    alert("AI Subtask Created Successfully");
+    setAddSubtaskOpen(false);
+    setOpenSnackbar(true);
+  } catch (error) {
+    alert("Failed to create AI Subtask");
+  }
+};
+
+  
+  
+  
+if (loading) {
     return (
-      <div className='w-full mt-8 flex min-h-screen'>
-      <div className="w-11/12 p-8 mt-8 py-8 flex-1 flex justify-center items-center overflow-y-auto scrollbar-hide max-h-[75vh] no-scrollbar">
-      <motion.div className="flex space-x-2">
-  {[0, 1, 2].map((i) => (
-    <motion.div
-      key={i}
-      className="w-2 h-2 bg-[#65558F] rounded-full"
-      initial={{ y: -10 }}
-      animate={{ y: [0, 10, 0] }}
-      transition={{ repeat: Infinity, duration: 0.9, delay: i * 0.2 }}
-    />
-  ))}
-</motion.div>
-
-      </div>
-    </div>
+         <>
+         <Loading/>
+         </>
+      
     );
   }
 
@@ -464,7 +488,7 @@ const AiGoal = () => {
   }));
   
   return (
-    <div className='w-full  flex min-h-screen px-4'>
+    <div className='w-full  flex min-h-screen md:px-4 px-0'>
       
 
       <div className="w-full h-full overflow-y-auto  ">
@@ -603,7 +627,9 @@ const AiGoal = () => {
                       {/* {  <span className='text-[#49454F] md:text-md xl:text-xs font-light 2xl:text-sm'>{cleanedDetails}</span>} */}
                 
                         </div>
-                        
+
+
+            
                      
                     </Box>
                   );
@@ -624,6 +650,12 @@ const AiGoal = () => {
               )
               }
              
+               <div className='flex  my-8 w-full justify-center  '>
+         <button onClick={() => setAddSubtaskOpen(true)} className='bg-[#4F378A] text-sm w-full max-w-sm text-white py-2 px-8 rounded-lg'>
+                Add to List
+              </button>
+              </div>
+                        
             
 
             </Box>
@@ -634,7 +666,7 @@ const AiGoal = () => {
       
     </Backdrop>
         )}
-          <div className='md:px-4 xl:px-0 mt-4 lg:px-0 xl:w-9/12 lg:w-7/12 md:w-10/12'>
+          <div className='md:px-4 xl:px-0 mt-4 lg:px-0 px-4 xl:w-9/12 lg:w-7/12 md:w-10/12'>
            <div className='flex items-center mb-4 mt-2 gap-4 justify-between'>
               <div className='flex items-center gap-4 2xl:ml-4 '>
                <span className='text-lg'> 🚩</span>
@@ -729,14 +761,30 @@ const AiGoal = () => {
                   </Box>
                 </Modal>
 
+      {/* Modal for AI Subtask Task Form */}
+              <Modal open={addSubtaskOpen} onClose={() => setAddSubtaskOpen(false)}>
+                  <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6  rounded-xl w-96' sx={{backgroundColor: colors.menu.primary}}>
+                    <h2 className='text-xl font-semibold mb-4'>Add  Subtask</h2>
+                    <TextField fullWidth label='Title' name='title' value={formData.title} onChange={handleSubtaskChange} margin='normal' />
+                    <TextField fullWidth label='Description' name='description' value={formData.description} onChange={handleSubtaskChange} margin='normal' />
+                    <TextField fullWidth label='Due Date' type='datetime-local' name='due_date' value={formData.due_date} onChange={handleSubtaskChange} margin='normal' InputLabelProps={{ shrink: true }} />
+                    <TextField fullWidth label='Task Timeline' name='task_timeline' value={formData.task_timeline} onChange={handleSubtaskChange} margin='normal' />
+                   
+                    <div className='flex justify-end gap-4 mt-4'>
+                      <Button onClick={() => setAddSubtaskOpen(false)} variant='outlined'>Cancel</Button>
+                      <Button onClick={handleSubmitAiSubtask} variant='contained' color='primary'>Submit</Button>
+                    </div>
+                  </Box>
+                </Modal>
+
 
 
 
 
          
            
-            <div className="ai-tasks overflow-visible overflow-y-clip  px-6 w-full  flex flex-col items-center  justify-center  " >
-              <div className="md:w-full w-full gap-4 pl-4 pb-10 md:pl-36 lg:pl-8 xl:pl-10 2xl:pl-26 m-2">
+            <div className="ai-tasks overflow-visible overflow-y-clip  md:px-6 px-6 md:pr-6 pr-0 w-full  flex flex-col items-center  justify-center  " >
+              <div className="md:w-full w-full  gap-4 pl-0 pb-10 md:pl-36 lg:pl-8 xl:pl-10 2xl:pl-26 md:m-2 m-0">
                 {goal.ai_tasks.map((task, index) => {
                   const isCompleted = taskCompletionStatus[index];
                   const allTasksCompleted = goal.ai_tasks.every(t => t.status === 'completed');
@@ -744,7 +792,7 @@ const AiGoal = () => {
                   const isLastTask = index === goal.ai_tasks.length - 1;
                   open
                   return (
-                    <div className="mx-auto" key={task.id}  onClick={() => {
+                    <div className="mx-auto " key={task.id}  onClick={() => {
   setActiveTaskIndex(index);
   setOpenTaskView(true);
 }}
@@ -758,7 +806,7 @@ const AiGoal = () => {
                           ease: "easeOut",
                           delay: index * 0.3, // Staggered delay based on index
                         }}>
-                        <div className="flex  transition-transform duration-300 hover:scale-[0.95] cursor-pointer justify-between md:gap-4 gap-2 relative  max-h-full  border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 lg:w-full md:w-11/12"   style={{
+                        <div className="flex  transition-transform duration-300 hover:scale-[0.95] cursor-pointer justify-between md:gap-4 gap-2 relative  max-h-full  border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 lg:w-full md:w-11/12 w-full"   style={{
         backgroundColor: allTasksCompleted
           ? theme.palette.background.paper // Adjust to your theme color
           : isActive
@@ -768,16 +816,16 @@ const AiGoal = () => {
         // boxShadow:
         //  "2px 3px 8px 2px rgba(101, 85, 143, 0.2), 0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
       }}>
-                          <div className={`md:w-1/4 w-20 rounded-lg p-4 ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}  style={{
+                          <div className={`md:w-1/4 w-24 rounded-lg p-4 ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}  style={{
         backgroundColor:isActive
-          ? theme.palette.background.paper // White background for active
-          : theme.palette.background.default,
+          ? "#D6CFFF" // White background for active
+          : colors.menu.primary,
 
       }}>
                               <img src={aiGoals} alt="goals"  className='h-20 object-cover'/>
                                  </div>
                             <div className='w-full ' >
-                              <div className='flex  items-center h-auto gap-4  mb-4  w-full justify-between '>
+                              <div className='flex  items-center h-auto gap-4  md:mb-4 mb-2 w-full justify-between '>
                                   {isTaskRenaming && renamingTaskId === task.id ? (
                                   <input
                                      type="text"
@@ -792,7 +840,7 @@ const AiGoal = () => {
                                    />
                                 
                                 ) : (
-                                  <h3 className="md:text-sm xl:text-sm 2xl:text-base font-medium" style={{color: isActive ? colors.primary[100] : colors.text.primary}}>
+                                  <h3 className="md:text-sm text-sm xl:text-sm 2xl:text-base font-medium" style={{color: isActive ? colors.primary[100] : colors.text.primary}}>
                                     {task.title}
                                   </h3>
                                 )}
@@ -889,9 +937,12 @@ const AiGoal = () => {
 
                                 <div className="flex flex-col gap-2">
                                                   <div className="flex items-center">
-                                                    <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm  text-xs font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Timeline:</p>
+                                                    {isXs ? (<BsHourglassTop fontSize='small' style={{color: colors.text.secondary}}/>
+                                                     
+                ):( <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm  text-xs font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Timeline:</p>)}
+
                                                    <span
-                                                        className="px-3 py-0.5 border 2xl:text-sm text-xs rounded-sm md:text-xs xl:text-xs"
+                                                        className="px-3 py-0.5 md:border 2xl:text-sm text-xs rounded-sm md:text-xs xl:text-xs"
                                                         style={{
                                                           color: isActive ? colors.primary[100] : colors.text.secondary,
                                                           borderColor: isActive ? colors.primary[100] : colors.text.secondary,
@@ -902,7 +953,7 @@ const AiGoal = () => {
 
                                                   </div>
                                                   <div className="flex items-center">
-                                                    <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>
+                                                   {isXs ? (""):( <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>)}
                                                     <span className="px-3 py-0.5 border  2xl:text-sm  text-center  text-xs rounded-sm md:text-xs xl:text-xs  flex items-center " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
                                                       {task.status}
                                                     </span>
@@ -924,7 +975,7 @@ const AiGoal = () => {
 
                          {index < goal.ai_tasks.length && (
                                           
-                                   <div className="absolute md:-left-18 xl:-left-6 lg:-left-5  -left-24  transform md:-translate-x-1/4 translate-x-1/12 top-1/5   flex flex-col items-center  overflow-hidden">
+                                   <div className="absolute md:-left-18 xl:-left-6 lg:-left-5  -left-23  transform md:-translate-x-1/4 translate-x-1/12 top-1/5   flex flex-col items-center  overflow-hidden">
 
                                     <motion.svg 
                                       width="300" 
@@ -1100,7 +1151,7 @@ const AiGoal = () => {
                       
                       
                       <Box className=' 2xl:h-6 h-6  flex items-center  gap-2   '>
-                      <AccessTimeIcon fontSize='small' sx={{color: colors.text.secondary}}/>
+                      <BsHourglassTop fontSize='small' style={{color: colors.text.secondary}}/>
                           <p className='md:text-xs xl:text-xs text-xs font-medium gap-4 ' style={{color: colors.text.secondary}}
                           >
                            
@@ -1136,12 +1187,23 @@ const AiGoal = () => {
 
 
               </div>
+
               <div className='flex  my-8 w-full justify-center  '>
-             {/* { <button onClick={() => setTaskOpen(true)} className='bg-[#4F378A] w-full max-w-sm text-white py-2 px-8 rounded-lg'>
+         <button onClick={() => setAddSubtaskOpen(true)} className='bg-[#4F378A] text-sm w-full max-w-sm text-white py-2 px-8 rounded-lg'>
                 Add to List
-              </button>} */}
+              </button>
              
               </div>
+              <Snackbar
+                                    open={openSnackbar}
+                                    autoHideDuration={3000}
+                                    onClose={() => setOpenSnackbar(false)}
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                                  >
+                                    <MuiAlert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                                      Subtask successfully updated!
+                                    </MuiAlert>
+                                  </Snackbar>
                 </>
               )
               }

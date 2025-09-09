@@ -7,7 +7,7 @@ import moment from "moment-timezone";
 import Snackbar from '@mui/material/Snackbar';
 import { AuthContext } from '../../../context/AuthContext';
 import { useState, useEffect, useRef, useContext } from "react";
-import {fetchTasks, fetchGoals, updateAiSubtaskById, updateTaskById } from "../../../utils/Api";
+import {fetchTasks, fetchGoals, updateAiSubtaskById, updateTaskById, createTask } from "../../../utils/Api";
 import { DialogContent, TextField } from "@mui/material";
 import Backdrop from '@mui/material/Backdrop';
 import FullCalendar from "@fullcalendar/react";
@@ -24,6 +24,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SearchResults from './SearchResults';
 import CheckIcon from '@mui/icons-material/Check';
 import MuiAlert from '@mui/material/Alert';
+import Switch from '@mui/material/Switch';
 
 
 
@@ -46,6 +47,7 @@ const Calender = () => {
     const [searchQuery, setSearchQuery] = useState(""); // User's search input
     const [title, setTitle] = useState("");
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [openNewSnackbar, setOpenNewSnackbar] = useState(false);
     const [filteredResults, setFilteredResults] = useState([]);
     const isSm = useMediaQuery(theme.breakpoints.only("sm"));
     const isLg = useMediaQuery(theme.breakpoints.only("lg"));
@@ -59,16 +61,26 @@ const Calender = () => {
     const [selectedDateInfo, setSelectedDateInfo] = useState(null);
     const [selectedTask, setSelectedTask] = useState(null);
     const [dueDate, setDueDate] = useState("");
+    const [reminderEnabled, setReminderEnabled] = useState(true); // default ON
+    const [reminderOption, setReminderOption] = useState("00:30"); // dropdown choice
+    const [customReminderTime, setCustomReminderTime] = useState("09:00"); // custom input
+
     const [dueTime, setDueTime] = useState("");
     const goals = [
     ...(user?.goals?.map(goal => ({ ...goal, is_ai_goal: false })) || []),
     ...(user?.ai_goals?.map(goal => ({ ...goal, is_ai_goal: true })) || [])
   ];
   const tasks = [...(user?.tasks || []), ...(user?.ai_goals.ai_tasks || [])];
+  const isNewUser = goals.length === 0 && tasks.length === 0;
+  
 
+
+  const label = { inputProps: { 'aria-label': 'Reminder switch ' } };
 
   const handleDateClick = (selected) => {
   setSelectedDateInfo(selected);
+  setDueDate(selected.startStr.split("T")[0]); // auto-fill date in form
+  setDueTime(""); // reset time for fresh input
   setOpen(true);
   selected.view.calendar.unselect();
 };
@@ -136,6 +148,89 @@ const handleUpdateTask = async () => {
       console.error("Failed to update task:", error);
       // You could show a toast/snackbar here to notify the user
     }
+  }
+};
+const handleAddNewTask = async () => {
+  if (!title) {
+    alert("Please enter title !");
+    return;
+  }
+
+  if (!dueDate) {
+    alert("Please select a due date!");
+    return;
+  }
+
+  try {
+    const localDateTime = `${dueDate}T${dueTime || "00:00"}`;
+    const userTimezone = localStorage.getItem("Timezone");
+    const finalDueDateTime = moment
+      .tz(localDateTime, userTimezone)
+      .utc()
+      .format();
+
+
+   let reminderTime = null;
+
+if (reminderEnabled) {
+  if (reminderOption !== "custom") {
+    const [hrs, mins] = reminderOption.split(":").map(Number);
+
+    // Start from local due date/time
+    const reminderMoment = moment
+      .tz(`${dueDate}T${dueTime || "00:00"}`, userTimezone)
+      .subtract(hrs, "hours")
+      .subtract(mins, "minutes");
+
+    // ✅ Force UTC time string
+    reminderTime = reminderMoment.utc().format("HH:mm:ss");
+  } else {
+    // Custom absolute time
+    const reminderMoment = moment.tz(
+      `${dueDate}T${customReminderTime}`,
+      userTimezone
+    );
+
+    reminderTime = reminderMoment.utc().format("HH:mm:ss");
+  }
+}
+
+
+
+
+
+    const newTask = await createTask({
+      title,
+      due_date: finalDueDateTime,
+      reminder_time: reminderTime  // ✅ only the time string
+    });
+
+    console.log("Task created:", newTask);
+
+    addTask(newTask);
+
+    // ✅ Add new task as calendar event
+    setCurrentEvents((prev) => [
+      ...prev,
+      {
+        id: `task-${newTask.id}`,
+        title: newTask.title,
+        start: finalDueDateTime,
+        end: finalDueDateTime,
+        allDay: false,
+      },
+    ]);
+
+    setOpen(false);
+    setTitle("");
+    setDueDate("");
+    setDueTime("");
+    setReminderEnabled(true);
+    setReminderOption("00:30");   // reset dropdown
+    setCustomReminderTime("09:00"); // reset custom input (optional)
+    setOpenNewSnackbar(true);
+  } catch (error) {
+    console.error("Error creating task:", error);
   }
 };
 
@@ -533,14 +628,112 @@ className="w-full  flex justify-center "
                         open={open}
                         onClick={handleClose}
                       >
-                        <div className=" md:w-4/12 w-11/12  p-6 rounded-lg shadow-lg text-center"
+                        <div className=" md:w-4/12 w-11/12 h-auto p-6 rounded-lg shadow-lg text-center"
                         style={{backgroundColor: colors.menu.primary,}}
                         onClick={(e) => e.stopPropagation()} // ⬅ stop the click from closing 
                         >
                        
-                            
-                            
-                            <div className="w-full flex justify-between items-center">
+                            {isNewUser ? (
+                                <div className="w-full ">
+                                   <div className="flex w-full mb-4 justify-end">
+                                  <div className="flex w-2/3 items-center justify-between">
+                                    <h1 className="text-xl font-bold text-[#6F2DA8] mt-4 flex items-center justify-center gap-2">
+                                      New Task
+                                    </h1>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center mb-4 gap-2">
+                                  <p className="text-sm text-start w-8 " style={{color:colors.text.primary}}>Title</p>
+                                  <input
+                                    type="text"
+                                    placeholder="Enter task title"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    className="w-full p-2 border text-black border-gray-200 rounded-lg focus:outline-none"
+                                    style={{color:colors.text.primary}}
+                                  />
+                                </div>
+
+                                <div className="flex flex-col gap-4 mt-8 mb-8">
+                                  {/* Date (pre-filled from calendar) */}
+                                  <TextField
+                                    label="Due Date"
+                                    type="date"
+                                    value={dueDate}
+                                    onChange={(e) => setDueDate(e.target.value)}
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                
+                                  />
+
+                                  {/* Time (user sets manually) */}
+                                  <TextField
+                                    label="Due Time"
+                                    type="time"
+                                    value={dueTime}
+                                    onChange={(e) => setDueTime(e.target.value)}
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                  />
+                                  <div className="w-full flex justify-between">
+                                   
+                                    <span style={{ color: colors.text.primary }}>Reminder</span>
+                                    <Switch
+                                      checked={reminderEnabled}
+                                      onChange={(e) => setReminderEnabled(e.target.checked)}
+                                      color="secondary"
+                                    />
+
+
+                                    </div>
+                                    {reminderEnabled && (
+                                      <TextField
+                                        select
+                                        label="Reminder Time"
+                                        value={reminderOption}
+                                        onChange={(e) => setReminderOption(e.target.value)}
+                                        fullWidth
+                                        InputLabelProps={{ shrink: true }}
+                                      >
+                                        <MenuItem value="00:05">5 minutes before</MenuItem>
+                                        <MenuItem value="00:10">10 minutes before</MenuItem>
+                                        <MenuItem value="00:30">30 minutes before</MenuItem>
+                                        <MenuItem value="01:00">1 hour before</MenuItem>
+                                        <MenuItem value="custom">Custom...</MenuItem>
+                                      </TextField>
+                                    )}
+
+                                    {reminderEnabled && reminderOption === "custom" && (
+                                      <TextField
+                                        label="Custom Reminder (HH:MM)"
+                                        type="time"
+                                        value={customReminderTime}
+                                        onChange={(e) => setCustomReminderTime(e.target.value)}
+                                        fullWidth
+                                        InputLabelProps={{ shrink: true }}
+                                      />
+                                    )}
+
+
+                                </div>
+
+
+                                
+
+                                <button 
+                                  onClick={handleAddNewTask}
+                                  className="mt-4 px-4 py-2 bg-[#6200EE] text-white rounded-lg"
+                                >
+                                  CREATE
+                                </button>
+                              
+                                  </div>
+
+                            ) : ( 
+                            <>
+                           <div className="flex-col relative gap-8">
+                             <div className="w-full flex justify-between items-center">
                             <div className="w-full">  
                               <h1 className='text-xl font-bold  m-4 flex items-center justify-center gap-2' style={{color: colors.text.secondary}}>
                               Add Task
@@ -567,7 +760,7 @@ className="w-full  flex justify-center "
                            
 
                               <div
-                                          className=" col-span-6 md:col-span-6   flex w-full   "
+                                          className=" col-span-6 md:col-span-6    flex w-full   "
                                           style={{
                                             paddingRight: isXs ? 4: isSm ? 4 : isMd ? 6 : isLg ? 4 : isXl ? 5 : isXxl ? 5 : 4,
                                             marginBottom: isXs ? 16: 8
@@ -691,7 +884,11 @@ className="w-full  flex justify-center "
                                         
                                           
                                         
-                                            <SearchResults
+                                          
+                                          </motion.div>
+
+                                        </div>
+                                          <SearchResults
                                                       results={filteredResults || []}
                                                     
                                                       
@@ -699,8 +896,6 @@ className="w-full  flex justify-center "
                                                       onClose={() => setFilteredResults([])}
                                                       onSelectTask={handleTaskSelect}
                                                     />
-                                          </motion.div>
-                                        </div>
 
                                         {selectedTask && (
   <div className="mb-4 text-left">
@@ -738,7 +933,12 @@ className="w-full  flex justify-center "
                             >
                                 UPDATE
                             </button>
-                        </div>
+                           </div>
+                            </>
+                       )}
+
+                            
+                            </div>
                     
                     </Backdrop>
                      <Snackbar
@@ -748,6 +948,16 @@ className="w-full  flex justify-center "
                       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                     >
                       <MuiAlert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                        Event successfully updated!
+                      </MuiAlert>
+                    </Snackbar>
+                     <Snackbar
+                      open={openNewSnackbar}
+                      autoHideDuration={3000}
+                      onClose={() => setOpenNewSnackbar(false)}
+                      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    >
+                      <MuiAlert onClose={() => setOpenNewSnackbar(false)} severity="success" sx={{ width: '100%' }}>
                         Event successfully updated!
                       </MuiAlert>
                     </Snackbar>

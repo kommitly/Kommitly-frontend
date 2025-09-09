@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import survey from '../../../assets/survey.svg';
 import flag from '../../../assets/flag-dynamic-color.svg';
 import { GoalsContext } from '../../../context/GoalsContext';
+import Loading from '../../components/Loading';
 
 import {
   Box, Table, TableBody, TableCell, TableContainer, TableHead,
@@ -88,23 +89,12 @@ const Goal = () => {
     };
     
 
-  if (loading) {
+if (loading) {
     return (
-      <div className='w-full mt-8 flex min-h-screen'>
-        <div className="w-11/12 p-8 mt-8 py-8 flex-1 flex justify-center items-center overflow-y-auto max-h-[75vh]">
-          <motion.div className="flex space-x-2">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                className="w-2 h-2 bg-[#65558F] rounded-full"
-                initial={{ y: -10 }}
-                animate={{ y: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 0.9, delay: i * 0.2 }}
-              />
-            ))}
-          </motion.div>
-        </div>
-      </div>
+         <>
+         <Loading/>
+         </>
+      
     );
   }
 
@@ -234,10 +224,14 @@ const Goal = () => {
             Add Task
           </Button>
         </Box>
-
-        {/* Task Table */}
+   {tasks.length > 0 ? (
+                tasks.map((task) => (
+      
         <TableContainer component={Paper} sx={{ mt: 3 }}>
           <Table>
+          
+
+          <>
             <TableHead>
               <TableRow sx={{ backgroundColor: '#F4F1FF' }}>
                 <TableCell><strong>Task</strong></TableCell>
@@ -247,9 +241,9 @@ const Goal = () => {
 
               </TableRow>
             </TableHead>
+            
             <TableBody>
-              {tasks.length > 0 ? (
-                tasks.map((task) => (
+             
                   <TableRow key={task.id}  onClick={() => navigate(`/dashboard/tasks/${task.id}`)}
   sx={{ cursor: 'pointer', '&:hover': { backgroundColor: '#F4F1FF' } }}>
                     <TableCell>{task.title}</TableCell>
@@ -257,15 +251,22 @@ const Goal = () => {
                     <TableCell>{task.due_date ? new Date(task.due_date).toLocaleString() : 'Not set'}</TableCell>
                     <TableCell>{new Date(task.last_updated).toLocaleString()}</TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={3} align="center">No tasks added yet</TableCell>
-                </TableRow>
-              )}
-            </TableBody>
+                  </TableBody>
+          </>
           </Table>
         </TableContainer>
+                ))
+              ) : (
+               <>
+              <div className='w-full flex justify-center items-center  h-24'>
+                 <p  >No tasks added yet</p>
+              </div>
+               </>
+                  
+                
+              )}
+            
+          
       </div>
 
     

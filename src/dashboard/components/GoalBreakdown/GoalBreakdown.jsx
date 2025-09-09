@@ -11,30 +11,35 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { color, motion } from "framer-motion";
 import { IoAdd } from "react-icons/io5";
 import { MdClear } from "react-icons/md";
+import Loading from "../Loading"
+
 
 const extractTimeline = (details) => {
-  if (!details) return { timeline: 'No detail available', cleanedDetails: details };
+  if (!details) {
+    return { timeline: 'No timeline available', cleanedDetails: '' };
+  }
 
   console.log('Details:', details); // Debugging
 
-  // Updated regex to match time expressions with an optional "within" before them
-   const match = details.match(/\b(within\s+)?((Days|Weeks|Months|Years)\s*\d+-\d+|\d+-\d+\s*(days|weeks|months|years)|\d+(Days|Weeks|Months|Years)|\d+\s*(day|week|month|year)|On-going)\b/i);
-
+  // Regex to specifically find "**Timeline:**" and capture the following text
+  const match = details.match(/\*\*Timeline:\*\*\s*(.+)$/i);
+  
   console.log('Match:', match); // Debugging
 
-  const timeline = match ? match[2] : 'No timeline available'; // Extract actual time value, ignoring "within"
+  // Access the first capture group (the timeline text itself)
+  const timeline = match ? match[1].trim() : 'No timeline available';
+  
   console.log('Timeline:', timeline); // Debugging
   
-  let cleanedDetails = match ? details.replace(match[0], '').trim() : details;
+  // Get the cleaned details by removing the matched timeline string from the original details
+  const cleanedDetails = match ? details.replace(match[0], '').trim() : details;
 
-  // Ensure no leftover empty phrases
-  cleanedDetails = cleanedDetails.replace(/\s+([,.])/, '$1'); // Remove spaces before punctuation
-  cleanedDetails = cleanedDetails.replace(/\s*\(\s*\)\s*/g, ''); // Remove empty parentheses
-  cleanedDetails = cleanedDetails.replace(/\s+\.$/, '.'); // Remove trailing spaces before period
-  cleanedDetails = cleanedDetails.replace(/\bwithin\s*$/, ''); // Remove hanging "within" if left alone
-  cleanedDetails = cleanedDetails.replace(/\b(for|in|at|on|by|Allocate)\s*[.,]*\s*$/, ''); // Remove orphaned prepositions and "Allocate" if at the end
+  // You can keep your existing cleanup logic, although the new regex approach makes it less necessary.
+  // The primary logic of splitting the string is handled by the regex itself.
+  // ... (your other cleanup code can go here if needed)
 
-  console.log("cleaned details :", cleanedDetails)
+  console.log("cleaned details :", cleanedDetails);
+  
   return { timeline, cleanedDetails };
 };
 
@@ -100,20 +105,10 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
 
   if (loading) {
     return (
-         <div className="w-11/12 p-8  min-h-screen flex justify-center items-center no-scrollbar">
-               <motion.div className="flex space-x-2">
-           {[0, 1, 2].map((i) => (
-             <motion.div
-               key={i}
-               className="w-2 h-2 bg-[#65558F] rounded-full"
-               initial={{ y: -10 }}
-               animate={{ y: [0, 10, 0] }}
-               transition={{ repeat: Infinity, duration: 0.9, delay: i * 0.2 }}
-             />
-           ))}
-         </motion.div>
-         
-               </div>
+         <>
+         <Loading/>
+         </>
+      
     );
   }
 
