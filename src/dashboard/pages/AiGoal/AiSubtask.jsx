@@ -213,6 +213,7 @@ const handleUpdateSubtask = async () => {
       reminder_time: reminderTime,
     };
 
+   
     // 1. Update the subtask itself
     await updateAiSubtaskById(taskId, step.id, updatedData);
 
@@ -223,28 +224,27 @@ const handleUpdateSubtask = async () => {
       reminder_time: reminderTime // always "HH:mm"
     });
 
-     // 3. If repeat is set, create a routine
-    if (step.frequency && step.frequency !== "no-repeat") {
+     if (step.routine_choice && step.routine_choice !== "no-repeat") {
       const routineData = {
-        tasks: [taskId], // task IDs (int array)
-        subtasks: [step.id], // subtask IDs (int array)
-        ai_subtasks: [step.id], // if your backend expects this too
-        due_date: step.due_date, // full datetime
-        name: step.title,
-        start_date: dayjs(step.due_date).format("YYYY-MM-DD"),
-        frequency: step.frequency, // "daily", "weekly", "custom", etc.
-        time_of_day: dayjs(step.due_date).format("HH:mm:ss"),
-        day_of_week: dayjs(step.due_date).day(), // 0-6 (Sunday-Saturday)
-        end_date: dayjs(step.due_date).add(30, "day").format("YYYY-MM-DD"), // or let user pick
+        tasks: [],
+        subtasks: [],
+        ai_subtasks: [step.id],
+        due_date: step.due_date,
+        frequency: step.routine_choice,
         is_active: true,
         subtask_template_title: step.title,
-        subtask_template_description: step.description || "",
+        subtask_template_description: step.description,
         reminder_time: reminderTime,
       };
 
       await createRoutine(routineData);
-      console.log("Routine created:", routineData);
+      console.log("Routine data:", routineData)
+      
+     
     }
+    
+
+
 
     console.log("Subtask updated and reminder triggered.");
     // ✅ Show snackbar
@@ -597,9 +597,9 @@ PopperProps={{
         {/*Time Picker Input*/}
         <div className="flex gap-4 items-center relative">
           <select
-    name="frequency"
+    name="routine_choice"
     className="text-sm"
-    value={step.frequency || "no-repeat"}
+    value={step.routine_choice || "no-repeat"}
     onChange={handleRoutineChange}  // 👈 reuse your handleChange function
   >
 
