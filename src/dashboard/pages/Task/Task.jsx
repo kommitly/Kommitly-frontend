@@ -2,7 +2,8 @@
 import { useEffect, useState, useContext } from "react";
 import { TasksContext } from "../../../context/TasksContext";
 import PropTypes from 'prop-types';
-import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem } from "@mui/material";
+import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem, useTheme} from "@mui/material";
+import { tokens } from "../../../theme";
 import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -21,6 +22,8 @@ import SubtaskDetails from "./Subtask";
 
 const TaskPage = () => {
     const { taskId } = useParams();
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
     const {setTasks} = useContext(TasksContext);
     const [selectedFile, setSelectedFile] = useState(null);
     const [showInput, setShowInput] = useState(false);
@@ -339,6 +342,13 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
         />
         
         </div>
+        </div>
+
+        <div className="w-full flex gap-16">
+          <p>
+            Status:
+          </p>
+          <p className="p-2 rounded-md" style={{backgroundColor: colors.background.paper, color: colors.text.secondary}}>{task.status}</p>
         </div>
   
   <div className="mt-4 flex gap-4">

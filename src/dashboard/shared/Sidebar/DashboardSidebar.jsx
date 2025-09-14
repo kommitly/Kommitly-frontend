@@ -579,6 +579,37 @@ sx={{
                         >
                           Calendar
                           </MenuItem>
+
+                             <MenuItem 
+                            title="Schedule"
+                           
+                            
+                            onClick={() => {
+                                navigate("/dashboard/schedule");
+                                setSelected("Schedule");
+                            }}
+                            icon={selected === "Schedule" ? <LeaderboardIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",
+  md: "1.5rem",     
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} /> : <LeaderboardOutlinedIcon sx={{fontSize:{
+  xs: "1.5rem",
+  sm: "1.5rem",   
+  md: "1.5rem",
+  lg: "1.5rem",
+  xl: "2rem",
+  xxl: "1.5rem",
+  },
+ }} />}
+                            
+                            active={selected === "Schedule"}
+                        >
+                          Schedule
+                          </MenuItem>
                     
                        
                   

@@ -18,7 +18,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { CssVarsProvider } from '@mui/joy/styles';
 import Registration from "./landing-page/Registration";
-
+import Schedule from "./dashboard/pages/Schedule/Schedule";
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -87,6 +87,7 @@ function App() {
                 <Route path="ai-goal/:goalId/task/:taskId/subtask/:subtaskId" element={<AiSubtaskPage />} />
                 <Route path="goal/:goalId" element={<Goal />} />
                 <Route path="calendar" element={<Calendar />} />
+                <Route path="schedule" element={<Schedule/>} />
                 <Route path="analytics" element={<Stats />} />
                 <Route path="settings" element={<Settings/>} />
               </Route>

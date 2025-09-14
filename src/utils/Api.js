@@ -597,6 +597,8 @@ const answerAiSubtask = async (subtaskId) => {
   }
 }
 
+
+
 const loginWithGoogle = async (id_token) => {
   const url = "https://kommitly-backend.onrender.com/api/auth/google/";
   try {
@@ -629,6 +631,85 @@ const createRoutine = async (routine_data)=> {
     throw error;
   }
 }
+
+
+
+const fetchRoutines = async () => {
+  const url = "https://kommitly-backend.onrender.com/api/routines/";
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Routines:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const fetchRoutineById = async (routineId) => {
+  
+  const url = `https://kommitly-backend.onrender.com/api/routines/${routineId}/`;
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching Routine with ID ${routineId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const updateRoutineById = async (routineId, updatedData) => {
+  console.log ( "for routine with ID:", routineId, "with data:", updatedData);
+  const url = `https://kommitly-backend.onrender.com/api/routines/${taskId}/`;
+ 
+  try {
+    const token = getToken();
+    const response = await axios.patch(url, updatedData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+    
+  } catch (error) {
+    console.error(`Error updating routine with ID ${routineId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+const deleteRoutineById = async (routineId) => {
+  const url = `https://kommitly-backend.onrender.com/api/routines/${routineId}/`;
+  try {
+    const token = getToken();
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting routine with ID ${routineId}:`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
+
 
 export { 
   generateInsights,
@@ -664,6 +745,13 @@ export {
   markNotificationAsRead,
   answerAiSubtask,
   loginWithGoogle,
-  createRoutine
+  createRoutine,
+  fetchRoutines,
+  fetchRoutineById,
+  updateRoutineById,
+  deleteRoutineById
+
+
+
 
 };

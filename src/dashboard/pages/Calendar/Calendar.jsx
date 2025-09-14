@@ -47,6 +47,7 @@ const Calender = () => {
     const [searchQuery, setSearchQuery] = useState(""); // User's search input
     const [title, setTitle] = useState("");
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [openCompletedTaskSnackbar, setOpenCompletedTaskSnackbar] = useState(false);
     const [openNewSnackbar, setOpenNewSnackbar] = useState(false);
     const [filteredResults, setFilteredResults] = useState([]);
     const isSm = useMediaQuery(theme.breakpoints.only("sm"));
@@ -450,14 +451,23 @@ const handleMenuClose = () => {
 };
 
 const handleMarkAsDone = async () => {
-  if (selectedEvent.id.startsWith("task-")) {
-    await updateTaskById(selectedEvent.id.split("-")[1], { status: "completed" });
-  } else if (selectedEvent.id.startsWith("subtask-")) {
-    const [_, taskId, subtaskId] = selectedEvent.id.split("-");
-    await updateAiSubtaskById(taskId, subtaskId, { status: "completed" });
+  try {
+    if (selectedEvent.id.startsWith("task-")) {
+      await updateTaskById(selectedEvent.id.split("-")[1], { status: "completed" });
+    } else if (selectedEvent.id.startsWith("subtask-")) {
+      const subtaskId = selectedEvent.id.split("-")[1];
+      await updateAiSubtaskById(subtaskId, { status: "completed" });
+    }
+   // ✅ Remove event from state instead of reloading
+    setCurrentEvents(prevEvents =>
+      prevEvents.filter(event => event.id !== selectedEvent.id)
+    );
+
+    handleMenuClose();
+    setOpenCompletedTaskSnackbar(true);
+  } catch (err) {
+    console.error("Failed to mark as done:", err);
   }
-  handleMenuClose();
-  window.location.reload(); // or refresh data
 };
 
 
@@ -959,6 +969,17 @@ className="w-full  flex justify-center "
                     >
                       <MuiAlert onClose={() => setOpenNewSnackbar(false)} severity="success" sx={{ width: '100%' }}>
                         Event successfully updated!
+                      </MuiAlert>
+                    </Snackbar>
+
+                     <Snackbar
+                      open={openCompletedTaskSnackbar}
+                      autoHideDuration={3000}
+                      onClose={() => setOpenCompletedTaskSnackbar(false)}
+                      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    >
+                      <MuiAlert onClose={() => setOpenCompletedTaskSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                        Event marked as completed!
                       </MuiAlert>
                     </Snackbar>
 
