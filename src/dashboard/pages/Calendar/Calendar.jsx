@@ -512,127 +512,21 @@ const handleReschedule = () => {
 };
 
     return (
-        <Box m="20px">
-            <Header title="CALENDAR" subtitle="" />
+        <div className="m-[20px] pt-4">
+             <div className="mb-[30px]  w-full justify-between flex">
+                        <Typography 
+                        variant="h3" 
+                        color={colors.text.primary} 
+                        fontWeight="bold" 
+                        
+                        >CALENDAR</Typography>
+                        <Button variant="contained">
+                          Manage Routines
+                        </Button>
+                    
+                </div>
             <div className="flex flex-col-reverse md:flex-row justify-between gap-4">
-                {/*CALENDAR SIDEBAR */}
-                <Box 
-                flex={isSmallScreen ? 'none' : '1 1 40%'}
-                backgroundColor = {colors.background.paper}
-                p="15px"
-                borderRadius="8px"
-                width="100%"
-                height="auto"
-                overflow="hidden"
-                >
-                    <Typography variant="h4" sx={{color: colors.text.primary}}>Events</Typography>
-                    <List overflowY="auto"  sx={{ maxHeight: 'calc(100% - 50px)', overflowY: 'auto', marginTop: '10px' ,   '&::-webkit-scrollbar': { display: 'none' }, // Chrome, Safari
-    '-ms-overflow-style': 'none', // IE, Edge
-    'scrollbar-width': 'none', // Firefox
-    }}
-    >
-                        {currentEvents.length === 0 ? (
-    <Typography sx={{ padding: '10px', color: colors.text.secondary }}>
-      No scheduled events
-    </Typography>
-  ) : (
-    currentEvents
-  .slice() // make a shallow copy to avoid mutating state directly
-  .sort((a, b) => new Date(b.start) - new Date(a.start)) // newest first
-  .map((event) => (
-  <ListItem
-  key={event.id}
-  sx={{
-    backgroundColor: colors.background.default,
-    margin: "10px 0",
-    borderRadius: "8px",
-    color: colors.text.primary,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    paddingTop: "2px",
-    paddingRight: "10px",
-  }}
->
-  {/* Left section: title, time, and View button */}
-  <Box sx={{ display: 'flex', flexDirection: 'column', width: "100%" }}>
-    <ListItemText
-      primary={event.title}
-      primaryTypographyProps={{
-        fontSize: '0.9rem',
-        fontWeight: 500,
-        color: colors.text.primary,
-        margin: "0px"
-      }}
-      secondaryTypographyProps={{
-        fontSize: '0.65rem',
-        fontWeight: 400,
-        color: colors.text.placeholder,
-        marginY: '4px',
-      }}
-      secondary={formatDate(event.start)}
-    />
-<div
-className="w-full  flex justify-center "
->
-      <Button
-      size="small"
-      sx={{
-        alignSelf: 'start',
-        marginBottom: '4px',
-        textTransform: 'none',
-        fontSize: '0.65rem',
-        border: "1px solid #4F378A",
-        width:"100%"
-      }}
-     onClick={() => handleEventClick({ event })}
-
-    >
-      View Event
-    </Button>
-</div>
-  </Box>
-
-  {/* Right section: More icon */}
-  <MoreVertIcon
-    sx={{
-      color: colors.text.secondary,
-      marginLeft: 'auto',
-      cursor: 'pointer',
-      marginTop: "10px"
-    }}
-    onClick={(e) => handleMenuOpen(e, event)}
-  />
-</ListItem>
-
-))
-  )}
-
-                    </List>
-                    <Menu
-  anchorEl={anchorEl}
-  open={Boolean(anchorEl)}
-  onClose={handleMenuClose}
->
-  <MenuItem onClick={handleMarkAsDone}>Mark as Done</MenuItem>
-  <MenuItem onClick={handleReschedule}>Reschedule</MenuItem>
-  <MenuItem onClick={handleDelete}>Delete</MenuItem>
-</Menu>
-
-<Dialog open={showRescheduleDialog} onClose={() => setShowRescheduleDialog(false)}>
-  <DialogTitle>Reschedule Task</DialogTitle>
-  <DialogActions>
-    <Button onClick={() => setShowRescheduleDialog(false)}>Cancel</Button>
-    <Button onClick={() => {
-      console.log("You can now open a date picker here.");
-      setShowRescheduleDialog(false);
-    }}>Continue</Button>
-  </DialogActions>
-</Dialog>
-
-
-                </Box>
-
+               
                   <Backdrop
                         sx={(theme) => ({ color: colors.menu.primary, zIndex: theme.zIndex.drawer + 1 })}
                         open={open}
@@ -984,7 +878,7 @@ className="w-full  flex justify-center "
                     </Snackbar>
 
                 {/*CALENDAR*/}
-                <Box flex="1 1 100%" ml={isSmallScreen ? '5px' : '15px'} width={isSmallScreen ? '100%' : '100%'}>
+                <Box flex="1 1 100%" mr={isSmallScreen ? '5px' : '15px'} width={isSmallScreen ? '100%' : '100%'}>
                     <FullCalendar
                     height={calendarHeight}
                     width={isSmallScreen ? '80%' : '100%'} // Adjusted width based on isSmallScreen
@@ -1012,8 +906,127 @@ className="w-full  flex justify-center "
                     />
                 </Box>
 
+                 {/*CALENDAR SIDEBAR */}
+                <Box 
+                flex={isSmallScreen ? 'none' : '1 1 50%'}
+                backgroundColor = {colors.background.paper}
+                p="15px"
+                borderRadius="8px"
+                width="100%"
+                height="auto"
+                overflow="hidden"
+                >
+                    <Typography variant="h4" sx={{color: colors.text.primary}}>Upcoming Events</Typography>
+                    <List overflowY="auto"  sx={{ maxHeight: 'calc(100% - 50px)', overflowY: 'auto', marginTop: '10px' ,   '&::-webkit-scrollbar': { display: 'none' }, // Chrome, Safari
+    '-ms-overflow-style': 'none', // IE, Edge
+    'scrollbar-width': 'none', // Firefox
+    }}
+    >
+                        {currentEvents.length === 0 ? (
+    <Typography sx={{ padding: '10px', color: colors.text.secondary }}>
+      No scheduled events
+    </Typography>
+  ) : (
+    currentEvents
+  .slice() // make a shallow copy to avoid mutating state directly
+  .sort((a, b) => new Date(b.start) - new Date(a.start)) // newest first
+  .map((event) => (
+  <ListItem
+  key={event.id}
+  sx={{
+    backgroundColor: colors.background.default,
+    margin: "10px 0",
+    borderRadius: "8px",
+    color: colors.text.primary,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    paddingTop: "2px",
+    paddingRight: "10px",
+  }}
+>
+  {/* Left section: title, time, and View button */}
+  <Box sx={{ display: 'flex', flexDirection: 'column', width: "100%" }}>
+    <ListItemText
+      primary={event.title}
+      primaryTypographyProps={{
+        fontSize: '0.9rem',
+        fontWeight: 500,
+        color: colors.text.primary,
+        margin: "0px"
+      }}
+      secondaryTypographyProps={{
+        fontSize: '0.65rem',
+        fontWeight: 400,
+        color: colors.text.placeholder,
+        marginY: '4px',
+      }}
+      secondary={formatDate(event.start)}
+    />
+<div
+className="w-full  flex justify-center "
+>
+      <Button
+      size="small"
+      sx={{
+        alignSelf: 'start',
+        marginBottom: '4px',
+        textTransform: 'none',
+        fontSize: '0.65rem',
+        border: "1px solid #4F378A",
+        width:"100%"
+      }}
+     onClick={() => handleEventClick({ event })}
+
+    >
+      View Event
+    </Button>
+</div>
+  </Box>
+
+  {/* Right section: More icon */}
+  <MoreVertIcon
+    sx={{
+      color: colors.text.secondary,
+      marginLeft: 'auto',
+      cursor: 'pointer',
+      marginTop: "10px"
+    }}
+    onClick={(e) => handleMenuOpen(e, event)}
+  />
+</ListItem>
+
+))
+  )}
+
+                    </List>
+                    <Menu
+  anchorEl={anchorEl}
+  open={Boolean(anchorEl)}
+  onClose={handleMenuClose}
+>
+  <MenuItem onClick={handleMarkAsDone}>Mark as Done</MenuItem>
+  <MenuItem onClick={handleReschedule}>Reschedule</MenuItem>
+  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+</Menu>
+
+<Dialog open={showRescheduleDialog} onClose={() => setShowRescheduleDialog(false)}>
+  <DialogTitle>Reschedule Task</DialogTitle>
+  <DialogActions>
+    <Button onClick={() => setShowRescheduleDialog(false)}>Cancel</Button>
+    <Button onClick={() => {
+      console.log("You can now open a date picker here.");
+      setShowRescheduleDialog(false);
+    }}>Continue</Button>
+  </DialogActions>
+</Dialog>
+
+
+                </Box>
+
+
             </div>
-        </Box>
+        </div>
     );
 
 };

@@ -6,8 +6,12 @@ import {
   updateRoutineById,
   deleteRoutineById,
 } from "../../../utils/Api";
+import { tokens } from "../../../theme";
+import {Box, Button, Typography, useTheme} from "@mui/material";
 
 const Schedule = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const [routines, setRoutines] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newRoutine, setNewRoutine] = useState({ title: "", description: "" });
@@ -71,11 +75,23 @@ const Schedule = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="m-[20px] pt-4">
+             <div className="mb-[30px]  w-full justify-between flex">
+                        <Typography 
+                        variant="h3" 
+                        color={colors.text.primary} 
+                        fontWeight="bold" 
+                        
+                        >ROUTINES</Typography>
+                        <Button variant="contained">
+                          View in Calendar
+                        </Button>
+                    
+                </div>
     
-      <h2 className="text-xl font-bold">Todays Schedule</h2>
       
-    <h2 className="text-xl font-bold">Daily Routine</h2>
+      
+    
 
 
       {/* Create Form */}

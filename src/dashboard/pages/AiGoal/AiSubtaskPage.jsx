@@ -372,6 +372,25 @@ const confirmDeleteSubtask = async () => {
     </div>
     
     </div>
+
+      <div className='flex gap-20 mt-8 items-center '>
+       <span className='flex  items-center gap-2'>
+        <span className='bg-[#D6CFFF] p-2 rounded-md'>
+         <FaTasks className="text-[#4F378A] " size={12} />
+        </span>
+      
+       
+          <p>
+            Status:
+          </p>
+          
+       </span>
+       <p className="p-2 rounded-md" style={{backgroundColor: colors.background.paper, color: colors.text.secondary}}>{step.status}</p>
+    
+        
+          
+        </div>
+    
     
           <div className="flex gap-4  mt-4">
          <div className='flex  items-center gap-2'>
