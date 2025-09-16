@@ -19,6 +19,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { CssVarsProvider } from '@mui/joy/styles';
 import Registration from "./landing-page/Registration";
 import Schedule from "./dashboard/pages/Schedule/Schedule";
+import DailyTemplatesPage from "./dashboard/pages/Templates/DailyTemplatesPage";
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -88,6 +89,7 @@ function App() {
                 <Route path="goal/:goalId" element={<Goal />} />
                 <Route path="calendar" element={<Calendar />} />
                 <Route path="schedule" element={<Schedule/>} />
+                <Route path="templates" element={<DailyTemplatesPage/>} />
                 <Route path="analytics" element={<Stats />} />
                 <Route path="settings" element={<Settings/>} />
               </Route>

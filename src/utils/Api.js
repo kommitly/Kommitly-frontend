@@ -710,6 +710,195 @@ const deleteRoutineById = async (routineId) => {
 
 
 
+const fetchDailyTemplates = async () => {
+  const url = "https://kommitly-backend.onrender.com/api/daily-templates/";
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Daily Templates:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const fetchDailyActivities = async () => {
+  const url = "https://kommitly-backend.onrender.com/api/daily-activities/";
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Daily Activities:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const createDailyTemplates = async (template_data)=> {
+  const url = "https://kommitly-backend.onrender.com/api/daily-templates/";
+  try {
+    const token = getToken();
+    const response = await axios.post(url, template_data, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating Daily Templates:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const createDailyActivities = async (activities_data)=> {
+  const url = "https://kommitly-backend.onrender.com/api/daily-activities/";
+  try {
+    const token = getToken();
+    const response = await axios.post(url, activities_data, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating Daily Activities:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const fetchTemplatesById = async (templateId) => {
+  
+  const url = `https://kommitly-backend.onrender.com/api/daily-templates/${templateId}/`;
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching Template with ID ${templateId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+
+const fetchActivitiesById = async (activitiesId) => {
+  
+  const url = `https://kommitly-backend.onrender.com/api/daily-activities/${activitiesId}/`;
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching Daily activity with ID ${activitiesId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const updateTemplatesById = async (templateId, templateData) => {
+  console.log ( "for template with ID:", templateId, "with data:", templateData);
+  const url = `https://kommitly-backend.onrender.com/api/daily-templates/${templateId}/`;
+ 
+  try {
+    const token = getToken();
+    const response = await axios.patch(url, templateData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+    
+  } catch (error) {
+    console.error(`Error updating template with ID ${templateId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+const updateActivitiesById = async (activitiesId, activitiesData) => {
+  console.log ( "for template with ID:", activitiesId, "with data:", activitiesData);
+  const url = `https://kommitly-backend.onrender.com/api/daily-activities/${activitiesId}/`;
+ 
+  try {
+    const token = getToken();
+    const response = await axios.patch(url, activitiesData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+    
+  } catch (error) {
+    console.error(`Error updating Daily activity with ID ${activitiesId}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+
+const deleteTemplatesById = async (templateId) => {
+  const url = `https://kommitly-backend.onrender.com/api/daily-templates/${templateId}/`;
+  try {
+    const token = getToken();
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting template with ID ${templateId}:`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
+const deleteActivitiesById = async (activitiesId) => {
+  const url = `https://kommitly-backend.onrender.com/api/daily-activities/${activitiesId}/`;
+  try {
+    const token = getToken();
+    const response = await axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting daily activity  with ID ${activitiesId}:`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
 
 export { 
   generateInsights,
@@ -749,7 +938,20 @@ export {
   fetchRoutines,
   fetchRoutineById,
   updateRoutineById,
-  deleteRoutineById
+  deleteRoutineById,
+  fetchDailyTemplates,
+  fetchDailyActivities,
+  createDailyTemplates,
+  createDailyActivities,
+  fetchTemplatesById,
+  fetchActivitiesById,
+  updateTemplatesById,
+  updateActivitiesById,
+  deleteTemplatesById,
+  deleteActivitiesById
+
+
+
 
 
 
