@@ -250,16 +250,41 @@ const handleChange = (field, value) => {
           </FormControl>
 
           {formData.frequency === "custom" && (
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="End Date"
-                value={formData.end_date ? new Date(formData.end_date) : null}
-                onChange={(newValue) => handleChange('end_date', newValue.toISOString().slice(0, 10))}
-                renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
-                minDate={new Date(formData.start_date)}
-              />
-            </LocalizationProvider>
-          )}
+  <Box>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DatePicker
+        label="End Date"
+        value={formData.end_date ? new Date(formData.end_date) : null}
+        onChange={(newValue) => handleChange('end_date', newValue.toISOString().slice(0, 10))}
+        renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+        minDate={new Date(formData.start_date)}
+      />
+    </LocalizationProvider>
+
+    <TextField
+      fullWidth
+      label="Custom Interval (e.g., every X days)"
+      type="number"
+      value={formData.custom_interval || ''}
+      onChange={(e) => handleChange('custom_interval', e.target.value)}
+      margin="normal"
+      sx={{ mt: 2 }}
+    />
+
+    <FormControl fullWidth margin="normal" sx={{ mt: 2 }}>
+      <InputLabel>Custom Unit</InputLabel>
+      <Select
+        value={formData.custom_unit || ''}
+        label="Custom Unit"
+        onChange={(e) => handleChange('custom_unit', e.target.value)}
+      >
+        <MenuItem value="days">Days</MenuItem>
+        <MenuItem value="weeks">Weeks</MenuItem>
+        <MenuItem value="months">Months</MenuItem>
+      </Select>
+    </FormControl>
+  </Box>
+)}
           
            <TextField
             fullWidth
