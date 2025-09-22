@@ -673,7 +673,7 @@ const fetchRoutineById = async (routineId) => {
 
 const updateRoutineById = async (routineId, updatedData) => {
   console.log ( "for routine with ID:", routineId, "with data:", updatedData);
-  const url = `https://kommitly-backend.onrender.com/api/routines/${taskId}/`;
+  const url = `https://kommitly-backend.onrender.com/api/routines/${routineId}/`;
  
   try {
     const token = getToken();
