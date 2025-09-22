@@ -20,6 +20,7 @@ import { CssVarsProvider } from '@mui/joy/styles';
 import Registration from "./landing-page/Registration";
 import Schedule from "./dashboard/pages/Schedule/Schedule";
 import DailyTemplatesPage from "./dashboard/pages/Templates/DailyTemplatesPage";
+import DailyTemplateDetail from "./dashboard/pages/Templates/DailyTemplateDetail";
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -90,6 +91,7 @@ function App() {
                 <Route path="calendar" element={<Calendar />} />
                 <Route path="schedule" element={<Schedule/>} />
                 <Route path="templates" element={<DailyTemplatesPage/>} />
+                <Route path="templates/:templateId" element={<DailyTemplateDetail />} />
                 <Route path="analytics" element={<Stats />} />
                 <Route path="settings" element={<Settings/>} />
               </Route>

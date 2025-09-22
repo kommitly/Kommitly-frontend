@@ -9,10 +9,14 @@ import Loading from '../../components/Loading';
 
 import {
   Box, Table, TableBody, TableCell, TableContainer, TableHead,
-  TableRow, Paper, TextField, Button, Typography
+  TableRow, Paper, TextField, Button, Typography, useTheme
 } from '@mui/material';
 
+import { tokens } from "../../../theme";
+
 const Goal = () => {
+  const theme = useTheme();
+  const colors =tokens(theme.palette.mode);
   const { goalId } = useParams();
   const [goal, setGoal] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -134,7 +138,9 @@ if (loading) {
       <div className='w-full'>
         <div className='flex items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
-        🚩
+        <div className='rounded-2xl h-36 p-12 font-semibold  flex justify-center items-center'
+        style={{backgroundColor: colors.primary[500], color: colors.primary[100]}}>
+
         {isGoalRenaming ? (
                     <input
                       type="text"
@@ -143,11 +149,12 @@ if (loading) {
                       onKeyDown={(e) => e.key === 'Enter' && handleUpdate()} // Only update on Enter key
                       onBlur={handleUpdate} // Update when clicking away
                       ref={inputGoalRef}
-                      className="md:text-md font-semibold border-b border-b-[#6246AC] p-1 focus:outline-none"
+                      className="md:text-2xl font-semibold border-b border-b-[#6246AC] p-1 focus:outline-none"
                     />
                   ) : (
-                    <h1 className='md:text-lg  xl:text-lg 2xl:text-xl font-medium'>{goal.title}</h1>
+                    <h1 className='md:text-2xl  xl:text-2xl 2xl:text-xl font-medium'>{goal.title}</h1>
                   )}
+        </div>
         </div>
 
 

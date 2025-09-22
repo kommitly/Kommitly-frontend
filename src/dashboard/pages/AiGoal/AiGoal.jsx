@@ -126,10 +126,11 @@ const AiGoal = () => {
             const fetchedGoal = await fetchAiGoalById(goalId);
             setGoal(fetchedGoal);
              // Update taskCompletionStatus based on fetched goal data
-             setTaskCompletionStatus(fetchedGoal.ai_tasks.map(task => task.status === 'completed'));
+            setTaskCompletionStatus(fetchedGoal.ai_tasks.map(task => task.status === 'completed'));
 
             const inProgressTaskIndex = fetchedGoal.ai_tasks.findIndex(task => task.status === 'in-progress');
             setActiveTaskIndex(inProgressTaskIndex !== -1 ? inProgressTaskIndex : 0);
+            return fetchedGoal;
           } catch (error) {
             setError(error.message);
         } finally {
@@ -152,32 +153,31 @@ const AiGoal = () => {
     setOpenTaskView(false);
   };
  
-  const handleStepCheck = async (stepIndex) => {
+  const handleStepCheck = async (subtaskId) => {
+  console.log("✅ Clicked subtask:", subtaskId); // <-- log right away
+
   const activeTask = goal.ai_tasks[activeTaskIndex];
-  const step = activeTask.ai_subtasks[stepIndex];
+  const step = activeTask.ai_subtasks.find(s => s.id === subtaskId);
+
+  if (!step) {
+    console.error("Subtask not found with ID:", subtaskId);
+    return;
+  }
+  
 
   const taskId = activeTask.id;
-  const subtaskId = step.id;
+  
 
   const newStatus = step.status === "completed" ? "pending" : "completed";
 
   try {
     await updateAiSubtaskById(taskId, subtaskId, { status: newStatus });
-    await loadGoal();
-    setGoal(prevGoal => {
-      // Deep copy to avoid state mutation
-      const newGoal = JSON.parse(JSON.stringify(prevGoal));
-      const task = newGoal.ai_tasks[activeTaskIndex];
-      task.ai_subtasks[stepIndex].status = newStatus;
-
-      // Check if all subtasks completed here
-      const allCompleted = task.ai_subtasks.every(s => s.status === "completed");
-      if (allCompleted) {
-        handleTaskCompletion();
-      }
-
-      return newGoal;
-    });
+    const updatedGoal = await loadGoal();
+    const updatedTask = updatedGoal.ai_tasks[activeTaskIndex];
+      
+    if (updatedTask.ai_subtasks.every(s => s.status === "completed")) {
+      handleTaskCompletion(updatedGoal, updatedTask);
+    }
 
   } catch (error) {
     console.error("Failed to update subtask:", error);
@@ -582,16 +582,16 @@ if (loading) {
               {activeTask &&
   [...activeTask.ai_subtasks] // make a shallow copy
     .sort((a, b) => a.id - b.id) // sort by ID
-    .map((step, stepIndex) => {
+    .map((step) => { 
       const { timeline, cleanedDetails } = extractTimeline(step.description);
       
                   return (
-                    <Box key={stepIndex}  className="step  p-4 rounded-xl cursor-pointer flex items-center gap-4" sx={{ backgroundColor: colors.background.paper }}>
+                    <Box key={step.id}  className="step  p-4 rounded-xl cursor-pointer flex items-center gap-4" sx={{ backgroundColor: colors.background.paper }}>
                     <label className="custom-checkbox">
                         <input
                         type="checkbox"
                         checked={step.status === "completed"}
-                        onChange={() => handleStepCheck(stepIndex)} // Call the new handler
+                        onChange={() => handleStepCheck(step.id)} // Call the new handler
                         size={16}
                         />
 
@@ -1122,16 +1122,16 @@ if (loading) {
                 {activeTask &&
   [...activeTask.ai_subtasks] // make a shallow copy
     .sort((a, b) => a.id - b.id) // sort by ID
-    .map((step, stepIndex) => {
+    .map((step) => { 
       const { timeline, cleanedDetails } = extractTimeline(step.description);
       
                   return (
-                    <Box key={stepIndex}  className="step  rounded-xl transition-transform duration-300 hover:scale-[0.95] cursor-pointer flex items-center " sx={{ backgroundColor: colors.background.paper }}>
+                    <Box key={step.id}  className="step  rounded-xl transition-transform duration-300 hover:scale-[0.95] cursor-pointer flex items-center " sx={{ backgroundColor: colors.background.paper }}>
                     <label className="custom-checkbox  p-4 ">
                         <input
                         type="checkbox"
                         checked={step.status === "completed"}
-                        onChange={() => handleStepCheck(stepIndex)} // Call the new handler
+                        onChange={() => handleStepCheck(step.id)} // Call the new handler
                         size={16}
                         />
 

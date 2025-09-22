@@ -454,7 +454,7 @@ const Goals = () => {
 
       <div className="md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0">
        
-        <Box className='w-full  container md:h-46 xl:h-50 2xl:h-64  h-36 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
+        <Box className='w-full  container md:h-46 xl:h-50 2xl:h-64  h-36 flex items-center justify-between rounded-2xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
         sx={{backgroundColor:colors.background.paper}}
         >
           <div className='space-y-4 h-full'>
