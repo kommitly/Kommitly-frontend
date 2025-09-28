@@ -521,7 +521,7 @@ const handleReschedule = () => {
                         
                         >CALENDAR</Typography>
                         <Button variant="contained">
-                          Manage Routines
+                          View Routines
                         </Button>
                     
                 </div>

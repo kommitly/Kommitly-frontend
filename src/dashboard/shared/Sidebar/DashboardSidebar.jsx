@@ -37,6 +37,10 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import logo from '../../../assets/logo.svg';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { RiCalendarScheduleLine } from "react-icons/ri";
+import { RiCalendarScheduleFill } from "react-icons/ri";
+import { HiOutlineTemplate } from "react-icons/hi";
+import { HiTemplate } from "react-icons/hi";
 
 const Item = ({title, to, icon, selected, setSelected}) => {
     const theme = useTheme();
@@ -588,7 +592,7 @@ sx={{
                                 navigate("/dashboard/schedule");
                                 setSelected("Schedule");
                             }}
-                            icon={selected === "Schedule" ? <LeaderboardIcon sx={{fontSize:{
+                            icon={selected === "Schedule" ? <RiCalendarScheduleFill size={24}  sx={{fontSize:{
   xs: "1.5rem",
   sm: "1.5rem",
   md: "1.5rem",     
@@ -596,7 +600,7 @@ sx={{
   xl: "2rem",
   xxl: "1.5rem",
   },
- }} /> : <LeaderboardOutlinedIcon sx={{fontSize:{
+ }} /> : <RiCalendarScheduleLine size={24}  sx={{fontSize:{
   xs: "1.5rem",
   sm: "1.5rem",   
   md: "1.5rem",
@@ -619,7 +623,7 @@ sx={{
                                 navigate("/dashboard/templates");
                                 setSelected("Templates");
                             }}
-                            icon={selected === "Templates" ? <LeaderboardIcon sx={{fontSize:{
+                            icon={selected === "Templates" ? <HiTemplate size={24}  sx={{fontSize:{
   xs: "1.5rem",
   sm: "1.5rem",
   md: "1.5rem",     
@@ -627,7 +631,7 @@ sx={{
   xl: "2rem",
   xxl: "1.5rem",
   },
- }} /> : <LeaderboardOutlinedIcon sx={{fontSize:{
+ }} /> : <HiOutlineTemplate size={24}  sx={{fontSize:{
   xs: "1.5rem",
   sm: "1.5rem",   
   md: "1.5rem",
@@ -692,7 +696,7 @@ sx={{
                  padding: "10px 15px",
                  marginBottom: "15px",
                  position: "absolute", 
-                 top: '80%',
+                 top: '85%',
                  left: "25%",
                }}>
          <Box
