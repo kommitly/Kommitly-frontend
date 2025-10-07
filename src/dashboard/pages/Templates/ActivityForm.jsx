@@ -89,7 +89,7 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
   };
 
   return (
-   <div className="h-screen w-full p-4 max-h-11/12 flex justify-center items-center ">
+   <div className="h-screen w-full p-4 md:p-0 max-h-11/12  flex justify-center items-center  md:items-start">
      <form
       onSubmit={handleSubmit}
       className="  p-4 md:h-screen w-full h-full max-h-10/12 relative rounded-xl space-y-3"
