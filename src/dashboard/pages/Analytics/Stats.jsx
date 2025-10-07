@@ -235,7 +235,7 @@ export default function Stats() {
             <StatCard icon={<FaCheck />} title="Tasks Completed" value={completedTasksCount} />
           </div>
 
-        <div className='w-full md:flex gap-4 h-full'>
+        <div className='w-full md:flex gap-4  h-full'>
                {/* AI Goals Chart */}
           {chartAiData.length > 0 && (
               <Card className="mt-6 w-full h-full">
