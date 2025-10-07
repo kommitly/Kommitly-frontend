@@ -226,8 +226,8 @@ export default function DailyTemplateDetail() {
         onClick={() => setShowForm(false)}
       >
         <div
-          className="w-11/12 md:w-5/12  rounded-xl"
-           style={{backgroundColor: colors.menu.primary}}
+          className=" w-full flex justify-center items-center"
+         
           
           onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
         >

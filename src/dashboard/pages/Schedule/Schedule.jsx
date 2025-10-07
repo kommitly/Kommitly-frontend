@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   createRoutine,
   fetchRoutines,
   fetchRoutineById,
   updateRoutineById,
   deleteRoutineById,
+  fetchTasks
+
 } from "../../../utils/Api";
+import { GoalsContext } from "../../../context/GoalsContext";
 import { tokens } from "../../../theme";
 import {Box, Button, Backdrop,Typography,TextField,useTheme, IconButton, Select,
   MenuItem,
@@ -17,23 +20,63 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SlidingButton2 from '../../components/SlidingButton2';
+import { Divider } from '@mui/material';
+
 
 const Schedule = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [routines, setRoutines] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newRoutine, setNewRoutine] = useState({ title: "", description: "" });
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [open, setOpen] = useState(false);
   const [openRoutine, setOpenRoutine] = useState(false);
   const [formData, setFormData] = useState(selectedRoutine || {});
+  const [type, setType] = useState("task"); // "task" | "ai_subtask" | "new"
+  const [options, setOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("Add from collection");
+  const [newRoutine, setNewRoutine] = useState({ title: "", description: "" });
+  const { goals } = useContext(GoalsContext);
+  const aiGoals = goals.ai_goals || [];
+  const [selected, setSelected] = useState("");
+  
+
+  // helper to find next unfinished subtask
+    function findNextAiSubtask(goal) {
+      const inProgressTask = goal.ai_tasks?.find((t) => t.status === "in-progress");
+      if (!inProgressTask) return null;
+  
+      const nextSubtask = inProgressTask.ai_subtasks?.find((st) => !st.completed_at);
+      if (!nextSubtask) return null;
+  
+      return {
+        goalId: goal.id,
+        goalTitle: goal.title,
+        taskId: inProgressTask.id,
+        taskTitle: inProgressTask.title,
+        subtask: nextSubtask,
+      };
+    }
+  
+    const recommendations = aiGoals.map(findNextAiSubtask).filter(Boolean);
+  
+    // load options only when needed
+    useEffect(() => {
+      if (type === "task") {
+        fetchTasks().then(setOptions);
+      } else {
+        setOptions([]); // reset for ai_subtask since we use recommendations
+      }
+    }, [type]);
+
 
 
   // Fetch routines on mount
   useEffect(() => {
     loadRoutines();
   }, []);
+
 
 
   const loadRoutines = async () => {
@@ -65,16 +108,29 @@ const handleChange = (field, value) => {
     setOpenRoutine(false);
   };
 
+  
+
   const handleCreate = async (e) => {
-    e.preventDefault();
-    try {
-      const routine = await createRoutine(newRoutine);
-      setRoutines((prev) => [...prev, routine]);
-      setNewRoutine({ title: "", description: "" });
-    } catch (err) {
-      console.error("Failed to create routine:", err);
-    }
-  };
+  e.preventDefault();
+
+  try {
+    const payload = {
+      ...newRoutine,
+      linked_task: type === "task" ? selectedOption : null,
+      linked_ai_subtask: type === "ai_subtask" ? selectedOption : null,
+    };
+    const routine = await createRoutine(payload);
+    setRoutines((prev) => [...prev, routine]);
+    setNewRoutine({ title: "", description: "" });
+    setType("new");
+    setSelectedOption(null);
+    setOpen(false);
+
+  } catch (err) {
+    console.error("Failed to create routine:", err);
+  }
+};
+
 
 
 
@@ -124,10 +180,14 @@ const handleChange = (field, value) => {
             
                   
                   {/* Create Form */}
-      <form onSubmit={handleCreate} className="my-4  gap-2">
-        <div className="w-full flex justify-between ">
-                   <div className="w-full">
-                    <h2 className='text-xl font-semibold mb-4' style={{color: colors.primary[500]}}>Add  Routine</h2>
+      <form onSubmit={handleCreate} className="  gap-2">
+        <div className="w-full flex gap-4 items-center justify-between ">
+                   <div className="w-full -mt-4">
+                     <SlidingButton2
+      options={["Add from collection", "Add new task"]}
+      selected={selectedOption}
+      onChange={setSelectedOption}
+    />
                    </div>
                  <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -146,30 +206,80 @@ const handleChange = (field, value) => {
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>  
         </div>
+          <div className="w-full flex justify-center mb-6">
+   
+  </div>
+   <p
+          className="w-full mb-1 font-semibold text-lg"
+          style={{ color: colors.text.secondary }}
+        >
+          {selectedOption}
+        </p>
+
+          <Divider orientation="horizontal" sx={{ borderColor: "#767676", opacity: 0.8 }} />
+        
          
-        <TextField
-          fullWidth
-          label='Title'
-          name='title'
-          value={newRoutine.title}
-          onChange={(e) =>
-            setNewRoutine((prev) => ({ ...prev, title: e.target.value }))
-          }
-          className="border px-2 py-1"
-          required
-          margin='normal'
-        />
-        <TextField
-          fullWidth 
-          label='Description' 
-          name='description'
-          value={newRoutine.description}
-          onChange={(e) =>
-            setNewRoutine((prev) => ({ ...prev, description: e.target.value }))
-          }
-          className="border px-2 py-1"
-          margin='normal'
-        />
+       {selectedOption === "Add new task" ? (
+    <>
+      <TextField
+        fullWidth
+        label="Title"
+        name="title"
+        value={newRoutine.title}
+        onChange={(e) => setNewRoutine((prev) => ({ ...prev, title: e.target.value }))}
+        required
+        margin="normal"
+      />
+      <TextField
+        fullWidth
+        label="Description"
+        name="description"
+        value={newRoutine.description}
+        onChange={(e) => setNewRoutine((prev) => ({ ...prev, description: e.target.value }))}
+        margin="normal"
+      />
+    </>
+  ) : (
+    <>
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="routine-type-label">Link Routine To</InputLabel>
+        <Select
+          labelId="routine-type-label"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <MenuItem value="task">Task</MenuItem>
+          <MenuItem value="ai_subtask">AI Subtask</MenuItem>
+        </Select>
+      </FormControl>
+
+      <div className="mt-4">
+        <label className="block mb-2 text-black capitalize">Select {type}</label>
+            <select
+              value={selected}
+              onChange={(e) => setSelected(e.target.value)}
+              className="w-full border text-black rounded px-2 py-1"
+            >
+              <option value="">None</option>
+              {type === "ai_subtask"
+                ? recommendations.map((r) => (
+                  <option key={r.subtask.id} value={r.subtask.id}>
+                    {r.goalTitle} → {r.taskTitle} → {r.subtask.title}
+                  </option>
+                ))
+                : options.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.title}
+                  </option>
+                ))}
+            </select>
+          </div>
+      
+    </>
+  )}
+
+
+
         <button
           type="submit"
           className="text-white px-4 py-2 mt-4  text-white rounded-lg"

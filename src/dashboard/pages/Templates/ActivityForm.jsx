@@ -5,6 +5,7 @@ import { color } from "framer-motion";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import SlidingButton2 from '../../components/SlidingButton2';
+import { Divider } from '@mui/material';
 
 
 export default function ActivityForm({ onSave, onCancel, initialData }) {
@@ -88,10 +89,10 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
   };
 
   return (
-   <div className="h-screen max-h-11/12  ">
+   <div className="h-screen w-full p-4 max-h-11/12 flex justify-center items-center ">
      <form
       onSubmit={handleSubmit}
-      className="  p-4 h-screen max-h-10/12 relative rounded-xl space-y-3"
+      className="  p-4 md:h-screen w-full h-full max-h-10/12 relative rounded-xl space-y-3"
       style={{
         color: colors.text.primary,
         backgroundColor: colors.background.paper,
@@ -107,16 +108,18 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
 
      <div className="relative p-4 h-10/12 rounded-xl" style={{backgroundColor: colors.background.default}}>
        <p
-        className="w-full mb-4 font-semibold text-lg"
+        className="w-full mb-1 font-semibold text-lg"
         style={{ color: colors.text.secondary }}
       >
         {selectedPeriod}
       </p>
 
+       <Divider orientation="horizontal" sx={{ borderColor: "#767676", opacity: 0.8 }} />
+
       {/* Conditionally render sections */}
       {selectedPeriod === "Add from collection" ? (
         <>
-          <div className="mb-2">
+          <div className="mb-2 mt-4">
             <label className="block mb-2">Link Type</label>
             <select
               value={type}
@@ -151,7 +154,7 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
           </div>
         </>
       ) : (
-        <div className="mb-2">
+        <div className="mb-2 mt-4">
           <label className="block mb-2">Activity Title</label>
           <input
             value={title}
@@ -186,7 +189,7 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
       <div className="flex absolute inset-x-0 bottom-4 justify-center w-full  space-x-2">
         <button
           type="submit"
-          className=" md:w-11/12 w-auto  text-white px-3 py-1 rounded"
+          className=" md:w-11/12 w-auto cursor-pointer  text-white px-3 py-1 rounded"
           style={{backgroundColor: colors.primary[500]}}
         >
           Save
