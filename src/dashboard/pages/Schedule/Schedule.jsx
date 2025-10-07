@@ -190,7 +190,7 @@ const handleChange = (field, value) => {
               open={openRoutine}
               onClick={handleCloseRoutine}
             >
-              <div className="md:w-6/12 w-11/12 p-6 rounded-lg " onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
+              <div className="md:w-6/12 w-11/12  rounded-lg " onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
             
                   
                   {/* Selected Routine */}
@@ -199,17 +199,17 @@ const handleChange = (field, value) => {
           
 
          
-          <div className=" w-full flex justify-between">
+          <div className=" w-full flex py-2 justify-between items-center rounded-lg px-4" style={{backgroundColor: colors.background.default}}>
 
-       <div className="w-full text-center">
-         <Typography variant="h4" component="h3" fontWeight="bold" mb={2}>
+       <div className="w-full " >
+         <p className="font-light" style={{color:colors.text.secondary}}>
           Routine Details
-        </Typography>
+        </p>
         </div>
           <IconButton
           sx={{
             
-            color: colors.text.primary,
+            color: colors.text.subtitle,
           }}
           onClick={handleCloseRoutine}
         >
@@ -217,24 +217,40 @@ const handleChange = (field, value) => {
         </IconButton>
             </div>
 
-         <Box sx={{ mt: 3 }}>
-          <Typography variant="body1" sx={{ color: colors.text.primary, mb: 1 }}>
-            <span style={{ fontWeight: 'bold' }}>Routine Name:</span> {selectedRoutine.name}
+        <div className="p-6">
+           <Box >
+
+
+            <Typography variant="h3" sx={{ color: colors.text.secondary, mb: 3 }}>
+           {selectedRoutine.subtask_template_title}
           </Typography>
 
-           <Typography variant="body1" sx={{ color: colors.text.primary, mb: 1 }}>
-            <span style={{ fontWeight: 'bold' }}>Title:</span> {selectedRoutine.subtask_template_title}
-          </Typography>
-          <Typography variant="body1" sx={{ color: colors.text.primary, mb: 1 }}>
+          <Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
             <span style={{ fontWeight: 'bold' }}>Description:</span> {selectedRoutine.subtask_template_description}
           </Typography>
 
-          <Typography variant="body1" sx={{ color: colors.text.primary, mb: 1 }}>
+          <Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
+            <span style={{ fontWeight: 'bold' }}>Routine Name:</span> {selectedRoutine.name}
+          </Typography>
+
+           
+          
+
+          <Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
             <span style={{ fontWeight: 'bold' }}>Start Date:</span> {selectedRoutine.start_date}
           </Typography>
-          <Typography variant="body1" sx={{ color: colors.text.primary, mb: 1 }}>
-            <span style={{ fontWeight: 'bold' }}>End Date:</span> {selectedRoutine.end_date}
-          </Typography>
+          <TextField
+            fullWidth
+            label="End Date"
+            type="date"
+            value={formData.end_date || ''}
+            onChange={(e) => handleChange('end_date', e.target.value)}
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+
          <FormControl fullWidth margin="normal">
             <InputLabel>Frequency</InputLabel>
             <Select
@@ -331,6 +347,7 @@ const handleChange = (field, value) => {
             Delete
           </Button>
           </Box>
+          </div>
         </div>
       )}
       

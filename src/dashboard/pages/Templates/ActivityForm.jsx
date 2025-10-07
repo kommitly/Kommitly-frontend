@@ -88,10 +88,10 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
   };
 
   return (
-   <div className="h-screen  ">
+   <div className="h-screen max-h-11/12  ">
      <form
       onSubmit={handleSubmit}
-      className="  p-4 max-h-9/12 relative rounded-xl space-y-3"
+      className="  p-4 h-screen max-h-10/12 relative rounded-xl space-y-3"
       style={{
         color: colors.text.primary,
         backgroundColor: colors.background.paper,
@@ -105,9 +105,9 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
         />
       </div>
 
-     <div className=" p-4 h-full rounded-xl" style={{backgroundColor: colors.background.default}}>
+     <div className="relative p-4 h-10/12 rounded-xl" style={{backgroundColor: colors.background.default}}>
        <p
-        className="w-full mb-8 font-semibold text-lg"
+        className="w-full mb-4 font-semibold text-lg"
         style={{ color: colors.text.secondary }}
       >
         {selectedPeriod}
@@ -116,8 +116,8 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
       {/* Conditionally render sections */}
       {selectedPeriod === "Add from collection" ? (
         <>
-          <div>
-            <label className="block mb-1">Link Type</label>
+          <div className="mb-2">
+            <label className="block mb-2">Link Type</label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
@@ -128,8 +128,8 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
             </select>
           </div>
 
-          <div>
-            <label className="block mb-1 capitalize">Select {type}</label>
+          <div className="mb-2">
+            <label className="block mb-2 capitalize">Select {type}</label>
             <select
               value={selected}
               onChange={(e) => setSelected(e.target.value)}
@@ -151,8 +151,8 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
           </div>
         </>
       ) : (
-        <div>
-          <label className="block mb-1">Activity Title</label>
+        <div className="mb-2">
+          <label className="block mb-2">Activity Title</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -162,9 +162,9 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
         </div>
       )}
 
-      <div className="flex w-full space-x-2">
+      <div className="flex w-full space-x-2 mb-2">
         <div className="w-1/2">
-          <label className="block mb-1">Start time</label>
+          <label className="block mb-2">Start time</label>
           <input
             type="time"
             value={startTime}
@@ -173,7 +173,7 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
           />
         </div>
         <div className="w-1/2">
-          <label className="block mb-1">End time</label>
+          <label className="block mb-2">End time</label>
           <input
             type="time"
             value={endTime}
@@ -183,17 +183,18 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
         </div>
       </div>
 
-      <div className="flex mt-8 space-x-2">
+      <div className="flex absolute inset-x-0 bottom-4 justify-center w-full  space-x-2">
         <button
           type="submit"
-          className="bg-blue-500 text-white px-3 py-1 rounded"
+          className=" md:w-11/12 w-auto  text-white px-3 py-1 rounded"
+          style={{backgroundColor: colors.primary[500]}}
         >
           Save
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="bg-gray-300 px-3 py-1 rounded"
+          className="block md:hidden bg-gray-300 px-3 py-1 rounded"
         >
           Cancel
         </button>

@@ -64,16 +64,33 @@ export default function DailyTemplateDetail() {
 
   return (
     <div className=" p-4 ">
-      <h2 className="text-xl font-bold mb-4">
-        Activities for: {template?.title || template?.name}
+      <h2 className="text-xl font-medium md:mb-8 mb-4 space-x-2">
+        <span>
+          Activities for
+        </span>
+
+        <span className="px-2" style={{backgroundColor: colors.background.paper, color: colors.text.secondary}}>
+        {template?.title || template?.name}
+        </span>
+         
       </h2>
+       {/* Add Activity Button (mobile) */}
+      <div className="w-full flex justify-end">
+        <button
+        onClick={() => setShowForm(true)}
+        className="md:hidden text-white px-3 py-1 rounded"
+        style={{ backgroundColor: colors.primary[500] }}
+      >
+        + Add Activity
+      </button>
+      </div>
 
       <div className="grid grid-cols-12 gap-8">
 
 
 
         {/* Activity List */}
-        <div className="space-y-2 mb-4 md:p-0 p-4 md:col-span-7 col-span-12">
+        <div className="space-y-4 md:mt-0 mt-4 h-screen max-h-10/12 overflow-y-auto no-scrollbar mb-4 md:p-0 p-4 md:col-span-7 col-span-12">
           {activities
   ?.slice()
   .sort((a, b) => a.start_time.localeCompare(b.start_time))
@@ -87,7 +104,7 @@ export default function DailyTemplateDetail() {
       <div key={activity.id} className="relative flex items-center">
         {/* Activity item */}
         <div
-          className="flex items-center justify-between p-2 w-full md:ml-18 ml-8 rounded-xl"
+          className="flex items-center justify-between p-2 w-11/12 md:ml-18 ml-8 rounded-xl"
           style={{ backgroundColor: colors.background.paper }}
         >
           <label className="flex items-center space-x-2 p-2">
@@ -188,7 +205,7 @@ export default function DailyTemplateDetail() {
         </div>
 
         {/* Desktop inline info */}
-        <div className="hidden md:block col-span-5">
+        <div className="hidden  md:block col-span-5">
           
             <ActivityForm
               onSave={(data) => {
@@ -200,14 +217,7 @@ export default function DailyTemplateDetail() {
         </div>
       </div>
 
-      {/* Add Activity Button (mobile) */}
-      <button
-        onClick={() => setShowForm(true)}
-        className="md:hidden text-white px-3 py-1 rounded"
-        style={{ backgroundColor: colors.primary[500] }}
-      >
-        + Add Activity
-      </button>
+     
 
       {/* Backdrop for Mobile Form */}
       <Backdrop
