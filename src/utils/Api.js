@@ -187,6 +187,7 @@ const updateGoalById = async (goalId, title, description) => {
   }
 }
 
+
 const updateAiTaskStatus = async (taskId, updatedData) => {
   const url = `https://kommitly-backend.onrender.com/api/tasks/${taskId}/update-ai-task/`;
   try {
@@ -899,6 +900,30 @@ const deleteActivitiesById = async (activitiesId) => {
   }
 };
 
+const markDailyActivityComplete = async (activityId, completed = true) => {
+  const url = `https://kommitly-backend.onrender.com/api/daily-activities/${activityId}/complete/`;
+  try {
+    const token = getToken();
+    const response = await axios.patch(
+      url,
+      { completed },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error marking activity ${activityId} complete:`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
+
+
 
 export { 
   generateInsights,
@@ -948,7 +973,8 @@ export {
   updateTemplatesById,
   updateActivitiesById,
   deleteTemplatesById,
-  deleteActivitiesById
+  deleteActivitiesById,
+  markDailyActivityComplete
 
 
 

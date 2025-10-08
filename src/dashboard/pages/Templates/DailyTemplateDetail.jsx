@@ -6,6 +6,7 @@ import {
   createDailyActivities,
   updateActivitiesById,
   deleteActivitiesById,
+  markDailyActivityComplete
 } from "../../../utils/Api"; 
 import ActivityForm from "./ActivityForm";
 import { useTheme, Backdrop } from "@mui/material";
@@ -49,13 +50,11 @@ export default function DailyTemplateDetail() {
   };
 
   const toggleActivity = async (activity) => {
-    const updated = await updateActivitiesById(activity.id, {
-      completed: !activity.completed,
-    });
-    setActivities(
-      activities.map((a) => (a.id === activity.id ? updated : a))
-    );
-  };
+  const updated = await markDailyActivityComplete(activity.id, !activity.completed);
+  setActivities((prev) =>
+    prev.map((a) => (a.id === activity.id ? { ...a, completed: updated.completed } : a))
+  );
+};
 
   const deleteActivity = async (id) => {
     await deleteActivitiesById(id);
