@@ -94,6 +94,8 @@ function App() {
                 <Route path="templates/:templateId" element={<DailyTemplateDetail />} />
                 <Route path="analytics" element={<Stats />} />
                 <Route path="settings" element={<Settings/>} />
+                <Route path="templates/suggested/:templateName" element={<DailyTemplateDetail />} />
+
               </Route>
             </Routes>
       </ThemeProvider>

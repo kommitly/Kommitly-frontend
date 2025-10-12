@@ -24,6 +24,28 @@ import SlidingButton2 from '../../components/SlidingButton2';
 import { Divider } from '@mui/material';
 
 
+
+const extractTimeline = (description) => {
+  if (!description) return { timeline: 'No detail available', cleanedDetails: description };
+
+  //console.log('Details:', description); // Debugging
+
+   // Updated regex to match time ranges and single values even without parentheses
+   const match = description.match(/\b(\d+-\d+ (days|weeks|months|years)|\d+ (day|week|month|year)|On-going|Ongoing|\d+\s*(days|weeks|months|years))\b/i);
+
+  //console.log('Match:', match); // Debugging
+
+  const timeline = match ? match[1] : 'No timeline available';
+  let cleanedDetails = match ? description.replace(match[0], '').trim() : description;
+
+  // Remove empty parentheses
+  cleanedDetails = cleanedDetails.replace(/\s*\(\s*\)\s*/g, '');
+
+  return { timeline, cleanedDetails };
+};
+
+
+
 const Schedule = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -130,6 +152,8 @@ const handleChange = (field, value) => {
     console.error("Failed to create routine:", err);
   }
 };
+
+
 
 
 
@@ -335,9 +359,9 @@ const handleChange = (field, value) => {
            {selectedRoutine.subtask_template_title}
           </Typography>
 
-          <Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
+          {/* {<Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
             <span style={{ fontWeight: 'bold' }}>Description:</span> {selectedRoutine.subtask_template_description}
-          </Typography>
+          </Typography>} */}
 
           <Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
             <span style={{ fontWeight: 'bold' }}>Routine Name:</span> {selectedRoutine.name}
@@ -500,43 +524,75 @@ const handleChange = (field, value) => {
         <p>Loading routines...</p>
       ) : (
         <ul className="space-y-2 md:flex gap-4 w-full">
-          {routines.map((routine) => (
-            <li
-              key={routine.id}
-              className="flex md:w-1/3 w-full  justify-between items-center p-3"
-            >
-              <div  className="w-full text-left flex  items-center text-lg p-4 font-semibold h-48 gap-4 rounded-4xl transition-opacity duration-200 hover:opacity-80"
-            style={{ backgroundColor: colors.primary[500], color: colors.primary[100] }}
-             onClick={() => {
-      handleFetchById(routine.id);
-      setOpenRoutine(true);
-    }} >
-                <p className="font-semibold">{routine.subtask_template_title}</p>
-                <p className="text-sm text-gray-500">{routine.description}</p>
-              </div>
-          {/* {    <div className="space-x-2">
-                <button
-                  onClick={() => handleUpdate(routine.id)}
-                  className="bg-yellow-400 px-2 py-1 rounded"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleDelete(routine.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => handleFetchById(routine.id)}
-                  className="bg-green-500 text-white px-2 py-1 rounded"
-                >
-                  View
-                </button>
-              </div>} */}
-            </li>
-          ))}
-        </ul>
+  {routines.map((routine) => {
+    const { timeline, cleanedDetails } = extractTimeline(routine.subtask_template_description);
+
+    const getParts = (desc) => {
+      const match = desc.split("**Timeline:**");
+      return {
+        text: match[0]?.trim(),
+        timeline: match[1]?.trim() || "",
+      };
+    };
+
+    const { text } = getParts(cleanedDetails);
+
+
+    return (
+      <li
+        key={routine.id}
+        className="flex md:w-1/3 w-full justify-between items-center p-3"
+      >
+        <div
+          className="p-5 rounded-xl shadow-md flex flex-col justify-between"
+          style={{
+            backgroundColor: colors.primary[500],
+            color: colors.primary[100],
+          }}
+        >
+          <div className="py-4">
+            <h3 className="text-lg font-semibold">
+              {routine.subtask_template_title}
+            </h3>
+            <p className="text-sm mt-2 opacity-90">
+              {text} 
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              handleFetchById(routine.id);
+              setOpenRoutine(true);
+            }}
+            className="rounded-lg mt-4 p-2 border transition-all duration-300 cursor-pointer"
+            style={{
+              borderColor: colors.background.paper,
+              color: colors.background.default,
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.color = colors.background.paper;
+              e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.color = colors.background.default;
+              e.target.style.boxShadow = "none";
+            }}
+            onMouseDown={(e) => {
+              e.target.style.boxShadow = `0 0 20px ${colors.background.default}`;
+              e.target.style.transform = "scale(0.98)";
+            }}
+            onMouseUp={(e) => {
+              e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
+              e.target.style.transform = "scale(1)";
+            }}
+          >
+            View
+          </button>
+        </div>
+      </li>
+    );
+  })}
+</ul>
+
       )}
 
      

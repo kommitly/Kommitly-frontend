@@ -520,12 +520,12 @@ const handleReschedule = () => {
                         fontWeight="bold" 
                         
                         >CALENDAR</Typography>
-                        <Button variant="contained">
+                        <Button variant="contained" onClick={() => navigate("/dashboard/schedule")}>
                           View Routines
                         </Button>
                     
                 </div>
-            <div className="flex flex-col-reverse md:flex-row justify-between gap-4">
+            <div className="flex flex-col md:flex-row justify-between gap-4">
                
                   <Backdrop
                         sx={(theme) => ({ color: colors.menu.primary, zIndex: theme.zIndex.drawer + 1 })}

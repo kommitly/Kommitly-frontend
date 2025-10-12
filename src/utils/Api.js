@@ -924,6 +924,44 @@ const markDailyActivityComplete = async (activityId, completed = true) => {
 
 
 
+const fetchTemplatesSuggestions = async () => {
+  const url = "https://kommitly-backend.onrender.com/api/daily-templates/suggestions/";
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching daily template suggestions:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+const saveTemplateSuggestion = async (templateData ) => {
+  const url = "https://kommitly-backend.onrender.com/api/daily-templates/save-suggestion/";
+  try {
+    const token = getToken();
+    const response = await axios.post(url, templateData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error triggering AI subtask reminder:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+
+
+
 
 export { 
   generateInsights,
@@ -974,12 +1012,9 @@ export {
   updateActivitiesById,
   deleteTemplatesById,
   deleteActivitiesById,
-  markDailyActivityComplete
-
-
-
-
-
+  markDailyActivityComplete,
+  fetchTemplatesSuggestions,
+  saveTemplateSuggestion
 
 
 };

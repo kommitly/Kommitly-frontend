@@ -1,15 +1,18 @@
-import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
 import {
   fetchDailyTemplates,
   fetchDailyActivities,
   createDailyActivities,
   updateActivitiesById,
   deleteActivitiesById,
-  markDailyActivityComplete
+  markDailyActivityComplete,
+  deleteTemplatesById,
+  saveTemplateSuggestion
 } from "../../../utils/Api"; 
+import Modal from '@mui/material/Modal';
 import ActivityForm from "./ActivityForm";
-import { useTheme, Backdrop } from "@mui/material";
+import { useTheme, Backdrop, Box, Button } from "@mui/material";
 import { tokens } from "../../../theme";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -18,27 +21,64 @@ import { motion } from "framer-motion";
 export default function DailyTemplateDetail() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { templateId } = useParams();
-  const [template, setTemplate] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation(); // 👈 move this up before using it
+  const { templateId, templateName } = useParams();
+  const menuRef = useRef(null);
+  const { isSuggested, template: suggestedTemplate } = location.state || {};
+  const [template, setTemplate] = useState(suggestedTemplate || null);
   const [activities, setActivities] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  
+  
+
 
   useEffect(() => {
+  if (isSuggested && suggestedTemplate) {
+    // If it's a suggested template, use data from location.state
+    setTemplate(suggestedTemplate);
+    setActivities(suggestedTemplate.activities || []);
+  } else if (templateId) {
+    // If it's a saved template, fetch it by ID
     const loadTemplate = async () => {
       const data = await fetchDailyTemplates();
       const found = data.find((t) => t.id === parseInt(templateId));
-      setTemplate(found);
+      if (found) {
+        setTemplate(found);
+        setActivities(found.activities || []);
+      }
     };
     loadTemplate();
-  }, [templateId]);
+  }
+}, [templateId, isSuggested, suggestedTemplate]);
+
 
   useEffect(() => {
-    if (template) loadActivities();
-  }, [template]);
+  if (template && !isSuggested) {
+    loadActivities();
+  }
+}, [template, isSuggested]);
+
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuVisible(false);
+    }
+  };
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, []);
 
   const loadActivities = async () => {
     const data = await fetchDailyActivities();
     setActivities(data.filter((a) => a.template === template.id));
+  };
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
   };
 
   const addActivity = async (activityData) => {
@@ -61,9 +101,35 @@ export default function DailyTemplateDetail() {
     setActivities(activities.filter((a) => a.id !== id));
   };
 
+ const handleDeleteTemplate = async (templateId) => {
+  try {
+    await deleteTemplatesById(templateId);
+    setDeleteOpen(false);  // close modal
+    navigate("/dashboard/templates");  // go back to list page
+  } catch (error) {
+    console.error("Failed to delete template:", error);
+  }
+};
+
+const handleSaveSuggestedTemplate = async (templateData) => {
+  try {
+    const savedTemplate = await saveTemplateSuggestion({
+      name: templateData.name,
+      description: templateData.description,
+      activities: templateData.activities,
+    });
+    navigate(`/dashboard/templates/${savedTemplate.id}`);
+  } catch (error) {
+    console.error("Failed to save suggested template:", error);
+  }
+};
+
+
   return (
     <div className=" p-4 ">
-      <h2 className="text-xl font-medium md:mb-8 mb-4 space-x-2">
+      <div className="w-full flex justify-between">
+     <div className=" w-full md:mb-8 mb-4  flex justify-between">
+         <h2 className="text-xl font-medium space-x-2">
         <span>
           Activities for
         </span>
@@ -73,6 +139,89 @@ export default function DailyTemplateDetail() {
         </span>
          
       </h2>
+        {isSuggested && (
+  <button
+    onClick={() => handleSaveSuggestedTemplate(template)}
+    className="rounded-md gap-2 justify-center items-center flex  px-2 py-1  transition-all duration-300 cursor-pointer"
+    style={{
+      backgroundColor: colors.primary[500],
+      color: colors.background.default,
+    }}
+    onMouseEnter={(e) => {
+      e.target.style.color = colors.background.paper;
+      e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.color = colors.background.default;
+      e.target.style.boxShadow = "none";
+    }}
+  >
+     <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="16"
+                                          height="16"
+                                          viewBox="0 0 24 24"
+                                          fill="#6246AC"
+                                          stroke="#FFFFFF"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        className="hidden md:block"
+                                          style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
+                                        >
+                                          <line x1="12" y1="5" x2="12" y2="19" />
+                                          <line x1="5" y1="12" x2="19" y2="12" />
+                                        </svg>
+    Save Template
+  </button>
+)}
+     </div>
+    
+
+      {!isSuggested && (
+      <div className="relative"  ref={menuRef}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#65558F"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="cursor-pointer"
+                onClick={toggleMenu}
+              >
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+               {menuVisible && (
+                  <div className="absolute right-0 mt-2 w-48  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.menu.primary }}>
+                    {/* {<button 
+                      onClick={() => {
+                        setIsRenaming(true);
+                        setTimeout(() => inputRef.current?.focus(), 0); // Ensure focus on input
+                      }} 
+                      className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20" style={{ color: colors.text.primary }}
+                    >
+                      Rename goal
+                    </button>} */}
+                    <button onClick={() => setDeleteOpen(true)} className='block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20' style={{ color: colors.background.warning }}>
+                      Delete
+                    </button>
+                  
+
+                   
+                  </div>
+                )}
+              </div>
+                )}
+      </div>
+    
+    
+
        {/* Add Activity Button (mobile) */}
       <div className="w-full flex justify-end">
         <button
@@ -83,6 +232,21 @@ export default function DailyTemplateDetail() {
         + Add Activity
       </button>
       </div>
+
+       <Modal open={deleteOpen} onClose={() => setDeleteOpen(false)}>
+                        <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6  rounded-xl w-96' sx={{backgroundColor: colors.menu.primary}}>
+                          <h2 className="text-xl font-semibold mb-4">Delete Template</h2>
+                          <p>Are you sure you want to delete this template?</p>
+
+                          <div className="flex justify-end gap-4 mt-4">
+                            <Button onClick={() => setDeleteOpen(false)} variant="outlined">Cancel</Button>
+                            <Button onClick={() => handleDeleteTemplate(templateId)} variant="contained" sx={{backgroundColor: colors.background.warning}}>
+                                Delete
+                          </Button>
+
+                          </div>
+                        </Box>
+                      </Modal>
 
       <div className="grid grid-cols-12 gap-8">
 
