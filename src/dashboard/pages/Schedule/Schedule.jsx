@@ -141,16 +141,46 @@ const handleChange = (field, value) => {
   };
 
   
-
- const handleCreate = async (e) => {
+const handleCreate = async (e) => {
   e.preventDefault();
 
   try {
+    let title = newRoutine.title?.trim() || null;
+    let description = newRoutine.description?.trim() || null;
+
+    if (type === "ai_subtask" && selected) {
+      const selectedSubtask = recommendations
+        .map(r => r.subtask)
+        .find(st => st.id === Number(selected));
+
+      if (selectedSubtask) {
+        title = selectedSubtask.title || title;
+        description = selectedSubtask.description || description;
+      }
+    }
+
     const payload = {
-      ...newRoutine,
-      linked_task: type === "task" ? selected?.id || selected || null : null,
-      linked_ai_subtask: type === "ai_subtask" ? selected?.id || selected || null : null,
+      subtask_template_title: title,
+      subtask_template_description: description,
+      start_date: newRoutine.start_date,
+      end_date: newRoutine.end_date || null,
+      frequency: newRoutine.frequency,
+      custom_interval: newRoutine.custom_interval || null,
+      custom_unit: newRoutine.custom_unit || null,
+      reminder_time: newRoutine.reminder_time || null,
+      time_of_day: newRoutine.time_of_day || null,
+      // 👇 send as arrays because backend expects lists
+      tasks: type === "task" && selected ? [selected] : [],
+      ai_subtasks: type === "ai_subtask" && selected ? [selected] : [],
+      subtasks: [],
+      name: "Daily Routine",
+      is_active: true,
     };
+
+    console.log("SELECTED VALUE:", selected);
+    console.log("TYPE:", type);
+
+    console.log("FINAL PAYLOAD:", payload);
 
     const routine = await createRoutine(payload);
 
@@ -165,7 +195,7 @@ const handleChange = (field, value) => {
       },
     ]);
 
-    // reset form
+    // Reset form
     setNewRoutine({
       title: "",
       description: "",
@@ -185,8 +215,6 @@ const handleChange = (field, value) => {
     console.error("Failed to create routine:", err);
   }
 };
-
-
 
 
 
@@ -234,17 +262,17 @@ const handleChange = (field, value) => {
             >
               <div className="md:w-8/12 w-11/12 ml-18  p-6 rounded-lg shadow-lg text-center" onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
             
-                  
-                  {/* Create Form */}
-      <form onSubmit={handleCreate} className="  gap-2">
-        <div className="w-full flex gap-4 items-center justify-between ">
-                   <div className="w-full text-black -mt-4">
+                    <div className="w-full text-black -mt-4">
                      <SlidingButton2
       options={["Add new task", "Add from collection"]}
       selected={selectedOption}
       onChange={setSelectedOption}
     />
                    </div>
+                  {/* Create Form */}
+      <form onSubmit={handleCreate} className="  gap-2">
+        <div className="w-full flex gap-4 items-center justify-between ">
+                 
                
         </div>
           <div className="w-full flex justify-center mb-6">
