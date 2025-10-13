@@ -57,8 +57,18 @@ const Schedule = () => {
   const [formData, setFormData] = useState(selectedRoutine || {});
   const [type, setType] = useState("task"); // "task" | "ai_subtask" | "new"
   const [options, setOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("Add from collection");
-  const [newRoutine, setNewRoutine] = useState({ title: "", description: "" });
+  const [selectedOption, setSelectedOption] = useState("Add new task");
+  const [newRoutine, setNewRoutine] = useState({
+  title: "",
+  description: "",
+  start_date: "",
+  end_date: "",
+  frequency: "",
+  custom_interval: "",
+  custom_unit: "",
+  reminder_time: "",
+  time_of_day: "",
+});
   const { goals } = useContext(GoalsContext);
   const aiGoals = goals.ai_goals || [];
   const [selected, setSelected] = useState("");
@@ -132,27 +142,49 @@ const handleChange = (field, value) => {
 
   
 
-  const handleCreate = async (e) => {
+ const handleCreate = async (e) => {
   e.preventDefault();
 
   try {
     const payload = {
       ...newRoutine,
-      linked_task: type === "task" ? selectedOption : null,
-      linked_ai_subtask: type === "ai_subtask" ? selectedOption : null,
+      linked_task: type === "task" ? selected?.id || selected || null : null,
+      linked_ai_subtask: type === "ai_subtask" ? selected?.id || selected || null : null,
     };
-    const routine = await createRoutine(payload);
-    setRoutines((prev) => [...prev, routine]);
-    setNewRoutine({ title: "", description: "" });
-    setType("new");
-    setSelectedOption(null);
-    setOpen(false);
 
+    const routine = await createRoutine(payload);
+
+    setRoutines((prev) => [
+      ...prev,
+      {
+        ...routine,
+        linked_task_name:
+          type === "task" ? selected?.title || selected?.name || "" : null,
+        linked_ai_subtask_name:
+          type === "ai_subtask" ? selected?.title || selected?.name || "" : null,
+      },
+    ]);
+
+    // reset form
+    setNewRoutine({
+      title: "",
+      description: "",
+      start_date: "",
+      end_date: "",
+      frequency: "",
+      custom_interval: "",
+      custom_unit: "",
+      reminder_time: "",
+      time_of_day: "",
+    });
+    setSelectedOption("Add new task");
+    setType("task");
+    setSelected("");
+    setOpen(false);
   } catch (err) {
     console.error("Failed to create routine:", err);
   }
 };
-
 
 
 
@@ -200,35 +232,20 @@ const handleChange = (field, value) => {
               open={open}
               onClick={handleClose}
             >
-              <div className="md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center" onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
+              <div className="md:w-8/12 w-11/12 ml-18  p-6 rounded-lg shadow-lg text-center" onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
             
                   
                   {/* Create Form */}
       <form onSubmit={handleCreate} className="  gap-2">
         <div className="w-full flex gap-4 items-center justify-between ">
-                   <div className="w-full -mt-4">
+                   <div className="w-full text-black -mt-4">
                      <SlidingButton2
-      options={["Add from collection", "Add new task"]}
+      options={["Add new task", "Add from collection"]}
       selected={selectedOption}
       onChange={setSelectedOption}
     />
                    </div>
-                 <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke={colors.text.primary}
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="cursor-pointer"
-              onClick={handleClose} 
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>  
+               
         </div>
           <div className="w-full flex justify-center mb-6">
    
@@ -245,72 +262,347 @@ const handleChange = (field, value) => {
          
        {selectedOption === "Add new task" ? (
     <>
-      <TextField
-        fullWidth
-        label="Title"
-        name="title"
-        value={newRoutine.title}
-        onChange={(e) => setNewRoutine((prev) => ({ ...prev, title: e.target.value }))}
-        required
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="Description"
-        name="description"
-        value={newRoutine.description}
-        onChange={(e) => setNewRoutine((prev) => ({ ...prev, description: e.target.value }))}
-        margin="normal"
-      />
+      <div className="mb-2 gap-4   flex  w-full items-start justify-start  mt-4">
+    <div className="flex flex-col pr-8 border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
+      <label className="block mb-2 text-black">Task Title</label>
+    <input
+      value={newRoutine.title}
+      onChange={(e) => setNewRoutine((prev) => ({ ...prev, title: e.target.value }))}
+      placeholder="Enter new task title..."
+      className="w-full border text-black border-black rounded px-2 py-1"
+      style={{borderColor: "#767676"}}
+    />
+      <label className="block text-black mb-2 mt-4">Description</label>
+    <textarea
+      value={newRoutine.description}
+      onChange={(e) => setNewRoutine((prev) => ({ ...prev, description: e.target.value }))}
+      placeholder="Enter task description..."
+      className="w-full border text-black rounded px-2 py-1"
+      style={{borderColor: "#767676"}}
+    />
+    <div className="w-full gap-4 flex">
+       {/* Start Date */}
+            <div className="w-full flex flex-col justify-start items-start">
+              <label className="block text-black mb-2 mt-4">Start Date</label>
+            <input
+              type="date"
+              value={newRoutine.start_date}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  start_date: e.target.value,
+                }))
+              }
+              className="w-full border text-black rounded  py-1"
+              style={{borderColor: "#767676"}}
+            />
+            </div>
+             {/* End Date */}
+           <div className="w-full flex flex-col justify-start items-start">
+             <label className="block text-black mb-2 mt-4">End Date</label>
+            <input
+              type="date"
+              value={newRoutine.end_date}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  end_date: e.target.value,
+                }))
+              }
+              className="w-full text-black border rounded  py-1"
+              style={{borderColor: "#767676"}}
+            />
+           </div>
+    </div>
+    </div>
+      <div className="flex flex-col  ml-4 w-full items-start justify-start">
+
+             {/* Frequency */}
+          <div className="w-full flex flex-col justift-start items-start ">
+              <label className="block text-black mb-2">Frequency</label>
+            <select
+              value={newRoutine.frequency}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  frequency: e.target.value,
+                }))
+              }
+              className="w-full text-black border rounded px-2"
+              style={{borderColor: "#767676"}}
+            >
+              <option value="">Select frequency</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="custom">Custom</option>
+            </select>
+
+          </div>
+            {/* Custom Interval (only show if frequency === custom) */}
+            {newRoutine.frequency === "custom" && (
+              <div className="flex gap-2 mt-2 w-full">
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Every..."
+                  value={newRoutine.custom_interval || ""}
+                  onChange={(e) =>
+                    setNewRoutine((prev) => ({
+                      ...prev,
+                      custom_interval: e.target.value,
+                    }))
+                  }
+                  className="w-1/2 text-black border border-black rounded px-2 py-1"
+                  style={{borderColor: "#767676"}}
+                />
+                <select
+                  value={newRoutine.custom_unit || ""}
+                  onChange={(e) =>
+                    setNewRoutine((prev) => ({
+                      ...prev,
+                      custom_unit: e.target.value,
+                    }))
+                  }
+                  className="w-1/2 text-black border rounded px-2 py-1"
+                  style={{borderColor: "#767676"}}
+                >
+                  <option value="">Select unit</option>
+                  <option value="days">Days</option>
+                  <option value="weeks">Weeks</option>
+                  <option value="months">Months</option>
+                </select>
+              </div>
+            )}
+
+            {/* Reminder Time */}
+            <label className="block text-black mb-2 mt-4">Reminder Time</label>
+            <input
+              type="time"
+              value={newRoutine.reminder_time}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  reminder_time: e.target.value,
+                }))
+              }
+              className="w-full text-black border rounded px-2 py-1"
+              style={{borderColor: "#767676"}}
+            />
+             {/* Time of Day (optional) */}
+            <label className="block text-black mb-2 mt-4">Time of Day (Optional)</label>
+            <input
+              type="time"
+              value={newRoutine.time_of_day || ""}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  time_of_day: e.target.value,
+                }))
+              }
+              className="w-full text-black border rounded px-2 py-1"
+              style={{borderColor: "#767676"}}
+            />
+
+</div>
+    </div>
+     
     </>
   ) : (
     <>
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="routine-type-label">Link Routine To</InputLabel>
-        <Select
-          labelId="routine-type-label"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
-          <MenuItem value="task">Task</MenuItem>
-          <MenuItem value="ai_subtask">AI Subtask</MenuItem>
-        </Select>
-      </FormControl>
+    <div className=" mb-2 gap-4   flex  w-full items-start justify-start  mt-4">
+      <div className="flex flex-col pr-8 border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
+      <div className="text-black flex flex-col  w-full items-start justify-start">
 
-      <div className="mt-4">
-        <label className="block mb-2 text-black capitalize">Select {type}</label>
+        <label className="block mb-2">Link Type</label>
+      <select
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        className="w-full border mb-4 rounded px-2 py-1"
+      >
+        <option value="task">Task</option>
+        <option value="ai_subtask">AI Subtask</option>
+      </select>
+    </div>
+
+    <div className="flex flex-col w-full justify-start items-start mb-2 text-black">
+      <label className="block mb-2 capitalize">Select {type}</label>
+      <select
+        value={selected}
+        onChange={(e) => setSelected(e.target.value)}
+        className="w-full border mb-4 rounded px-2 py-1"
+      >
+        <option value="">None</option>
+        {type === "ai_subtask"
+          ? recommendations.map((r) => (
+              <option key={r.subtask.id} value={r.subtask.id}>
+                {r.goalTitle} → {r.taskTitle} → {r.subtask.title}
+              </option>
+            ))
+          : options.map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.title}
+              </option>
+            ))}
+      </select>
+    </div>
+
+    <div className="w-full gap-4 flex">
+       {/* Start Date */}
+            <div className="w-full flex flex-col justify-start items-start">
+              <label className="block text-black mb-2 ">Start Date</label>
+            <input
+              type="date"
+              value={newRoutine.start_date}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  start_date: e.target.value,
+                }))
+              }
+              className="w-full border text-black rounded  py-1"
+              style={{borderColor: "#767676"}}
+            />
+            </div>
+             {/* End Date */}
+           <div className="w-full flex flex-col justify-start items-start">
+             <label className="block text-black mb-2">End Date</label>
+            <input
+              type="date"
+              value={newRoutine.end_date}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  end_date: e.target.value,
+                }))
+              }
+              className="w-full text-black border rounded  py-1"
+              style={{borderColor: "#767676"}}
+            />
+           </div>
+           </div>
+
+      </div>
+
+
+
+
+     <div className="flex flex-col  ml-4 w-full items-start justify-start">
+
+             {/* Frequency */}
+          <div className="w-full flex flex-col justift-start items-start ">
+              <label className="block text-black mb-2">Frequency</label>
             <select
-              value={selected}
-              onChange={(e) => setSelected(e.target.value)}
-              className="w-full border text-black rounded px-2 py-1"
+              value={newRoutine.frequency}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  frequency: e.target.value,
+                }))
+              }
+              className="w-full text-black border rounded px-2"
+              style={{borderColor: "#767676"}}
             >
-              <option value="">None</option>
-              {type === "ai_subtask"
-                ? recommendations.map((r) => (
-                  <option key={r.subtask.id} value={r.subtask.id}>
-                    {r.goalTitle} → {r.taskTitle} → {r.subtask.title}
-                  </option>
-                ))
-                : options.map((opt) => (
-                  <option key={opt.id} value={opt.id}>
-                    {opt.title}
-                  </option>
-                ))}
+              <option value="">Select frequency</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="custom">Custom</option>
             </select>
+
           </div>
-      
-    </>
+            {/* Custom Interval (only show if frequency === custom) */}
+            {newRoutine.frequency === "custom" && (
+              <div className="flex gap-2 mt-2 w-full">
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Every..."
+                  value={newRoutine.custom_interval || ""}
+                  onChange={(e) =>
+                    setNewRoutine((prev) => ({
+                      ...prev,
+                      custom_interval: e.target.value,
+                    }))
+                  }
+                  className="w-1/2 text-black border border-black rounded px-2 py-1"
+                  style={{borderColor: "#767676"}}
+                />
+                <select
+                  value={newRoutine.custom_unit || ""}
+                  onChange={(e) =>
+                    setNewRoutine((prev) => ({
+                      ...prev,
+                      custom_unit: e.target.value,
+                    }))
+                  }
+                  className="w-1/2 text-black border rounded px-2 py-1"
+                  style={{borderColor: "#767676"}}
+                >
+                  <option value="">Select unit</option>
+                  <option value="days">Days</option>
+                  <option value="weeks">Weeks</option>
+                  <option value="months">Months</option>
+                </select>
+              </div>
+            )}
+
+            {/* Reminder Time */}
+            <label className="block text-black mb-2 mt-4">Reminder Time</label>
+            <input
+              type="time"
+              value={newRoutine.reminder_time}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  reminder_time: e.target.value,
+                }))
+              }
+              className="w-full text-black border rounded px-2 py-1"
+              style={{borderColor: "#767676"}}
+            />
+             {/* Time of Day (optional) */}
+            <label className="block text-black mb-2 mt-4">Time of Day (Optional)</label>
+            <input
+              type="time"
+              value={newRoutine.time_of_day || ""}
+              onChange={(e) =>
+                setNewRoutine((prev) => ({
+                  ...prev,
+                  time_of_day: e.target.value,
+                }))
+              }
+              className="w-full text-black border rounded px-2 py-1"
+              style={{borderColor: "#767676"}}
+            />
+
+</div>
+
+
+
+
+      </div>
+  </>
   )}
 
 
 
-        <button
+       <div className="flex gap-4 mt-8 w-full">
+         <button
           type="submit"
-          className="text-white px-4 py-2 mt-4  text-white rounded-lg"
+          className=" w-1/2 py-1 mt-4  text-white rounded-lg"
           style={{backgroundColor: colors.primary[500]}}
         >
           Add
         </button>
+         <button
+         onClick={handleClose}
+          className=" border w-1/2 py-1 mt-4  rounded-lg"
+          style={{color: colors.primary[500], borderColor: colors.primary[500]}}
+        >
+          Close
+        </button>
+       </div>
       </form>
               
               
