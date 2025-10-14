@@ -46,9 +46,11 @@ export default function DailyTemplateDetail() {
     const loadTemplate = async () => {
       const data = await fetchDailyTemplates();
       const found = data.find((t) => t.id === parseInt(templateId));
+
       if (found) {
+        const today = new Date().toISOString().split("T")[0];
         setTemplate(found);
-        setActivities(found.activities || []);
+        setActivities((found.activities || []).filter(a => a.date === today));
       }
     };
     loadTemplate();
@@ -208,6 +210,24 @@ const handleSaveSuggestedTemplate = async (templateData) => {
                     >
                       Rename goal
                     </button>} */}
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        ml: 2,
+                        borderColor: colors.primary[500],
+                        color: colors.primary[500],
+                        textTransform: "none",
+                        "&:hover": {
+                          backgroundColor: colors.primary[500],
+                          color: colors.background.default,
+                        },
+                      }}
+                      onClick={() => navigate(`/dashboard/templates/${templateId}/history`)}
+                    >
+                      View History
+                    </Button>
+
                     <button onClick={() => setDeleteOpen(true)} className='block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20' style={{ color: colors.background.warning }}>
                       Delete
                     </button>

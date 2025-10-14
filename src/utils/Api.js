@@ -728,9 +728,8 @@ const fetchDailyTemplates = async () => {
   }
 }
 
-
-const fetchDailyActivities = async () => {
-  const url = "https://kommitly-backend.onrender.com/api/daily-activities/";
+const fetchDailyActivities = async (view = "today") => {
+  const url = `https://kommitly-backend.onrender.com/api/daily-activities/?view=${view}`;
   try {
     const token = getToken();
     const response = await axios.get(url, {
@@ -744,7 +743,7 @@ const fetchDailyActivities = async () => {
     console.error("Error fetching Daily Activities:", error.response?.data || error.message);
     throw error;
   }
-}
+};
 
 
 const createDailyTemplates = async (template_data)=> {
