@@ -12,7 +12,7 @@ export default function DailyActivityHistory() {
 
   useEffect(() => {
     const loadHistory = async () => {
-      const data = await fetchDailyActivities("?view=history");
+      const data = await fetchDailyActivities("history");
 
       // Group activities by date
       const filtered = data.filter(a => a.template === parseInt(templateId));
