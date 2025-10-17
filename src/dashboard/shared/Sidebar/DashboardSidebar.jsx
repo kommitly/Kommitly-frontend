@@ -258,7 +258,7 @@ sx={{
       transition: 'left 0.3s ease-in-out, width 0.3s ease-in-out',
       width: isCollapsed
       ? (isXs ? "0px" : isSm ? "80px" : isMd ? "70px" : isLg ? "80px" : isXl ? "120px" : "80px")
-      : (isXs ? "220px" : isSm ? "158px" : isMd ? "215px" : isLg ? "230px" : isXl ? "320px" : isXxl ? "200px" : "280px"),
+      : (isXs ? "220px" : isSm ? "220px" : isMd ? "215px" : isLg ? "230px" : isXl ? "320px" : isXxl ? "200px" : "280px"),
       overflow: 'hidden',
       margin: '8px',
       boxShadow: isCollapsed

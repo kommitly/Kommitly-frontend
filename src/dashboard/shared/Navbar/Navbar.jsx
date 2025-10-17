@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Box, Button, IconButton, Typography, useTheme, Menu, MenuItem, TextField } from "@mui/material";
 import  {tokens} from "../../../theme";
 import { fetchAllNotifications } from '../../../utils/Api';
-
+import notificationSound from "/notification.mp3";
 import { AuthContext } from '../../../context/AuthContext';
 import SearchIcon from '@mui/icons-material/Search';
 import { IoSearch } from "react-icons/io5";
@@ -23,6 +23,8 @@ import CheckIcon from '@mui/icons-material/Check';
 
 
 export const Navbar = ({setIsCollapsed, isCollapsed }) => {
+  const audioRef = useRef(null);
+  const prevUnreadCount = useRef(0);
   const [isOpen, setIsOpen] = useState(false);
   const {user, logout} = useContext(AuthContext);
   const theme = useTheme();
@@ -69,7 +71,6 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     setAnchorEl(null); // Close the menu
   };
 
- // console.log("Profile:", user);
 
 
   const quotes = [
@@ -136,6 +137,15 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     }, [])
 
     const unreadCount = notifications.filter(n => !n.is_read).length
+
+     useEffect(() => {
+    // play sound only when unread count increases
+    if (unreadCount > prevUnreadCount.current) {
+      audioRef.current?.play().catch(() => {});
+    }
+
+    prevUnreadCount.current = unreadCount;
+  }, [unreadCount]);
   
 
   const handleLogout = () => {
@@ -195,7 +205,14 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   return (
   <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 xl:left-24' : 'md:left-58 xl:left-62 2xl:left-80 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
 
-      <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: isXs ? 0 : isSm ? 2 : isMd ? 0 : isLg ? 2 : isXl ? 4 : isXxl ? 2 : 2, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
+      <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: {
+      xs: isCollapsed ? 2 : 8,
+      sm: isCollapsed ? 14 : 30,
+      md: isCollapsed ? 0 : 2,
+      lg: isCollapsed ? 2 : 2,
+      xl: isCollapsed ? 0 : 4,
+      xxl: isCollapsed ? 0 : 2,
+    }, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
       {/* Logo */}
       <div className='flex items-center  grid grid-cols-12   w-full ' style={{ paddingRight: isCollapsed ? 0 : isXs ? 0 : isSm ? 0 : isMd ? 0 : isLg ? 0 : isXl ? 0 : isXxl ? 0 : 0 }}>
           <Box className='col-span-5  flex items-center'
@@ -205,7 +222,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
           >
               <IconButton onClick={()=> setIsCollapsed(!isCollapsed)} sx={{alignItems: "center",  color: colors.primary,  display: {
       xs: 'flex',  // show on mobile
-      md: 'none',  // hide on medium and larger screens
+      sm: 'none',  // hide on medium and larger screens
     },}}>
                 <MenuIcon sx={{ fontSize: {
                             xs: "20px",  // extra-small screens
@@ -401,6 +418,8 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
                </div>
              </div>
+
+              <audio ref={audioRef} src={notificationSound} preload="auto" />
                   
                
             
@@ -508,6 +527,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                     </div>
                   )}
                 </div>
+                
 
               
           </Box>

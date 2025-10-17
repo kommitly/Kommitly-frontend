@@ -5,7 +5,8 @@ import {
   fetchRoutineById,
   updateRoutineById,
   deleteRoutineById,
-  fetchTasks
+  fetchTasks,
+  createTask
 
 } from "../../../utils/Api";
 import { GoalsContext } from "../../../context/GoalsContext";
@@ -148,10 +149,22 @@ const handleCreate = async (e) => {
     let title = newRoutine.title?.trim() || null;
     let description = newRoutine.description?.trim() || null;
 
+    // create a brand new Task if user selected "Add new task"
+    let createdTask = null;
+    if (selectedOption === "Add new task" && type === "task") {
+      const newTaskPayload = {
+        
+        title: `✅ ${title}`
+        
+      };
+      createdTask = await createTask(newTaskPayload);
+      console.log("🆕 Created Task:", createdTask);
+    }
+
     if (type === "ai_subtask" && selected) {
       const selectedSubtask = recommendations
-        .map(r => r.subtask)
-        .find(st => st.id === Number(selected));
+        .map((r) => r.subtask)
+        .find((st) => st.id === Number(selected));
 
       if (selectedSubtask) {
         title = selectedSubtask.title || title;
@@ -169,16 +182,18 @@ const handleCreate = async (e) => {
       custom_unit: newRoutine.custom_unit || null,
       reminder_time: newRoutine.reminder_time || null,
       time_of_day: newRoutine.time_of_day || null,
-      // 👇 send as arrays because backend expects lists
-      tasks: type === "task" && selected ? [selected] : [],
-      ai_subtasks: type === "ai_subtask" && selected ? [selected] : [],
+      tasks:
+        type === "task"
+          ? [createdTask?.id || selected]
+          : [],
+      ai_subtasks:
+        type === "ai_subtask" && selected
+          ? [selected]
+          : [],
       subtasks: [],
       name: "Daily Routine",
       is_active: true,
     };
-
-    console.log("SELECTED VALUE:", selected);
-    console.log("TYPE:", type);
 
     console.log("FINAL PAYLOAD:", payload);
 
@@ -188,14 +203,11 @@ const handleCreate = async (e) => {
       ...prev,
       {
         ...routine,
-        linked_task_name:
-          type === "task" ? selected?.title || selected?.name || "" : null,
-        linked_ai_subtask_name:
-          type === "ai_subtask" ? selected?.title || selected?.name || "" : null,
+        linked_task_name: createdTask?.title || title,
+        linked_ai_subtask_name: null,
       },
     ]);
 
-    // Reset form
     setNewRoutine({
       title: "",
       description: "",
@@ -215,6 +227,7 @@ const handleCreate = async (e) => {
     console.error("Failed to create routine:", err);
   }
 };
+
 
 
 
@@ -788,7 +801,10 @@ const handleCreate = async (e) => {
           <Button
             variant="contained"
             startIcon={<DeleteIcon />}
-            onClick={() => handleDeleteRoutine(selectedRoutine.id)}
+            onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(selectedRoutine.id);
+          }}
             sx={{
               backgroundColor: colors.background.warning,
               color: 'white',
@@ -845,15 +861,17 @@ const handleCreate = async (e) => {
       ) : (
         <ul className="space-y-2 md:flex gap-4 w-full">
   {routines.map((routine) => {
-    const { timeline, cleanedDetails } = extractTimeline(routine.subtask_template_description);
-
+    const { timeline, cleanedDetails } = extractTimeline(
+  routine.subtask_template_description || ""
+);
     const getParts = (desc) => {
-      const match = desc.split("**Timeline:**");
-      return {
-        text: match[0]?.trim(),
-        timeline: match[1]?.trim() || "",
+        if (!desc) return { text: "", timeline: "" }; // safety check
+        const match = desc.split("**Timeline:**");
+        return {
+          text: match[0]?.trim(),
+          timeline: match[1]?.trim() || "",
+        };
       };
-    };
 
     const { text } = getParts(cleanedDetails);
 
@@ -864,7 +882,7 @@ const handleCreate = async (e) => {
         className="flex md:w-1/3 w-full justify-between items-center p-3"
       >
         <div
-          className="p-5 rounded-xl shadow-md flex flex-col justify-between"
+          className="p-5 rounded-xl w-full h-full shadow-md flex flex-col justify-between"
           style={{
             backgroundColor: colors.primary[500],
             color: colors.primary[100],

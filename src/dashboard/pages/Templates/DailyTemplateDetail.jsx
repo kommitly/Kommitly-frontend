@@ -13,6 +13,8 @@ import {
 import Modal from '@mui/material/Modal';
 import ActivityForm from "./ActivityForm";
 import { useTheme, Backdrop, Box, Button } from "@mui/material";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import { tokens } from "../../../theme";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -31,6 +33,9 @@ export default function DailyTemplateDetail() {
   const [showForm, setShowForm] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [openAddSnackbar, setOpenAddSnackbar] = useState(false);
+  const [openCompleteSnackbar, setOpenCompleteSnackbar] = useState(false);
+    
 
   
   
@@ -89,6 +94,7 @@ useEffect(() => {
       ...activityData,
     });
     setActivities([...activities, activity]);
+    setOpenAddSnackbar(true);
   };
 
   const toggleActivity = async (activity) => {
@@ -294,7 +300,10 @@ const handleSaveSuggestedTemplate = async (templateData) => {
             <input
               type="checkbox"
               checked={activity.completed}
-              onChange={() => toggleActivity(activity)}
+              onChange={() => {
+              toggleActivity(activity);
+              setOpenCompleteSnackbar(true);
+            }}
             />
             <div className="ml-2">
               <p className={activity.completed ? "line-through text-gray-400" : ""}>
@@ -314,6 +323,30 @@ const handleSaveSuggestedTemplate = async (templateData) => {
             </button>
           )}
         </div>
+
+         <Snackbar
+          open={openAddSnackbar}
+          autoHideDuration={3000}
+          onClose={() => setOpenAddSnackbar(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <MuiAlert onClose={() => setOpenAddSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+            Activity successfully added!
+          </MuiAlert>
+        </Snackbar>
+
+        <Snackbar
+        open={openCompleteSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenCompleteSnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={() => setOpenCompleteSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+          Activity successfully completed!
+        </MuiAlert>
+      </Snackbar>
+
+
 
         {/* SVG Timeline indicator (same style as AI goal page) */}
         <div className="absolute mt-8  md:-left-6 -left-12 top-1/2 transform -translate-y-1/2 flex flex-col items-center overflow-y-auto">

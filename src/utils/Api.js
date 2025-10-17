@@ -581,6 +581,24 @@ const markNotificationAsRead = async (notificationId) => {
   }
 }
 
+const markAllNotificationAsRead = async () => {
+  const url = `https://kommitly-backend.onrender.com/api/notifications/mark-all-read/`;
+  try {
+    const token = getToken();
+    const response = await axios.patch(url, {}, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error marking all notifications as read:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
 const answerAiSubtask = async (subtaskId) => {
   const url = `https://kommitly-backend.onrender.com/api/tasks/ai-subtask/${subtaskId}/answer/`;
   try {
@@ -1013,7 +1031,8 @@ export {
   deleteActivitiesById,
   markDailyActivityComplete,
   fetchTemplatesSuggestions,
-  saveTemplateSuggestion
+  saveTemplateSuggestion,
+  markAllNotificationAsRead
 
 
 };
