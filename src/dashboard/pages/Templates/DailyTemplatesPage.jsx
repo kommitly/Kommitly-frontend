@@ -110,7 +110,7 @@ const loadSuggestions = async () => {
 
 
   return (
-    <div className="p-6  mx-auto">
+    <div className="p-6    mx-auto">
       <div className="mb-[30px]  w-full justify-between flex">
                               <Typography 
                               variant="h2" 
@@ -235,15 +235,15 @@ const loadSuggestions = async () => {
 
      
       {/* Templates list */}
-      <ul className="grid md:grid-cols-3 space-y-2 flex w-full">
+      <ul className="grid md:grid-cols-3 md:space-y-2 space-y-6 flex w-full">
         {templates.map((t) => (
           <li
             key={t.id}
-            className="flex  w-full justify-between items-center p-3"
+            className="flex  w-full justify-between items-center "
           >
            <div
            
-            className="p-5 rounded-xl w-full h-full shadow-md flex flex-col justify-between"
+            className="p-5 rounded-xl  w-full h-full shadow-md flex flex-col justify-between"
             style={{ backgroundColor: colors.primary[500], color: colors.primary[100] }}
           >
             <div className="py-4">

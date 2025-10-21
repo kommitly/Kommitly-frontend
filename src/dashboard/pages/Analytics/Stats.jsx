@@ -220,7 +220,7 @@ export default function Stats() {
 
 
   return (
-    <div className="p-2 space-y-6 ">
+    <div className="p-6 space-y-6 ">
       <span className="flex items-center space-x-2 mb-4">
           <PiChartBarFill size={24} className="text-[#4F378A]"/>
       <h1 className="md:text-2xl text-xl  font-semibold"> Progress Overview</h1>
@@ -267,9 +267,9 @@ export default function Stats() {
     xAxis={[{ scaleType: "band", dataKey: "name" }]} // ✅ band scale
     series={[{ dataKey: "value", label: "Value" }]} // ✅ tells it which value to plot
     colors={[colors.primary[500]]}
-    width={isSm ? 360: 420}
+    width={isSm ? 350: 420}
     height={400}
-    margin={{left: isSm ? 30 : 30}}
+    margin={{left: isSm ? 28 : 30}}
     borderRadius={6}
     barLabel="value"
     slots={{ barLabel: AnimatedBarLabel }}
@@ -289,7 +289,7 @@ export default function Stats() {
 
           {chartData.length > 0 && (
              <Card className="mt-6  w-full h-full mb-8">
-            <CardContent className=" h-auto p-4">
+            <CardContent className=" h-auto py-4">
              <div className="md:flex md:mb-2 mb-8  w-full justify-between items-center">
                {/* {<h2 className="text-lg font-semibold mb-2">{view} Goal Activity</h2>} */}
                <h2 className="text-lg font-semibold "> Goal Activity</h2>
@@ -315,9 +315,9 @@ export default function Stats() {
     xAxis={[{ scaleType: "band", dataKey: "name" }]} // ✅ band scale
     series={[{ dataKey: "value", label: "Value" }]} // ✅ tells it which value to plot
     colors={[colors.primary[500]]}
-    width={isSm ? 360: 420}
+    width={isSm ? 350: 420}
     height={400}
-    margin={{left: isSm ? 30 : 30}}
+    margin={{left: isSm ? 28 : 30}}
     borderRadius={6}
     barLabel="value"
     slots={{ barLabel: AnimatedBarLabel }}

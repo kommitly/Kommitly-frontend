@@ -259,7 +259,7 @@ const handleChange = (field, value) => {
             >
               <div className="md:w-8/12 w-11/12 h-10/12 md:h-auto md:ml-18  p-6 rounded-lg shadow-lg text-center" onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
             
-                    <div className="w-full text-black -mt-4">
+                    <div className="w-full -mt-4" style={{color: colors.text.primary}}>
                      <SlidingButton2
       options={["Add new task", "Add from collection"]}
       selected={selectedOption}
@@ -284,26 +284,26 @@ const handleChange = (field, value) => {
     <>
      <div className="mb-2 gap-4 h-[50vh] md:h-auto overflow-y-auto flex flex-col md:flex-row w-full items-start justify-start mt-4">
       <div className="flex flex-col md:pr-8 md:border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
-      <label className="block mb-2 text-black">Task Title</label>
+      <label className="block mb-2 " style={{color: colors.text.primary}}>Task Title</label>
     <input
       value={newRoutine.title}
       onChange={(e) => setNewRoutine((prev) => ({ ...prev, title: e.target.value }))}
       placeholder="Enter new task title..."
-      className="w-full border text-black border-black rounded px-2 py-1"
-      style={{borderColor: "#767676"}}
+      className="w-full border   rounded px-2 py-1"
+      style={{borderColor: "#767676", color: colors.text.primary}}
     />
-      <label className="block text-black mb-2 mt-4">Description</label>
+      <label className="block mb-2 mt-4" style={{color: colors.text.primary}}>Description</label>
     <textarea
       value={newRoutine.description}
       onChange={(e) => setNewRoutine((prev) => ({ ...prev, description: e.target.value }))}
       placeholder="Enter task description..."
-      className="w-full border text-black rounded px-2 py-1"
-      style={{borderColor: "#767676"}}
+      className="w-full border  rounded px-2 py-1"
+      style={{borderColor: "#767676", color: colors.text.primary }}
     />
     <div className="w-full gap-4 flex">
        {/* Start Date */}
             <div className="w-full flex flex-col justify-start items-start">
-              <label className="block text-black mb-2 mt-4">Start Date</label>
+              <label className="block mb-2 mt-4" style={{color: colors.text.primary}}>Start Date</label>
             <input
               type="date"
               value={newRoutine.start_date}
@@ -313,13 +313,13 @@ const handleChange = (field, value) => {
                   start_date: e.target.value,
                 }))
               }
-              className="w-full border text-black rounded  py-1"
-              style={{borderColor: "#767676"}}
+              className="w-full border  rounded  py-1"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             />
             </div>
              {/* End Date */}
            <div className="w-full flex flex-col justify-start items-start">
-             <label className="block text-black mb-2 mt-4">End Date</label>
+             <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>End Date</label>
             <input
               type="date"
               value={newRoutine.end_date}
@@ -329,8 +329,8 @@ const handleChange = (field, value) => {
                   end_date: e.target.value,
                 }))
               }
-              className="w-full text-black border rounded  py-1"
-              style={{borderColor: "#767676"}}
+              className="w-full  border rounded  py-1"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             />
            </div>
     </div>
@@ -339,7 +339,7 @@ const handleChange = (field, value) => {
 
              {/* Frequency */}
           <div className="w-full flex flex-col justift-start items-start ">
-              <label className="block text-black mb-2">Frequency</label>
+              <label className="block  mb-2" style={{color: colors.text.primary}}>Frequency</label>
             <select
               value={newRoutine.frequency}
               onChange={(e) =>
@@ -348,8 +348,8 @@ const handleChange = (field, value) => {
                   frequency: e.target.value,
                 }))
               }
-              className="w-full text-black border rounded px-2"
-              style={{borderColor: "#767676"}}
+              className="w-full border rounded px-2"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             >
               <option value="">Select frequency</option>
               <option value="daily">Daily</option>
@@ -373,8 +373,8 @@ const handleChange = (field, value) => {
                       custom_interval: e.target.value,
                     }))
                   }
-                  className="w-1/2 text-black border border-black rounded px-2 py-1"
-                  style={{borderColor: "#767676"}}
+                  className="w-1/2 border border-black rounded px-2 py-1"
+                  style={{borderColor: "#767676", color: colors.text.primary}}
                 />
                 <select
                   value={newRoutine.custom_unit || ""}
@@ -384,8 +384,8 @@ const handleChange = (field, value) => {
                       custom_unit: e.target.value,
                     }))
                   }
-                  className="w-1/2 text-black border rounded px-2 py-1"
-                  style={{borderColor: "#767676"}}
+                  className="w-1/2  border rounded px-2 py-1"
+                  style={{borderColor: "#767676", color: colors.text.primary}}
                 >
                   <option value="">Select unit</option>
                   <option value="days">Days</option>
@@ -396,7 +396,7 @@ const handleChange = (field, value) => {
             )}
 
             {/* Reminder Time */}
-            <label className="block text-black mb-2 mt-4">Reminder Time</label>
+            <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>Reminder Time</label>
             <input
               type="time"
               value={newRoutine.reminder_time}
@@ -406,11 +406,11 @@ const handleChange = (field, value) => {
                   reminder_time: e.target.value,
                 }))
               }
-              className="w-full text-black border rounded px-2 py-1"
-              style={{borderColor: "#767676"}}
+              className="w-full  border rounded px-2 py-1"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             />
              {/* Time of Day (optional) */}
-            <label className="block text-black mb-2 mt-4">Time of Day (Optional)</label>
+            <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>Time of Day (Optional)</label>
             <input
               type="time"
               value={newRoutine.time_of_day || ""}
@@ -420,8 +420,8 @@ const handleChange = (field, value) => {
                   time_of_day: e.target.value,
                 }))
               }
-              className="w-full text-black border rounded px-2 py-1"
-              style={{borderColor: "#767676"}}
+              className="w-full border rounded px-2 py-1"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             />
 
 </div>
@@ -432,9 +432,9 @@ const handleChange = (field, value) => {
     <>
     <div className="mb-2 gap-4 h-[50vh] md:h-auto overflow-y-auto flex flex-col md:flex-row w-full items-start justify-start mt-4">
       <div className="flex flex-col md:pr-8 md:border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
-      <div className="text-black flex flex-col  w-full items-start justify-start">
+      <div className="flex flex-col  w-full items-start justify-start" style={{color: colors.text.primary}}>
 
-        <label className="block mb-2">Link Type</label>
+        <label className="block mb-2" >Link Type</label>
       <select
         value={type}
         onChange={(e) => setType(e.target.value)}
@@ -445,7 +445,7 @@ const handleChange = (field, value) => {
       </select>
     </div>
 
-    <div className="flex flex-col w-full justify-start items-start mb-2 text-black">
+    <div className="flex flex-col w-full justify-start items-start mb-2 " style={{color: colors.text.primary}}>
       <label className="block mb-2 capitalize">Select {type}</label>
       <select
         value={selected}
@@ -470,7 +470,7 @@ const handleChange = (field, value) => {
     <div className="w-full gap-4 flex">
        {/* Start Date */}
             <div className="w-full flex flex-col justify-start items-start">
-              <label className="block text-black mb-2 ">Start Date</label>
+              <label className="block  mb-2 " style={{color: colors.text.primary}}>Start Date</label>
             <input
               type="date"
               value={newRoutine.start_date}
@@ -480,13 +480,13 @@ const handleChange = (field, value) => {
                   start_date: e.target.value,
                 }))
               }
-              className="w-full border text-black rounded  py-1"
-              style={{borderColor: "#767676"}}
+              className="w-full border rounded  py-1"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             />
             </div>
              {/* End Date */}
            <div className="w-full flex flex-col justify-start items-start">
-             <label className="block text-black mb-2">End Date</label>
+             <label className="block  mb-2" style={{color: colors.text.primary}}>End Date</label>
             <input
               type="date"
               value={newRoutine.end_date}
@@ -496,8 +496,8 @@ const handleChange = (field, value) => {
                   end_date: e.target.value,
                 }))
               }
-              className="w-full text-black border rounded  py-1"
-              style={{borderColor: "#767676"}}
+              className="w-full border rounded  py-1"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             />
            </div>
            </div>
@@ -511,7 +511,7 @@ const handleChange = (field, value) => {
 
              {/* Frequency */}
           <div className="w-full flex flex-col justift-start items-start ">
-              <label className="block text-black mb-2">Frequency</label>
+              <label className="block  mb-2" style={{color: colors.text.primary}}>Frequency</label>
             <select
               value={newRoutine.frequency}
               onChange={(e) =>
@@ -520,8 +520,8 @@ const handleChange = (field, value) => {
                   frequency: e.target.value,
                 }))
               }
-              className="w-full text-black border rounded px-2"
-              style={{borderColor: "#767676"}}
+              className="w-full  border rounded px-2"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             >
               <option value="">Select frequency</option>
               <option value="daily">Daily</option>
@@ -545,8 +545,8 @@ const handleChange = (field, value) => {
                       custom_interval: e.target.value,
                     }))
                   }
-                  className="w-1/2 text-black border border-black rounded px-2 py-1"
-                  style={{borderColor: "#767676"}}
+                  className="w-1/2  border border-black rounded px-2 py-1"
+                  style={{borderColor: "#767676", color: colors.text.primary}}
                 />
                 <select
                   value={newRoutine.custom_unit || ""}
@@ -556,8 +556,8 @@ const handleChange = (field, value) => {
                       custom_unit: e.target.value,
                     }))
                   }
-                  className="w-1/2 text-black border rounded px-2 py-1"
-                  style={{borderColor: "#767676"}}
+                  className="w-1/2  border rounded px-2 py-1"
+                  style={{borderColor: "#767676", color: colors.text.primary}}
                 >
                   <option value="">Select unit</option>
                   <option value="days">Days</option>
@@ -568,7 +568,7 @@ const handleChange = (field, value) => {
             )}
 
             {/* Reminder Time */}
-            <label className="block text-black mb-2 mt-4">Reminder Time</label>
+            <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>Reminder Time</label>
             <input
               type="time"
               value={newRoutine.reminder_time}
@@ -578,11 +578,11 @@ const handleChange = (field, value) => {
                   reminder_time: e.target.value,
                 }))
               }
-              className="w-full text-black border rounded px-2 py-1"
-              style={{borderColor: "#767676"}}
+              className="w-full border rounded px-2 py-1"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             />
              {/* Time of Day (optional) */}
-            <label className="block text-black mb-2 mt-4">Time of Day (Optional)</label>
+            <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>Time of Day (Optional)</label>
             <input
               type="time"
               value={newRoutine.time_of_day || ""}
@@ -592,8 +592,8 @@ const handleChange = (field, value) => {
                   time_of_day: e.target.value,
                 }))
               }
-              className="w-full text-black border rounded px-2 py-1"
-              style={{borderColor: "#767676"}}
+              className="w-full  border rounded px-2 py-1"
+              style={{borderColor: "#767676", color: colors.text.primary}}
             />
 
 </div>
@@ -616,9 +616,17 @@ const handleChange = (field, value) => {
           Add
         </button>
          <button
+        
          onClick={handleClose}
           className=" border w-1/2 py-1 mt-4  rounded-lg"
-          style={{color: colors.primary[500], borderColor: colors.primary[500]}}
+          style={{color: colors.primary[500],
+         
+          borderColor: colors.primary[500],  textTransform: "none",
+          "&:hover": {
+            backgroundColor: colors.primary[500],
+            color: colors.background.default,
+          }
+        }}
         >
           Close
         </button>
@@ -807,7 +815,7 @@ const handleChange = (field, value) => {
           
           </Backdrop>
       
-             <div className="mb-[30px]  w-full justify-between flex">
+             <div className=" p-4  w-full justify-between flex">
                         <Typography 
                         variant="h3" 
                         color={colors.text.primary} 

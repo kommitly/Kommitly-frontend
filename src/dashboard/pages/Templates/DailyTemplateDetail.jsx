@@ -217,11 +217,11 @@ const handleSaveSuggestedTemplate = async (templateData) => {
                       Rename goal
                     </button>} */}
                     <Button
-                      variant="outlined"
+                   
                       size="small"
                       sx={{
-                        ml: 2,
-                        borderColor: colors.primary[500],
+                        ml: 1,
+                        
                         color: colors.primary[500],
                         textTransform: "none",
                         "&:hover": {
@@ -249,7 +249,7 @@ const handleSaveSuggestedTemplate = async (templateData) => {
     
 
        {/* Add Activity Button (mobile) */}
-      <div className="w-full flex justify-end">
+      <div className="w-full flex p-2 justify-end">
         <button
         onClick={() => setShowForm(true)}
         className="md:hidden text-white px-3 py-1 rounded"

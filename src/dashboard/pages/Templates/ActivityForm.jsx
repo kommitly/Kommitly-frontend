@@ -189,7 +189,7 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
       <div className="flex p-4  absolute inset-x-0 bottom-4 justify-center w-full  space-x-4">
         <button
           type="submit"
-          className="  w-1/2  cursor-pointer  text-white px-3 py-1 rounded-md"
+          className="  w-1/2 md:w-full  cursor-pointer  text-white px-3 py-1 rounded-md"
           style={{backgroundColor: colors.primary[500]}}
         >
           Save

@@ -52,14 +52,14 @@ export default function DailyActivityHistory() {
                   opacity: a.completed ? 1 : 0.6,
                 }}
               >
-                <span>{a.title}</span>
-                <span
-                  className={`text-sm ${
-                    a.completed ? "text-green-500" : "text-gray-400"
-                  }`}
+                <span>{a.activity_title}</span>
+               <span
+                  className="text-sm"
+                  style={{ color: a.completed ? colors.primary[400] : "#9ca3af" }} // gray-400 hex
                 >
                   {a.completed ? "✔ Done" : "⏳ Pending"}
                 </span>
+
               </div>
             ))}
           </div>
