@@ -207,7 +207,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: {
       xs: isCollapsed ? 2 : 8,
-      sm: isCollapsed ? 14 : 30,
+      sm: isCollapsed ? 2 : 3,
       md: isCollapsed ? 0 : 2,
       lg: isCollapsed ? 2 : 2,
       xl: isCollapsed ? 0 : 4,
@@ -302,7 +302,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
               <Box
               className=" col-span-6 md:col-span-6   flex w-full justify-end  "
               sx={{
-                paddingRight: isXs ? 4: isSm ? 4 : isMd ? 6 : isLg ? 4 : isXl ? 5 : isXxl ? 5 : 4,
+                paddingRight: isXs ? 4: isSm ? 6 : isMd ? 6 : isLg ? 4 : isXl ? 5 : isXxl ? 5 : 4,
               }
               
               }
@@ -438,8 +438,8 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
 
 
-                <Box className='flex col-span-1 md:col-span-1 justify-end items-center xl:space-x-6 md:space-x-6  2xl:space-x-8  space-x-4 xl:pr-6 lg:pr-6 md:pr-4 2xl:pr-8 pr-4'
-                sx={{
+                <div className='flex  col-span-1 md:col-span-1 justify-end items-center xl:space-x-6 md:space-x-6  2xl:space-x-8  space-x-4  xl:pr-6 lg:pr-6 md:pr-4 2xl:pr-8 pr-4'
+                style={{
                   gridColumn: isXs ? 'span 1' : isSm ? 'span 1' : isMd ? 'span 1' : isLg ? 'span 1' : isXl ? 'span 1' : isXxl ? 'span 1' : 'span 1',
                 }}>
                   
@@ -530,7 +530,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                 
 
               
-          </Box>
+          </div>
 
                       
 

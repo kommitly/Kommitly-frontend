@@ -10,7 +10,7 @@ import {
 } from "../../../utils/Api"; // adjust path
 import DailyTemplateDetail from "./DailyTemplateDetail";
 import Backdrop from '@mui/material/Backdrop';
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, IconButton, Typography, useTheme, Divider } from "@mui/material";
 import { tokens } from "../../../theme";
 
 export default function DailyTemplatesPage() {
@@ -20,10 +20,12 @@ export default function DailyTemplatesPage() {
   const [templates, setTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [newTemplate, setNewTemplate] = useState("");
+  const [newDescription, setNewDescription] = useState("");
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
   const navigate = useNavigate();
+
 
   useEffect(() => {
     loadTemplates();
@@ -49,12 +51,26 @@ const loadSuggestions = async () => {
 };
 
   const addTemplate = async () => {
-    if (!newTemplate.trim()) return;
-    const template = await createDailyTemplates({ title: newTemplate });
+    // Only require the name field
+    if (!newTemplate.trim()) {
+        alert("Template name cannot be empty."); // Optional user feedback
+        return;
+    }
+
+    
+    const template_data = { 
+        name: newTemplate.trim(),
+        description: newDescription.trim() // Send the description
+    };
+
+    // 2. Call the API
+    const template = await createDailyTemplates(template_data);
+    
+    // 3. Update local state and clear inputs
     setTemplates([...templates, template]);
     setNewTemplate("");
-  };
-
+    setNewDescription(""); // <-- CLEAR THE NEW DESCRIPTION STATE
+};
   const deleteTemplate = async (id) => {
     await deleteTemplatesById(id);
     setTemplates(templates.filter((t) => t.id !== id));
@@ -136,23 +152,78 @@ const loadSuggestions = async () => {
           onClick={handleClose} // Clicking outside should close it
         >
            <div 
-            className=" md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.menu.primary }} 
+            className=" md:w-4/12 w-11/12 rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.menu.primary }} 
             onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
           >
              {/* Add new template */}
-      <div className="flex space-x-2 mb-6">
+      <div className="flex  flex-col  mb-2">
+         <div className='flex px-6 mt-4  w-full  justify-end'>
+                    <div className='flex  w-full items-center justify-between'>
+                    <h1 className='text-xl font-semibold  flex items-center justify-center gap-2' style={{ color: colors.text.secondary }}>
+                      New Template
+                    </h1>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke={colors.text.primary}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="cursor-pointer"
+                      onClick={handleClose}
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>  
+                    
+        
+        
+        
+                    </div>
+        
+                    </div>
+                    <div className='mt-4'>
+                                      <Divider orientation="horizontal" sx={{ borderColor: "#00000", opacity: 0.8 }} />
+                                    </div>
+                    
+        <div  className="flex px-6  mt-4 flex-col w-full   gap-4">
+            <p className='text-sm text-start  ' style={{color:colors.text.primary}}>Title</p>
         <input
           value={newTemplate}
           onChange={(e) => setNewTemplate(e.target.value)}
           placeholder="New template name..."
           className="flex-1 border rounded px-2 py-1"
         />
-        <button
-          onClick={addTemplate}
-          className="bg-blue-500 text-white px-3 py-1 rounded"
+        </div>
+
+         <div className="flex p-6  flex-col w-full   gap-4">
+        <p className='text-sm text-start  ' style={{color:colors.text.primary}}>Description</p>
+     
+
+
+        <input 
+        value={newDescription}
+        onChange={(e) => setNewDescription(e.target.value)}
+        placeholder="Template description (optional)..."
+        className="flex-1 border rounded px-2 py-1 mb-2" // Added mb-2 for spacing
+      />
+      </div>
+       <div className="w-full mb-8  px-6">
+         <button
+          onClick={() => {
+        // Prevent modal background handler from firing
+        addTemplate();       // Execute the template creation
+        handleClose();
+    }}
+          className="mt-8 w-full py-2 text-white rounded-lg cursor-pointer hover:opacity-70"
+  style={{ backgroundColor: colors.primary[500] }}
         >
-          Add
+          Add Template
         </button>
+       </div>
       </div>
 
 
@@ -164,15 +235,15 @@ const loadSuggestions = async () => {
 
      
       {/* Templates list */}
-      <ul className="space-y-2 w-full">
+      <ul className="grid md:grid-cols-3 space-y-2 flex w-full">
         {templates.map((t) => (
           <li
             key={t.id}
-            className="flex md:w-1/3 w-full justify-between items-center p-3"
+            className="flex  w-full justify-between items-center p-3"
           >
            <div
            
-            className="p-5 rounded-xl shadow-md flex flex-col justify-between"
+            className="p-5 rounded-xl w-full h-full shadow-md flex flex-col justify-between"
             style={{ backgroundColor: colors.primary[500], color: colors.primary[100] }}
           >
             <div className="py-4">
@@ -225,7 +296,7 @@ const loadSuggestions = async () => {
     <Typography variant="h4" color={colors.text.placeholder} fontWeight="light">
       Suggested Templates
     </Typography>
-    <div className="grid md:grid-cols-3 gap-4 mt-4">
+    <div className="grid  md:grid-cols-3 gap-4 mt-4">
       {suggestedTemplates.map((s, index) => (
         <div
           key={index}

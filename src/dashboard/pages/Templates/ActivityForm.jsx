@@ -89,10 +89,10 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
   };
 
   return (
-   <div className="h-screen w-full p-4 md:p-0 max-h-11/12  flex justify-center items-center  md:items-start">
+   <div className="h-screen w-full p-4 md:p-0 max-h-10/12 h-full  flex justify-center items-center  md:items-start">
      <form
       onSubmit={handleSubmit}
-      className="  p-4 md:h-screen w-full h-full max-h-10/12 relative rounded-xl space-y-3"
+      className="  p-4 pb-6 md:h-screen w-full h-9/12 max-h-10/12 relative rounded-xl space-y-3"
       style={{
         color: colors.text.primary,
         backgroundColor: colors.background.paper,
@@ -106,7 +106,7 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
         />
       </div>
 
-     <div className="relative p-4 h-10/12 rounded-xl" style={{backgroundColor: colors.background.default}}>
+     <div className="relative  p-4 md:h-10/12 h-10/12 rounded-xl" style={{backgroundColor: colors.background.default}}>
        <p
         className="w-full mb-1 font-semibold text-lg"
         style={{ color: colors.text.secondary }}
@@ -186,10 +186,10 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
         </div>
       </div>
 
-      <div className="flex absolute inset-x-0 bottom-4 justify-center w-full  space-x-2">
+      <div className="flex p-4  absolute inset-x-0 bottom-4 justify-center w-full  space-x-4">
         <button
           type="submit"
-          className=" md:w-11/12 w-auto cursor-pointer  text-white px-3 py-1 rounded"
+          className="  w-1/2  cursor-pointer  text-white px-3 py-1 rounded-md"
           style={{backgroundColor: colors.primary[500]}}
         >
           Save
@@ -197,7 +197,8 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
         <button
           type="button"
           onClick={onCancel}
-          className="block md:hidden bg-gray-300 px-3 py-1 rounded"
+          className="block  w-1/2   md:hidden border px-3 py-1 rounded-md"
+          style={{borderColor: colors.primary[500], color: colors.text.secondary}}
         >
           Cancel
         </button>

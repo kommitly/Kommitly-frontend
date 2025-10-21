@@ -141,25 +141,13 @@ const handleChange = (field, value) => {
     setOpenRoutine(false);
   };
 
-  
-const handleCreate = async (e) => {
+
+  const handleCreate = async (e) => {
   e.preventDefault();
 
   try {
     let title = newRoutine.title?.trim() || null;
     let description = newRoutine.description?.trim() || null;
-
-    // create a brand new Task if user selected "Add new task"
-    let createdTask = null;
-    if (selectedOption === "Add new task" && type === "task") {
-      const newTaskPayload = {
-        
-        title: `✅ ${title}`
-        
-      };
-      createdTask = await createTask(newTaskPayload);
-      console.log("🆕 Created Task:", createdTask);
-    }
 
     if (type === "ai_subtask" && selected) {
       const selectedSubtask = recommendations
@@ -173,8 +161,8 @@ const handleCreate = async (e) => {
     }
 
     const payload = {
-      subtask_template_title: title,
-      subtask_template_description: description,
+      task_template_title: title,
+      task_template_description: description,
       start_date: newRoutine.start_date,
       end_date: newRoutine.end_date || null,
       frequency: newRoutine.frequency,
@@ -182,10 +170,6 @@ const handleCreate = async (e) => {
       custom_unit: newRoutine.custom_unit || null,
       reminder_time: newRoutine.reminder_time || null,
       time_of_day: newRoutine.time_of_day || null,
-      tasks:
-        type === "task"
-          ? [createdTask?.id || selected]
-          : [],
       ai_subtasks:
         type === "ai_subtask" && selected
           ? [selected]
@@ -196,18 +180,18 @@ const handleCreate = async (e) => {
     };
 
     console.log("FINAL PAYLOAD:", payload);
-
     const routine = await createRoutine(payload);
 
     setRoutines((prev) => [
       ...prev,
       {
         ...routine,
-        linked_task_name: createdTask?.title || title,
+        linked_task_name: title,
         linked_ai_subtask_name: null,
       },
     ]);
 
+    // reset form
     setNewRoutine({
       title: "",
       description: "",
@@ -267,13 +251,13 @@ const handleCreate = async (e) => {
       <div className="w-full h-full overflow-y-auto  ">
         
         
-        <div className=' mt-4  w-full  p-2'>
+        <div className=' mt-4  w-full h-full p-2'>
        <Backdrop
               sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
               open={open}
               onClick={handleClose}
             >
-              <div className="md:w-8/12 w-11/12 ml-18  p-6 rounded-lg shadow-lg text-center" onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
+              <div className="md:w-8/12 w-11/12 h-10/12 md:h-auto md:ml-18  p-6 rounded-lg shadow-lg text-center" onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
             
                     <div className="w-full text-black -mt-4">
                      <SlidingButton2
@@ -284,15 +268,10 @@ const handleCreate = async (e) => {
                    </div>
                   {/* Create Form */}
       <form onSubmit={handleCreate} className="  gap-2">
-        <div className="w-full flex gap-4 items-center justify-between ">
-                 
-               
-        </div>
-          <div className="w-full flex justify-center mb-6">
-   
-  </div>
+      
+          
    <p
-          className="w-full mb-1 font-semibold text-lg"
+          className="w-full mt-4 mb-1 font-semibold text-lg"
           style={{ color: colors.text.secondary }}
         >
           {selectedOption}
@@ -303,8 +282,8 @@ const handleCreate = async (e) => {
          
        {selectedOption === "Add new task" ? (
     <>
-      <div className="mb-2 gap-4   flex  w-full items-start justify-start  mt-4">
-    <div className="flex flex-col pr-8 border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
+     <div className="mb-2 gap-4 h-[50vh] md:h-auto overflow-y-auto flex flex-col md:flex-row w-full items-start justify-start mt-4">
+      <div className="flex flex-col md:pr-8 md:border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
       <label className="block mb-2 text-black">Task Title</label>
     <input
       value={newRoutine.title}
@@ -356,7 +335,7 @@ const handleCreate = async (e) => {
            </div>
     </div>
     </div>
-      <div className="flex flex-col  ml-4 w-full items-start justify-start">
+      <div className="flex flex-col  md:ml-4 w-full items-start justify-start">
 
              {/* Frequency */}
           <div className="w-full flex flex-col justift-start items-start ">
@@ -451,8 +430,8 @@ const handleCreate = async (e) => {
     </>
   ) : (
     <>
-    <div className=" mb-2 gap-4   flex  w-full items-start justify-start  mt-4">
-      <div className="flex flex-col pr-8 border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
+    <div className="mb-2 gap-4 h-[50vh] md:h-auto overflow-y-auto flex flex-col md:flex-row w-full items-start justify-start mt-4">
+      <div className="flex flex-col md:pr-8 md:border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
       <div className="text-black flex flex-col  w-full items-start justify-start">
 
         <label className="block mb-2">Link Type</label>
@@ -528,7 +507,7 @@ const handleCreate = async (e) => {
 
 
 
-     <div className="flex flex-col  ml-4 w-full items-start justify-start">
+     <div className="flex flex-col  md:ml-4 w-full items-start justify-start">
 
              {/* Frequency */}
           <div className="w-full flex flex-col justift-start items-start ">
