@@ -1,34 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // <-- Import useState and useEffect
 import Topbar from './Topbar';
-import Hero from './Hero';
 import Footer from './Footer';
-import hero from '../assets/hero.svg'; // Ensure the path is correct
-import Procrastination from './Procrastination';
+import hero from '../assets/hero.svg';
+import Feature from './Feature';
 import Goalmore from './Goalmore';
 import Partner from './Partner';
 import Graveyard from './Graveyard';
-import Breakdown from './Breakdown';
-import Success from './Success';
-import Hero2 from './Hero2'; // Import Hero2 component
+import HowItWorks from './HowItWorks';
+import Waitlist from './Waitlist';
+import Hero2 from './Hero2';
+import Painpoint from './Painpoint';
 
 const LandingPage = () => {
-  return (
-    <div
-      className=" bg-no-repeat bg-contain bg-center min-h-screen flex flex-col items-center w-full xs:w-full sm:w-full md:w-full lg:w-full xl:w-full 2xl:w-full" 
-      
-    >
-      <Topbar />
-      <Hero2 />
-      <Hero />
-      <Procrastination />
-      <Goalmore />
-      <Partner/>
-      <Graveyard/>
-      <Breakdown/>
-      <Success/>
-      <Footer />
-    </div>
-  );
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrollPosition(window.scrollY);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const clipRadius = Math.min(
+        100 + scrollPosition * 3,
+        3000
+    );
+
+    return (
+        <div
+            className="min-h-screen p-0  flex flex-col items-center w-full"
+            style={{
+                backgroundColor: '#2C1D57', 
+                overflowX: 'hidden'
+            }}
+        >
+            {/* PASS clipRadius TO TOPBAR */}
+            <Topbar clipRadius={clipRadius} /> 
+            
+            <Hero2 clipRadius={clipRadius} bgColor="#FFFFFF" initialColor="#2C1D57"  />
+            
+            {/* ... rest of the components */}
+            <Painpoint/>
+            <Feature />
+            
+          
+            <HowItWorks/>
+            <Waitlist/>
+            <Footer />
+        </div>
+    );
 };
 
 export default LandingPage;
