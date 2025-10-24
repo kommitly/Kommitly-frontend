@@ -235,7 +235,7 @@ const loadSuggestions = async () => {
 
      
       {/* Templates list */}
-      <ul className="grid md:grid-cols-3 md:space-y-2 space-y-6 flex w-full">
+      <ul className="grid md:grid-cols-3 gap-4 md:space-y-2 space-y-6 flex w-full">
         {templates.map((t) => (
           <li
             key={t.id}
