@@ -140,9 +140,18 @@ const Registration = () => {
 
      <div className="flex w-full  h-full  rounded-xl flex-col items-center" style={{ backgroundColor: colors.background.default } }>
        <div className="flex    w-full h-full flex-col items-center relative">
-        <p className="block md:hidden fredoka text-2xl font-semibold"
+        <p className="block md:hidden fredoka flex justify-center items-center gap-2 text-2xl font-semibold"
         style={{ color: colors.text.secondary, fontFamily: "Fredoka, sans-serif", marginTop: "20px" }}
         >
+          <svg width="32" height="54" viewBox="0 0 64 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Note: If the SVG colors are hardcoded, they must be changed 
+             to currentColor or wrapped in a condition to follow the theme. 
+             We'll keep the blue/cyan shades but ensure the text is readable.
+          */}
+          <path d="M31.3536 23.1342C34.3679 23.1342 37.323 24.3064 39.7619 26.4697L58.6992 43.2663C61.2882 45.5627 61.723 49.9273 59.6425 52.7347L47.2048 69.5176L1.9344 25.0352C1.2727 24.385 1.63573 23.1344 2.48617 23.1344L31.3536 23.1342Z" fill=" #10D3F1"/>
+          <path d="M43.4496 73.9714C44.652 72.3814 44.4661 69.8997 43.0416 68.5204L28.0595 54.0145L2.18288 88.8602C1.92488 89.2077 2.14331 89.7605 2.53851 89.7605L12.0044 89.7609L28.486 89.761C30.4094 89.761 32.2284 88.8057 33.4972 87.1284L43.4496 73.9714Z" fill='#20A0E6' stroke='#10D3F1'/>
+        </svg>
+
           Kommitly
         </p>
         

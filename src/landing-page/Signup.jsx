@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import Backdrop from '@mui/material/Backdrop';
 import { tokens } from "../theme";
 import getLocationAndTimezone from "../utils/location";
@@ -13,6 +13,7 @@ import {Formik} from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { use } from "react";
+import Button from "../dashboard/components/Button"
 
 
 const initialValues = {
@@ -142,9 +143,7 @@ const Signup = ({message, setMessage}) => {
               display="grid" 
               gap="30px" 
               gridTemplateColumns="repeat(4,minmax(0,1fr))"
-              sx={{
-                  "& > div": {gridColumn: isNonMobile ? undefined : "span 4" },
-              }}
+              
               >
                   <TextField 
                   fullWidth
@@ -157,7 +156,7 @@ const Signup = ({message, setMessage}) => {
                   name="first_name"
                   error={!!touched.first_name && !!errors.first_name}
                   helperText={touched.first_name && errors.first_name}
-                  sx={{gridColumn: "span 2"}}
+                  sx={{gridColumn:  "span 2" }}
                
 
                   />
@@ -206,10 +205,9 @@ const Signup = ({message, setMessage}) => {
 
 
                     </Box>
-                    <Box display="flex" justifyContent="end" mt="20px" width="100%"  >
-                         <Button type="submit"  sx={{ width: "100%", padding: 1.5, backgroundColor: colors.primary[500], color:"#FFFFFF" }}>
-                            Create New User
-                        </Button>
+                    <Box display="flex" justifyContent="center" mt="40px" width="100%"  >
+                         <Button type="submit" text=" Create New User" className="w-full" />
+                  
                     </Box>
 
                 </form>

@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Button } from "@mui/material";
+import  Button from "../dashboard/components/Button"
 import { Link, useNavigate } from "react-router-dom";
 import { ProfileContext } from "../context/ProfileContext";
 import { TextField } from "@mui/material";
@@ -134,11 +134,10 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
                     Forgot password?</p></Link>
 
                 </div>
-                <Box display="flex" justifyContent="center" mt="20px" width="100%">
-                  <Button type="submit"  sx={{ width: "100%", padding: 1.5, backgroundColor: colors.primary[500], color:"#FFFFFF" }}>
-                   <span > Login</span>
-                  </Button>
-                </Box>
+                <Box display="flex" justifyContent="center" mt="40px" width="100%"  >
+                         <Button type="submit" text=" Login" className="w-full" />
+                  
+                    </Box>
               </form>
               
             )}
