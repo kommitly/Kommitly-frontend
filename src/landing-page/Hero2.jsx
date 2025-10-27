@@ -141,7 +141,7 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
                     <div className="flex gap-4 w-full justify-center items-center">
                         <Link
                             to="/registration?tab=signup"
-                            className="bg-[#6F2DA8] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#4F378A] transition 2xl:text-xl xl:text-base lg:text-base"
+                            className="bg-[#4F378A] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
                         >
                             Get Started
                             <MdOutlineArrowOutward className="inline ml-2" />

@@ -35,7 +35,7 @@ const Feature = () => {
   ];
 
   return (
-    <section className="flex flex-col md:px-6 px-2 py-16">
+    <section className="flex flex-col md:px-6 px-2 py-20">
       <Typography 
         variant="h3" 
         component="h2" 
@@ -51,7 +51,7 @@ const Feature = () => {
       </Typography>
 
       <Box 
-        className="grid p-12 grid-cols-1 md:grid-cols-4 gap-8 md:gap-12"
+        className="grid  md:p-12 p-4 grid-cols-1 md:grid-cols-4 gap-8 md:gap-12"
         
       >
         {features.map((feature, index) => (
@@ -62,7 +62,7 @@ const Feature = () => {
           >
             <Box className="mb-4">{feature.icon}</Box>
             <Typography 
-              variant="h5" 
+              variant="h4" 
               sx={{ 
                 fontWeight: 'bold', 
                 color: colors.background.default,

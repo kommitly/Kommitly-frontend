@@ -12,21 +12,21 @@ const Painpoint = () => {
     const colors = tokens(theme.palette.mode);
    
   return (
-   <section className="bg-white w-full py-16 md:py-24 ">
-        <div className="bg-white w-full py-16 md:py-24  px-4 md:px-8" style={{ backgroundColor: colors.background.default }}>
+   <section className=" w-full py-6 md:py-12 " style={{ backgroundColor: colors.background.paper }}>
+        <div className=" w-full py-6 md:py-10  px-6 md:px-8" >
           <div className="max-w-7xl mx-auto container">
 
             {/* SECTION HEADER */}
             <Typography 
-                variant="h2" 
+                variant="h3" 
                 component="h2" 
                 textAlign="center" 
                 gutterBottom 
                 sx={{ 
-                    fontSize: { xs: '2rem', md: '3rem' }, 
-                    fontWeight: 'medium', 
+                    fontSize: { xs: '1.75rem', md: '2.25rem' },
+                    fontWeight: 'semibold', 
                     color: colors.text.primary,
-                    mb: 12 // Increased margin bottom to separate header from content
+                    mb: {xs: 6, md: 10} // Increased margin bottom to separate header from content
                 }}
             >
                 Before You Commit, Get Clear
@@ -103,7 +103,7 @@ const Painpoint = () => {
                     <Box pt={2}>
                          <Link
                                                     to="/registration?tab=signup"
-                                                    className="bg-[#6F2DA8] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#4F378A] transition 2xl:text-xl xl:text-base lg:text-base"
+                                                    className="bg-[#4F378A]  text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
                                                 >
                                                     Get Started
                                                     <MdOutlineArrowOutward className="inline ml-2" />

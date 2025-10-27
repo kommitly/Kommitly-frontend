@@ -19,24 +19,32 @@ const Waitlist = () => {
 
   return (
     <section
-      className="rounded-t-4xl justify-center items-center pb-8 flex flex-col md:px-6 px-2 w-full"
+      className="rounded-t-4xl justify-center items-center py-18 flex flex-col md:px-6 px-6 w-full"
      
     >
-      <Box
-        sx={{
+      <div
+     
+        
+      >
+       <Box sx={{
           textAlign: "center",
           maxWidth: "600px",
           width: "100%",
-          py: 10,
-        }}
-      >
-        {!submitted ? (
+        
+        }}>
+         {!submitted ? (
           <>
             <Typography
-              variant="h4"
-              fontWeight="bold"
+              variant="h3"
+              component="h2"
+              fontWeight="semibold"
               gutterBottom
-              sx={{ color: colors.background.default }}
+              sx={{ 
+                    fontSize: { xs: '1.75rem', md: '2.25rem' },
+                    fontWeight: 'semibold', 
+                    color: colors.background.default,
+                    mb: {xs: 6, md: 4} // Increased margin bottom to separate header from content
+                }}
             >
               Be the First to Experience Kommitly
             </Typography>
@@ -64,7 +72,7 @@ const Waitlist = () => {
                 }}
               />
               <button
-              className="bg-[#6F2DA8] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#4F378A] transition 2xl:text-xl xl:text-base lg:text-base"
+              className="bg-[#4F378A] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
               >
                 Subscribe
               </button>
@@ -88,7 +96,8 @@ const Waitlist = () => {
             </Typography>
           </Box>
         )}
-      </Box>
+       </Box>
+      </div>
     </section>
   );
 };

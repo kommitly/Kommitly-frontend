@@ -31,7 +31,7 @@ const HowItWorks = () => {
   ]
 
   return (
-    <section className="flex bg-white  flex-col items-center justify-center  md:px-8 px-4 w-full">
+    <section className="flex bg-white  flex-col items-center justify-center  md:p-8 p-4 w-full">
       <div className='p-4 mb-16'>
         <Typography
         variant="h3"
@@ -55,10 +55,10 @@ const HowItWorks = () => {
         {steps.map((step, index) => (
           <Box
             key={index}
-            className="flex flex-col items-center text-center p-6 rounded-2xl shadow-xl"
+            className="flex flex-col items-center text-center p-6 rounded-2xl shadow-md"
             sx={{
               backgroundColor:
-                theme.palette.mode === 'dark' ? colors.menu.primary : "#F5F5F5",
+                theme.palette.mode === 'dark' ? colors.menu.primary : colors.background.paper,
               transition: 'transform 0.3s ease',
               '&:hover': { transform: 'translateY(-5px)' },
             }}
@@ -67,7 +67,7 @@ const HowItWorks = () => {
               sx={{ fontSize: 40, color: colors.primary[500], mb: 2 }}
             />
             <Typography
-              variant="h6"
+              variant="h4"
               sx={{
                 fontWeight: 'bold',
                 color: colors.text.primary,
@@ -77,7 +77,7 @@ const HowItWorks = () => {
               {step.title}
             </Typography>
             <Typography
-              variant="body2"
+              variant="body"
               sx={{
                 color: colors.text.secondary,
                 lineHeight: 1.6,
