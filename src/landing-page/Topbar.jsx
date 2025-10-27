@@ -82,7 +82,7 @@ const Topbar = ({ clipRadius }) => {
       {/* Logo */}
       <Link 
         to="/" 
-        className="text-3xl flex gap-2 justify-center items-center fredoka-semibold font-bold"
+        className="md:text-3xl text-2xl flex gap-2 justify-center items-center fredoka-semibold "
         style={{ color: currentLogoColor }} // Dynamic Logo text color
       >
         {/* SVG color is handled separately or can be set to the logo color */}

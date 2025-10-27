@@ -67,12 +67,12 @@ const Waitlist = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 fullWidth
                 sx={{
-                  input: { color: colors.text.placeholder },
+                  input: { color: colors.menu.primary },
                   fieldset: { borderColor: colors.primary[500] },
                 }}
               />
               <button
-              className="bg-[#4F378A] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
+              className="bg-[#4F378A] text-white px-4 py-2 rounded-sm shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
               >
                 Subscribe
               </button>

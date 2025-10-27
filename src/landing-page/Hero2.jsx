@@ -82,12 +82,12 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
         />
 
         {/* --- FLOATING SVGS --- */}
-    <FloatingIcon icon={Target} size={30} delay={0} top="5%" left="15%" />
-    <FloatingIcon icon={Check} size={25} delay={1.5} top="35%" left="3%" />
-    <FloatingIcon icon={ArrowRight} size={35} delay={3} top="50%" right="2%" className="rotate-45" />
+    <FloatingIcon icon={Target} size={30} delay={0} className="absolute top-[2%] left-[5%] md:top-[5%] md:left-[15%]" />
+    <FloatingIcon icon={Check} size={25} delay={1.5}   className="absolute top-[30%] left-[5%] md:top-[35%] md:left-[3%]" />
+    <FloatingIcon icon={ArrowRight} size={35} delay={3} top="50%" right="2%" className="rotate-320" />
    {/* { <FloatingIcon icon={Star} size={20} delay={0.8} top="35%" right="4%" />} */}
-   <FloatingIcon icon={Bell} size={28} delay={2} top="15%" left="30%" />
-    <FloatingIcon icon={Calendar} size={32} delay={0.5} top="10%" right="5%" />
+   <FloatingIcon icon={Bell} size={28} delay={2} className="absolute top-[16%] left-[15%] md:top-[15%] md:left-[30%]"/>
+    <FloatingIcon icon={Calendar} size={32} delay={0.5} className="absolute top-[1%] right-[5%] md:top-[10%] md:right-[5%]"/>
     <FloatingIcon icon={LineChart} size={35} delay={3.5} top="18%" right="30%" />
 
         {/* CONTENT LAYER: All content goes here */}

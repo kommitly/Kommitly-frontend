@@ -6,6 +6,7 @@ import FlareIcon from '@mui/icons-material/Flare';
 import LightbulbCircleIcon from '@mui/icons-material/LightbulbCircle'; // New icon for 'Idea'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'; // New icon for 'Automation'
 import { MdOutlineArrowOutward } from "react-icons/md";
+import PsychologyIcon from "@mui/icons-material/Psychology";
 
 const Painpoint = () => {
     const theme = useTheme();
@@ -37,10 +38,8 @@ const Painpoint = () => {
                 className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16"
             >
                 {/* 1. THE PROBLEM  */}
-                <Box className="space-y-6 p-6 md:p-8 rounded-xl" sx={{ backgroundColor: colors.menu.primary }}>
-                    <LightbulbCircleIcon 
-                        sx={{ fontSize: 48, color: '#FFB800' }} 
-                    />
+                <Box className="space-y-6 p-6 md:p-8 rounded-xl" sx={{ backgroundColor: colors.background.default }}>
+                    <PsychologyIcon sx={{ fontSize: 48, color: '#FFB800' }} />
                     
                     <Typography 
                         variant="h4" 
@@ -59,7 +58,7 @@ const Painpoint = () => {
                     You don’t lack discipline, just clarity. Endless lists and decisions drain your focus before real progress begins.
                   </Typography>
                     
-                    <ul className="list-disc pl-5 text-sm space-y-2" style={{ color: colors.text.secondary }}>
+                    <ul className="list-disc pl-5 text-base space-y-2" style={{ color: colors.text.secondary }}>
                         <li>Struggle to turn goals into clear, doable steps.</li>
                         <li>Overwhelmed by scattered thoughts and unfinished plans.</li>
                         <li>Each day ends with effort, but not real progress.</li>
@@ -91,7 +90,7 @@ const Painpoint = () => {
                        Kommitly transforms goals into step-by-step actions, giving you a clear plan without the mental overload.
                     </Typography>
 
-                    <ul className="list-disc pl-5 text-sm space-y-2" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
+                    <ul className="list-disc pl-5 text-base space-y-2" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
                          <li>Relief from mental clutter.</li>
                         <li>Clarity and confidence in what to do next.</li>
                         <li>A sense of progress and completion.</li>
