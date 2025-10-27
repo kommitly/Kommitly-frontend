@@ -136,17 +136,18 @@ const handleSaveSuggestedTemplate = async (templateData) => {
   return (
     <div className=" p-4 ">
       <div className="w-full flex justify-between">
-     <div className=" w-full md:mb-8 mb-4  flex justify-between">
+     <div className=" w-full md:mb-8 mb-4  flex flex-col ">
          <h2 className="text-xl font-medium space-x-2">
-        <span>
-          Activities for
-        </span>
+        
 
-        <span className="px-2" style={{backgroundColor: colors.background.paper, color: colors.text.secondary}}>
+        <span className="px-2" style={{ color: colors.text.secondary}}>
         {template?.title || template?.name}
         </span>
          
       </h2>
+
+      <div className="p-2 border-none flex justify-end">
+
         {isSuggested && (
   <button
     onClick={() => handleSaveSuggestedTemplate(template)}
@@ -183,6 +184,7 @@ const handleSaveSuggestedTemplate = async (templateData) => {
     Save Template
   </button>
 )}
+      </div>
      </div>
     
 
@@ -249,15 +251,19 @@ const handleSaveSuggestedTemplate = async (templateData) => {
     
 
        {/* Add Activity Button (mobile) */}
-      <div className="w-full flex p-2 justify-end">
-        <button
-        onClick={() => setShowForm(true)}
-        className="md:hidden text-white px-3 py-1 rounded"
-        style={{ backgroundColor: colors.primary[500] }}
-      >
-        + Add Activity
-      </button>
-      </div>
+      {/* Add Activity Button (mobile) */}
+        {!isSuggested && (
+          <div className="w-full flex p-2 justify-end">
+            <button
+              onClick={() => setShowForm(true)}
+              className="md:hidden text-white px-3 py-1 rounded"
+              style={{ backgroundColor: colors.primary[500] }}
+            >
+              + Add Activity
+            </button>
+          </div>
+        )}
+
 
        <Modal open={deleteOpen} onClose={() => setDeleteOpen(false)}>
                         <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6  rounded-xl w-96' sx={{backgroundColor: colors.menu.primary}}>

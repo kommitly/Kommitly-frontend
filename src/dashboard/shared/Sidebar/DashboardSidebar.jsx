@@ -240,7 +240,7 @@ sx={{
   collapsed={isCollapsed}
   rootStyles={{
     [`.${sidebarClasses.container}`]: {
-      backgroundColor: `#4F378A !important`,
+      backgroundColor: `${colors.background.sidebar} !important`,
       height: isCollapsed ? "98vh" : "98vh",
       borderRadius: isCollapsed ? '12px' : '12px',
       border: 'none',
@@ -276,15 +276,15 @@ sx={{
              <Menu iconShape="square"
             rootStyles={{
               [`.${menuClasses.SubMenu}`]: {
-                backgroundColor: "#4F378A",
+                backgroundColor: `${colors.background.sidebar} `,
               },
               [`.${menuClasses.subMenuContent}`]: {
-                backgroundColor:" #4F378A",
+                backgroundColor:`${colors.background.sidebar} `,
               },
 
               [`.${menuClasses.button}`]: {
                 color: colors.primary[100],
-                backgroundColor: "#4F378A",
+                backgroundColor: `${colors.background.sidebar} `,
                 width: "96%",
                 marginBottom: isCollapsed ? (
                   isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
@@ -364,8 +364,12 @@ sx={{
     setIsCollapsed(newValue);
     console.log("isCollapsed:", newValue);
   }}
-  icon={isCollapsed ?  <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
-                                    <img src={logo} alt="Kommitly Logo" style={{ width: "20px", height: "20px" }} />
+  icon={isCollapsed ?  <div>
+                                    <svg width="32" height="54" viewBox="0 0 64 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+     
+                                            <path d="M31.3536 23.1342C34.3679 23.1342 37.323 24.3064 39.7619 26.4697L58.6992 43.2663C61.2882 45.5627 61.723 49.9273 59.6425 52.7347L47.2048 69.5176L1.9344 25.0352C1.2727 24.385 1.63573 23.1344 2.48617 23.1344L31.3536 23.1342Z" fill='#10D3F1'/>
+                                            <path d="M43.4496 73.9714C44.652 72.3814 44.4661 69.8997 43.0416 68.5204L28.0595 54.0145L2.18288 88.8602C1.92488 89.2077 2.14331 89.7605 2.53851 89.7605L12.0044 89.7609L28.486 89.761C30.4094 89.761 32.2284 88.8057 33.4972 87.1284L43.4496 73.9714Z" fill='#20A0E6' stroke= '#10D3F1'/>
+                                          </svg>
                                   </div> : undefined}
   style={{
     backgroundColor: hover ? "transparent" : "transparent",
@@ -404,8 +408,12 @@ sx={{
                          
                             >
                                 <div style={{display: "flex", alignItems: "center", gap: "10px"}}>
-                                  <div style={{backgroundColor: colors.primary[100], padding: "5px", borderRadius: "24%"}}>
-                                    <img src={logo} alt="Kommitly Logo" className='md:w-4 md:h-4 xl:w-4 xl:h-4 2xl:w-8 2xl:h-8  w-4 h-4' />
+                                  <div >
+                                    <svg width="32" height="54" viewBox="0 0 64 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+     
+                                            <path d="M31.3536 23.1342C34.3679 23.1342 37.323 24.3064 39.7619 26.4697L58.6992 43.2663C61.2882 45.5627 61.723 49.9273 59.6425 52.7347L47.2048 69.5176L1.9344 25.0352C1.2727 24.385 1.63573 23.1344 2.48617 23.1344L31.3536 23.1342Z" fill='#10D3F1'/>
+                                            <path d="M43.4496 73.9714C44.652 72.3814 44.4661 69.8997 43.0416 68.5204L28.0595 54.0145L2.18288 88.8602C1.92488 89.2077 2.14331 89.7605 2.53851 89.7605L12.0044 89.7609L28.486 89.761C30.4094 89.761 32.2284 88.8057 33.4972 87.1284L43.4496 73.9714Z" fill='#20A0E6' stroke= '#10D3F1'/>
+                                          </svg>
                                   </div>
                                   <p className=' 2xl:text-3xl lg:text-xl text-lg ' style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: 500,  }}>
                                     Kommitly
@@ -651,36 +659,48 @@ sx={{
                      
                        
 
-                        <MenuItem 
-                            title="Stats"
-                           
-                            
-                            onClick={() => {
-                                navigate("/dashboard/analytics");
-                                setSelected("Stats");
-                            }}
-                            icon={selected === "Stats" ? <LeaderboardIcon sx={{fontSize:{
-  xs: "1.5rem",
-  sm: "1.5rem",
-  md: "1.5rem",     
-  lg: "1.5rem",
-  xl: "2rem",
-  xxl: "1.5rem",
-  },
- }} /> : <LeaderboardOutlinedIcon sx={{fontSize:{
-  xs: "1.5rem",
-  sm: "1.5rem",   
-  md: "1.5rem",
-  lg: "1.5rem",
-  xl: "2rem",
-  xxl: "1.5rem",
-  },
- }} />}
-                            
-                            active={selected === "Stats"}
-                        >
-                          Stats
-                          </MenuItem>
+                       {(goals?.length > 0 || tasks?.length > 0) && (
+  <MenuItem 
+    title="Stats"
+    onClick={() => {
+      navigate("/dashboard/analytics");
+      setSelected("Stats");
+    }}
+    icon={
+      selected === "Stats" ? (
+        <LeaderboardIcon
+          sx={{
+            fontSize: {
+              xs: "1.5rem",
+              sm: "1.5rem",
+              md: "1.5rem",
+              lg: "1.5rem",
+              xl: "2rem",
+              xxl: "1.5rem",
+            },
+          }}
+        />
+      ) : (
+        <LeaderboardOutlinedIcon
+          sx={{
+            fontSize: {
+              xs: "1.5rem",
+              sm: "1.5rem",
+              md: "1.5rem",
+              lg: "1.5rem",
+              xl: "2rem",
+              xxl: "1.5rem",
+            },
+          }}
+        />
+      )
+    }
+    active={selected === "Stats"}
+  >
+    Stats
+  </MenuItem>
+)}
+
                     
                        
                   

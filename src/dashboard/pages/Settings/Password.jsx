@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Card, CardContent, Typography, TextField, Button } from "@mui/material";
+import { tokens } from "../../../theme";
+import { TextField, useTheme} from "@mui/material";
+import Button from "../../components/Button";
 
 const Password = () => {
+  const theme = useTheme();
+  const colors =tokens(theme.palette.mode);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -12,14 +16,12 @@ const Password = () => {
   };
 
   return (
-    <div className="w-full flex justify-center "  >
-      <Card className="w-10/12  p-6 shadow-lg rounded-2xl">
-        <CardContent className="flex flex-col w-6/12">
-          <Typography variant="h3" className=" font-semibold" sx={{ mb: 4 }}>
-            Update Password
-          </Typography>
-
-          <TextField
+    <div className="w-full flex justify-ce "  >
+      <div className=" w-full  ">
+       
+          <h2 className='text-xl font-semibold mb-4' style={{color: colors.text.primary}}>Update Password</h2>
+          <div className="md:w-1/2 w-full">
+            <TextField
             label="Current Password"
             type="password"
             fullWidth
@@ -48,16 +50,15 @@ const Password = () => {
           />
 
           <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 , width: '50%'}}
+            text=" UPDATE PASSWORD"
+            
             onClick={handleUpdatePassword}
-          >
-            Update Password
-          </Button>
-        </CardContent>
-      </Card>
+          />
+           
+          
+   
+          </div>
+      </div>
     </div>
   );
 };

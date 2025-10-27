@@ -43,22 +43,23 @@ const Profile = () => {
     };
 
     return (
-        <div className='w-full flex justify-center'>  
-            <Card className='mb-6 w-10/12 p-4'>
-                <h2 className='text-xl font-semibold mb-4'>Personal Details</h2>
+        <div className='w-full  flex justify-center'>  
+            <div className='w-full flex flex-col'>
+
+                <h2 className='text-xl font-semibold mb-4'  style={{color: colors.text.primary}}>Personal Details</h2>
                 {profile.user && (
-                    <div className='space-y-4 w-6/12'>
+                    <div className='space-y-4 md:w-6/12 w-full'>
                         <div className='flex space-x-8 pb-2'>
-                            <span className='font-medium w-26'>First Name</span>
-                            <span>{profile.user.first_name}</span>
+                            <span className='font-medium md:w-26 w-20 '  style={{color: colors.text.primary}}>First Name</span>
+                            <span  style={{color: colors.text.primary}}>{profile.user.first_name}</span>
                         </div>
                         <div className='flex space-x-8 pb-2'>
-                            <span className='font-medium w-26'>Last Name</span>
-                            <span>{profile.user.last_name}</span>
+                            <span className='font-medium md:w-26 w-20'  style={{color: colors.text.primary}}>Last Name</span>
+                            <span  style={{color: colors.text.primary}}>{profile.user.last_name}</span>
                         </div>
                         <div className='flex space-x-8'>
-                            <span className='font-medium w-26'>Email</span>
-                            <span>{profile.user.email}</span>
+                            <span className='font-medium md:w-26 w-20'  style={{color: colors.text.primary}}>Email</span>
+                            <span  style={{color: colors.text.primary}}>{profile.user.email}</span>
                         </div>
                     </div>
                 )}
@@ -72,7 +73,8 @@ const Profile = () => {
                         Delete Account
                     </Button>   
                 </div>
-            </Card>
+            </div>
+           
 
             {/* Confirmation Modal */}
             <Modal open={open} onClose={handleClose}>

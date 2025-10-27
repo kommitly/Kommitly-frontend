@@ -244,7 +244,7 @@ const loadSuggestions = async () => {
            <div
            
             className="p-5 rounded-xl  w-full h-full shadow-md flex flex-col justify-between"
-            style={{ backgroundColor: colors.primary[500], color: colors.primary[100] }}
+            style={{ backgroundColor: colors.background.sidebar, color: colors.primary[100] }}
           >
             <div className="py-4">
             <h3 className="text-lg font-semibold">{t.name}</h3>
@@ -255,23 +255,23 @@ const loadSuggestions = async () => {
    onClick={() => navigate(`/dashboard/templates/${t.id}`)}
   className="rounded-lg mt-4 p-2 border transition-all duration-300 cursor-pointer"
   style={{
-    borderColor: colors.background.paper,
-    color: colors.background.default,
+    borderColor: "#D6CFFF",
+    color: "#D6CFFF",
   }}
   onMouseEnter={(e) => {
     e.target.style.color = colors.background.paper;
-    e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
+    e.target.style.boxShadow = "0 0 12px #D6CFFF";
   }}
   onMouseLeave={(e) => {
-    e.target.style.color = colors.background.default;
+    e.target.style.color = "#D6CFFF";
     e.target.style.boxShadow = "none";
   }}
   onMouseDown={(e) => {
-    e.target.style.boxShadow = `0 0 20px ${colors.background.default}`;
+    e.target.style.boxShadow = "0 0 20px #D6CFFF";
     e.target.style.transform = "scale(0.98)";
   }}
   onMouseUp={(e) => {
-    e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
+    e.target.style.boxShadow = "0 0 12px #D6CFFF";
     e.target.style.transform = "scale(1)";
   }}
 >
@@ -302,7 +302,7 @@ const loadSuggestions = async () => {
           key={index}
          
           className="p-5 rounded-xl shadow-md flex flex-col justify-between"
-          style={{ backgroundColor: colors.primary[500], color: colors.primary[100] }}
+          style={{ backgroundColor: colors.background.sidebar, color: colors.primary[100] }}
         >
           <div className="py-4">
             <h3 className="text-lg font-semibold">{s.name}</h3>
@@ -318,23 +318,23 @@ const loadSuggestions = async () => {
 
   className="rounded-lg mt-4 p-2 border transition-all duration-300 cursor-pointer"
   style={{
-    borderColor: colors.background.paper,
-    color: colors.background.default,
+    borderColor: "#D6CFFF",
+    color: "#D6CFFF",
   }}
   onMouseEnter={(e) => {
     e.target.style.color = colors.background.paper;
-    e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
+    e.target.style.boxShadow = "0 0 12px #D6CFFF";
   }}
   onMouseLeave={(e) => {
-    e.target.style.color = colors.background.default;
+    e.target.style.color = "#D6CFFF";
     e.target.style.boxShadow = "none";
   }}
   onMouseDown={(e) => {
-    e.target.style.boxShadow = `0 0 20px ${colors.background.default}`;
+    e.target.style.boxShadow = "0 0 20px #D6CFFF";
     e.target.style.transform = "scale(0.98)";
   }}
   onMouseUp={(e) => {
-    e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
+    e.target.style.boxShadow = "0 0 12px #D6CFFF";
     e.target.style.transform = "scale(1)";
   }}
 >

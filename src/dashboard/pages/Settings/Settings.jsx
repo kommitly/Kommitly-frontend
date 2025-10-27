@@ -62,14 +62,14 @@ const Settings = () => {
     };
 
   return (
-    <div className='w-full p-6 text-black flex flex-col min-h-screen'>
-      <div className="flex  min-h-screen w-full h-full flex-col items-center  relative">
+    <div className='w-full  text-black flex flex-col min-h-screen'>
+      <div className="flex p-4  min-h-screen w-full h-full flex-col items-start   relative">
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs value={value} onChange={handleChange} aria-label="Settings Tabs">
             <Tab label="Profile" {...a11yProps(0)} />
             <Tab label="Password" {...a11yProps(1)} />
-            <Tab label="Subscription" {...a11yProps(2)} />
-            <Tab label="Billing" {...a11yProps(3)} />
+            {/* {<Tab label="Subscription" {...a11yProps(2)} />
+            <Tab label="Billing" {...a11yProps(3)} />} */}
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0} className="w-full ">
@@ -78,12 +78,13 @@ const Settings = () => {
         <CustomTabPanel value={value} index={1} className="w-full">
           <Password />
         </CustomTabPanel>
+         {/* {
         <CustomTabPanel value={value} index={2} className="w-full">
           <Subscription />
         </CustomTabPanel>
-        <CustomTabPanel value={value} index={3} className="w-full">
+       <CustomTabPanel value={value} index={3} className="w-full">
           <Billing />
-        </CustomTabPanel>
+        </CustomTabPanel>} */}
       </div>
     
     
