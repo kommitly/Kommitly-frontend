@@ -98,7 +98,7 @@ const HeroComponent = () => {
   
   return (
    <div 
-  className='w-full h-[90vh] flex p-4 border border-b-0 rounded-xl' 
+  className='w-full h-[80vh] md:h-[90vh] flex p-4 border border-b-0 rounded-xl' 
   style={{
     backgroundColor: colors.background.default, 
     borderColor: colors.background.paper,
@@ -157,7 +157,7 @@ const HeroComponent = () => {
 
          
            
-            <div className="ai-tasks  overflow-visible overflow-y-clip   md:px-6 px-0 md:pr-6 pr-0 w-full  flex flex-col items-center  justify-center  " >
+            <div className="ai-tasks   overflow-visible overflow-y-clip   md:px-6 px-0 md:pr-6 pr-0 w-full  flex flex-col items-center  justify-center  " >
               <div className=" md:w-10/12 w-full  gap-4 pl-0 pb-10 md:pl-3 lg:pl-3 xl:pl-3 2xl:pl-3 md:m-2 m-0">
                 {goal.ai_tasks.map((task, index) => {
                   const isCompleted = taskCompletionStatus[index];

@@ -149,7 +149,7 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
                         
                         <button
                             aria-label="How-it-works"
-                            className="px-4 py-2 cursor-pointer transition 2xl:text-xl xl:text-base lg:text-base sm:text-xs"
+                            className="px-4 py-2 cursor-pointer text-white  hover:!text-[#6D5BA6] transition-colors transition 2xl:text-xl xl:text-base lg:text-base sm:text-xs"
                             // Smoothly transition the button text color from white to the primary purple color
                             style={{
                                 color: `rgb(
