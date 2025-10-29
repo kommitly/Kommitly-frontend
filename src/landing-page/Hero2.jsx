@@ -93,7 +93,7 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
         {/* CONTENT LAYER: All content goes here */}
         <div className="relative  z-10 w-full h-full flex flex-col justify-center items-center">
             <div className="md:w-8/12 w-full flex flex-col justify-center items-center md:mb-8 mb-8">
-                <div className="w-full md:p-8 p-0 flex flex-col justify-center items-center">
+                <div className="w-full md:p-8 p-4 flex flex-col justify-center items-center">
                     
                     {/* TYPOGRAPHY: Two layers for smooth color transition */}
                     <div className="relative w-full text-center" style={{ marginBottom: "3rem" }}>
