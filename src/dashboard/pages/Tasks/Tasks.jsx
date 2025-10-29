@@ -11,13 +11,15 @@ import aiGoals from '../../../assets/goals.svg';
 import CalendarComponent from './Calendar';
 import dayjs from "dayjs";
 import DatePicker from "react-datepicker";
+import Button from "../../components/Button"
 import 'react-datepicker/dist/react-datepicker.css'; // Import DatePicker styles
 import { FaCalendarAlt, FaClock, FaTasks } from "react-icons/fa"; // Import calendar icon
 import TaskItem from '../../components/TaskItem'; // Import TaskItem component
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import { Divider } from '@mui/material';
 import SlidingButton from "../../components/SlidingButton";
+import Empty from "../../components/Empty";
 
 
 
@@ -322,6 +324,49 @@ const handleAddSubtask = () => {
         </div>
       );
     }
+
+
+
+// ✅ If no tasks exist, show empty state
+if (!loading && tasks.length === 0) {
+  return (
+    <div className="flex flex-col min-h-screen h-full  p-4">
+     
+          <div className='flex justify-between w-full'>
+              <Typography 
+          variant="h2" 
+          color={colors.text.primary} 
+          fontWeight="bold" 
+          
+          >Tasks</Typography>
+                    <Button onClick={openModal} text="Create Task"  >
+                          <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="#6246AC"
+                          stroke="#FFFFFF"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                      
+                          style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                       
+                      </Button>
+          
+                  </div>
+          <div className="flex flex-col items-center justify-center h-full text-center p-6">
+        <Empty/>
+          </div>
+     
+    </div>
+  );
+}
   
     return (
 <div className="w-full  grid gap-1 grid-cols-1  sm:grid-cols-12 p-2 flex min-h-screen">

@@ -10,8 +10,9 @@ import {
 } from "../../../utils/Api"; // adjust path
 import DailyTemplateDetail from "./DailyTemplateDetail";
 import Backdrop from '@mui/material/Backdrop';
-import { Box, Button, IconButton, Typography, useTheme, Divider } from "@mui/material";
+import { Box,  IconButton, Typography, useTheme, Divider } from "@mui/material";
 import { tokens } from "../../../theme";
+import Button from "../../components/Button";
 
 export default function DailyTemplatesPage() {
   const [suggestedTemplates, setSuggestedTemplates] = useState([]);
@@ -110,7 +111,7 @@ const loadSuggestions = async () => {
 
 
   return (
-    <div className="p-6    mx-auto">
+    <div className="py-6 px-4    mx-auto">
       <div className="mb-[30px]  w-full justify-between flex">
                               <Typography 
                               variant="h2" 
@@ -118,7 +119,7 @@ const loadSuggestions = async () => {
                               fontWeight="bold" 
                               
                               >Templates</Typography>
-      <Button onClick={openModal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-1 cursor-pointer rounded-lg' sx={{backgroundColor:"#4F378A", borderRadius: '6px', paddingX: '12px'}}>
+      <Button onClick={openModal}  className=' flex items-center' text="Create Template">
                            <svg
                                           xmlns="http://www.w3.org/2000/svg"
                                           width="16"
@@ -129,20 +130,13 @@ const loadSuggestions = async () => {
                                           strokeWidth="2"
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
-                                        className="hidden md:block"
+                                        className=""
                                           style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
                                         >
                                           <line x1="12" y1="5" x2="12" y2="19" />
                                           <line x1="5" y1="12" x2="19" y2="12" />
                                         </svg>
-                                        <p
-                                          
-                                          className='md:text-xs text-xs xl:text-sm 2xl:text-xl '
-                                          style={{ color: colors.primary[100] }}
-                                         
-                                        >
-                                        Create Template
-                                        </p>
+                                     
                         </Button>
                         </div>
 
@@ -243,17 +237,18 @@ const loadSuggestions = async () => {
           >
            <div
            
-            className="p-5 rounded-xl  w-full h-full shadow-md flex flex-col justify-between"
+            className="p-5 rounded-4xl  w-full h-full shadow-md flex flex-col justify-between"
             style={{ backgroundColor: colors.background.sidebar, color: colors.primary[100] }}
           >
             <div className="py-4">
             <h3 className="text-lg font-semibold">{t.name}</h3>
-            <p className="text-sm mt-2 opacity-90">{t.description}</p>
+           <p className="text-sm mt-2 opacity-90">{t.description || "No description"}</p>
+
           </div>
 
             <button
    onClick={() => navigate(`/dashboard/templates/${t.id}`)}
-  className="rounded-lg mt-4 p-2 border transition-all duration-300 cursor-pointer"
+  className="rounded-4xl mb-2 mt-4 p-2 border transition-all duration-300 cursor-pointer"
   style={{
     borderColor: "#D6CFFF",
     color: "#D6CFFF",
@@ -301,7 +296,7 @@ const loadSuggestions = async () => {
         <div
           key={index}
          
-          className="p-5 rounded-xl shadow-md flex flex-col justify-between"
+          className="p-5 rounded-4xl  shadow-md flex flex-col justify-between"
           style={{ backgroundColor: colors.background.sidebar, color: colors.primary[100] }}
         >
           <div className="py-4">
@@ -316,7 +311,7 @@ const loadSuggestions = async () => {
 }
 
 
-  className="rounded-lg mt-4 p-2 border transition-all duration-300 cursor-pointer"
+  className="rounded-4xl mb-2 mt-4 p-2 border transition-all duration-300 cursor-pointer"
   style={{
     borderColor: "#D6CFFF",
     color: "#D6CFFF",

@@ -86,6 +86,7 @@ export const themeSettings = (mode) => {
       background: {
         default: colors.background.default,
         paper: colors.background.paper,
+        sidebar: colors.background.sidebar
       },
       text: {
         primary: colors.text.primary,
@@ -93,7 +94,7 @@ export const themeSettings = (mode) => {
       },
     },
     typography: {
-      fontFamily: ["Poppins", "sans-serif"].join(","),
+      fontFamily: ["cereal", "sans-serif"].join(","),
       fontSize: 12,
       h1: {
         fontSize: 32,

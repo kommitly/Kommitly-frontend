@@ -92,7 +92,7 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
 
         {/* CONTENT LAYER: All content goes here */}
         <div className="relative  z-10 w-full h-full flex flex-col justify-center items-center">
-            <div className="md:w-8/12 w-full flex flex-col pl-5 justify-center items-center md:mb-8 mb-8">
+            <div className="md:w-8/12 w-full flex flex-col justify-center items-center md:mb-8 mb-8">
                 <div className="w-full md:p-8 p-0 flex flex-col justify-center items-center">
                     
                     {/* TYPOGRAPHY: Two layers for smooth color transition */}
@@ -100,24 +100,26 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
                         
                         {/* 1. DARK TEXT (Fades In) */}
                         <Typography 
-                            variant="h1"
-                            component="h1"
-                            gutterBottom
-                            sx={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                opacity: darkTextOpacity,
-                                color: darkTextColor, // Dark color
-                                fontWeight: 'medium',
-                                transition: 'opacity 0.2s',
-                                fontSize: { xs: '2rem', sm: '2.5rem', md: '2.4rem', lg: '2.8rem', xl: '4rem', '2xl': '4rem' },
-                                textAlign: 'center',
-                            }}
+                        variant="h1"
+                        component="h1"
+                        gutterBottom
+                        sx={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            opacity: darkTextOpacity,
+                            color: darkTextColor,
+                            fontWeight: 'medium',
+                            transition: 'opacity 0.2s',
+                            fontSize: { xs: '2rem', sm: '2.5rem', md: '2.4rem', lg: '2.8rem', xl: '4rem', '2xl': '4rem' },
+                            textAlign: 'center',
+                            textShadow: '2px 2px 8px rgba(0,0,0,0.2)' 
+                        }}
                         >
-                            Where ideas meet action and actually get finished.
+                        Where ideas meet action and actually get finished.
                         </Typography>
+
 
                         {/* 2. LIGHT TEXT (Fades Out) - Must be visible when dark background is active */}
                         <Typography 
@@ -131,6 +133,7 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
                                 transition: 'opacity 0.2s',
                                 fontSize: { xs: '2rem', sm: '2.5rem', md: '2.4rem', lg: '2.8rem', xl: '4rem', '2xl': '4rem' },
                                 textAlign: 'center',
+                                textShadow: '2px 2px 8px rgba(0,0,0,0.2)' 
                             }}
                         >
                             Where ideas meet action and actually get finished.
@@ -141,7 +144,7 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
                     <div className="flex gap-4 w-full justify-center items-center">
                         <Link
                             to="/registration?tab=signup"
-                            className="bg-[#4F378A] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
+                            className="bg-[#4F378A] text-white flex justify-center items-center px-4 py-2 rounded-4xl shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
                         >
                             Get Started
                             <MdOutlineArrowOutward className="inline ml-2" />

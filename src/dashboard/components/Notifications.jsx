@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material'
 import { tokens } from '../../theme'
 import dayjs from 'dayjs'
 import Divider from '@mui/material/Divider'
+import Empty from './Empty'
 
 const Notifications = ({ notifications, setNotifications }) => {
   const theme = useTheme()
@@ -102,7 +103,11 @@ const Notifications = ({ notifications, setNotifications }) => {
           </React.Fragment>
         ))
       ) : (
-        <p className="text-sm text-gray-500">No notifications yet.</p>
+        <div className='w-full flex justify-center items-center'>
+          <div className='w-1/4'>
+            <Empty/>
+            </div>
+        </div>
       )}
 
     </div>

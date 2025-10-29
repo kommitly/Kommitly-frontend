@@ -71,7 +71,7 @@ const Registration = () => {
   return (
     <Box className="flex items-center p-2 h-screen">
       <div className="flex    rounded-xl w-full items-center h-full">
-        <Box className="w-full h-full p-4  hidden md:block   items-center justify-center bg-no-repeat bg-cover bg-center rounded-xl" sx={{backgroundColor: colors.background.paper}}>
+        <Box className="w-full h-full p-4  hidden md:block   items-center justify-center bg-no-repeat bg-cover bg-center rounded-4xl" sx={{backgroundColor: colors.background.paper}}>
 
        {/* { <AnimatedLines />} */}
        <Box 

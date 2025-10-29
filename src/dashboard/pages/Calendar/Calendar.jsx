@@ -1,5 +1,6 @@
 import React from "react";
-import { IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import { IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from "@mui/material";
+import Button from "../../components/Button";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -25,6 +26,7 @@ import SearchResults from './SearchResults';
 import CheckIcon from '@mui/icons-material/Check';
 import MuiAlert from '@mui/material/Alert';
 import Switch from '@mui/material/Switch';
+import Empty from "../../components/Empty";
 
 
 
@@ -520,9 +522,9 @@ const handleReschedule = () => {
                         fontWeight="bold" 
                         
                         >CALENDAR</Typography>
-                        <Button variant="contained" onClick={() => navigate("/dashboard/schedule")}>
-                          View Routines
-                        </Button>
+                        <Button text="  View Routines" onClick={() => navigate("/dashboard/schedule")}/>
+                        
+                        
                     
                 </div>
             <div className="flex flex-col md:flex-row justify-between gap-4">
@@ -917,15 +919,17 @@ const handleReschedule = () => {
                 overflow="hidden"
                 >
                     <Typography variant="h4" sx={{color: colors.text.primary}}>Upcoming Events</Typography>
-                    <List overflowY="auto"  sx={{ maxHeight: 'calc(100% - 50px)', overflowY: 'auto', marginTop: '10px' ,   '&::-webkit-scrollbar': { display: 'none' }, // Chrome, Safari
+                    <List overflowY="auto"  sx={{ height: '100%', maxHeight: 'calc(100% - 50px)', overflowY: 'auto', marginTop: '10px' ,   '&::-webkit-scrollbar': { display: 'none' }, // Chrome, Safari
     '-ms-overflow-style': 'none', // IE, Edge
     'scrollbar-width': 'none', // Firefox
     }}
     >
                         {currentEvents.length === 0 ? (
-    <Typography sx={{ padding: '10px', color: colors.text.secondary }}>
-      No scheduled events
-    </Typography>
+    <div className="w-full flex justify-center items-center h-full">
+      <div className="w-1/2 h-full">
+      <Empty/>
+    </div>
+    </div>
   ) : (
     currentEvents
   .slice() // make a shallow copy to avoid mutating state directly

@@ -319,7 +319,7 @@ sx={{
                 color: colors.primary[100],
                  fontSize: "0.8rem", // base font size
                 [theme.breakpoints.up("md")]: {
-                  fontSize: "0.8rem",
+                  fontSize: "0.9rem",
                 },
                 [theme.breakpoints.up("xl")]: {
                   fontSize: "1.2rem",
@@ -415,7 +415,7 @@ sx={{
                                             <path d="M43.4496 73.9714C44.652 72.3814 44.4661 69.8997 43.0416 68.5204L28.0595 54.0145L2.18288 88.8602C1.92488 89.2077 2.14331 89.7605 2.53851 89.7605L12.0044 89.7609L28.486 89.761C30.4094 89.761 32.2284 88.8057 33.4972 87.1284L43.4496 73.9714Z" fill='#20A0E6' stroke= '#10D3F1'/>
                                           </svg>
                                   </div>
-                                  <p className=' 2xl:text-3xl lg:text-xl text-lg ' style={{ fontFamily: "Fredoka", color:colors.primary[100], fontWeight: 500,  }}>
+                                  <p className=' 2xl:text-3xl lg:text-xl text-lg ' style={{ color:colors.primary[100], fontWeight: 500,  }}>
                                     Kommitly
 
                                 </p>
@@ -424,10 +424,11 @@ sx={{
                                     {isCollapsed ? (
                                         <MenuOutlinedIcon/>
                                     ) : (
-                                        <ArrowBackIcon  color={"#F6F3F3"} sx={{
-  cursor: "pointer",
+                                        <ArrowBackIcon  sx={{
+                                          color: colors.primary[300],
+                                        cursor: "pointer",
 
- }} />
+                                      }} />
                                     )}
                                 </button>
 
@@ -441,6 +442,8 @@ sx={{
                       onClick={() => {
                         navigate("/dashboard/home");
                         setSelected("Home");
+                        if (!isCollapsed) setIsCollapsed(true);
+                        
                       }}
                       title='Home'
                       icon={selected === "Home" ? <HomeIcon  sx={{fontSize:{
@@ -503,6 +506,7 @@ sx={{
                                     onClick={() => {
                                         navigate(`/dashboard/ai-goal/${goal.id}`);
                                         setSelected(goal.title);
+                                        if (!isCollapsed) setIsCollapsed(true);
                                     }}
 
                                     active={selected === goal.title}
@@ -550,6 +554,7 @@ sx={{
                                     onClick={() => {
                                         navigate(`/dashboard/tasks/${task.id}`);
                                         setSelected(task.title); // optionally track specific task
+                                        if (!isCollapsed) setIsCollapsed(true);
                                     }}
                                     active={selected === task.title}
                                     style={{ color: colors.primary[100] }}
@@ -567,6 +572,7 @@ sx={{
                             onClick={() => {
                                 navigate("/dashboard/calendar");
                                 setSelected("Calendar");
+                                if (!isCollapsed) setIsCollapsed(true);
                             }}
                             icon={selected === "Calendar" ? <CalendarMonthIcon sx={{fontSize:{
   xs: "1.5rem",
@@ -599,6 +605,7 @@ sx={{
                             onClick={() => {
                                 navigate("/dashboard/schedule");
                                 setSelected("Schedule");
+                                if (!isCollapsed) setIsCollapsed(true);
                             }}
                             icon={selected === "Schedule" ? <RiCalendarScheduleFill size={24}  sx={{fontSize:{
   xs: "1.5rem",
@@ -630,6 +637,7 @@ sx={{
                             onClick={() => {
                                 navigate("/dashboard/templates");
                                 setSelected("Templates");
+                                if (!isCollapsed) setIsCollapsed(true);
                             }}
                             icon={selected === "Templates" ? <HiTemplate size={24}  sx={{fontSize:{
   xs: "1.5rem",
@@ -665,6 +673,7 @@ sx={{
     onClick={() => {
       navigate("/dashboard/analytics");
       setSelected("Stats");
+      if (!isCollapsed) setIsCollapsed(true);
     }}
     icon={
       selected === "Stats" ? (

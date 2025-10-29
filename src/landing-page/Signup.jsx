@@ -147,7 +147,7 @@ const Signup = ({message, setMessage}) => {
               >
                   <TextField 
                   fullWidth
-                  variant="filled"
+                
                   type="text"
                   label="First Name"
                   onBlur={handleBlur}
@@ -162,7 +162,7 @@ const Signup = ({message, setMessage}) => {
                   />
                     <TextField 
                         fullWidth
-                        variant="filled"
+                        
                         type="text"
                         label="Last Name"
                         onBlur={handleBlur}
@@ -176,7 +176,7 @@ const Signup = ({message, setMessage}) => {
                         />
                         <TextField
                         fullWidth
-                        variant="filled"
+                        
                         type="text"
                         label="Email"
                         onBlur={handleBlur}
@@ -189,7 +189,7 @@ const Signup = ({message, setMessage}) => {
                         />
                         <TextField
                         fullWidth
-                        variant="filled"
+                        
                         type="password"
                         label="Password"
                         onBlur={handleBlur}
@@ -199,14 +199,18 @@ const Signup = ({message, setMessage}) => {
                         error={!!touched.password && !!errors.password}
                         helperText={touched.password && errors.password}
                         sx={{ gridColumn: "span 4" }}
-                        InputProps={{ style: { color: "#fff" } }} 
+                        InputProps={{ style: { color: "#000" } }} 
                         />
 
 
 
                     </Box>
                     <Box display="flex" justifyContent="center" mt="40px" width="100%"  >
-                         <Button type="submit" text=" Create New User" className="w-full" />
+                        
+                             <button type="submit"   className={`bg-[#4F378A] w-full text-white px-4 md:py-2 py-2 text-xs  md:rounded-sm rounded-sm shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base`}
+    >
+     Create New User
+    </button>
                   
                     </Box>
 

@@ -38,7 +38,7 @@ const Painpoint = () => {
                 className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16"
             >
                 {/* 1. THE PROBLEM  */}
-                <Box className="space-y-6 p-6 md:p-8 rounded-xl" sx={{ backgroundColor: colors.background.default }}>
+                <Box className="space-y-6 p-6 md:p-8 rounded-4xl" sx={{ backgroundColor: colors.background.default }}>
                     <PsychologyIcon sx={{ fontSize: 48, color: '#FFB800' }} />
                     
                     <Typography 
@@ -67,7 +67,7 @@ const Painpoint = () => {
 
                 {/* 2. THE SOLUTION (Kommitly AI) */}
                 <Box 
-                    className="space-y-6 p-6 md:p-8 rounded-xl shadow-2xl" 
+                    className="space-y-6 p-6 md:p-8 rounded-4xl shadow-2xl" 
                     sx={{ backgroundColor: '#2C1D57', color: 'white' }} // Purple background for high contrast
                 >
                     <AutoAwesomeIcon 
@@ -102,7 +102,7 @@ const Painpoint = () => {
                     <Box pt={2}>
                          <Link
                                                     to="/registration?tab=signup"
-                                                    className="bg-[#4F378A]  text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
+                                                    className="bg-[#4F378A]  text-white px-4 py-2 rounded-4xl shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
                                                 >
                                                     Get Started
                                                     <MdOutlineArrowOutward className="inline ml-2" />

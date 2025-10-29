@@ -18,6 +18,7 @@ import MuiAlert from '@mui/material/Alert';
 import { tokens } from "../../../theme";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Empty from "../../components/Empty";
 
 
 export default function DailyTemplateDetail() {
@@ -208,7 +209,7 @@ const handleSaveSuggestedTemplate = async (templateData) => {
                 <circle cx="12" cy="19" r="1"></circle>
               </svg>
                {menuVisible && (
-                  <div className="absolute right-0 mt-2 w-48  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.menu.primary }}>
+                  <div className="absolute right-0 mt-2 w-30  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.menu.primary }}>
                     {/* {<button 
                       onClick={() => {
                         setIsRenaming(true);
@@ -222,23 +223,20 @@ const handleSaveSuggestedTemplate = async (templateData) => {
                    
                       size="small"
                       sx={{
-                        ml: 1,
-                        
+                      
+                        width: "100%",
                         color: colors.primary[500],
                         textTransform: "none",
-                        "&:hover": {
-                          backgroundColor: colors.primary[500],
-                          color: colors.background.default,
-                        },
+                     
                       }}
                       onClick={() => navigate(`/dashboard/templates/${templateId}/history`)}
                     >
                       View History
                     </Button>
 
-                    <button onClick={() => setDeleteOpen(true)} className='block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20' style={{ color: colors.background.warning }}>
+                    <Button size="small" onClick={() => setDeleteOpen(true)}  sx={{ width: "100%", color: colors.background.warning }}>
                       Delete
-                    </button>
+                    </Button>
                   
 
                    
@@ -286,7 +284,13 @@ const handleSaveSuggestedTemplate = async (templateData) => {
 
         {/* Activity List */}
         <div className="space-y-4 md:mt-0 mt-4 h-screen max-h-10/12 overflow-y-auto no-scrollbar mb-4 md:p-0 p-4 md:col-span-7 col-span-12">
-          {activities
+            {(!activities || activities.length === 0) ? (
+    <div className="flex h-9/12 flex-col items-center justify-center  text-center">
+     <Empty/>
+      
+    </div>
+  ) : (
+    activities
   ?.slice()
   .sort((a, b) => a.start_time.localeCompare(b.start_time))
   .map((activity, index) => {
@@ -422,7 +426,10 @@ const handleSaveSuggestedTemplate = async (templateData) => {
         </div>
       </div>
     );
-  })}
+    
+  }))}
+
+
 
         </div>
 

@@ -91,7 +91,7 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
                 >
                   <TextField
                     fullWidth
-                    variant="filled"
+                    
                     type="text"
                     label="Email"
                     onBlur={handleBlur}
@@ -100,23 +100,12 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
                     name="email"
                     error={!!touched.email && !!errors.email}
                     helperText={touched.email && errors.email}
-                    sx={{ gridColumn: "span 4", "& .MuiFilledInput-root": {
-  backgroundColor: "#f5f5f5",
-  "&:hover": {
-    backgroundColor: "#ebebeb",
-  },
-  "&.Mui-focused": {
-    backgroundColor: "#e0e0e0",
-  },
-  input: {
-    color: "#333",
-  },
-},
+                    sx={{ gridColumn: "span 4"
   }}
                   />
                   <TextField
                     fullWidth
-                    variant="filled"
+               
                     type="password"
                     label="Password"
                     onBlur={handleBlur}
@@ -135,7 +124,10 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
 
                 </div>
                 <Box display="flex" justifyContent="center" mt="40px" width="100%"  >
-                         <Button type="submit" text=" Login" className="w-full" />
+                         <button type="submit"   className={`bg-[#4F378A] w-full text-white px-4 md:py-2 py-2 text-xs  md:rounded-sm rounded-sm shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base`}
+    >
+     Login
+    </button>
                   
                     </Box>
               </form>

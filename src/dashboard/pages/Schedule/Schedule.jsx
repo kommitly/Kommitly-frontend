@@ -11,10 +11,12 @@ import {
 } from "../../../utils/Api";
 import { GoalsContext } from "../../../context/GoalsContext";
 import { tokens } from "../../../theme";
-import {Box, Button, Backdrop,Typography,TextField,useTheme, IconButton, Select,
+import {Box, Backdrop,Typography,TextField,useTheme, IconButton, Select,
   MenuItem,
   InputLabel,
   FormControl} from "@mui/material";
+import Button from "../../components/Button";
+import Loading from "../../components/Loading";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -23,6 +25,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SlidingButton2 from '../../components/SlidingButton2';
 import { Divider } from '@mui/material';
+import Empty from "../../components/Empty";
 
 
 
@@ -245,7 +248,7 @@ const handleChange = (field, value) => {
   };
 
   return (
-   <div className='w-full  flex min-h-screen md:px-4 px-0'>
+   <div className='w-full  flex min-h-screen md:px-2 px-4'>
       
 
       <div className="w-full h-full overflow-y-auto  ">
@@ -815,9 +818,9 @@ const handleChange = (field, value) => {
           
           </Backdrop>
       
-             <div className=" p-4  w-full justify-between flex">
+             <div className="    w-full justify-between flex">
                         <Typography 
-                        variant="h3" 
+                        variant="h2" 
                         color={colors.text.primary} 
                         fontWeight="bold" 
                         
@@ -825,11 +828,28 @@ const handleChange = (field, value) => {
                        {/* { <Button variant="contained">
                           View in Calendar
                         </Button>} */}
-                         <Button variant="contained"  onClick={()=> {
+                         <Button  text="Create Routine" onClick={()=> {
                                                         setOpen(true)
-                                                      }} >
-                          Create Routine
-                        </Button>
+                                                      }}  >
+                                                         <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="16"
+                                          height="16"
+                                          viewBox="0 0 24 24"
+                                          fill="#6246AC"
+                                          stroke="#FFFFFF"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        className=""
+                                          style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
+                                        >
+                                          <line x1="12" y1="5" x2="12" y2="19" />
+                                          <line x1="5" y1="12" x2="19" y2="12" />
+                                        </svg>
+                                                        </Button>
+                          
+                      
                     
                 </div>
 
@@ -844,8 +864,15 @@ const handleChange = (field, value) => {
 
       {/* Routines List */}
       {loading ? (
-        <p>Loading routines...</p>
-      ) : (
+        <div>
+          <Loading/>
+          </div>
+      ) : routines.length === 0 ? (
+  <div className="w-full  flex flex-col items-center justify-center h-[80vh] text-center">
+   <Empty/>
+   
+  </div>
+) : (
         <ul className="space-y-2 md:flex gap-4 w-full">
   {routines.map((routine) => {
     const { timeline, cleanedDetails } = extractTimeline(

@@ -15,7 +15,7 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
   const [startTime, setStartTime] = useState(initialData?.start_time || "");
   const [endTime, setEndTime] = useState(initialData?.end_time || "");
   const [type, setType] = useState("task");
-  const [selectedPeriod, setSelectedPeriod] = useState('Add from collection');
+  const [selectedPeriod, setSelectedPeriod] = useState('Add New Activity');
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState("");
 
@@ -100,7 +100,7 @@ export default function ActivityForm({ onSave, onCancel, initialData }) {
     >
       <div className="w-full flex justify-center mb-8 items-center">
         <SlidingButton2
-          options={["Add from collection", "Add new task"]}
+          options={[ "Add New Activity", "Add from Collection"]}
           selected={selectedPeriod}
           onChange={setSelectedPeriod}
         />

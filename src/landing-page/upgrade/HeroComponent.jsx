@@ -98,12 +98,12 @@ const HeroComponent = () => {
   
   return (
    <div 
-  className='w-full h-[80vh] md:h-[90vh] flex p-4 border border-b-0 rounded-xl' 
+  className='w-full h-[80vh] md:h-[90vh] flex p-4 border border-b-0 rounded-4xl' 
   style={{
     backgroundColor: colors.background.default, 
     borderColor: colors.background.paper,
     // Add box shadow that matches the borderColor (colors.background.paper)
-    boxShadow: `2px 0px 5px ${colors.background.paper}` 
+    // boxShadow: `2px 0px 5px ${colors.background.paper}` 
   }}
 >
 

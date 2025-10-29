@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { Link, useNavigate, useLocation , useParams} from "react-router-dom";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import Button from '../../components/Button';
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import { useMediaQuery } from '@mui/material';
 import { color, motion } from 'framer-motion';
@@ -20,6 +21,7 @@ import { IoSearch } from "react-icons/io5";
 import Backdrop from '@mui/material/Backdrop';
 import { ProfileContext } from '../../../context/ProfileContext';
 import SellIcon from '@mui/icons-material/Sell';
+import Empty from '../../components/Empty';
 
 function CircularProgressWithLabel({ value, textColor = '#000000', progressColor = '#4F378A' , size = 40, fontSize = '0.6rem' }) {
   return (
@@ -250,7 +252,7 @@ const Goals = () => {
       <div className="text-center py-4 text-gray-500">Loading goals...</div>
     ) : goals?.goals?.length === 0 && goals?.ai_goals?.length === 0 ? (
       <>
-      <div className="flex flex-col items-center justify-center  min-h-screen">
+      <div className="flex flex-col p-4 min-h-screen h-full">
         <Backdrop
           sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
           open={openCreateGoal}// Use openCreateGoal state for backdrop
@@ -327,8 +329,18 @@ const Goals = () => {
           
           </div>
         </Backdrop>
-        <div className='fixed right-3 top-18'>
-          <Button onClick={openCreateGoalModal}  className=' flex items-center  text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{ borderRadius: '6px', paddingX: '12px', backgroundColor: "#4F378A" }}>
+
+        <div className='w-full flex justify-between items-center'>
+
+         <Typography 
+                                       variant="h2" 
+                                       color={colors.text.primary} 
+                                       fontWeight="bold" 
+                                       
+                                       >Goals</Typography>
+
+<div className=''>
+          <Button onClick={openCreateGoalModal} text=' Create Goal' >
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -339,27 +351,36 @@ const Goals = () => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-              className="hidden md:block"
+             
                 style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
               >
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              <p
-                component="span"
-                className='md:text-base text-xs '
-                style={{ color: colors.primary[100] }}
-               
-              >
-              Create Goal
-              </p>
+             
             </Button>
 
         </div>
-       <div className="text-sm text-gray-600 w-full text-center py-4">
-        No goals created yet.
+
+
+        </div>
+
+         
+
+         <div className="flex flex-col items-center justify-center  h-full">
+        
+      
+        <Empty />
+  
       </div>
+
+
+
       </div>
+
+
+
+     
 
       </>
       

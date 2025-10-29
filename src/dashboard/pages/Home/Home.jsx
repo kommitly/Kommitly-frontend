@@ -1,17 +1,36 @@
-
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 import  { useState, useContext, useEffect, useRef } from 'react';
 import { LuSendHorizontal } from "react-icons/lu";
 import GoalBreakdown from '../../components/GoalBreakdown/GoalBreakdown';
 import {  generateInsights } from '../../../utils/Api';
 import { color, motion } from 'framer-motion';
 import { ProfileContext } from '../../../context/ProfileContext';
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, IconButton, Typography, useTheme, Modal, Card, CardContent } from "@mui/material";
 import { tokens } from "../../../theme";
 import FlowChart from './Flowchart';
 import { animate } from "motion"
 import TypingText from './TypingText';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Loading from '../../components/Loading';
+
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow placement="top" classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.background.sidebar,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.background.sidebar,
+    color: theme.palette.text.primary,
+    boxShadow: theme.shadows[3],
+    fontSize: '0.9rem',
+    padding: '1rem',
+    borderRadius: '12px',
+    maxWidth: 320,
+    textAlign: 'center',
+  },
+}));
 
 const Home = () => {
   const theme = useTheme();
@@ -35,8 +54,19 @@ const Home = () => {
   const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-   
+  const [showNewUserModal, setShowNewUserModal] = useState(false);
+
   
+
+  useEffect(() => {
+  const hasSeenModal = localStorage.getItem("seenNewUserModal");
+
+  if (!hasSeenModal) {
+    setShowNewUserModal(true);
+    localStorage.setItem("seenNewUserModal", "true");
+  }
+}, []);
+
    
   useEffect(() => {
     if (goalBreakdownRef.current) {
@@ -114,6 +144,7 @@ if (loading) {
   
   return (
     <div className='w-full   md:px-0 px-2  mt-4 '>
+
       
 
       <div className="w-full   flex-1 overflow-y-auto scrollbar-hide xl:max-h-[76vh] md:max-h-[70vh]  no-scrollbar">
@@ -184,26 +215,7 @@ if (loading) {
             </div>
             <div>
 
-               {/* { <Typography variant="h5" className="mt-2 w-1/2" style={{ color: colors.primary[400] }}>
-                Many people struggle to break down big goals into manageable tasks. This can lead to:
-              </Typography>
-
-              <ul className="list-disc pl-5 mt-2 text-gray-600">
-                <li>Feeling overwhelmed and unsure where to start</li>
-                <li>Procrastination and lack of motivation</li>
-                <li>Frustration and eventual abandonment of goals</li>
-              </ul>
-
-              <Typography variant="h5" className="mt-4 w-1/2" style={{ color: colors.primary[400] }}>
-                Kommitly helps by:
-              </Typography>
-
-              <ul className="list-disc pl-5 mt-2 text-gray-600">
-                <li>Using AI to structure your journey</li>
-                <li>Breaking goals into clear, actionable steps</li>
-                <li>Keeping you accountable and tracking progress</li>
-              </ul>
- */}
+             
           <Typography variant="h4" className="mt-2 w-full" style={{ color: colors.text.tertiary, fontWeight: '400' ,  fontSize: isXs
         ? "0.8rem" // Smallest size for XS
         : isSm
@@ -281,9 +293,83 @@ if (loading) {
         </motion.div>
       )}
 
+<Modal
+  open={showNewUserModal}
+  onClose={() => setShowNewUserModal(false)}
+  aria-labelledby="new-user-modal"
+  sx={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  }}
+>
+  <Box
+     sx={{
+    position: 'absolute',
+    bottom: { xs: 170, sm: 160 }, // higher on extra small screens
+    left: { xs: '50%', sm: '50%' }, // slightly shifted on small screens
+    transform: 'translateX(-50%)',
+    pointerEvents: 'none',
+  }}
+  >
+    <LightTooltip
+      open
+      title={
+        <Box textAlign="start">
+          <Typography variant="h6" sx={{ color: "#fff", fontWeight: 'bold', mb: 1 }}>
+            Welcome to Kommitly 🎯
+          </Typography>
+          <Typography sx={{ color: "#fff",  fontSize: '0.9rem', mb: 2 }}>
+            Start by typing your first goal below to see how Kommitly helps you
+            break it down into actionable steps.
+          </Typography>
+         
+         <div className='w-full flex justify-end'>
+           <Button
+            variant="outlined"
+            onClick={() => setShowNewUserModal(false)}
+            sx={{
+              borderColor: '#fff',
+              color: '#fff',
+              borderRadius: '100px',
+              px: 3,
+              py: 0.8,
+              fontSize: '0.85rem',
+              '&:hover': { backgroundColor: 'primary.light' },
+            }}
+          >
+            Got it
+          </Button>
+         </div>
+        </Box>
+      }
+    >
+      {/* Visible anchor element */}
+      <Box
+        sx={{
+          width: 0,
+          height: 0,
+          pointerEvents: 'auto',
+          position: 'relative',
+          bottom: -40, // pushes tooltip slightly up
+        }}
+      />
+    </LightTooltip>
+  </Box>
+</Modal>
+
+
+
+
+
 {!showGoalBreakdown && (
    <div className='flex  w-full  items-center justify-center flex-wrap gap-4'>
-   <Box className='md:w-8/12 xl:w-6/12 w-10/12  bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-20' sx={{ backgroundColor:  colors.background.paper }}>
+   <Box className='md:w-8/12 xl:w-6/12 w-10/12  bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-20' sx={{
+    backgroundColor: colors.background.paper,
+    position: 'fixed',
+    zIndex: (theme) => theme.zIndex.modal + 3
+  }}>
      <div className='flex items-center justify-between gap-4'>
        <div className='flex items-center w-full gap-4 ml-2'>
          <IconButton>
@@ -304,6 +390,9 @@ if (loading) {
              <line x1="3" y1="18" x2="21" y2="18"></line>
            </svg>
          </IconButton>
+
+
+
 
          <input
            type="text"

@@ -57,7 +57,7 @@ const Feature = () => {
         {features.map((feature, index) => (
           <Box 
             key={index}
-            className="p-6 rounded-xl border shadow-lg transition-transform transform hover:scale-105"
+            className="p-6 rounded-4xl border shadow-lg transition-transform transform hover:scale-105"
           sx={{borderColor: colors.text.secondary}}
           >
             <Box className="mb-4">{feature.icon}</Box>

@@ -72,7 +72,7 @@ const Waitlist = () => {
                 }}
               />
               <button
-              className="bg-[#4F378A] text-white px-4 py-2 rounded-sm shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
+              className="bg-[#4F378A] text-white px-4 py-2  shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
               >
                 Subscribe
               </button>

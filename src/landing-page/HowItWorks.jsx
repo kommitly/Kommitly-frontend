@@ -55,7 +55,7 @@ const HowItWorks = () => {
         {steps.map((step, index) => (
           <Box
             key={index}
-            className="flex flex-col items-center text-center p-6 rounded-2xl shadow-md"
+            className="flex flex-col items-center text-center p-6 rounded-4xl shadow-md"
             sx={{
               backgroundColor:
                 theme.palette.mode === 'dark' ? colors.menu.primary : colors.background.paper,

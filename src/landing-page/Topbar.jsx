@@ -82,7 +82,7 @@ const Topbar = ({ clipRadius }) => {
       {/* Logo */}
       <Link 
         to="/" 
-        className="md:text-3xl text-2xl flex gap-2 justify-center items-center fredoka-semibold "
+        className="md:text-3xl text-2xl flex gap-2 justify-center items-center font-semibold "
         style={{ color: currentLogoColor }} // Dynamic Logo text color
       >
         {/* SVG color is handled separately or can be set to the logo color */}
@@ -102,7 +102,7 @@ const Topbar = ({ clipRadius }) => {
         {/* Login Link: Uses dynamic color */}
         <Link
         to="/registration?tab=login"
-        className="px-4 py-2 border border-white text-white rounded-lg hover:bg-gray-100 hover:!text-[#2C1D57] transition-colors 2xl:text-xl xl:text-base lg:text-base"
+        className="px-4 py-2 border border-white text-white rounded-xl hover:bg-gray-100 hover:!text-[#2C1D57] transition-colors 2xl:text-xl xl:text-base lg:text-base"
       >
         Login
       </Link>
@@ -110,7 +110,7 @@ const Topbar = ({ clipRadius }) => {
         {/* Sign Up Link: Colors remain static purple/white for contrast */}
         <Link
           to="/registration?tab=signup"
-          className="bg-[#4F378A] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
+          className="bg-[#4F378A] text-white px-4 py-2 rounded-xl shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
         >
           Sign Up
         </Link>
@@ -128,11 +128,11 @@ const Topbar = ({ clipRadius }) => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="absolute top-16 right-6 shadow-lg rounded-lg p-4 flex flex-col gap-4 sm:hidden z-50" style={{ backgroundColor: colors.background.paper }}>
+        <div className="absolute top-16 right-6 shadow-lg rounded-xl p-4 flex flex-col gap-4 sm:hidden z-50" style={{ backgroundColor: colors.background.paper }}>
           {/* Mobile Links: Use theme colors, which are dark */}
           <Link
             to="/registration?tab=login"
-            className="text-[#6F2DA8] px-4 py-2 rounded-lg hover:bg-gray-100 transition"
+            className="text-[#6F2DA8] px-4 py-2  hover:bg-gray-100 transition"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Login
