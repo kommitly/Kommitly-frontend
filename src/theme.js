@@ -70,69 +70,52 @@ export const tokens = (mode) => ({
       }),
 });
 
-// MUI theme settings
 export const themeSettings = (mode) => {
   const colors = tokens(mode);
 
   return {
     palette: {
-      mode: mode,
-      primary: {
-        main: colors.primary[500],
-      },
-      secondary: {
-        main: colors.primary[300],
-      },
+      mode,
+      primary: { main: colors.primary[500] },
+      secondary: { main: colors.primary[300] },
       background: {
         default: colors.background.default,
         paper: colors.background.paper,
-        sidebar: colors.background.sidebar
+        sidebar: colors.background.sidebar,
       },
       text: {
         primary: colors.text.primary,
         secondary: colors.text.secondary,
       },
     },
+
     typography: {
       fontFamily: ["cereal", "sans-serif"].join(","),
       fontSize: 12,
-      h1: {
-        fontSize: 32,
-        fontWeight: 600, // SemiBold
-      },
-      h2: {
-        fontSize: 24,
-        fontWeight: 600,
-      },
-      h3: {
-        fontSize: 20,
-        fontWeight: 600, // Medium
-      },
-      h4: {
-        fontSize: 16,
-        fontWeight: 500,
-      },
-      h5: {
-        fontSize: 14,
-        fontWeight: 400, // Regular
-      },
-      h6: {
-        fontSize: 12,
-        fontWeight: 300,
-      },
-      body1: {
-        fontSize: 14,
-        fontWeight: 400,
-        lineHeight: 1.5,
-      },
-      body2: {
-        fontSize: 12,
-        fontWeight: 400,
-        lineHeight: 1.5,
+      h1: { fontSize: 32, fontWeight: 600 },
+      h2: { fontSize: 24, fontWeight: 600 },
+      h3: { fontSize: 20, fontWeight: 600 },
+      h4: { fontSize: 16, fontWeight: 500 },
+      h5: { fontSize: 14, fontWeight: 400 },
+      h6: { fontSize: 12, fontWeight: 300 },
+      body1: { fontSize: 14, fontWeight: 400, lineHeight: 1.5 },
+      body2: { fontSize: 12, fontWeight: 400, lineHeight: 1.5 },
+    },
+
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+        xxl: 1920,
+        xxxl: 2360,
       },
     },
   };
-}    
+};
+  
 
 // Context for color mode
 export const ColorModeContext = createContext({

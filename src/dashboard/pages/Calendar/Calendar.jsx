@@ -522,8 +522,8 @@ const handleReschedule = () => {
                         fontWeight="bold" 
                         
                         >CALENDAR</Typography>
-                        <Button text="  View Routines" onClick={() => navigate("/dashboard/schedule")}/>
-                        
+                       {/* { <Button text="  View Routines" onClick={() => navigate("/dashboard/schedule")}/>
+                        } */}
                         
                     
                 </div>

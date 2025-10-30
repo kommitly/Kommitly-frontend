@@ -75,10 +75,11 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
     const [selected, setSelected] = useState("Home");
     const isSm = useMediaQuery(theme.breakpoints.only("sm"));
     const isLg = useMediaQuery(theme.breakpoints.only("lg"));
-    const isXl = useMediaQuery(theme.breakpoints.only("xl"));
+    const isXl = useMediaQuery(theme.breakpoints.down("xl"));
     const isMd = useMediaQuery(theme.breakpoints.only("md"));
     const isXs = useMediaQuery(theme.breakpoints.only("xs"));
-    const isXxl = useMediaQuery(theme.breakpoints.only("2xl"));
+    const isXxl = useMediaQuery(theme.breakpoints.only("xxl"));
+    const isXxxl = useMediaQuery(theme.breakpoints.up("xxl"));
 
 
 
@@ -257,8 +258,8 @@ sx={{
       zIndex: 2000,
       transition: 'left 0.3s ease-in-out, width 0.3s ease-in-out',
       width: isCollapsed
-      ? (isXs ? "0px" : isSm ? "80px" : isMd ? "70px" : isLg ? "80px" : isXl ? "120px" : "80px")
-      : (isXs ? "220px" : isSm ? "220px" : isMd ? "215px" : isLg ? "230px" : isXl ? "320px" : isXxl ? "200px" : "280px"),
+      ? (isXs ? "0px" : isSm ? "80px" : isMd ? "80px" : isLg ? "80px" : isXl ? "80px" : "110px")
+      : (isXs ? "220px" : isSm ? "220px" : isMd ? "215px" : isLg ? "230px" : isXl ? "300px" : isXxl ? "300px" : isXxxl ? "400px" :   "300px"),
       overflow: 'hidden',
       margin: '8px',
       boxShadow: isCollapsed
@@ -272,7 +273,7 @@ sx={{
   }}
 >
 
-           <div className='mt-4 flex flex-col '>
+           <div className='mt-4  p-2 flex flex-col '>
              <Menu iconShape="square"
             rootStyles={{
               [`.${menuClasses.SubMenu}`]: {
@@ -285,13 +286,18 @@ sx={{
               [`.${menuClasses.button}`]: {
                 color: colors.primary[100],
                 backgroundColor: `${colors.background.sidebar} `,
-                width: "96%",
+                width: "100%",
                 marginBottom: isCollapsed ? (
-                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
+                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "20px"
                 ) : (   
-                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "0px"
+                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "20px" : "20px"
                 ),
-               
+                paddingY: "4px",
+                paddingLeft: isCollapsed ? (
+                  isXs ? "0px" : isSm ? "20px" : isMd ? "10px" : isLg ? "10px" : isXl ? "20px" : isXxl ? "20px":  isXxxl ? "20px": "20px"
+                ) : (   
+                  isXs ? "0px" : isSm ? "20px" : isMd ? "10px" : isLg ? "20px" : isXl ? "20px" : "20px"
+                ),
 
                 
                 '&:hover': {
@@ -302,13 +308,13 @@ sx={{
               [`.${menuClasses.icon}`]: {
                 color: colors.primary[100],
                 marginRight: isCollapsed ? (
-                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "100px" : "100px"
+                  isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "10px" : "10px"
                 ) : (
                   isXs ? "10px" : isSm ? "10px" : isMd ? "10px" : isLg ? "10px" : isXl ? "10px" : isXxl ? "10px" : "10px"
                 ),
           
               marginLeft: isCollapsed ? (
-                isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "16px" : "0px"
+                isXs ? "0px" : isSm ? "0px" : isMd ? "4px" : isLg ? "0px" : isXl ? "10px" : "10px"
               ) : (
                 isXs ? "10px" : isSm ? "10px" : isMd ? "0px" : isLg ? "0px" : isXl ? "10px" : isXxl ? "10px" : "10px"
               ),
@@ -374,18 +380,18 @@ sx={{
   style={{
     backgroundColor: hover ? "transparent" : "transparent",
     marginLeft: isCollapsed ? (
-      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "2px" : isXl ? "20px" : "0px"
+      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "2px" : isXl ? "0px" : "0px"
     ) : (
-      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "2px" : isXl ? "20px" : "0px"
+      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "2px" : isXl ? "0px" : "0px"
     ),
    
    
  
     
     marginBottom: isCollapsed ? (
-      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "20px" : isXl ? "20px" : "0px"
+      isXs ? "0px" : isSm ? "20px" : isMd ? "20px" : isLg ? "20px" : isXl ? "20px" : "20px"
     ) : (
-      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "20px" : isXl ? "20px" : "0px"
+      isXs ? "0px" : isSm ? "20px" : isMd ? "20px" : isLg ? "20px" : isXl ? "20px" : "20px"
     ),  
 
     
@@ -408,14 +414,14 @@ sx={{
                          
                             >
                                 <div style={{display: "flex", alignItems: "center", gap: "10px"}}>
-                                  <div >
+                                  <div  >
                                     <svg width="32" height="54" viewBox="0 0 64 109" fill="none" xmlns="http://www.w3.org/2000/svg">
      
                                             <path d="M31.3536 23.1342C34.3679 23.1342 37.323 24.3064 39.7619 26.4697L58.6992 43.2663C61.2882 45.5627 61.723 49.9273 59.6425 52.7347L47.2048 69.5176L1.9344 25.0352C1.2727 24.385 1.63573 23.1344 2.48617 23.1344L31.3536 23.1342Z" fill='#10D3F1'/>
                                             <path d="M43.4496 73.9714C44.652 72.3814 44.4661 69.8997 43.0416 68.5204L28.0595 54.0145L2.18288 88.8602C1.92488 89.2077 2.14331 89.7605 2.53851 89.7605L12.0044 89.7609L28.486 89.761C30.4094 89.761 32.2284 88.8057 33.4972 87.1284L43.4496 73.9714Z" fill='#20A0E6' stroke= '#10D3F1'/>
                                           </svg>
                                   </div>
-                                  <p className=' 2xl:text-3xl lg:text-xl text-lg ' style={{ color:colors.primary[100], fontWeight: 500,  }}>
+                                  <p className=' 2xl:text-2xl xl:text-xl lg:text-xl text-lg ' style={{ color:colors.primary[100], fontWeight: 500,  }}>
                                     Kommitly
 
                                 </p>
@@ -437,7 +443,7 @@ sx={{
                     </MenuItem>
                
                     {/*MENU ITEMS */}
-                    <Box paddingLeft={isCollapsed ? "4%" : "4%"}>
+                    <Box >
                       <MenuItem 
                       onClick={() => {
                         navigate("/dashboard/home");
@@ -467,6 +473,7 @@ sx={{
                       active={selected === "Home"} >
                       Home
                       </MenuItem>
+                      
                        
                         <SubMenu 
                         

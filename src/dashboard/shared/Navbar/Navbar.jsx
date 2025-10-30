@@ -203,10 +203,10 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
   
   return (
-  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0 xl:left-24' : 'md:left-58 xl:left-62 2xl:left-80 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
+  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0  lg:left-24 xl:left-28 2xl:left-38' : 'md:left-58 xl:left-62 2xl:left-80 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: {
-      xs: isCollapsed ? 2 : 8,
+      xs: isCollapsed ? 1 : 8,
       sm: isCollapsed ? 2 : 3,
       md: isCollapsed ? 0 : 2,
       lg: isCollapsed ? 2 : 2,
@@ -240,7 +240,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
                     <p
                  
                   style={{ color: colors.text.primary }}
-                  className=' font-medium mb-0 md:text-base text-lg 2xl:text-3xl lg:text-lg xl:text-xl'
+                  className=' font-regular mb-0 md:text-base text-lg 2xl:text-3xl lg:text-lg xl:text-xl'
                 >
                 Hello
       
@@ -251,7 +251,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
               <span className='text-secondary'>
               <p
                   style={{ color: colors.primary[500] }}
-                  className='font-medium mb-0 text-lg 2xl:text-3xl md:text-base lg:text-lg xl:text-xl'
+                  className='font-regular mb-0 text-lg 2xl:text-3xl md:text-base lg:text-lg xl:text-xl'
                 >
                  {user.user.first_name}
       
@@ -469,7 +469,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
 
                      {isNotifOpen && (
-                <div    ref={notifRef} className="absolute md:right-2 -right-2 top-1/2 mt-8 md:w-96 w-90  shadow-lg rounded-lg  z-50" style={{ backgroundColor: colors.background.default }}>
+                <div    ref={notifRef} className="absolute md:right-2 right-2 top-1/2 mt-8 md:w-96 w-86  shadow-lg rounded-lg  z-50" style={{ backgroundColor: colors.background.default }}>
                   <Notifications
                     notifications={notifications}
                     setNotifications={setNotifications}

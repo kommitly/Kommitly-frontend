@@ -143,155 +143,16 @@ if (loading) {
 
   
   return (
-    <div className='w-full   md:px-0 px-2  mt-4 '>
+    <div className='w-full p-6  mt-4 '>
 
       
 
-      <div className="w-full   flex-1 overflow-y-auto scrollbar-hide xl:max-h-[76vh] md:max-h-[70vh]  no-scrollbar">
+      <div className="w-full 2xl:px-16   md:px-0 px-2    flex-1 overflow-y-auto scrollbar-hide xl:max-h-[76vh] md:max-h-[70vh]  no-scrollbar">
       
       {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
 
           {/* Problem Statement Section */}
-      {!showGoalBreakdown && (
-        <motion.div 
-        initial="hidden" 
-        animate="visible" 
-        variants={{
-          hidden: { opacity: 0 },
-          visible: { opacity: 1, transition: { staggerChildren: 0.5 } }, // Stagger effect
-        }}
-        className="py-8 px-4 space-y-4"
-      > 
-          <motion.div className='flex h-10 items-center gap-4 mb-4 '
-          style={{marginBottom: isXs
-        ? '10px'
-        : isSm
-        ? '20px'
-        : isMd
-        ? '20px'
-        : isLg
-        ? '20px'
-        : isXl
-        ? '20px'
-        : isXxl
-        ? '20px'
-        : '20px'
-           }}>
 
-           <Box>
-           <motion.div
-              className='flex items-center justify-center w-4 h-4 rounded-full'
-              style={{ backgroundColor: colors.primary[500],
-                width: isXs ? '10px' : isSm ? '20px' : isMd ? '20px' : isLg ? '20px' : isXl ? '20px' : isXxl ? '20px' : '20px', 
-                height: isXs ? '10px' : isSm ? '20px' : isMd ? '20px' : isLg ? '20px' : isXl ? '20px' : isXxl ? '20px' : '20px',
-                
-               }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              ref={(el) => {
-                if (el) {
-                  animate(el, { scale: [0.8, 1.4, 0.8] }, { duration: 1.5, repeat: Infinity });
-                }
-              }}
-            >
-
-              </motion.div>
-           </Box>
-
-              <TypingText color={colors.primary[500]}  onComplete={() => setTextComplete(true)} />
-
-          </motion.div>
-
-          { textComplete && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }} // Remove fixed delay
-            className='flex w-full items-center gap-5'
-          >
-            <div className='w-3  h-8'>
-
-            </div>
-            <div>
-
-             
-          <Typography variant="h4" className="mt-2 w-full" style={{ color: colors.text.tertiary, fontWeight: '400' ,  fontSize: isXs
-        ? "0.8rem" // Smallest size for XS
-        : isSm
-        ? "1.2rem" // Medium size for SM
-        : isMd
-        ? "1.2rem" // Medium size for MD
-        : isLg
-        ? "1.2rem" // Large size for LG
-        : isXl
-        ? "1.5rem" // Extra large size for XL
-        : "1.2rem", // Default size for larger screens (or the largest)
-    }}>
-            Achieve your goals in just a few steps:
-          </Typography>
-          <motion.ul
-  className="mt-4"
-  style={{ color: colors.primary[500] }}
-  initial="hidden"
-  animate="visible"
-  variants={{
-    visible: { transition: { staggerChildren: 0.2 } } // Stagger effect
-  }}
->
-  {steps.map((step, index) => (
-    <motion.li
-      key={index}
-      className="flex items-center gap-3 text-primary "
-      style={{ marginLeft: `${index * 8}px` }}
-      variants={{
-        hidden: { opacity: 0, x: -20 }, // Start slightly to the left
-        visible: { opacity: 1, x: 0, transition: { duration: 0.5 } } // Slide in
-      }}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="#A89FE3"
-        className="w-5 h-8 text-secondary"
-      >
-        <path d="M4 4 Q4 14 14 14" strokeLinecap="round" />{/* Smooth right-angle bend */}
-        <path strokeLinecap="round" strokeLinejoin="round" d="M16 8l6 6-6 6" />
-      </svg>
-      <Typography  style={{fontSize: isXs
-        ? "0.8rem" // Smallest size for XS
-        : isSm
-        ? "1rem" // Medium size for SM
-        : isMd
-        ? "1rem" // Medium size for MD
-        : isLg
-        ? "1rem" // Large size for LG
-        : isXl
-        ? "1.2rem" // Extra large size for XL
-        : "1rem", // Default size for larger screens (or the largest)
-    }}>
-      {step}
-      </Typography>
-   
-    </motion.li>
-  ))}
-</motion.ul>
-
-
-
-
-
-            </div>
-           
-          </motion.div>
-        )}
-
-          
-          
-        </motion.div>
-      )}
 
 <Modal
   open={showNewUserModal}
@@ -364,12 +225,45 @@ if (loading) {
 
 
 {!showGoalBreakdown && (
-   <div className='flex  w-full  items-center justify-center flex-wrap gap-4'>
-   <Box className='md:w-8/12 xl:w-6/12 w-10/12  bg-[#F4F1FF] p-2 z-10 rounded-full fixed bottom-20' sx={{
-    backgroundColor: colors.background.paper,
-    position: 'fixed',
-    zIndex: (theme) => theme.zIndex.modal + 3
-  }}>
+   <div className='flex relative md:h-[70vh] h-[88vh]  w-full  items-center justify-center flex-wrap gap-4'>
+    <div className='w-full h-full   flex flex-col justify-center items-center '>
+    <Typography
+  variant="body"
+  sx={{
+    color: colors.text.secondary,
+     fontSize: {
+      xs: "1.6rem",  // mobile
+      sm: "1.2rem",
+      md: "1.4rem",
+      lg: "1.6rem", // desktop
+      xl: "2rem",
+      xxl: "2.2rem"
+    },
+    marginBottom: "4rem",
+    textAlign: "center",
+  }}
+>
+  What Goal do You Want to Break Down?
+</Typography>
+
+     <Box
+   className="md:w-9/12 xl:w-8/12 w-full border p-2 md:p-2 xl:p-3 2xl:p-4  z-10 rounded-full"
+  sx={{
+    borderColor: colors.primary[200],
+    boxShadow:
+      theme.palette.mode === 'dark'
+        ? `4px 4px 4px rgba(109, 91, 166, 0.5)`
+        : `4px 4px 4px rgba(214, 207, 255, 0.6)`,
+
+    // ✅ Fixed at bottom on small screens, centered on medium+
+    position: { xs: 'fixed', md: 'relative' },
+    bottom: { xs: '2rem', md: 'auto' },
+    left: { xs: '50%', md: '0' },
+    transform: { xs: 'translateX(-50%)', md: 'none' },
+    width: { xs: '90%', md: '70%' },
+    zIndex: 10,
+  }}
+>
      <div className='flex items-center justify-between gap-4'>
        <div className='flex items-center w-full gap-4 ml-2'>
          <IconButton>
@@ -396,11 +290,11 @@ if (loading) {
 
          <input
            type="text"
-           placeholder='Break down a new goal'
+           placeholder='Enter a goal'
            value={inputValue}
            onChange={handleInputChange}
            onKeyDown={(e) => e.key === 'Enter' && handleFormSubmit()}
-           className=' outline-none border-none w-full text-xs' style={{color: colors.text.primary}}
+           className=' outline-none border-none w-full md:text-base text-sm xl:text-base 2xl:text-xl lg:text-base' style={{color: colors.text.primary}}
          />
 
        </div>
@@ -409,6 +303,10 @@ if (loading) {
        </IconButton>
      </div>
    </Box>
+
+
+      </div>
+  
  </div>
 
 

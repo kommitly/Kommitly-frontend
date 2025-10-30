@@ -252,7 +252,7 @@ const Goals = () => {
       <div className="text-center py-4 text-gray-500">Loading goals...</div>
     ) : goals?.goals?.length === 0 && goals?.ai_goals?.length === 0 ? (
       <>
-      <div className="flex flex-col p-4 min-h-screen h-full">
+      <div className="flex flex-col p-4 md:p-4 xl:p-18 min-h-screen h-full">
         <Backdrop
           sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
           open={openCreateGoal}// Use openCreateGoal state for backdrop
@@ -330,7 +330,7 @@ const Goals = () => {
           </div>
         </Backdrop>
 
-        <div className='w-full flex justify-between items-center'>
+        <div className='w-full border flex justify-between items-center'>
 
          <Typography 
                                        variant="h2" 

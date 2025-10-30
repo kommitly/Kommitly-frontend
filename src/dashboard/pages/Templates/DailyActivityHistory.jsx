@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchDailyActivities } from "../../../utils/Api";
 import { useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
+import Empty from "../../components/Empty";
 
 export default function DailyActivityHistory() {
   const theme = useTheme();
@@ -31,10 +32,13 @@ export default function DailyActivityHistory() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Your Progress History</h2>
+      <h2 className="text-xl font-medium mb-4">Your Progress History</h2>
 
       {Object.keys(history).length === 0 && (
-        <p style={{ color: colors.text.placeholder }}>No activity history yet.</p>
+        <div className="h-[80vh] flex justify-center items-center">
+            <Empty/>
+          </div>
+     
       )}
 
       {Object.entries(history).map(([date, activities]) => (
