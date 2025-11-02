@@ -59,13 +59,14 @@ const Home = () => {
   
 
   useEffect(() => {
-  const hasSeenModal = localStorage.getItem("seenNewUserModal");
+    const hasSeenModal = localStorage.getItem("seenNewUserModal");
 
-  if (!hasSeenModal) {
-    setShowNewUserModal(true);
-    localStorage.setItem("seenNewUserModal", "true");
-  }
-}, []);
+    if (!hasSeenModal || hasSeenModal === "false") {
+      setShowNewUserModal(true);
+      localStorage.setItem("seenNewUserModal", "true");
+    }
+  }, []);
+
 
    
   useEffect(() => {
@@ -168,7 +169,7 @@ if (loading) {
   <Box
      sx={{
     position: 'absolute',
-    bottom: { xs: 170, sm: 160 }, // higher on extra small screens
+    bottom: { xs: 120, sm: "56%" }, // higher on extra small screens
     left: { xs: '50%', sm: '50%' }, // slightly shifted on small screens
     transform: 'translateX(-50%)',
     pointerEvents: 'none',

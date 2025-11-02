@@ -32,10 +32,20 @@ export const tokens = (mode) => ({
         tag:{
           primary: "#1E1A2A"
         },
+         empty:{
+          primary: "#2C2640",
+          secondary: "#6D5BA6",
+          tertiary: "#4F378A",
+          clips: "#F4F1FF",
+          paper: "#A89FE3",
+          cut: "#13101B"
+          
+        },
            menu:{
           primary: "#3F375C"
         }
       }
+
     : {
         primary: {
           100: "#F6F3F3", // Soft Lavender-White
@@ -64,7 +74,16 @@ export const tokens = (mode) => ({
         },
            menu:{
           primary: "#FFFFFF"
-        }
+        },
+           empty:{
+          primary: "#EAE6FF",
+          secondary: "#6D5BA6",
+          tertiary: "#4F378A",
+          clips: "#F4F1FF",
+          paper: "#A89FE3",
+          cut: "#FFFFFF"
+          
+        },
 
 
       }),

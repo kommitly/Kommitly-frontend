@@ -10,7 +10,7 @@ const SlidingButton = ({ options, selected, onChange }) => {
   const width = 100 / options.length;
 
   return (
-    <div className="flex mt-4 relative px-1 rounded-md md:w-7/12 w-full" style={{backgroundColor: colors.tag.primary}} >
+    <div className="flex  relative px-1 rounded-md md:w-7/12 w-full" style={{backgroundColor: colors.tag.primary}} >
 
  
                   <div className='relative w-full'>
