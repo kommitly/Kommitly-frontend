@@ -144,7 +144,7 @@ if (loading) {
 
   
   return (
-    <div className='w-full p-6  mt-4 '>
+    <div className='w-full md:p-6 p-2 mt-4 '>
 
       
 

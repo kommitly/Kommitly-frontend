@@ -13,7 +13,7 @@ export const tokens = (mode) => ({
           400: "#0D81E0", // Rich Purple
           500: "#6D5BA6", // Muted Eggplant (Surface)
           600: "#F6F3F3", // Deep Midnight Purple (Background)
-
+          700: "#2C2640"
         },
         text: {
           primary: "#F4F1FF", // Soft Lavender-White
@@ -54,6 +54,7 @@ export const tokens = (mode) => ({
           400: "#0D81E0", // Deep Violet
           500: "#4F378A", // Rich Purple
           600: "#2C2640", // Muted Eggplant (Surface)
+          700: "#F6F3F3",
         },
         text: {
           primary: "#1E1A2A", // Dark Purple (for contrast in light mode)

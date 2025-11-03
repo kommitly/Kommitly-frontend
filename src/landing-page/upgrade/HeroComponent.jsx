@@ -265,7 +265,7 @@ const HeroComponent = () => {
         // Use the descriptive text on medium screens and up
         <p className="w-16 text-[10px] font-medium " style={{ color: isActive ? "#F6F3F3" : "#4F378A" }}>Status:</p>
     )}
-    <span className=" py-0.5 border w-20 text-center rounded-sm text-[10px] justify-center flex items-center " style={{ color: isActive ? "#F6F3F3" : "#4F378A", borderColor: isActive ? "#F6F3F3" : "#4F378A" }}>
+    <span className=" py-0.5  w-20 text-center rounded-sm text-[10px] justify-center flex items-center " style={{ color: isActive ? "#F6F3F3" : "#4F378A", borderColor: isActive ? "#F6F3F3" : "#4F378A" }}>
         {task.status}
     </span>
 </div>

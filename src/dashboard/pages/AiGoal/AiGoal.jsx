@@ -35,6 +35,9 @@ import AiAssistance from '../../components/AiAssistance';
 import { color } from 'framer-motion';
 import { BsHourglassSplit } from "react-icons/bs";
 import { BsHourglassTop } from "react-icons/bs";
+import { CiCircleMore } from "react-icons/ci";
+import { RiProgress1Line } from "react-icons/ri";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 
 
 const extractTimeline = (description) => {
@@ -73,6 +76,24 @@ const pathVariant = {
   
  
 }
+
+
+
+const StatusIcon = ({ status, color, size = 16 }) => {
+  const iconColor = color || "#000";
+  switch (status?.toLowerCase().replace(/[-_]/g, " ")) {
+  case "pending":
+    return <CiCircleMore size={size} color={iconColor} />;
+  case "in progress":
+    return <RiProgress1Line size={size} color={iconColor} />;
+  case "completed":
+  case "done":
+    return <AiOutlineCheckCircle size={size} color={iconColor} />;
+  default:
+    return <CiCircleMore size={size} color={iconColor} />;
+}
+
+};
 
 
 
@@ -937,7 +958,7 @@ if (loading) {
 
                                 <div className="flex flex-col gap-2">
                                                   <div className="flex items-center">
-                                                    {isXs ? (<BsHourglassTop fontSize='small' style={{color: colors.text.secondary}}/>
+                                                    {isXs ? (<BsHourglassTop fontSize='small' style={{color: isActive ? colors.primary[100] : colors.text.secondary }}/>
                                                      
                 ):( <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm  text-xs font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Timeline:</p>)}
 
@@ -953,8 +974,11 @@ if (loading) {
 
                                                   </div>
                                                   <div className="flex items-center">
-                                                   {isXs ? (""):( <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>)}
-                                                    <span className="px-3 py-0.5 border  2xl:text-sm  text-center  text-xs rounded-sm md:text-xs xl:text-xs  flex items-center " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
+                                                   {isXs ? (<StatusIcon 
+  status={task.status} 
+  color={isActive ? "#F6F3F3" : "#4F378A"} 
+/>):( <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>)}
+                                                    <span className="px-3 py-0.5  2xl:text-sm  text-center  text-xs rounded-sm md:text-xs xl:text-xs  flex items-center " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
                                                       {task.status}
                                                     </span>
                                                   </div>
