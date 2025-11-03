@@ -281,6 +281,12 @@ sx={{
               },
               [`.${menuClasses.subMenuContent}`]: {
                 backgroundColor:`${colors.background.sidebar} `,
+                marginLeft: isCollapsed ? (
+                isXs ? "0px" : isSm ? "0px" : isMd ? "4px" : isLg ? "0px" : isXl ? "0px" : "0px"
+              ) : (
+                isXs ? "20px" : isSm ? "10px" : isMd ? "0px" : isLg ? "0px" : isXl ? "0px" : isXxl ? "0px" : "0px"
+              ),
+
               },
 
               [`.${menuClasses.button}`]: {

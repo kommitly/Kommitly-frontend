@@ -94,8 +94,8 @@ const Goals = () => {
   const navigate = useNavigate();
   const { goals, addGoal, reloadGoals } = useContext(GoalsContext);
   const [loading, setLoading] = useState(true);
-  const [selectedAiCategory, setSelectedAiCategory] = useState("inProgress");
-  const [selectedCategory, setSelectedCategory] = useState("inProgress");
+  const [selectedAiCategory, setSelectedAiCategory] = useState("pending");
+  const [selectedCategory, setSelectedCategory] = useState("pending");
   const goalsContainerRef = useRef(null);
   const aiGoalsContainerRef = useRef(null);
   const [selectedPeriod, setSelectedPeriod] = useState('weekly');
@@ -529,7 +529,7 @@ const Goals = () => {
             >AI Goals </Typography></h1>
 
                  <SlidingButton 
-  options={["inProgress", "pending", "completed"]}
+  options={[ "pending", "inProgress", "completed"]}
   selected={selectedAiCategory}
   onChange={setSelectedAiCategory}
 />
@@ -673,7 +673,7 @@ const Goals = () => {
             </Typography>
             </h1>
                          <SlidingButton
-  options={["inProgress", "pending", "completed"]}
+  options={["pending","inProgress",  "completed"]}
   selected={selectedCategory}
   onChange={setSelectedCategory}
 />

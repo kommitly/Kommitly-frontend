@@ -1,8 +1,9 @@
 import React from 'react'
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, useNavigate  } from 'react-router-dom';
 import { useEffect, useState, useContext } from "react";
 import { TasksContext } from "../../../context/TasksContext";
 import PropTypes from 'prop-types';
+
 import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById, getAiSubtaskById } from "../../../utils/Api";
 import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem, colors } from "@mui/material";
 import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } from "@mui/icons-material";
@@ -22,6 +23,7 @@ import { Hand } from 'lucide-react';
 import { HiMiniChevronDoubleLeft } from "react-icons/hi2";
 import SubtaskDateTimePicker from './SubtaskDateTimePicker';
 import ReminderTimePicker from './ReminderTimePicker';
+import { Select, FormControl } from "@mui/material";
 
 const AiSubtaskPage = () => {
 
@@ -40,6 +42,12 @@ const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
 
   const showCustomReminderPicker = step?.reminder_offset === 'custom';
+  const [menuVisible, setMenuVisible] = useState(false);
+
+   const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
 
   useEffect(() => {
     setTimeout(() => setVisible(true), 10);
@@ -159,8 +167,10 @@ const handleUpdateSubtask = async () => {
 
     console.log("Final payload:", {
       title: step.title,
+      description: step.description,
       due_date: step.due_date,
       reminder_time: reminderTime,
+      status: step.status, 
     });
 
     const updatedData = {
@@ -183,6 +193,12 @@ const handleUpdateSubtask = async () => {
     console.error("Failed to update subtask:", err);
   }
 };
+
+const handleStatusChange = (newStatus) => {
+  setStep((prev) => ({ ...prev, status: newStatus }));
+  handleUpdateSubtask(); // Trigger backend update
+};
+
 
 
 const confirmDeleteSubtask = async () => {
@@ -207,7 +223,7 @@ const confirmDeleteSubtask = async () => {
     <div >
 
       <div className="w-full h-full flex flex-col p-4">
-  <button
+  {/* {<button
  
   className="group p-2 w-10 h-10 flex justify-center items-center cursor-pointer "
   style={{
@@ -217,17 +233,11 @@ const confirmDeleteSubtask = async () => {
 
 >
   <HiMiniChevronDoubleLeft className="text-2xl  text-[#4F378A] group-hover:text-white transition-colors duration-300" onClick={() => navigate(`/dashboard/ai-goal/${goalId}`)} />
-</button>
+</button>} */}
 
             
         <div className='flex gap-2 mt-8 items-center '>
-       <span className='flex  items-center gap-2'>
-        <span className='bg-[#D6CFFF] p-2 rounded-md'>
-         <FaTasks className="text-[#4F378A] " size={12} />
-        </span>
       
-       <label className=" w-30 text-base font-regular">Title</label>
-       </span>
         <input
             type="text"
             name="title"
@@ -238,8 +248,50 @@ const confirmDeleteSubtask = async () => {
                 color: colors.primary[500],
               }
               }
-            className="w-full   text-xl focus:outline-none focus:ring-none focus:bg-purple-300"
+            className="w-full mb-2  text-xl focus:outline-none focus:ring-none focus:bg-purple-300"
           />
+
+                        <div className="relative" >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#65558F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="cursor-pointer"
+                          onClick={toggleMenu}
+                        >
+                          <circle cx="12" cy="5" r="1"></circle>
+                          <circle cx="12" cy="12" r="1"></circle>
+                          <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                         {menuVisible && (
+                            <div className="absolute right-0 mt-2 w-30 flex flex-col  rounded-md shadow-lg z-50" style={{ backgroundColor: colors.menu.primary }}>
+                               <button
+                        onClick={handleUpdateSubtask}
+                          className=" px-4 py-2" style={{color:colors.text.primary}}
+                        >
+                          Update
+                        </button>
+                               <button
+                        onClick={() => setShowDeleteModal(true)}
+                          className=" px-4 py-2 " style={{color:colors.background.warning}}
+                        >
+                          Delete
+                        </button>
+                       
+                              
+          
+                             
+                            </div>
+                          )}
+                        </div>
+
+         
         </div>
     
          
@@ -267,7 +319,7 @@ const confirmDeleteSubtask = async () => {
           <div className="relative mt-6 w-11/12">
       <textarea
           name="description"
-            className=" rounded w-full text-sm  focus:outline-none focus:ring-none focus:bg-purple-100"
+            className=" rounded w-full md:w-1/2 text-sm  focus:outline-none focus:ring-none focus:bg-purple-100"
             value={step.description}
             onChange={handleChange}
           />
@@ -373,25 +425,48 @@ const confirmDeleteSubtask = async () => {
     
     </div>
 
-      <div className='flex gap-20 mt-8 items-center '>
-       <span className='flex  items-center gap-2'>
-        <span className='bg-[#D6CFFF] p-2 rounded-md'>
-         <FaTasks className="text-[#4F378A] " size={12} />
-        </span>
+   <div className="flex gap-20 mt-8 items-center">
+  <span className="flex items-center gap-2">
+    <span className="bg-[#D6CFFF] p-2 rounded-md">
+      <FaTasks className="text-[#4F378A]" size={12} />
+    </span>
+
+    <p>Status:</p>
+  </span>
+
+  <FormControl
+    size="small"
+    sx={{
+      minWidth: 140,
+      backgroundColor: colors.background.paper,
+      borderRadius: "8px",
+    }}
+  >
+    <Select
+      value={step.status}
+      onChange={(e) => handleStatusChange(e.target.value)}
       
-       
-          <p>
-            Status:
-          </p>
-          
-       </span>
-       <p className="p-2 rounded-md" style={{backgroundColor: colors.background.paper, color: colors.text.secondary}}>{step.status}</p>
+      sx={{
+        color: colors.text.secondary,
+        "& .MuiOutlinedInput-notchedOutline": {
+          border: "none",
+        },
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+          border: "none",
+        },
+        "& .MuiSelect-icon": {
+          color: colors.text.secondary,
+        },
+      }}
+    >
+      <MenuItem value="pending">Pending</MenuItem>
+      <MenuItem value="in-progress">In Progress</MenuItem>
+      <MenuItem value="completed">Completed</MenuItem>
+    </Select>
+  </FormControl>
+</div>
     
-        
-          
-        </div>
-    
-    
+    {/* {
           <div className="flex gap-4  mt-4">
          <div className='flex  items-center gap-2'>
            <span className='flex  items-center gap-2'> 
@@ -418,23 +493,10 @@ const confirmDeleteSubtask = async () => {
           </div>
     
         
-    
+    } */}
           
     
-          <div className="  item-end flex gap-4 fixed bottom-0 right-0">
-            <button
-            onClick={() => setShowDeleteModal(true)}
-              className="bg-red-400 text-red-100 px-4 py-2 rounded hover:bg-red-600"
-            >
-              Delete
-            </button>
-            <button
-             onClick={handleUpdateSubtask}
-              className="bg-[#6246AC] text-white px-4 py-2 rounded hover:bg-purple-600"
-            >
-              Update
-            </button>
-          </div>
+        
         </div>
         </div>
         {showDeleteModal && (

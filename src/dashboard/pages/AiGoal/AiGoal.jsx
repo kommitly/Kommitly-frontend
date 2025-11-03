@@ -957,13 +957,13 @@ if (loading) {
 
 
                                 <div className="flex flex-col gap-2">
-                                                  <div className="flex items-center">
+                                                  <div className="flex gap-2 items-center">
                                                     {isXs ? (<BsHourglassTop fontSize='small' style={{color: isActive ? colors.primary[100] : colors.text.secondary }}/>
                                                      
-                ):( <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm  text-xs font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Timeline:</p>)}
+                ):( <p className="w-16 md:text-xs xl:text-xs 2xl:text-sm  text-xs font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Timeline:</p>)}
 
                                                    <span
-                                                        className="px-3 py-0.5 md:border 2xl:text-sm text-xs rounded-sm md:text-xs xl:text-xs"
+                                                        className="  2xl:text-sm text-xs rounded-sm md:text-xs xl:text-xs"
                                                         style={{
                                                           color: isActive ? colors.primary[100] : colors.text.secondary,
                                                           borderColor: isActive ? colors.primary[100] : colors.text.secondary,
@@ -973,12 +973,12 @@ if (loading) {
                                                       </span>
 
                                                   </div>
-                                                  <div className="flex items-center">
+                                                  <div className="flex gap-2 items-center">
                                                    {isXs ? (<StatusIcon 
   status={task.status} 
   color={isActive ? "#F6F3F3" : "#4F378A"} 
-/>):( <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>)}
-                                                    <span className="px-3 py-0.5  2xl:text-sm  text-center  text-xs rounded-sm md:text-xs xl:text-xs  flex items-center " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
+/>):( <p className="w-16 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>)}
+                                                    <span className="  2xl:text-sm  text-center  text-xs rounded-sm md:text-xs xl:text-xs  flex items-center " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
                                                       {task.status}
                                                     </span>
                                                   </div>
@@ -1176,7 +1176,7 @@ if (loading) {
                       
                       <Box className=' 2xl:h-6 h-6  flex items-center  gap-2   '>
                       <BsHourglassTop fontSize='small' style={{color: colors.text.secondary}}/>
-                          <p className='md:text-xs xl:text-xs text-xs font-medium gap-4 ' style={{color: colors.text.secondary}}
+                          <p className='md:text-xs xl:text-xs text-xs  gap-4 ' style={{color: colors.text.secondary}}
                           >
                            
                           {timeline}
