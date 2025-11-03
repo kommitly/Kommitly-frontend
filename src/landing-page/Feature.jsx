@@ -58,14 +58,14 @@ const Feature = () => {
           <Box 
             key={index}
             className="p-6 rounded-4xl border shadow-lg transition-transform transform hover:scale-105"
-          sx={{borderColor: colors.text.secondary}}
+          sx={{borderColor: "#4F378A"}}
           >
             <Box className="mb-4">{feature.icon}</Box>
             <Typography 
               variant="h4" 
               sx={{ 
                 fontWeight: 'bold', 
-                color: colors.background.default,
+                color: "#FBF9FF",
                 mb: 2 
               }}
             >
@@ -74,7 +74,7 @@ const Feature = () => {
             <Typography 
               variant="body1" 
               sx={{ 
-                color: colors.background.default, 
+                color: "#FBF9FF", 
                 lineHeight: 1.8 
               }}
             >

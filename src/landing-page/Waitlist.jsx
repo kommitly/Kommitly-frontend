@@ -42,7 +42,7 @@ const Waitlist = () => {
               sx={{ 
                     fontSize: { xs: '1.75rem', md: '2.25rem' },
                     fontWeight: 'semibold', 
-                    color: colors.background.default,
+                    color: "#FBF9FF",
                     mb: {xs: 6, md: 4} // Increased margin bottom to separate header from content
                 }}
             >
@@ -67,8 +67,8 @@ const Waitlist = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 fullWidth
                 sx={{
-                  input: { color: colors.menu.primary },
-                  fieldset: { borderColor: colors.primary[500] },
+                  input: { color: "#FFFFFF" },
+                  fieldset: { borderColor: "#4F378A" },
                 }}
               />
               <button
@@ -84,7 +84,7 @@ const Waitlist = () => {
             <Typography
               variant="h5"
               fontWeight="bold"
-              sx={{ color: colors.primary[500], mb: 1 }}
+              sx={{ color: "#4F378A", mb: 1 }}
             >
               You’re on the list!
             </Typography>

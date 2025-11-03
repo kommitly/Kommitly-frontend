@@ -21,6 +21,7 @@ import { GoogleLogin} from '@react-oauth/google';
 import { loginWithGoogle} from "../utils/Api"; 
 import getLocationAndTimezone from "../utils/location";
 import Loading from "../dashboard/components/Loading";
+import RegistrationPhoto from "./upgrade/RegistrationPhoto";
 
 
 
@@ -71,22 +72,27 @@ const Registration = () => {
   return (
     <Box className="flex items-center p-2 h-screen">
       <div className="flex    rounded-xl w-full items-center h-full">
-        <Box className="w-full h-full p-4  hidden md:block   items-center justify-center bg-no-repeat bg-cover bg-center rounded-4xl" sx={{backgroundColor: colors.background.paper}}>
+        <Box
+  className="w-full h-full p-4 hidden md:block items-center justify-center bg-repeat bg-cover bg-center rounded-4xl"
+  sx={{
+    backgroundColor: colors.background.paper,
+   
+    backgroundSize: '100px 100px',
+    position: 'relative',
+  }}
+>
 
-       {/* { <AnimatedLines />} */}
+
+     
        <Box 
        sx={{ padding: 1, marginBottom: 4, paddingLeft: 2}}>
         <div className="flex  items-center gap-6 ">
-          <div className=" mt-10 h-full">
-              <h1 className="md:text-3xl lg:text-5xl  sm:text-2xl xl:text-4xl 2xl:text-6xl  font-semibold text-[#4B2E83]">
+          <div className=" mt-4 h-full">
+              <h1 className="md:text-3xl lg:text-5xl  sm:text-2xl xl:text-4xl 2xl:text-6xl  font-regular text-[#4B2E83]">
            Welcome to 
         </h1>
           </div>
-         {/* {<img
-          src={banner}
-          alt="Logo"
-          className="justify-end w-36  md:w-24 lg:w-30 2xl:w-36                      h-auto -mt-8 md:mt-0 2xl:-mt-6"  
-        />} */}
+        
        <div>
          <svg width="158" height="144" viewBox="0 0 158 144" fill="none" xmlns="http://www.w3.org/2000/svg" className="overflow-visible w-auto ">
         
@@ -115,21 +121,10 @@ const Registration = () => {
         </div>
        
 
-        <p
-          className="mt-4 mb-4 md:text-xs lg:text-sm text-xs  sm:text-2xl xl:text-base 2xl:text-xl"
-          style={{ color: colors.text.secondary, fontFamily: "Poppins, sans-serif" }}
-
-        >
-          Your journey to achieving your goals starts here.
-        </p>
     
        </Box>
-        <div className="flex justify-center items-center  w-full">
-         <img
-          src={breakdown}
-          alt="Logo"
-          className="justify-end w-10/12 md:w-8/12 sm;w-8/12 xs-w-6/12    h-auto "
-        />
+        <div className="flex justify-center  w-full">
+        <RegistrationPhoto/>
      </div>
       </Box>
      

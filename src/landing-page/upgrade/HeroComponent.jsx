@@ -58,7 +58,7 @@ const HeroComponent = () => {
     [`&.${linearProgressClasses.colorPrimary}`]: {
       backgroundColor: theme.palette.grey[200],
       ...theme.applyStyles('dark', {
-        backgroundColor: theme.palette.grey[800],
+        backgroundColor: theme.palette.grey[200],
       }),
     },
     [`& .${linearProgressClasses.bar}`]: {
@@ -66,7 +66,7 @@ const HeroComponent = () => {
       boxShadow: '0px 4px 4px rgba(98,0,238,0.2)', // Add shadow here
       backgroundColor: '#6441C1',
       ...theme.applyStyles('dark', {
-        backgroundColor: '#E8DEF8',
+        backgroundColor: '#6441C1',
       }),
     },
   }));
@@ -100,10 +100,10 @@ const HeroComponent = () => {
    <div 
   className='w-full h-[80vh] md:h-[90vh] flex p-4 border border-b-0 rounded-4xl' 
   style={{
-    backgroundColor: colors.background.default, 
-    borderColor: colors.background.paper,
-    // Add box shadow that matches the borderColor (colors.background.paper)
-    // boxShadow: `2px 0px 5px ${colors.background.paper}` 
+    backgroundColor: "#FBF9FF", 
+    borderColor: "#D6CFFF",
+    // Add box shadow that matches the borderColor ("#D6CFFF")
+    // boxShadow: `2px 0px 5px ${"#D6CFFF"}` 
   }}
 >
 
@@ -117,7 +117,7 @@ const HeroComponent = () => {
             <div className='flex items-center gap-4 2xl:ml-4 '>
             <span className='text-lg'> 🚩</span>
                 
-            <h1 className='md:text-sm  font-medium'>{goal.title}</h1>
+            <h1 className='md:text-sm text-black  font-medium'>{goal.title}</h1>
                  
 
 
@@ -179,10 +179,10 @@ const HeroComponent = () => {
                         }}>
                         <div className="flex  transition-transform duration-300 justify-between items-center md:gap-4 gap-2 relative  max-h-full   border-l md:p-4 p-2  rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 lg:w-full md:w-11/12 w-full"   style={{
         backgroundColor: allTasksCompleted
-          ? theme.palette.background.paper // Adjust to your theme color
+          ? "#D6CFFF" // Adjust to your theme color
           : isActive
           ? "#4F378A" // White background for active
-          : theme.palette.background.paper,
+          : "#D6CFFF",
         borderLeftColor: theme.palette.primary.main, // Replace with the desired theme color
         // boxShadow:
         //  "2px 3px 8px 2px rgba(101, 85, 143, 0.2), 0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -190,7 +190,7 @@ const HeroComponent = () => {
           <div className={`md:w-1/4 w-24 rounded-lg  p-2 flex justify-center items-center ${isActive ? 'bg-[#F4F1FF]' : 'bg-[#FFFFFF]'}`}  style={{
         backgroundColor:isActive
           ? "#D6CFFF" // White background for active
-          : colors.menu.primary,
+          :  "#FFFFFF",
 
       }}>
                               <img src={aiGoals} alt="goals"  className='h-18 object-cover'/>
@@ -198,7 +198,7 @@ const HeroComponent = () => {
                             <div className='w-full ' >
                               <div className='flex  items-center h-auto gap-4  md:mb-2 mb-2 w-full justify-between '>
                                  
-                                  <h3 className="md:text-xs text-xs xl:text-xs 2xl:text-xs font-medium" style={{color: isActive ? colors.primary[100] : colors.text.primary}}>
+                                  <h3 className="md:text-xs text-xs xl:text-xs 2xl:text-xs font-medium" style={{color: isActive ? "#F6F3F3" : "#1E1A2A"}}>
                                     {task.title}
                                   </h3>
                           
@@ -210,7 +210,7 @@ const HeroComponent = () => {
                                             height="16"
                                             viewBox="0 0 24 24"
                                             fill="none"
-                                            stroke= {isActive ? colors.primary[100] : colors.text.secondary}
+                                            stroke= {isActive ? "#F6F3F3" : "#4F378A"}
                                             strokeWidth="2"
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
@@ -236,15 +236,15 @@ const HeroComponent = () => {
 
                                 <div className="flex flex-col gap-2">
                                                   <div className="flex items-center">
-                                                    {isXs ? (  <div className="w-8 flex justify-center"> <BsHourglassTop fontSize='small'  style={{ color: isActive ? colors.primary[100] : colors.text.secondary }}/> </div> 
+                                                    {isXs ? (  <div className="w-8 flex justify-center"> <BsHourglassTop fontSize='small'  style={{ color: isActive ? "#F6F3F3" : "#4F378A" }}/> </div> 
                                                      
-                ):( <p className="w-16 text-[10px] font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Timeline:</p>)}
+                ):( <p className="w-16 text-[10px] font-medium " style={{color: isActive ? "#F6F3F3" : "#4F378A" }}>Timeline:</p>)}
 
                                                    <span
                                                         className="w-20 flex justify-center py-0.5 md:border text-[10px] rounded-sm "
                                                         style={{
-                                                          color: isActive ? colors.primary[100] : colors.text.secondary,
-                                                          borderColor: isActive ? colors.primary[100] : colors.text.secondary,
+                                                          color: isActive ? "#F6F3F3" : "#4F378A",
+                                                          borderColor: isActive ? "#F6F3F3" : "#4F378A",
                                                         }}
                                                       >
                                                         {task.timeline}
@@ -256,16 +256,16 @@ const HeroComponent = () => {
         <div className="w-8 flex justify-center"> 
             <StatusIcon 
   status={task.status} 
-  color={isActive ? colors.primary[100] : colors.text.secondary} 
+  color={isActive ? "#F6F3F3" : "#4F378A"} 
 />
 
 
         </div>
     ) : (
         // Use the descriptive text on medium screens and up
-        <p className="w-16 text-[10px] font-medium " style={{ color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>
+        <p className="w-16 text-[10px] font-medium " style={{ color: isActive ? "#F6F3F3" : "#4F378A" }}>Status:</p>
     )}
-    <span className=" py-0.5 border w-20 text-center rounded-sm text-[10px] justify-center flex items-center " style={{ color: isActive ? colors.primary[100] : colors.text.secondary, borderColor: isActive ? colors.primary[100] : colors.text.secondary }}>
+    <span className=" py-0.5 border w-20 text-center rounded-sm text-[10px] justify-center flex items-center " style={{ color: isActive ? "#F6F3F3" : "#4F378A", borderColor: isActive ? "#F6F3F3" : "#4F378A" }}>
         {task.status}
     </span>
 </div>
@@ -376,12 +376,12 @@ const HeroComponent = () => {
             
           </div>
 
-          <Box className="hidden relative md:block actionable-steps xl:w-6/12 lg:w-5/12 md:w-5/12 space-y-4 p-4 h-auto rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
+          <Box className="hidden relative md:block actionable-steps xl:w-6/12 lg:w-5/12 md:w-5/12 space-y-4 p-4 h-auto rounded-xl mt-4 " sx={{ backgroundColor: "#D6CFFF" }}>
               <div className=' items-center gap-4 mb-4 mt-4'>
                 <div className='flex items-center gap-4 w-full justify-between mb-2'>
-                <span className=' font-regular text-[#00000] text-xs '
+                <span className=' font-regular text-black text-xs '
                 >Progress</span>
-                <span className=' font-regular text-xs ' style={{color: colors.text.primary}}>
+                <span className=' font-regular text-xs ' style={{color: "#1E1A2A"}}>
                   24%
                 </span>
                 </div>
@@ -390,13 +390,13 @@ const HeroComponent = () => {
 
               
               </div>
-            <Box className='w-full    rounded-lg p-2 flex justify-center items-center' sx={{ backgroundColor: colors.background.default }}>
-                 <p className="md:text-xs lg:text-md 2xl:text-lg  font-medium" style={{color: colors.text.primary}}>
+            <Box className='w-full    rounded-lg p-2 flex justify-center items-center' sx={{ backgroundColor: "#FBF9FF" }}>
+                 <p className="md:text-xs lg:text-md 2xl:text-lg  font-medium" style={{color: "#1E1A2A"}}>
                 Start working on your goal today! 🚀
               </p>
             </Box>
            
-            <Box className="text-lg container h-[54vh] w-full px-4 py-2 mb-4 rounded-lg bg-[#FFFFFF] relative flex flex-col" sx={{ backgroundColor: colors.background.default }}>
+            <Box className="text-lg container h-[54vh] w-full px-4 py-2 mb-4 rounded-lg bg-[#FFFFFF] relative flex flex-col" sx={{ backgroundColor: "#FBF9FF" }}>
              
     {/* Content Container: This holds everything EXCEPT the button */}
     <div className="flex-grow overflow-y-auto pb-16"> {/* Add padding-bottom to ensure content doesn't hide under the fixed button */}
@@ -404,7 +404,7 @@ const HeroComponent = () => {
             <p className="text-xs flex items-center m-2 gap-2 w-full  text-[#000000] font-normal">
                 {activeTask ? (
                     <>
-                        <span className="font-medium text-xs" style={{color: colors.text.primary}}>{activeTask.title}</span>
+                        <span className="font-medium text-xs" style={{color: "#1E1A2A"}}>{activeTask.title}</span>
                     </>
                 ) : (
                     "Select a task"
@@ -419,7 +419,7 @@ const HeroComponent = () => {
         
         <div className='space-y-6 mt-4'>
             {activeTask?.ai_subtasks?.map((step) => (
-                <Box key={step.id} className="step rounded-xl transition-transform duration-300  flex items-center" sx={{ backgroundColor: colors.background.paper }}>
+                <Box key={step.id} className="step rounded-xl transition-transform duration-300  flex items-center" sx={{ backgroundColor: "#D6CFFF" }}>
                     <label className="custom-checkbox p-2">
                         <input
                             type="checkbox"
@@ -432,14 +432,14 @@ const HeroComponent = () => {
                     <div className='w-full py-4'>
                         <div className="flex flex-col w-full">
                             <Box width={"100%"} display={"flex"} alignItems={"center"}>
-                                <span className='md:text-xs xl:text-xs xl:w-full 2xl:text-xs font-regular' style={{ color: colors.text.primary }}>
+                                <span className='md:text-xs xl:text-xs xl:w-full 2xl:text-xs font-regular' style={{ color: "#1E1A2A" }}>
                                     {step.title}
                                 </span>
                             </Box>
 
                             <Box className='2xl:h-6 h-6 flex items-center gap-2'>
-                                <BsHourglassTop fontSize='small' style={{ color: colors.text.secondary }} />
-                                <p className='text-[10px] font-medium gap-4' style={{ color: colors.text.secondary }}>
+                                <BsHourglassTop fontSize='small' style={{ color: "#4F378A" }} />
+                                <p className='text-[10px] font-medium gap-4' style={{ color: "#4F378A" }}>
                                     {step.timeline}
                                 </p>
                             </Box>
@@ -452,7 +452,7 @@ const HeroComponent = () => {
     {/* END Content Container */}
 
     {/* The Button Container is NOW FIXED to the bottom */}
-    <div className='flex absolute bottom-0 left-0 right-0 py-4 w-full justify-center bg-[#FFFFFF] rounded-b-lg' sx={{ backgroundColor: colors.background.default }}>
+    <div className='flex absolute bottom-0 left-0 right-0 py-4 w-full justify-center bg-[#FFFFFF] rounded-b-lg' sx={{ backgroundColor: "#FBF9FF" }}>
         <button className='bg-[#4F378A] text-xs w-11/12 max-w-sm text-white py-2 px-8 rounded-lg'>
             Add to List
         </button>

@@ -13,7 +13,7 @@ const Painpoint = () => {
     const colors = tokens(theme.palette.mode);
    
   return (
-   <section className=" w-full py-6 md:py-12 " style={{ backgroundColor: colors.background.paper }}>
+   <section className=" w-full py-6 md:py-12 " style={{ backgroundColor: "#D6CFFF" }}>
         <div className=" w-full py-6 md:py-10  px-6 md:px-8" >
           <div className="max-w-7xl mx-auto container">
 
@@ -26,7 +26,7 @@ const Painpoint = () => {
                 sx={{ 
                     fontSize: { xs: '1.75rem', md: '2.25rem' },
                     fontWeight: 'semibold', 
-                    color: colors.text.primary,
+                    color: "#1E1A2A",
                     mb: {xs: 6, md: 10} // Increased margin bottom to separate header from content
                 }}
             >
@@ -38,7 +38,7 @@ const Painpoint = () => {
                 className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16"
             >
                 {/* 1. THE PROBLEM  */}
-                <Box className="space-y-6 p-6 md:p-8 rounded-4xl" sx={{ backgroundColor: colors.background.default }}>
+                <Box className="space-y-6 p-6 md:p-8 rounded-4xl" sx={{ backgroundColor: "#FBF9FF" }}>
                     <PsychologyIcon sx={{ fontSize: 48, color: '#FFB800' }} />
                     
                     <Typography 
@@ -46,7 +46,7 @@ const Painpoint = () => {
                         component="h3" 
                         sx={{ 
                             fontWeight: 'bold', 
-                            color: colors.text.primary, 
+                            color: "#1E1A2A", 
                             fontSize: { xs: '1.5rem', md: '1.75rem' },
                             marginBottom: "1rem" 
                         }}
@@ -54,11 +54,11 @@ const Painpoint = () => {
                         You’re not lazy, your system is broken.
                     </Typography>
                     
-                    <Typography variant="h4" sx={{ color: colors.text.secondary, lineHeight: 1.8, marginBottom: "1rem" }}>
+                    <Typography variant="h4" sx={{ color: "#4F378A", lineHeight: 1.8, marginBottom: "1rem" }}>
                     You don’t lack discipline, just clarity. Endless lists and decisions drain your focus before real progress begins.
                   </Typography>
                     
-                    <ul className="list-disc pl-5 text-base space-y-2" style={{ color: colors.text.secondary }}>
+                    <ul className="list-disc pl-5 text-base space-y-2" style={{ color: "#4F378A" }}>
                         <li>Struggle to turn goals into clear, doable steps.</li>
                         <li>Overwhelmed by scattered thoughts and unfinished plans.</li>
                         <li>Each day ends with effort, but not real progress.</li>

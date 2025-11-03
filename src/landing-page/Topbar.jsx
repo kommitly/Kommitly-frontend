@@ -102,10 +102,15 @@ const Topbar = ({ clipRadius }) => {
         {/* Login Link: Uses dynamic color */}
         <Link
         to="/registration?tab=login"
-        className="px-4 py-2 border border-white text-white rounded-xl hover:bg-gray-100 hover:!text-[#2C1D57] transition-colors 2xl:text-xl xl:text-base lg:text-base"
+        className="px-4 py-2 rounded-xl transition-colors 2xl:text-xl xl:text-base lg:text-base"
+        style={{
+          color: currentLogoColor,
+          border: `1px solid ${currentLogoColor}`,
+        }}
       >
         Login
       </Link>
+
 
         {/* Sign Up Link: Colors remain static purple/white for contrast */}
         <Link

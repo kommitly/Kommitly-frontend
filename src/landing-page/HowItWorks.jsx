@@ -37,7 +37,7 @@ const HowItWorks = () => {
         variant="h3"
         sx={{
           fontWeight: 'bold',
-          color: colors.text.primary,
+          color: "#1E1A2A",
           mb: 8,
           mt:4,
           fontSize: { xs: '1.75rem', md: '2rem' },
@@ -58,7 +58,7 @@ const HowItWorks = () => {
             className="flex flex-col items-center text-center p-6 rounded-4xl shadow-md"
             sx={{
               backgroundColor:
-                theme.palette.mode === 'dark' ? colors.menu.primary : colors.background.paper,
+                theme.palette.mode === 'dark' ? "#D6CFFF" : "#D6CFFF",
               transition: 'transform 0.3s ease',
               '&:hover': { transform: 'translateY(-5px)' },
             }}
@@ -70,7 +70,7 @@ const HowItWorks = () => {
               variant="h4"
               sx={{
                 fontWeight: 'bold',
-                color: colors.text.primary,
+                color: "#1E1A2A",
                 mb: 1,
               }}
             >
@@ -79,7 +79,7 @@ const HowItWorks = () => {
             <Typography
               variant="body"
               sx={{
-                color: colors.text.secondary,
+                color: "#4F378A",
                 lineHeight: 1.6,
                 maxWidth: '280px',
               }}

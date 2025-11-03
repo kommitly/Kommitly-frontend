@@ -7,8 +7,8 @@ import { TextField } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
-import { tokens } from "../theme";
+import { useTheme } from '@mui/material/styles'
+import { tokens } from '../theme'
 import { Box } from "@mui/material";
 import getLocationAndTimezone from "../utils/location";
 
@@ -100,8 +100,15 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
                     name="email"
                     error={!!touched.email && !!errors.email}
                     helperText={touched.email && errors.email}
-                    sx={{ gridColumn: "span 4"
-  }}
+                    sx={{
+                      color: colors.text.primary,
+                      gridColumn: "span 4",
+                      "& input:-webkit-autofill": {
+                        WebkitBoxShadow: "0 0 0 1000px transparent inset !important",
+                        WebkitTextFillColor: "inherit !important",
+                        transition: "background-color 9999s ease-in-out 0s",
+                      },
+                    }}
                   />
                   <TextField
                     fullWidth
@@ -114,7 +121,15 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
                     name="password"
                     error={!!touched.password && !!errors.password}
                     helperText={touched.password && errors.password}
-                    sx={{ gridColumn: "span 4" }}
+                    sx={{
+                      color: colors.text.primary,
+                      gridColumn: "span 4",
+                      "& input:-webkit-autofill": {
+                        WebkitBoxShadow: "0 0 0 1000px transparent inset !important",
+                        WebkitTextFillColor: "inherit !important",
+                        transition: "background-color 9999s ease-in-out 0s",
+                      },
+                    }}
                   />
                 </Box>
                 <div className="w-full flex justify-end mt-3">
