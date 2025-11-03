@@ -289,7 +289,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
            sx={{
           position: 'absolute',
           top: { xs: "20%", sm: "26%" }, // higher on extra small screens
-          left: { xs: '15%', sm: '32%' }, // slightly shifted on small screens
+          left: { xs: '10%', sm: '32%' }, // slightly shifted on small screens
         
           pointerEvents: 'none',
         }}
