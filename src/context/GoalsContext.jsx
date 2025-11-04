@@ -29,7 +29,7 @@ export const GoalsProvider = ({ children }) => {
 
           try {
             const fetchedGoals = await fetchGoals();
-            console.log("Fetched Goals:", fetchedGoals);
+            console.log("Fetched Goals from context:", fetchedGoals);
             setGoals(fetchedGoals ?? { goals: [], ai_goals: [] });
         } 
         catch (error) {    

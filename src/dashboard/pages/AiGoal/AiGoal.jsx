@@ -146,6 +146,7 @@ const AiGoal = () => {
       try {
             const fetchedGoal = await fetchAiGoalById(goalId);
             setGoal(fetchedGoal);
+            console.log('Fetched goal:', fetchedGoal);
              // Update taskCompletionStatus based on fetched goal data
             setTaskCompletionStatus(fetchedGoal.ai_tasks.map(task => task.status === 'completed'));
 

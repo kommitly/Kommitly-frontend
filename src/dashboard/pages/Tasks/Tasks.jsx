@@ -18,7 +18,8 @@ import TaskItem from '../../components/TaskItem'; // Import TaskItem component
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import { Divider } from '@mui/material';
-import SlidingButton from "../../components/SlidingButton";
+import SlidingButton from "../../components/SlidingButton";import CircularProgress from '@mui/material/CircularProgress';
+import { useMediaQuery } from '@mui/material'
 import Empty from "../../components/Empty";
 
 
@@ -40,7 +41,7 @@ const Tasks = () => {
   const [menuVisible, setMenuVisible] = useState({});
   const {removeTask, addTaskToSidebar} = useContext(TasksContext); // Use the TasksContext
   const [showFilters, setShowFilters] = useState(false);
-  const [task, setTask] = useState({ title: "", due_date:null, reminder_time: null, progress: 0, priority: "Low", subtasks: [] });
+  const [task, setTask] = useState({ title: "", due_date:null, reminder_time: null, priority: "Low", subtasks: [] });
   const [selectedFile, setSelectedFile] = useState(null); // State for selected file
   const [newSubtask, setNewSubtask] = useState('');
   const [showInput, setShowInput] = useState(false);
@@ -48,7 +49,52 @@ const Tasks = () => {
   const [newSubtasks, setNewSubtasks] = useState([]);
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
+  const isSm = useMediaQuery(theme.breakpoints.only("sm"));
+  const isLg = useMediaQuery(theme.breakpoints.only("lg"));
+  const isXl = useMediaQuery(theme.breakpoints.only("xl"));
+  const isMd = useMediaQuery(theme.breakpoints.only("md"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
+  const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
+  const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
+
   
+  
+  
+
+function CircularProgressWithLabel({ value, textColor = '#000000', progressColor = '#4F378A' , size = 40, fontSize = '0.6rem' }) {
+  
+  return (
+    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <CircularProgress
+        variant="determinate"
+        value={value}
+        size={size}
+        sx={{ color: progressColor }}
+      />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography
+          variant="caption"
+          component="div"
+          sx={{ color: textColor, fontSize: fontSize }}
+        >
+          {`${Math.round(value)}%`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
 
 
 
@@ -87,29 +133,35 @@ const Tasks = () => {
 });
 
 const renderTaskBlock = (hour) => {
-  return filteredTasksByDate
-    .filter((task) => {
-      const taskHour = new Date(task.due_date).getHours();
-      return taskHour === hour;
-    })
-    .map((task, index) => {
-      const taskTime = new Date(task.due_date);
-      const topOffset = (taskTime.getMinutes() / 60) * 100;
+  const tasksThisHour = filteredTasksByDate.filter((task) => {
+    const taskHour = new Date(task.due_date).getHours();
+    return taskHour === hour;
+  });
+
+  const taskCount = tasksThisHour.length;
+
+  return tasksThisHour.map((task, index) => {
+    const taskTime = new Date(task.due_date);
+
+    const height = 100 / taskCount;       // each task gets equal slice
+    const topOffset = index * height;     // stack them one after another
 
       return (
         <div
           key={index}
-          className="absolute left-[100px] right-4 bg-[#6246AC] text-white text-xs px-2 py-1 rounded shadow"
+          className="absolute   left-[0px] right-4 bg-[#6246AC] text-white  px-2 py-1 rounded shadow"
           style={{
             top: `${topOffset}%`,
-            height: "32px", // You can adjust or make this dynamic if needed
+            height: "50px", // You can adjust or make this dynamic if needed
           }}
         >
-          {task.title} — {taskTime.toLocaleTimeString([], {
+          <div className="text-s"> {task.title} </div>
+          <div className="mt-1 text-xs">
+           {taskTime.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
             hour12: true
-          })}
+          })} </div>
         </div>
       );
     });
@@ -123,6 +175,9 @@ const renderTaskBlock = (hour) => {
   
     const aiTasks = goals.ai_goals.flatMap(goal => goal.ai_tasks) ?? [];
     console.log("AI Tasks:", aiTasks);
+    const aiSubtasks = aiTasks.flatMap(task => task.ai_subtasks) ?? [];
+
+    console.log("AI Subtasks:", aiSubtasks);
   
     switch (category) {
       //case 'recentlyAdded':
@@ -153,7 +208,27 @@ const renderTaskBlock = (hour) => {
   { key: "completed", label: "Completed" }
 ];
 
-  
+
+   const aiTaskProgress =(aiTask) => {
+  if (aiTask.ai_subtasks && aiTask.ai_subtasks.length > 0) {
+    console.log("subtasks for this ai task", aiTask.ai_subtasks);
+    const completedSubtasks = aiTask.ai_subtasks.filter(subtask => subtask.completed).length;
+    return (completedSubtasks / aiTask.ai_subtasks.length) * 100;
+  }
+  return aiTask.progress || 0;
+ }
+    
+
+  const taskProgress = (task) => {
+  if (task.subtasks && task.subtasks.length > 0) {
+    console.log("subtasks for this task", task.subtasks);
+    const completedSubtasks = task.subtasks.filter(subtask => subtask.completed).length;
+    return (completedSubtasks / task.subtasks.length) * 100;
+  }
+  return task.progress || 0;
+};
+
+
   
   const filterTasks = (category) => {
     switch (category) {
@@ -206,6 +281,7 @@ const renderTaskBlock = (hour) => {
         addTask(newTask); // Add the new task to the context
         setOpen(false);
         alert("New task created")
+        console.log("New task created:", newTask);
         //navigate(`/dashboard/task/${newTask.id}`); // Use newTask.id instead of undefined goal.id
       } catch (error) {
         console.error("Error creating task:", error);
@@ -654,6 +730,14 @@ if (!loading && tasks.length === 0) {
           <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl transition-transform duration-300 hover:scale-[0.95]'sx={{backgroundColor:colors.background.paper}}>
             <div className='w-1/4  full overflow-hidden '>
               {/*<img src={aiGoals} alt="goals" className='h-auto'/> */}
+              <CircularProgressWithLabel  value={aiTaskProgress(task)} 
+                                progressColor={colors.primary[500]}
+                                textColor={colors.text.primary}
+                                size={50}
+                                fontSize={
+                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
+                                } 
+                                />
             </div>
             <div className='w-full h-auto flex flex-col gap-0'>
               <div className='flex  items-start h-auto mb-1 justify-between'>
@@ -704,33 +788,17 @@ if (!loading && tasks.length === 0) {
 
                       {/* New subtasks section below title */}
 <div className="flex items-center pl-0 gap-0 mt-2  ">
-  <svg className="mt-1"
-  xmlns="http://www.w3.org/2000/svg"
-  width="24"
-  height="24"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#4F378A"
-  strokeWidth="1.5"
-  strokeLinecap="round"
-  strokeLinejoin="round"
->
- 
-  <line x1="4" y1="4" x2="18" y2="4" />
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
   
- 
-  <line x1="10" y1="4" x2="10" y2="12" />
-  
-
-  <line x1="10" y1="8" x2="16" y2="8" />
-  
- 
-  <line x1="10" y1="12" x2="16" y2="12" />
+  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.75"/>
+  <circle cx="12" cy="12" r="5.5" stroke="currentColor" strokeWidth="1.75"/>
+  <circle cx="12" cy="12" r="2" fill="currentColor"/>
+  <path d="M16.5 7.5l3-3" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"/>
+  <path d="M15.2 8.8l3.6-3.6l.3 2.4l2.4.3l-3.6 3.6z" fill="currentColor"/>
 </svg>
 
-  <span className="text-[#65558F] text-xs">
-   subtasks
-  </span>
+ 
 </div>
 
              
@@ -937,14 +1005,17 @@ if (!loading && tasks.length === 0) {
                 }}>
           Tasks for {selectedDate.format("YYYY-MM-DD")}
         </h3>
-      <div className="mt-4  rounded-xl  p-4 h-[250px] overflow-y-auto border" style={{ backgroundColor: colors.background.default }}>
+      <div className="mt-4  rounded-xl bg-black  p-4 h-[250px] overflow-y-auto border" style={{ backgroundColor: colors.background.default }}>
         {hours.map((hourLabel, hourIndex) => (
   <div
     key={hourIndex}
-    className="border-t border-gray-300 h-16 relative pl-4 text-sm text-gray-600"
+    className="border-t border-gray-300  h-16 relative pl-4 text-sm text-gray-600"
   >
-    <div className="absolute left-0 top-0">{hourLabel}</div>
-    <div className="ml-16 h-full relative">
+    <div className="absolute left-0 top-0">
+      <button onClick={openModal}>{hourLabel}
+        </button>
+      </div>
+    <div className="ml-10 h-auto   relative">
       {renderTaskBlock(hourIndex)}
     </div>
   </div>
