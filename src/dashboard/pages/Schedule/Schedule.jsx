@@ -164,8 +164,8 @@ const handleChange = (field, value) => {
     }
 
     const payload = {
-      task_template_title: title,
-      task_template_description: description,
+      subtask_template_title: title,
+      subtask_template_description: description,
       start_date: newRoutine.start_date,
       end_date: newRoutine.end_date || null,
       frequency: newRoutine.frequency,
@@ -679,11 +679,11 @@ const handleChange = (field, value) => {
 
 
             <Typography variant="h3" sx={{ color: colors.text.secondary, mb: 3 }}>
-           {selectedRoutine.subtask_template_title}
+           {selectedRoutine.subsubtask_template_title}
           </Typography>
 
           {/* {<Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
-            <span style={{ fontWeight: 'bold' }}>Description:</span> {selectedRoutine.subtask_template_description}
+            <span style={{ fontWeight: 'bold' }}>Description:</span> {selectedRoutine.subsubtask_template_description}
           </Typography>} */}
 
           <Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
@@ -876,7 +876,7 @@ const handleChange = (field, value) => {
         <ul className="space-y-2 md:flex gap-4 w-full">
   {routines.map((routine) => {
     const { timeline, cleanedDetails } = extractTimeline(
-  routine.subtask_template_description || ""
+  routine.subsubtask_template_description || ""
 );
     const getParts = (desc) => {
         if (!desc) return { text: "", timeline: "" }; // safety check
@@ -904,7 +904,7 @@ const handleChange = (field, value) => {
         >
           <div className="py-4">
             <h3 className="text-lg font-semibold">
-              {routine.subtask_template_title}
+              {routine.subsubtask_template_title}
             </h3>
             <p className="text-sm mt-2 opacity-90">
               {text} 
