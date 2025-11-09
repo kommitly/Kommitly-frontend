@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { DateTime } from "luxon";
 import {
   createRoutine,
   fetchRoutines,
@@ -76,6 +77,14 @@ const Schedule = () => {
   const { goals } = useContext(GoalsContext);
   const aiGoals = goals.ai_goals || [];
   const [selected, setSelected] = useState("");
+  const timezone = localStorage.getItem("Timezone");
+
+  const convertToLocalTime = (utcTime) => {
+  if (!utcTime) return "";
+  return DateTime.fromISO(utcTime, { zone: "utc" })
+    .setZone(timezone)
+    .toFormat("HH:mm");
+};
   
 
   // helper to find next unfinished subtask
@@ -679,7 +688,7 @@ const handleChange = (field, value) => {
 
 
             <Typography variant="h3" sx={{ color: colors.text.secondary, mb: 3 }}>
-           {selectedRoutine.subsubtask_template_title}
+           {selectedRoutine.subtask_template_title}
           </Typography>
 
           {/* {<Typography variant="body1" sx={{ color: colors.text.primary, mb: 2 }}>
@@ -763,7 +772,7 @@ const handleChange = (field, value) => {
             fullWidth
             label="Reminder Time"
             type="time"
-            value={formData.reminder_time || ''}
+            value={convertToLocalTime(formData.reminder_time) || ''}
             onChange={(e) => handleChange('reminder_time', e.target.value)}
             margin="normal"
             InputLabelProps={{
@@ -774,37 +783,28 @@ const handleChange = (field, value) => {
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 3 }}>
           <Button
-            variant="contained"
-            startIcon={<EditIcon />}
+          
+            text="Update"
             onClick={handleUpdate}
-            sx={{
-              backgroundColor: colors.primary[400],
-              color: 'white',
-              '&:hover': {
-                backgroundColor: colors.primary[400],
-                opacity: 0.8
-              }
-            }}
+           
           >
-            Update
+            <EditIcon />
+          
           </Button>
           <Button
-            variant="contained"
-            startIcon={<DeleteIcon />}
+           
             onClick={(e) => {
             e.stopPropagation();
             handleDelete(selectedRoutine.id);
           }}
-            sx={{
-              backgroundColor: colors.background.warning,
-              color: 'white',
-              '&:hover': {
-                backgroundColor: colors.background.warning,
-                opacity:50
-              }
-            }}
+
+          className="bg-[#E60178] hover:bg-[#E60178]"
+           
+
+            text="Delete"
           >
-            Delete
+            <DeleteIcon />
+        
           </Button>
           </Box>
           </div>
@@ -904,7 +904,7 @@ const handleChange = (field, value) => {
         >
           <div className="py-4">
             <h3 className="text-lg font-semibold">
-              {routine.subsubtask_template_title}
+              {routine.subtask_template_title}
             </h3>
             <p className="text-sm mt-2 opacity-90">
               {text} 
