@@ -77,7 +77,7 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
   return (
     <div className="flex w-full  rounded-xl flex-col items-center">
       <div className="flex w-full flex-col  items-center">
-        <div className="flex w-10/12 flex-col gap-4 justify-center ">
+        <div className="flex md:w-10/12 w-11/12 flex-col gap-4 justify-center ">
          
          
           <Formik onSubmit={handleLogin} initialValues={initialValues} validationSchema={userSchema}>
