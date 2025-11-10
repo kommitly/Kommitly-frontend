@@ -39,7 +39,7 @@ const Painpoint = () => {
             >
                 {/* 1. THE PROBLEM  */}
                 <Box className="space-y-6 p-6 md:p-8 rounded-4xl" sx={{ backgroundColor: "#FBF9FF" }}>
-                    <PsychologyIcon sx={{ fontSize: 48, color: '#FFB800' }} />
+                    <PsychologyIcon sx={{ fontSize: 48, color: colors.primary[400] }} />
                     
                     <Typography 
                         variant="h4" 
@@ -71,7 +71,7 @@ const Painpoint = () => {
                     sx={{ backgroundColor: '#2C1D57', color: 'white' }} // Purple background for high contrast
                 >
                     <AutoAwesomeIcon 
-                        sx={{ fontSize: 48, color: '#10D3F1' }} // Bright accent color
+                        sx={{ fontSize: 48, color: colors.primary[300] }} // Bright accent color
                     />
                     
                     <Typography 
