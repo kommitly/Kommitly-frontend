@@ -242,7 +242,7 @@ const loadSuggestions = async () => {
           >
             <div className="py-4">
             <h3 className="text-lg font-semibold">{t.name}</h3>
-           <p className="text-sm mt-2 opacity-90">{t.description || "No description"}</p>
+           <p className="text-xs mt-2 opacity-90">{t.description || "No description"}</p>
 
           </div>
 
@@ -287,7 +287,7 @@ const loadSuggestions = async () => {
 
       {/* Suggested Templates */}
 {suggestedTemplates.length > 0 && (
-  <div className="mt-10">
+  <div className="mt-4">
     <Typography variant="h4" color={colors.text.placeholder} fontWeight="light">
       Suggested Templates
     </Typography>
@@ -301,7 +301,7 @@ const loadSuggestions = async () => {
         >
           <div className="py-4">
             <h3 className="text-lg font-semibold">{s.name}</h3>
-            <p className="text-sm mt-2 opacity-90">{s.description}</p>
+            <p className="text-xs mt-2 opacity-90">{s.description || "No description"}</p>
           </div>
           <button
   onClick={() =>

@@ -273,7 +273,7 @@ sx={{
   }}
 >
 
-           <div className='mt-4  p-2 flex flex-col '>
+           <div className='md:mt-4 mt-2 p-4  md:p-0 flex flex-col '>
              <Menu iconShape="square"
             rootStyles={{
               [`.${menuClasses.SubMenu}`]: {
@@ -281,11 +281,13 @@ sx={{
               },
               [`.${menuClasses.subMenuContent}`]: {
                 backgroundColor:`${colors.background.sidebar} `,
+                borderRadius: "12px",
                 marginLeft: isCollapsed ? (
                 isXs ? "0px" : isSm ? "0px" : isMd ? "4px" : isLg ? "0px" : isXl ? "0px" : "0px"
               ) : (
                 isXs ? "20px" : isSm ? "10px" : isMd ? "0px" : isLg ? "0px" : isXl ? "0px" : isXxl ? "0px" : "0px"
               ),
+                inset: "0px auto auto 10px !important",
 
               },
 
@@ -316,7 +318,7 @@ sx={{
                 marginRight: isCollapsed ? (
                   isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "0px" : isXl ? "10px" : "10px"
                 ) : (
-                  isXs ? "10px" : isSm ? "10px" : isMd ? "10px" : isLg ? "10px" : isXl ? "10px" : isXxl ? "10px" : "10px"
+                  isXs ? "0px" : isSm ? "0px" : isMd ? "10px" : isLg ? "10px" : isXl ? "10px" : isXxl ? "10px" : "10px"
                 ),
           
               marginLeft: isCollapsed ? (
@@ -386,7 +388,7 @@ sx={{
   style={{
     backgroundColor: hover ? "transparent" : "transparent",
     marginLeft: isCollapsed ? (
-      isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "2px" : isXl ? "0px" : "0px"
+      isXs ? "0px" : isSm ? "10px" : isMd ? "10px" : isLg ? "12px" : isXl ? "10px" : "10px"
     ) : (
       isXs ? "0px" : isSm ? "0px" : isMd ? "0px" : isLg ? "2px" : isXl ? "0px" : "0px"
     ),
@@ -411,15 +413,14 @@ sx={{
 >
 
                         {!isCollapsed && (
-                            <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            width={"100%"}
+                            <div
+                            className='flex justify-between items-center w-full'
+                          
+                            
                             
                          
                             >
-                                <div style={{display: "flex", alignItems: "center", gap: "10px"}}>
+                                <div  style={{display: "flex", alignItems: "center", gap: "10px"}}>
                                   <div  >
                                     <svg width="32" height="54" viewBox="0 0 64 109" fill="none" xmlns="http://www.w3.org/2000/svg">
      
@@ -427,7 +428,7 @@ sx={{
                                             <path d="M43.4496 73.9714C44.652 72.3814 44.4661 69.8997 43.0416 68.5204L28.0595 54.0145L2.18288 88.8602C1.92488 89.2077 2.14331 89.7605 2.53851 89.7605L12.0044 89.7609L28.486 89.761C30.4094 89.761 32.2284 88.8057 33.4972 87.1284L43.4496 73.9714Z" fill='#20A0E6' stroke= '#10D3F1'/>
                                           </svg>
                                   </div>
-                                  <p className=' 2xl:text-2xl xl:text-xl lg:text-xl text-lg ' style={{ color:colors.primary[100], fontWeight: 500,  }}>
+                                  <p className=' 2xl:text-2xl xl:text-lg lg:text-lg text-lg ' style={{ color:colors.primary[100], fontWeight: 500,  }}>
                                     Kommitly
 
                                 </p>
@@ -444,12 +445,12 @@ sx={{
                                     )}
                                 </button>
 
-                            </Box>
+                            </div>
                         )}
                     </MenuItem>
                
                     {/*MENU ITEMS */}
-                    <Box >
+                    <Box sx={{marginTop: "1rem ", margin: "0.6rem"}} >
                       <MenuItem 
                       onClick={() => {
                         navigate("/dashboard/home");

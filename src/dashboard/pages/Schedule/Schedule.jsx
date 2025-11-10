@@ -257,7 +257,7 @@ const handleChange = (field, value) => {
   };
 
   return (
-   <div className='w-full  flex min-h-screen md:px-2 px-4'>
+   <div className='w-full  flex min-h-screen md:px-2 px-2'>
       
 
       <div className="w-full h-full overflow-y-auto  ">
@@ -873,7 +873,7 @@ const handleChange = (field, value) => {
    
   </div>
 ) : (
-        <ul className="space-y-2 md:flex gap-4 w-full">
+        <ul className="space-y-2 mt-10 md:flex gap-4  w-full">
   {routines.map((routine) => {
     const { timeline, cleanedDetails } = extractTimeline(
   routine.subsubtask_template_description || ""
@@ -893,10 +893,10 @@ const handleChange = (field, value) => {
     return (
       <li
         key={routine.id}
-        className="flex md:w-1/3 w-full justify-between items-center p-3"
+        className="flex md:w-1/3 w-full justify-between items-center"
       >
         <div
-          className="p-5 rounded-xl w-full h-full shadow-md flex flex-col justify-between"
+          className="p-5 rounded-4xl  w-full h-full shadow-md flex flex-col justify-between"
           style={{
             backgroundColor: colors.primary[500],
             color: colors.primary[100],
@@ -906,8 +906,8 @@ const handleChange = (field, value) => {
             <h3 className="text-lg font-semibold">
               {routine.subtask_template_title}
             </h3>
-            <p className="text-sm mt-2 opacity-90">
-              {text} 
+            <p className="text-xs mt-2 opacity-90">
+              {text || "No description"} 
             </p>
           </div>
           <button
@@ -915,30 +915,30 @@ const handleChange = (field, value) => {
               handleFetchById(routine.id);
               setOpenRoutine(true);
             }}
-            className="rounded-lg mt-4 p-2 border transition-all duration-300 cursor-pointer"
-            style={{
-              borderColor: colors.background.paper,
-              color: colors.background.default,
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.color = colors.background.paper;
-              e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.color = colors.background.default;
-              e.target.style.boxShadow = "none";
-            }}
-            onMouseDown={(e) => {
-              e.target.style.boxShadow = `0 0 20px ${colors.background.default}`;
-              e.target.style.transform = "scale(0.98)";
-            }}
-            onMouseUp={(e) => {
-              e.target.style.boxShadow = `0 0 12px ${colors.background.default}`;
-              e.target.style.transform = "scale(1)";
-            }}
-          >
-            View
-          </button>
+            className="rounded-4xl mb-2 mt-4 p-2 border transition-all duration-300 cursor-pointer"
+  style={{
+    borderColor: "#D6CFFF",
+    color: "#D6CFFF",
+  }}
+  onMouseEnter={(e) => {
+    e.target.style.color = colors.background.paper;
+    e.target.style.boxShadow = "0 0 12px #D6CFFF";
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.color = "#D6CFFF";
+    e.target.style.boxShadow = "none";
+  }}
+  onMouseDown={(e) => {
+    e.target.style.boxShadow = "0 0 20px #D6CFFF";
+    e.target.style.transform = "scale(0.98)";
+  }}
+  onMouseUp={(e) => {
+    e.target.style.boxShadow = "0 0 12px #D6CFFF";
+    e.target.style.transform = "scale(1)";
+  }}
+>
+  View
+</button>
         </div>
       </li>
     );
