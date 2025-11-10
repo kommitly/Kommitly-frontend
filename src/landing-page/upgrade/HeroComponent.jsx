@@ -238,10 +238,10 @@ const HeroComponent = () => {
                                                   <div className="flex items-center">
                                                     {isXs ? (  <div className="w-6 flex justify-center"> <BsHourglassTop fontSize='small'  style={{ color: isActive ? "#F6F3F3" : "#4F378A" }}/> </div> 
                                                      
-                ):( <p className="w-16 text-[10px] font-medium " style={{color: isActive ? "#F6F3F3" : "#4F378A" }}>Timeline:</p>)}
+                ):( <p className="w-12 text-[10px] font-medium " style={{color: isActive ? "#F6F3F3" : "#4F378A" }}>Timeline:</p>)}
 
                                                    <span
-                                                        className="w-16 flex justify-center py-0.5 md:border text-[10px] rounded-sm "
+                                                        className="w-16 flex justify-center py-0.5  text-[10px] rounded-sm "
                                                         style={{
                                                           color: isActive ? "#F6F3F3" : "#4F378A",
                                                           borderColor: isActive ? "#F6F3F3" : "#4F378A",
@@ -263,7 +263,7 @@ const HeroComponent = () => {
         </div>
     ) : (
         // Use the descriptive text on medium screens and up
-        <p className="w-16 text-[10px] font-medium " style={{ color: isActive ? "#F6F3F3" : "#4F378A" }}>Status:</p>
+        <p className="w-12 text-[10px] font-medium " style={{ color: isActive ? "#F6F3F3" : "#4F378A" }}>Status:</p>
     )}
     <span className=" py-0.5   w-16 text-center rounded-sm text-[10px] justify-center flex items-center " style={{ color: isActive ? "#F6F3F3" : "#4F378A", borderColor: isActive ? "#F6F3F3" : "#4F378A" }}>
         {task.status}

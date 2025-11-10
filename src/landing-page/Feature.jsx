@@ -13,24 +13,24 @@ const Feature = () => {
 
   const features = [
     {
-      icon: <AutoAwesomeIcon sx={{ fontSize: 40, color: colors.primary[400] }} />,
+      icon: <AutoAwesomeIcon sx={{ fontSize: 40, color: colors.primary[300] }} />,
       title: 'Smart Goal Breakdown',
-      desc: 'Kommitly transforms your goals into structured, achievable steps — no overwhelm, just clarity and momentum.'
+      desc: 'Kommitly transforms your goals into structured, achievable steps, no overwhelm, just clarity and momentum.'
     },
     {
-      icon: <AccessTimeIcon sx={{ fontSize: 40, color: colors.primary[400] }} />,
+      icon: <AccessTimeIcon sx={{ fontSize: 40, color: colors.primary[300] }} />,
       title: 'Seamless Scheduling',
-      desc: 'Your priorities are intelligently scheduled so you always know what to focus on next — and when to do it.'
+      desc: 'Your priorities are intelligently scheduled so you always know what to focus on next and when to do it.'
     },
     {
-      icon: <InsightsIcon sx={{ fontSize: 40, color: colors.primary[400] }} />,
+      icon: <InsightsIcon sx={{ fontSize: 40, color: colors.primary[300] }} />,
       title: 'Progress Insights',
       desc: 'Track your growth with visual insights that show how far you’ve come and what’s working best for you.'
     },
     {
-      icon: <CheckCircleIcon sx={{ fontSize: 40, color: colors.primary[400] }} />,
+      icon: <CheckCircleIcon sx={{ fontSize: 40, color: colors.primary[300] }} />,
       title: 'Completion Made Rewarding',
-      desc: 'Every completed task feels satisfying — Kommitly celebrates progress, not perfection.'
+      desc: 'Every completed task feels satisfying, Kommitly celebrates progress, not perfection.'
     },
   ];
 

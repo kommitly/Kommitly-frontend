@@ -39,7 +39,7 @@ const Painpoint = () => {
             >
                 {/* 1. THE PROBLEM  */}
                 <Box className="space-y-6 p-6 md:p-8 rounded-4xl" sx={{ backgroundColor: "#FBF9FF" }}>
-                    <PsychologyIcon sx={{ fontSize: 48, color: colors.primary[400] }} />
+                    <PsychologyIcon sx={{ fontSize: 48, color: colors.primary[300] }} />
                     
                     <Typography 
                         variant="h4" 
@@ -54,11 +54,11 @@ const Painpoint = () => {
                         You’re not lazy, your system is broken.
                     </Typography>
                     
-                    <Typography variant="h4" sx={{ color: "#4F378A", lineHeight: 1.8, marginBottom: "1rem" }}>
+                    <Typography variant="h4" sx={{ color: "#2C1D57", lineHeight: 1.8, marginBottom: "1rem" }}>
                     You don’t lack discipline, just clarity. Endless lists and decisions drain your focus before real progress begins.
                   </Typography>
                     
-                    <ul className="list-disc pl-5 text-base space-y-2" style={{ color: "#4F378A" }}>
+                    <ul className="list-disc pl-5 md:text-sm text-sm space-y-2" style={{ color: "#2C1D57" }}>
                         <li>Struggle to turn goals into clear, doable steps.</li>
                         <li>Overwhelmed by scattered thoughts and unfinished plans.</li>
                         <li>Each day ends with effort, but not real progress.</li>
@@ -90,7 +90,7 @@ const Painpoint = () => {
                        Kommitly transforms goals into step-by-step actions, giving you a clear plan without the mental overload.
                     </Typography>
 
-                    <ul className="list-disc pl-5 text-base space-y-2" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
+                    <ul className="list-disc pl-5 md:text-sm text-sm space-y-2" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
                          <li>Relief from mental clutter.</li>
                         <li>Clarity and confidence in what to do next.</li>
                         <li>A sense of progress and completion.</li>
