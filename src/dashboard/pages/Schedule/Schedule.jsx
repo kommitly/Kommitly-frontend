@@ -27,6 +27,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SlidingButton2 from '../../components/SlidingButton2';
 import { Divider } from '@mui/material';
 import Empty from "../../components/Empty";
+import { useSidebar } from '../../../context/SidebarContext';
 
 
 
@@ -53,6 +54,7 @@ const extractTimeline = (description) => {
 
 const Schedule = () => {
   const theme = useTheme();
+  const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
   const colors = tokens(theme.palette.mode);
   const [routines, setRoutines] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -876,7 +878,7 @@ const handleChange = (field, value) => {
         <ul className="space-y-2 mt-10 md:flex gap-4  w-full">
   {routines.map((routine) => {
     const { timeline, cleanedDetails } = extractTimeline(
-  routine.subsubtask_template_description || ""
+  routine.subtask_template_description || ""
 );
     const getParts = (desc) => {
         if (!desc) return { text: "", timeline: "" }; // safety check
@@ -893,12 +895,19 @@ const handleChange = (field, value) => {
     return (
       <li
         key={routine.id}
-        className="flex md:w-1/3 w-full justify-between items-center"
+        className={`flex grid justify-between items-center ${
+    !isMobile
+      ? isCollapsed
+        ? "md:grid-cols-4"
+        : "md:grid-cols-3"
+      : "grid-cols-1"
+  }`}
+
       >
         <div
           className="p-5 rounded-4xl  w-full h-full shadow-md flex flex-col justify-between"
           style={{
-            backgroundColor: colors.primary[500],
+            backgroundColor: colors.background.sidebar,
             color: colors.primary[100],
           }}
         >
@@ -906,7 +915,7 @@ const handleChange = (field, value) => {
             <h3 className="text-lg font-semibold">
               {routine.subtask_template_title}
             </h3>
-            <p className="text-xs mt-2 opacity-90">
+            <p className="text-xs mt-2 w-10/12 opacity-90">
               {text || "No description"} 
             </p>
           </div>

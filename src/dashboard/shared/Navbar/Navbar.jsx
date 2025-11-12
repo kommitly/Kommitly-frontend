@@ -20,9 +20,10 @@ import Badge from '@mui/material/Badge';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PersonIcon from '@mui/icons-material/Person';
 import CheckIcon from '@mui/icons-material/Check';
+import { useSidebar } from '../../../context/SidebarContext';
 
 
-export const Navbar = ({setIsCollapsed, isCollapsed }) => {
+export const Navbar = () => {
   const audioRef = useRef(null);
   const prevUnreadCount = useRef(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -49,6 +50,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
     ...(user?.goals?.map(goal => ({ ...goal, is_ai_goal: false })) || []),
     ...(user?.ai_goals?.map(goal => ({ ...goal, is_ai_goal: true })) || [])
   ];
+  const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
 
   
 
@@ -162,10 +164,6 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
   }, [filteredResults]);
   
 
-  useEffect(() => {
-    console.log("Navbar isCollapsed:", isCollapsed);
-  }, [isCollapsed]); // Run this whenever isCollapsed changes
-
 
  useEffect(() => {
   const handleClickOutside = (event) => {
@@ -203,7 +201,7 @@ export const Navbar = ({setIsCollapsed, isCollapsed }) => {
 
   
   return (
-  <div className={`fixed top-0   ${isCollapsed ? 'md:left-26 xs:left-0  lg:left-24 xl:left-28 2xl:left-38' : 'md:left-58 xl:left-62 2xl:left-80 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
+  <div className={`fixed top-0   ${isCollapsed ? 'md:left-28 xs:left-0 lg:left-24 xl:left-24  2xl:left-38' : 'md:left-58 lg:left-62 xl:left-62 2xl:left-80 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: {
       xs: isCollapsed ? 1 : 8,

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { Link, useNavigate, useLocation , useParams} from "react-router-dom";
 import Button from '../../components/Button';
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import { useMediaQuery } from '@mui/material';
 import { color, motion } from 'framer-motion';
@@ -18,10 +18,19 @@ import GoalsPieChart from './GoalsPieChart'; // Import the PieChart component
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
 import { IoSearch } from "react-icons/io5";
-import Backdrop from '@mui/material/Backdrop';
+import {
+  Backdrop,
+  Box,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import { ProfileContext } from '../../../context/ProfileContext';
 import SellIcon from '@mui/icons-material/Sell';
 import Empty from '../../components/Empty';
+import FormButton from '../../components/FormButton'
 
 function CircularProgressWithLabel({ value, textColor = '#000000', progressColor = '#4F378A' , size = 40, fontSize = '0.6rem' }) {
   return (
@@ -252,83 +261,151 @@ const Goals = () => {
       <div className="text-center py-4 text-gray-500">Loading goals...</div>
     ) : goals?.goals?.length === 0 && goals?.ai_goals?.length === 0 ? (
       <>
-      <div className="flex flex-col p-4 md:p-4 xl:p-18 min-h-screen h-full">
-        <Backdrop
-          sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-          open={openCreateGoal}// Use openCreateGoal state for backdrop
-          onClick={handleCloseCreateGoal} // Clicking outside should close it
-        >
-          <div 
-            className=" md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.menu.primary }} 
-            onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
-          >
-            <div className='flex w-full mb-4 justify-end'>
-            <div className='flex w-2/3 items-center justify-between'>
-            <h1 className='text-xl font-bold  mt-4 flex items-center justify-center gap-2' style={{ color: colors.text.secondary }} >
-              New Goal
-            </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke={colors.text.primary}
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="cursor-pointer"
-              onClick={handleCloseCreateGoal}
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>  
-            
+      <div className="flex flex-col p-4 md:p-4 xl:p-4 min-h-screen h-full">
+      <Backdrop
+  sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+  open={openCreateGoal}
+  onClick={handleCloseCreateGoal}
+>
+  <div
+    className="md:w-4/12 w-11/12 rounded-lg shadow-lg"
+    style={{
+      backgroundColor: colors.menu.content,
+      textAlign: "center",
+      borderRadius: "12px",
+    }}
+    onClick={(e) => e.stopPropagation()}
+  >
+    {/* Header */}
+    <Box
+  display="flex"
+  justifyContent="space-between"
+  alignItems="center"
+
+  sx={{
+    backgroundColor: colors.menu.header,
+    paddingX: "16px",
+    paddingTop: "8px",
+    borderTopLeftRadius: "12px",
+    borderTopRightRadius: "12px",
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  }}
+>
+  <h1
+    className="text-base font-semibold flex items-center gap-2"
+    style={{ color: colors.text.secondary }}
+  >
+    New Goal
+  </h1>
+
+  <IconButton>
+     <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={colors.text.secondary}
+    strokeWidth="1"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="cursor-pointer"
+    onClick={handleCloseCreateGoal}
+  >
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+
+  </IconButton>
+
+ 
+</Box>
+
+<div className='p-4 mt-6'>
+
+
+   {/* Goal Title */}
+    <TextField
+      fullWidth
+      label="Title"
+      placeholder="Enter goal title"
+      type="text"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      sx={{
+        mb: 3,
+        "& .MuiInputBase-root": {
+          borderRadius: "4px",
+          color: colors.text.primary,
+        },
+        "& .MuiInputLabel-root": {
+          color: colors.text.secondary,
+        },
+        "& .MuiOutlinedInput-notchedOutline": {
+          borderColor: "#e5e7eb",
+        },
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+          borderColor: "#cbd5e1",
+        },
+        "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+          borderColor: "#4F378A",
+        },
+      }}
+    />
+
+    {/* Category */}
+   <FormControl fullWidth sx={{ mb: 3 }}>
+  <InputLabel sx={{ color: colors.text.secondary }}>Category</InputLabel>
+  <Select
+    value={category}
+    label="Category"
+    onChange={(e) => {
+      setCategory(e.target.value);
+      console.log("Selected category:", e.target.value);
+    }}
+    sx={{
+      borderRadius: "4px",
+      color: colors.text.primary,
+      backgroundColor: colors.menu.main, // closed input background
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#e5e7eb",
+      },
+      "&:hover .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#cbd5e1",
+      },
+      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#4F378A",
+      },
+    }}
+    MenuProps={{
+      PaperProps: {
+        sx: {
+          backgroundColor: colors.menu.main, // dropdown menu background
+        },
+      },
+    }}
+  >
+    <MenuItem value="weekly">Weekly</MenuItem>
+    <MenuItem value="monthly">Monthly</MenuItem>
+    <MenuItem value="yearly">Yearly</MenuItem>
+  </Select>
+</FormControl>
+
+
+    {/* Submit Button */}
+    <Box display="flex" justifyContent="center" mt={2} mb={1}>
+      <FormButton onClick={handleAddGoal} text="Add Goal" className="w-full  " />
+    </Box>
 
 
 
-            </div>
-
-            </div>
-            
-           
-
-            <div className="flex items-center mb-4 gap-4">
-              <p className='text-sm text-start w-20 ' style={{color:colors.text.primary}}>Title</p>
-              <input
-                type="text"
-                placeholder="Enter goal title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 border  border-gray-200 rounded-lg focus:outline-none" style={{color:colors.text.primary}}
-              />
-            </div>
-
-          <div className="flex items-center mb-4 gap-4">
-            <p className="text-sm w-20" style={{ color: colors.text.primary }}>Category</p>
-            <select
-              value={category}
-              onChange={(e) => {
-              setCategory(e.target.value);
-              console.log("Selected category:", e.target.value);
-            }}
-
-              className="w-full p-2 border border-gray-200 rounded-lg text-black focus:outline-none"
-            >
-            
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly</option>
-            </select>
-          </div>
+</div>
 
 
-            <button onClick={handleAddGoal} className="mt-4 px-4 py-2  text-white rounded-lg cursor-pointer"  style={{backgroundColor: colors.primary[400], '&:hover':{ opacity: 0.7} }}>
-              Add Goal
-            </button>
-          
-          </div>
-        </Backdrop>
+   
+  </div>
+</Backdrop>
 
         <div className='w-full flex justify-between items-center'>
 

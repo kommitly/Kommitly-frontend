@@ -42,7 +42,9 @@ export const tokens = (mode) => ({
           
         },
            menu:{
-          primary: "#3F375C"
+          primary: "#3F375C",
+          header: "#3F375C",
+          content: "#13101B",
         }
       }
 
@@ -74,7 +76,9 @@ export const tokens = (mode) => ({
           primary: "#EEEEEE"
         },
            menu:{
-          primary: "#FFFFFF"
+          primary: "#FFFFFF",
+          header: "#F6F3F3",
+          content: "#FFFFFF",
         },
            empty:{
           primary: "#EAE6FF",

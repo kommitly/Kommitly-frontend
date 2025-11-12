@@ -7,7 +7,7 @@ import { GoDotFill } from "react-icons/go";
 import { Divider } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
@@ -16,7 +16,7 @@ import { GoalsContext } from '../../../context/GoalsContext'; // Adjust the impo
 import { TasksContext } from '../../../context/TasksContext'; // Adjust the import path as needed
 import GoalTrophyAnimation from './GoalTrophyAnimation';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-
+import Button from '../../components/Button'
 import TrophyAnimation from './TrophyAnimation';
 import PickerWithButtonField from './PickerWithButtonField';
 import GoalBadgeAnimation from './GoalBadge';
@@ -38,7 +38,8 @@ import { BsHourglassTop } from "react-icons/bs";
 import { CiCircleMore } from "react-icons/ci";
 import { RiProgress1Line } from "react-icons/ri";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-
+import { useSidebar } from '../../../context/SidebarContext';
+import ReusableFormModal from '../../components/ReusableFormModal';
 
 const extractTimeline = (description) => {
   if (!description) return { timeline: 'No detail available', cleanedDetails: description };
@@ -100,6 +101,7 @@ const StatusIcon = ({ status, color, size = 16 }) => {
 
 
 const AiGoal = () => {
+  const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
   const { goalId } = useParams();
@@ -175,35 +177,42 @@ const AiGoal = () => {
     setOpenTaskView(false);
   };
  
-  const handleStepCheck = async (subtaskId) => {
-  console.log("✅ Clicked subtask:", subtaskId); // <-- log right away
+const handleStepCheck = async (subtaskId) => {
+  console.log("✅ Clicked subtask:", subtaskId);
 
   const activeTask = goal.ai_tasks[activeTaskIndex];
-  const step = activeTask.ai_subtasks.find(s => s.id === subtaskId);
-
-  if (!step) {
-    console.error("Subtask not found with ID:", subtaskId);
-    return;
-  }
-  
+  const stepIndex = activeTask.ai_subtasks.findIndex(s => s.id === subtaskId);
+  if (stepIndex === -1) return console.error("Subtask not found:", subtaskId);
 
   const taskId = activeTask.id;
-  
-
+  const step = activeTask.ai_subtasks[stepIndex];
   const newStatus = step.status === "completed" ? "pending" : "completed";
 
+  // 🔹 1. Optimistically update UI
+  const updatedGoal = { ...goal };
+  updatedGoal.ai_tasks[activeTaskIndex].ai_subtasks[stepIndex].status = newStatus;
+  setGoal(updatedGoal); // 👈 instant UI feedback
+
   try {
+    // 🔹 2. Update backend
     await updateAiSubtaskById(taskId, subtaskId, { status: newStatus });
-    const updatedGoal = await loadGoal();
-    const updatedTask = updatedGoal.ai_tasks[activeTaskIndex];
-      
+
+    // 🔹 3. Optionally sync with backend after success
+    const freshGoal = await loadGoal();
+    setGoal(freshGoal);
+
+    const updatedTask = freshGoal.ai_tasks[activeTaskIndex];
     if (updatedTask.ai_subtasks.every(s => s.status === "completed")) {
-      handleTaskCompletion(updatedGoal, updatedTask);
+      handleTaskCompletion(freshGoal, updatedTask);
     }
 
   } catch (error) {
     console.error("Failed to update subtask:", error);
-    // Optionally show an error toast or revert checkbox UI
+
+    // 🔹 4. Rollback on error
+    const rolledBackGoal = { ...goal };
+    rolledBackGoal.ai_tasks[activeTaskIndex].ai_subtasks[stepIndex].status = step.status;
+    setGoal(rolledBackGoal);
   }
 };
 
@@ -243,9 +252,13 @@ const AiGoal = () => {
       }
       else {
         setOpen(true); // Show modal when all tasks are completed
+         if (window.innerWidth < 768) {
+        setOpenTaskView(false);
+      }
+
       }
     
-    }, 100); // Hide confetti after 2 seconds
+    }, 1000); // Hide confetti after 2 seconds
   };
   
 
@@ -522,22 +535,44 @@ if (loading) {
         open={open}
         onClick={handleClose}
       >
-        <div className="bg-white w-4/12 p-6 rounded-lg shadow-lg text-center">
-          <GoalTrophyAnimation/>
-            
-            
-            <h1 className='text-xl font-bold text-[#6F2DA8] mt-4 flex items-center justify-center gap-2'>
-              Goal Completed!
-            </h1>
-            <p className='mt-4 text-sm text-[#49454F] font-normal'
-            >You have successfully completed all your tasks!</p>
-            <button 
-              onClick={handleClose} 
-                className="mt-4 px-4 py-2 bg-[#6200EE] text-white rounded-lg"
-            >
-                Close
-            </button>
-        </div>
+      <div
+  className="relative md:w-4/12 w-11/12 p-6 rounded-lg shadow-lg text-center"
+  style={{ backgroundColor: colors.menu.primary }}
+>
+  {/* ❌ Close icon */}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={colors.text.placeholder}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="absolute top-4 right-4 cursor-pointer hover:opacity-70 transition"
+    onClick={handleClose}
+  >
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+
+  <GoalTrophyAnimation />
+
+  <h1
+    className="text-xl font-bold mt-4 flex items-center justify-center gap-2"
+    style={{ color: colors.text.secondary }}
+  >
+    Goal Completed!
+  </h1>
+  <p
+    className="mt-4 text-sm font-normal"
+    style={{ color: colors.text.placeholder }}
+  >
+    You have successfully completed all your tasks!
+  </p>
+</div>
+
     
     </Backdrop>
 
@@ -673,9 +708,9 @@ if (loading) {
               }
              
                <div className='flex  my-8 w-full justify-center  '>
-         <button onClick={() => setAddSubtaskOpen(true)} className='bg-[#4F378A] text-sm w-full max-w-sm text-white py-2 px-8 rounded-lg'>
-                Add to List
-              </button>
+         <Button onClick={() => setAddSubtaskOpen(true)} className='w-full' text='Add to List'>
+              
+              </Button>
               </div>
                         
             
@@ -784,20 +819,22 @@ if (loading) {
                 </Modal>
 
       {/* Modal for AI Subtask Task Form */}
-              <Modal open={addSubtaskOpen} onClose={() => setAddSubtaskOpen(false)}>
-                  <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6  rounded-xl w-96' sx={{backgroundColor: colors.menu.primary}}>
-                    <h2 className='text-xl font-semibold mb-4'>Add  Subtask</h2>
-                    <TextField fullWidth label='Title' name='title' value={formData.title} onChange={handleSubtaskChange} margin='normal' />
-                    <TextField fullWidth label='Description' name='description' value={formData.description} onChange={handleSubtaskChange} margin='normal' />
-                    <TextField fullWidth label='Due Date' type='datetime-local' name='due_date' value={formData.due_date} onChange={handleSubtaskChange} margin='normal' InputLabelProps={{ shrink: true }} />
-                    <TextField fullWidth label='Task Timeline' name='task_timeline' value={formData.task_timeline} onChange={handleSubtaskChange} margin='normal' />
-                   
-                    <div className='flex justify-end gap-4 mt-4'>
-                      <Button onClick={() => setAddSubtaskOpen(false)} variant='outlined'>Cancel</Button>
-                      <Button onClick={handleSubmitAiSubtask} variant='contained' color='primary'>Submit</Button>
-                    </div>
-                  </Box>
-                </Modal>
+             <ReusableFormModal
+  open={addSubtaskOpen}
+  onClose={() => setAddSubtaskOpen(false)}
+  title="Add Subtask"
+  colors={colors}
+  formData={formData}
+  onChange={handleSubtaskChange}
+  onSubmit={handleSubmitAiSubtask}
+  fields={[
+    { name: "title", label: "Title" },
+    { name: "description", label: "Description" },
+    { name: "due_date", label: "Due Date", type: "datetime-local" },
+    { name: "task_timeline", label: "Task Timeline" },
+  ]}
+/>
+
 
 
 
@@ -805,8 +842,24 @@ if (loading) {
 
          
            
-            <div className="ai-tasks overflow-visible overflow-y-clip  md:px-6 px-6 md:pr-6 pr-0 w-full  flex flex-col items-center  justify-center  " >
-              <div className="md:w-full w-full  gap-4 pl-0 pb-10 md:pl-36 lg:pl-8 xl:pl-10 2xl:pl-26 md:m-2 m-0">
+           <div
+  className="ai-tasks overflow-visible overflow-y-clip md:px-6 px-6 md:pr-6 pr-0 w-full flex flex-col items-center justify-center"
+  style={{
+    paddingLeft: !isMobile
+      ? isCollapsed
+        ? "60px" // add margin when sidebar collapsed (desktop)
+        : "40px"  // no margin when expanded
+      : "20px",   // no margin on mobile
+      paddingRight: !isMobile
+      ? isCollapsed
+        ? "80px" // add margin when sidebar collapsed (desktop)
+        : "60px"  // no margin when expanded
+      : "10px",   // no margin on mobile
+     
+    transition: "margin-left 0.3s ease-in-out",
+  }}
+>
+  <div className="md:w-full w-full  gap-4 pl-4 pb-10 md:pl-36 lg:pl-8 xl:pl-10 2xl:pl-26 md:m-2 m-0">
                 {goal.ai_tasks.map((task, index) => {
                   const isCompleted = taskCompletionStatus[index];
                   const allTasksCompleted = goal.ai_tasks.every(t => t.status === 'completed');
@@ -832,7 +885,7 @@ if (loading) {
         backgroundColor: allTasksCompleted
           ? theme.palette.background.paper // Adjust to your theme color
           : isActive
-          ? "#4F378A" // White background for active
+          ? theme.palette.background.sidebar // White background for active
           : theme.palette.background.paper,
         borderLeftColor: theme.palette.primary.main, // Replace with the desired theme color
         // boxShadow:
@@ -977,7 +1030,7 @@ if (loading) {
                                                   <div className="flex gap-2 items-center">
                                                    {isXs ? (<StatusIcon 
   status={task.status} 
-  color={isActive ? "#F6F3F3" : "#4F378A"} 
+  color={isActive ? "#F6F3F3" : colors.text.secondary} 
 />):( <p className="w-16 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>)}
                                                     <span className="  2xl:text-sm  text-center  text-xs rounded-sm md:text-xs xl:text-xs  flex items-center " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
                                                       {task.status}
@@ -1000,7 +1053,7 @@ if (loading) {
 
                          {index < goal.ai_tasks.length && (
                                           
-                                   <div className="absolute md:-left-18 xl:-left-6 lg:-left-5  -left-23  transform md:-translate-x-1/4 translate-x-1/12 top-1/5   flex flex-col items-center  overflow-hidden">
+                                   <div className="absolute md:-left-18 xl:-left-6 lg:-left-5  -left-26  transform md:-translate-x-1/4 translate-x-1/12 top-1/5   flex flex-col items-center  overflow-hidden">
 
                                     <motion.svg 
                                       width="300" 
@@ -1214,9 +1267,9 @@ if (loading) {
               </div>
 
               <div className='flex  my-8 w-full justify-center  '>
-         <button onClick={() => setAddSubtaskOpen(true)} className='bg-[#4F378A] text-sm w-full max-w-sm text-white py-2 px-8 rounded-lg'>
-                Add to List
-              </button>
+         <Button onClick={() => setAddSubtaskOpen(true)}  text='Add to List' className='w-full'>
+             
+              </Button>
              
               </div>
               <Snackbar

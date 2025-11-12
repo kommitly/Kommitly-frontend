@@ -90,7 +90,7 @@ function App() {
                 <Route path="ai-goal/:goalId/task/:taskId/subtask/:subtaskId" element={<AiSubtaskPage />} />
                 <Route path="goal/:goalId" element={<Goal />} />
                 <Route path="calendar" element={<Calendar />} />
-                <Route path="schedule" element={<Schedule/>} />
+                <Route path="routine" element={<Schedule/>} />
                 <Route path="templates" element={<DailyTemplatesPage/>} />
                 <Route path="templates/:templateId" element={<DailyTemplateDetail />} />
                 <Route path="analytics" element={<Stats />} />

@@ -13,8 +13,12 @@ import Backdrop from '@mui/material/Backdrop';
 import { Box,  IconButton, Typography, useTheme, Divider } from "@mui/material";
 import { tokens } from "../../../theme";
 import Button from "../../components/Button";
+import { useSidebar } from '../../../context/SidebarContext';
+
+
 
 export default function DailyTemplatesPage() {
+  const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
   const [suggestedTemplates, setSuggestedTemplates] = useState([]);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
  
@@ -229,7 +233,16 @@ const loadSuggestions = async () => {
 
      
       {/* Templates list */}
-      <ul className="grid md:grid-cols-3 gap-4 md:space-y-2 space-y-6 flex w-full">
+      <ul
+  className={`grid gap-4 md:space-y-2 space-y-6 w-full ${
+    !isMobile
+      ? isCollapsed
+        ? "md:grid-cols-4"
+        : "md:grid-cols-3"
+      : "grid-cols-1"
+  }`}
+>
+
         {templates.map((t) => (
           <li
             key={t.id}
@@ -291,7 +304,16 @@ const loadSuggestions = async () => {
     <Typography variant="h4" color={colors.text.placeholder} fontWeight="light">
       Suggested Templates
     </Typography>
-    <div className="grid  md:grid-cols-3 gap-4 mt-4">
+    <div
+  className={`grid gap-4 mt-4 ${
+    !isMobile
+      ? isCollapsed
+        ? "md:grid-cols-4"
+        : "md:grid-cols-3"
+      : "grid-cols-1"
+  }`}
+>
+
       {suggestedTemplates.map((s, index) => (
         <div
           key={index}

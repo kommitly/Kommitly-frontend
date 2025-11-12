@@ -163,9 +163,20 @@ const TaskAccordion = ({ task, index }) => {
           <Box className='flex items-center justify-center text-[#65558F] rounded-md' sx={{ backgroundColor: colors.primary[200] }}>
             <p className='flex items-center justify-center text-sm w-5  h-5 text-xs text-center'>{index + 1}</p>
           </Box>
-          <Typography variant="body1" sx={{ color: colors.text.primary, fontWeight: 'medium' }}>
+         <div>
+           <Typography variant="body1" sx={{ color: colors.text.primary, fontWeight: 'medium' }}>
             {task.title || "No title available"}
           </Typography>
+
+            {task.task_timeline !== 'No timeline available' && (
+          <span className=" flex text-xs  items-center space-x-1 mt-1" style={{ color: colors.text.subtitle }}>
+            <AccessTimeIcon className="w-4 h-4" />
+           <p>
+             {task.task_timeline}
+           </p>
+           </span>)}
+
+         </div>
         </div>
         
       </AccordionSummary>

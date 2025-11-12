@@ -3,8 +3,9 @@ import { useParams, useLocation, useNavigate  } from 'react-router-dom';
 import { useEffect, useState, useContext } from "react";
 import { TasksContext } from "../../../context/TasksContext";
 import PropTypes from 'prop-types';
-
-import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById, getAiSubtaskById } from "../../../utils/Api";
+import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
+import { motion } from "framer-motion";
+import { updateAiSubtaskById, triggerAiSubtaskReminder, deleteAiSubtaskById, getAiSubtaskById, answerAiSubtask } from "../../../utils/Api";
 import { Modal, Box, Typography, TextField, Button, IconButton, MenuItem, colors } from "@mui/material";
 import { CalendarToday, AccessTime, Notifications, AttachFile, PushPin, Add } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -15,7 +16,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt, FaClock, FaFlag, FaTasks  } from "react-icons/fa"; // Calendar icon
 import SubtaskDetails from "../Task/Subtask";
-
+import AiAssistance from "../../components/AiAssistance";
 import {useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
@@ -31,6 +32,7 @@ const { goalId, taskId, subtaskId } = useParams();
 const { state } = useLocation();
 
 const navigate = useNavigate();
+const [aiAnswer, setAiAnswer] = useState(null);
 
   const [step, setStep] = useState(state?.step || null);
   const [loading, setLoading] = useState(!state?.step);
@@ -53,21 +55,24 @@ const navigate = useNavigate();
     setTimeout(() => setVisible(true), 10);
   }, []);
 
-  useEffect(() => {
-    if (!state?.step) {
-      const fetchSubtask = async () => {
-        try {
-          const data = await getAiSubtaskById(taskId, subtaskId);
-          setStep(data);
-          setLoading(false);
-        } catch (err) {
-          setError("Failed to load subtask.");
-          setLoading(false);
-        }
-      };
-      fetchSubtask();
+
+useEffect(() => {
+  const fetchSubtask = async () => {
+    try {
+      const data = await getAiSubtaskById(taskId, subtaskId);
+      console.log("Fetched subtask:", data, "Keys:", Object.keys(data));
+      setStep(data);
+      setAiAnswer(data.ai_answer || null); // use null fallback
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to load subtask.");
+      setLoading(false);
     }
-  }, [taskId, subtaskId, state]);
+  };
+  fetchSubtask();
+}, [taskId, subtaskId]);
+
+
 
   useEffect(() => {
     if (step?.due_date && step?.reminder_time && !step.reminder_offset) {
@@ -84,6 +89,18 @@ const navigate = useNavigate();
       }
     }
   }, [step?.due_date, step?.reminder_time]);
+
+   const handleAnswerAiSubtask = async () => {
+    if (aiAnswer) return; // Don't call the API if aiAnswer already exists
+  
+    try {
+      const res = await answerAiSubtask(step.id); 
+      setAiAnswer(res.answer); // Assuming `res.answer` is the correct path
+    } catch (error) {
+      console.error("Failed to get AI subtask answer:", error);
+    }
+  };
+
 
   // ✅ Only start conditionals after hooks
   if (loading) {
@@ -236,7 +253,7 @@ const confirmDeleteSubtask = async () => {
 </button>} */}
 
             
-        <div className='flex gap-2 mt-8 items-center '>
+        <div className='flex gap-2 mt-2 mb-2 items-center '>
       
         <input
             type="text"
@@ -245,7 +262,7 @@ const confirmDeleteSubtask = async () => {
             onChange={handleChange}
             style={{
             
-                color: colors.primary[500],
+                color: colors.text.secondary,
               }
               }
             className="w-full mb-2  text-xl focus:outline-none focus:ring-none focus:bg-purple-300"
@@ -297,26 +314,23 @@ const confirmDeleteSubtask = async () => {
          
           
     
-          <div className="mt-0 w-full">
+          <div className="mt-0 mb w-full">
           <div className="flex items-center justify-center  space-x-2">
 
-               <span className='flex  items-center gap-2'>
-                 {/* Description Icon */}
-             <span className='bg-[#D6CFFF] p-2 rounded-md'>
-               <FaTasks className="text-[#4F378A] " size={12} />
-             </span>
+          {/* {<span className='flex  items-center gap-2'>
+         
+        <span className='bg-[#D6CFFF] p-2 rounded-md'>
+          <FaTasks className="text-[#4F378A] " size={12} />
+        </span>
+      
+     
+      <label htmlFor="description" className="w-30  text-base">
+        Description
+      </label>
+    
+          </span>} */}
            
-            {/* Label */}
-            <label htmlFor="description" className="w-30  text-base">
-              Description
-            </label>
-            {/* Description Input */}
-          
-
-
-               </span>
-           
-          <div className="relative mt-6 w-11/12">
+          <div className="relative  w-11/12">
       <textarea
           name="description"
             className=" rounded w-full md:w-1/2 text-sm  focus:outline-none focus:ring-none focus:bg-purple-100"
@@ -327,7 +341,7 @@ const confirmDeleteSubtask = async () => {
           </div>
      
     
-    <div className="mt-2">
+    <div className="mt-8">
           <div className="flex items-center space-x-2">
                <span className='flex  items-center gap-2'>
                   {/* Calendar Icon */}
@@ -465,6 +479,36 @@ const confirmDeleteSubtask = async () => {
     </Select>
   </FormControl>
 </div>
+
+
+         
+<div className="w-full mt-4  flex justify-end">
+          <IconButton
+            className="pulse text-[#4F378A] hover:text-white  "
+            style={{ backgroundColor: colors.primary[500], width: '40px', height: '40px' }}
+            onClick={handleAnswerAiSubtask} 
+          
+          >
+              <motion.div
+      animate={{ scale: [1, 1.2, 1] }}
+      transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <EmojiObjectsIcon
+        sx={{ fontSize: 20 }}
+        className="text-white hover:text-white"
+      />
+    </motion.div>
+            
+          </IconButton>
+         </div>
+
+
+<div className='mt-4'>
+   <AiAssistance answer={aiAnswer} onClose={() => setAiAnswer(null)} />
+
+</div>
+
+ 
     
     {/* {
           <div className="flex gap-4  mt-4">

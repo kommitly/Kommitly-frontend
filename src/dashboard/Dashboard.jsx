@@ -1,98 +1,80 @@
-import React, {useEffect} from "react";
-import { ColorModeContext, useMode } from "../theme";
-import { tokens } from "../theme";
-import { useState } from "react";
+// Dashboard.jsx
+import React from "react";
 import { Outlet } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Backdrop from "@mui/material/Backdrop";
+
+import { SidebarProvider, useSidebar } from "../context/SidebarContext";
 import DashboardSidebar from "./shared/Sidebar/DashboardSidebar";
 import Navbar from "./shared/Navbar/Navbar";
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-import Backdrop from '@mui/material/Backdrop';
+import { tokens } from "../theme";
 
-
-
-const Dashboard = () => {
-  const muiTheme = useTheme();
-  const colorMode = useMode();
+const DashboardContent = () => {
   const theme = useTheme();
-  const colors =tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-   const isSm = useMediaQuery(theme.breakpoints.only("sm"));
-    const isLg = useMediaQuery(theme.breakpoints.only("lg"));
-    const isXl = useMediaQuery(theme.breakpoints.only("xl"));
-    const isMd = useMediaQuery(theme.breakpoints.only("md"));
-    const isXs = useMediaQuery(theme.breakpoints.only("xs"));
-    const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
-    const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const colors = tokens(theme.palette.mode);
+  const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
 
-
-  useEffect(() => {
-  if (isMobile) {
-    setIsCollapsed(true);  // collapsed on mobile
-  } else {
-    setIsCollapsed(false); // expanded on desktop/laptop
-  }
-}, [isMobile]);
-
-
- 
-
-
-
+  const isXl = useMediaQuery(theme.breakpoints.only("xl"));
 
   return (
-    <div className="flex h-screen relative w-full ">
-      
-     <div className=" ">
-    {isMobile && !isCollapsed &&  (
-  <Backdrop
-    sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1, position: 'fixed' })}
-    open={!isCollapsed}
-    onClick={() => setIsCollapsed(true)}
-  />
-)}
+    <div className="flex h-screen relative w-full">
+      {/* Backdrop for mobile when sidebar is expanded */}
+      {isMobile && !isCollapsed && (
+        <Backdrop
+          sx={(theme) => ({
+            color: "#fff",
+            zIndex: theme.zIndex.drawer + 1,
+            position: "fixed",
+          })}
+          open={!isCollapsed}
+          onClick={() => setIsCollapsed(true)}
+        />
+      )}
 
-
-
+      {/* Sidebar */}
       <DashboardSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
-    
-    </div>
-
-    
-
-        {/* Push Outlet Content Below Navbar */}
-        <main
-  className="w-full no-scrollbar"
-  style={{
- 
-    paddingLeft: !isMobile
-      ? isCollapsed
-        ? (isXl ? '60px' : '20px')
-        : (isXl ? '60px' : '10px')
-      : '0px',
-    position: isMobile ? 'fixed' : 'relative',
-    height: isMobile ? '100vh' : 'auto',
-    overflowY: isMobile ? 'auto' : 'visible', // 💡 allows scroll on mobile
-  }}
->
-
-           <div className="relative  mt-2  z-50 w-full ">
+      {/* Main content */}
+      <main
+        className="w-full no-scrollbar"
+        style={{
+          paddingLeft: !isMobile
+            ? isCollapsed
+              ? isXl
+                ? "60px"
+                : "20px"
+              : isXl
+              ? "60px"
+              : "10px"
+            : "0px",
+          position: isMobile ? "fixed" : "relative",
+          height: isMobile ? "100vh" : "auto",
+          overflowY: isMobile ? "auto" : "visible",
+        }}
+      >
+        {/* Navbar */}
+        <div className="relative mt-2 z-50 w-full">
           <Navbar setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />
-
         </div>
-          <div
-  className="mt-14  relative "
 
->
-          <div className=" h-screen w-full  relative">
-            <Outlet  />
+        {/* Page content */}
+        <div className="mt-14 relative">
+          <div className="h-screen w-full relative">
+            <Outlet />
           </div>
-          </div>
-          </main>
-    
+        </div>
+      </main>
     </div>
+  );
+};
+
+// Wrap DashboardContent with SidebarProvider so all pages can access isCollapsed
+const Dashboard = () => {
+  return (
+    <SidebarProvider>
+      <DashboardContent />
+    </SidebarProvider>
   );
 };
 

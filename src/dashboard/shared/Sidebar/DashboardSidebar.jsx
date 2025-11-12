@@ -41,6 +41,8 @@ import { RiCalendarScheduleLine } from "react-icons/ri";
 import { RiCalendarScheduleFill } from "react-icons/ri";
 import { HiOutlineTemplate } from "react-icons/hi";
 import { HiTemplate } from "react-icons/hi";
+import { useSidebar } from '../../../context/SidebarContext';
+
 
 const Item = ({title, to, icon, selected, setSelected}) => {
     const theme = useTheme();
@@ -63,8 +65,8 @@ const Item = ({title, to, icon, selected, setSelected}) => {
 };
 
 
-const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
-
+const DashboardSidebar = () => {
+    const { isCollapsed, setIsCollapsed} = useSidebar();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
@@ -613,15 +615,15 @@ sx={{
                           </MenuItem>
 
                              <MenuItem 
-                            title="Schedule"
+                            title="Routine"
                            
                             
                             onClick={() => {
-                                navigate("/dashboard/schedule");
-                                setSelected("Schedule");
+                                navigate("/dashboard/routine");
+                                setSelected("Routine");
                                 if (!isCollapsed) setIsCollapsed(true);
                             }}
-                            icon={selected === "Schedule" ? <RiCalendarScheduleFill size={24}  sx={{fontSize:{
+                            icon={selected === "Routine" ? <RiCalendarScheduleFill size={24}  sx={{fontSize:{
   xs: "1.5rem",
   sm: "1.5rem",
   md: "1.5rem",     
@@ -639,9 +641,9 @@ sx={{
   },
  }} />}
                             
-                            active={selected === "Schedule"}
+                            active={selected === "Routine"}
                         >
-                          Schedule
+                         Routine
                           </MenuItem>
 
                            <MenuItem 
@@ -681,7 +683,7 @@ sx={{
                      
                        
 
-                       {(goals?.length > 0 || tasks?.length > 0) && (
+                       {((goals?.goals?.length > 0 || goals?.ai_goals?.length > 0 || tasks?.length > 0)) && (
   <MenuItem 
     title="Stats"
     onClick={() => {
