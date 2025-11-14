@@ -915,11 +915,13 @@ const handleChange = (field, value) => {
                         color={colors.text.primary} 
                         fontWeight="bold" 
                         
-                        >Routines</Typography>
+                        >My Routines</Typography>
                        {/* { <Button variant="contained">
                           View in Calendar
                         </Button>} */}
-                         <Button  text="Create Routine" onClick={()=> {
+
+                          <div className="hidden sm:block">
+                             <Button  text="Create Routine" onClick={()=> {
                                                         setOpen(true)
                                                       }}  >
                                                          <svg
@@ -939,7 +941,33 @@ const handleChange = (field, value) => {
                                           <line x1="5" y1="12" x2="19" y2="12" />
                                         </svg>
                                                         </Button>
-                          
+
+
+
+                          </div>
+                        
+                              {/* Mobile floating + button */}
+<button
+  onClick={()=> {  setOpen(true)}} 
+  className="sm:hidden fixed bottom-36 right-12 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
+  style={{ backgroundColor: colors.background.sidebar }}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="26"
+    height="26"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#ffffff"
+    strokeWidth="3"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+</button>
+
                       
                     
                 </div>
@@ -996,8 +1024,8 @@ const handleChange = (field, value) => {
         <div
           className="p-5 rounded-4xl  w-full h-full shadow-md flex flex-col justify-between"
           style={{
-            backgroundColor: colors.background.sidebar,
-            color: colors.primary[100],
+            backgroundColor: colors.background.paper,
+            color: colors.text.primary,
           }}
         >
           <div className="py-4">
@@ -1015,23 +1043,23 @@ const handleChange = (field, value) => {
             }}
             className="rounded-4xl mb-2 mt-4 p-2 border transition-all duration-300 cursor-pointer"
   style={{
-    borderColor: "#D6CFFF",
-    color: "#D6CFFF",
+    borderColor: "#4F378A",
+    color: "#4F378A",
   }}
   onMouseEnter={(e) => {
-    e.target.style.color = colors.background.paper;
-    e.target.style.boxShadow = "0 0 12px #D6CFFF";
+    e.target.style.color = colors.text.secondary;
+    e.target.style.boxShadow = "0 0 12px #4F378A";
   }}
   onMouseLeave={(e) => {
-    e.target.style.color = "#D6CFFF";
+    e.target.style.color = "#4F378A";
     e.target.style.boxShadow = "none";
   }}
   onMouseDown={(e) => {
-    e.target.style.boxShadow = "0 0 20px #D6CFFF";
+    e.target.style.boxShadow = "0 0 20px #4F378A";
     e.target.style.transform = "scale(0.98)";
   }}
   onMouseUp={(e) => {
-    e.target.style.boxShadow = "0 0 12px #D6CFFF";
+    e.target.style.boxShadow = "0 0 12px #4F378A";
     e.target.style.transform = "scale(1)";
   }}
 >

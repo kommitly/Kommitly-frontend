@@ -122,8 +122,9 @@ const loadSuggestions = async () => {
                               color={colors.text.primary} 
                               fontWeight="bold" 
                               
-                              >Templates</Typography>
-      <Button onClick={openModal}  className=' flex items-center' text="Create Template">
+                              >My Templates</Typography>
+                              <div className="hidden sm:block">
+                                <Button onClick={openModal}  className=' flex items-center' text="Create Template">
                            <svg
                                           xmlns="http://www.w3.org/2000/svg"
                                           width="16"
@@ -142,6 +143,33 @@ const loadSuggestions = async () => {
                                         </svg>
                                      
                         </Button>
+
+
+                              </div>
+
+                     {/* Mobile floating + button */}
+<button
+  onClick={openModal}
+  className="sm:hidden fixed bottom-36 right-12 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
+  style={{ backgroundColor: colors.background.sidebar }}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="26"
+    height="26"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#ffffff"
+    strokeWidth="3"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+</button>
+
+      
                         </div>
 
       <Backdrop
@@ -319,7 +347,7 @@ const loadSuggestions = async () => {
           key={index}
          
           className="p-5 rounded-4xl  shadow-md flex flex-col justify-between"
-          style={{ backgroundColor: colors.background.sidebar, color: colors.primary[100] }}
+          style={{ backgroundColor: colors.background.paper, color: colors.text.primary }}
         >
           <div className="py-4">
             <h3 className="text-lg font-semibold">{s.name}</h3>
@@ -335,23 +363,23 @@ const loadSuggestions = async () => {
 
   className="rounded-4xl mb-2 mt-4 p-2 border transition-all duration-300 cursor-pointer"
   style={{
-    borderColor: "#D6CFFF",
-    color: "#D6CFFF",
+    borderColor: colors.text.secondary,
+    color: colors.text.secondary,
   }}
   onMouseEnter={(e) => {
     e.target.style.color = colors.background.paper;
-    e.target.style.boxShadow = "0 0 12px #D6CFFF";
+    e.target.style.boxShadow = "0 0 12px #4F378A";
   }}
   onMouseLeave={(e) => {
-    e.target.style.color = "#D6CFFF";
+    e.target.style.color = "#4F378A";
     e.target.style.boxShadow = "none";
   }}
   onMouseDown={(e) => {
-    e.target.style.boxShadow = "0 0 20px #D6CFFF";
+    e.target.style.boxShadow = "0 0 20px #4F378A";
     e.target.style.transform = "scale(0.98)";
   }}
   onMouseUp={(e) => {
-    e.target.style.boxShadow = "0 0 12px #D6CFFF";
+    e.target.style.boxShadow = "0 0 12px #4F378A";
     e.target.style.transform = "scale(1)";
   }}
 >

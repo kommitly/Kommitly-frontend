@@ -408,37 +408,67 @@ if (!loading && tasks.length === 0) {
   return (
     <div className="flex flex-col min-h-screen h-full  p-4">
      
-          <div className='flex justify-between w-full'>
-              <Typography 
-          variant="h2" 
-          color={colors.text.primary} 
-          fontWeight="bold" 
-          
-          >Tasks</Typography>
-                    <Button onClick={openModal} text="Create Task"  >
-                          <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="#6246AC"
-                          stroke="#FFFFFF"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                      
-                          style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                       
-                      </Button>
-          
-                  </div>
-          <div className="flex flex-col items-center justify-center h-full text-center p-6">
-        <Empty/>
+        <div className='flex justify-between w-full'>
+  <Typography 
+    variant="h2" 
+    color={colors.text.primary} 
+    fontWeight="bold"
+  >
+   My Tasks
+  </Typography>
+
+  {/* Desktop button */}
+  <div className="hidden sm:block">
+    <Button onClick={openModal} text="Create Task">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="#6246AC"
+        stroke="#FFFFFF"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ stroke: '#FFFFFF' }}
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+    </Button>
+  </div>
+</div>
+
+          <div className="flex flex-col items-center justify-center h-[50vh] w-full text-center p-6">
+            <div className="w-7/12">
+              <Empty/>
+            </div>
+        
           </div>
+
+          {/* Mobile floating + button */}
+<button
+  onClick={openModal}
+  className="sm:hidden fixed bottom-36 right-12 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
+  style={{ backgroundColor: colors.background.sidebar }}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="26"
+    height="26"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#ffffff"
+    strokeWidth="3"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+</button>
+
+
      
     </div>
   );
