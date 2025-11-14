@@ -10,14 +10,14 @@ const SlidingButton2 = ({ options, selected, onChange }) => {
   const width = 100 / options.length;
 
   return (
-    <div className="flex mt-4 relative px-1 rounded-md md:w-11/12 w-full" style={{backgroundColor: colors.tag.primary}} >
+    <div className="flex mt-4 relative px-1 rounded-4xl md:w-11/12 w-full" style={{backgroundColor: colors.tag.primary}} >
 
  
                   <div className='relative w-full'>
       {/* Sliding Background */}
       <div
     
-        className="absolute top-1   bottom-1  w-1/2 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-sm transition-all duration-300 ease-in-out"
+        className="absolute top-1   bottom-1  w-1/2 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-4xl transition-all duration-300 ease-in-out"
         style={{
           left: `${index * width}%`,
           width: `${width}%`,

@@ -302,13 +302,13 @@ const confirmDeleteSubtask = async () => {
           
 
                   <div className='flex'>
-                     <Button className="block w-full  py-2 text-sm cursor-pointer" sx={{border: "1px solid #0D81E0"  , color: colors.primary[400],   '&:hover': {
+                     <Button className="block w-full  py-2 text-sm cursor-pointer" variant='outlined' sx={{borderColor: colors.text.secondary , color: colors.text.secondary,   '&:hover': {
       opacity: 0.7, // or any other value < 1
     }, textTransform: "none",  gap: "10px"  } }
              onClick={handleUpdateSubtask}
 
             >
-                   UPDATE
+                   Update
             </Button>
             <Snackbar
   open={openSnackbar}

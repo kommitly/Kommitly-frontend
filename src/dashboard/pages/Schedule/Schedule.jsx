@@ -285,92 +285,122 @@ const handleChange = (field, value) => {
       
           
    <p
-          className="w-full mt-4 mb-1 font-semibold text-lg"
+          className="w-full flex justify-start mt-4 mb-1 font-semibold text-lg"
           style={{ color: colors.text.secondary }}
         >
           {selectedOption}
         </p>
 
-          <Divider orientation="horizontal" sx={{ borderColor: "#767676", opacity: 0.8 }} />
         
          
        {selectedOption === "Add new task" ? (
     <>
-     <div className="mb-2 gap-4 h-[50vh] md:h-auto overflow-y-auto flex flex-col md:flex-row w-full items-start justify-start mt-4">
+     <div className="mb-2 gap-4 h-[54vh] md:h-auto overflow-y-auto flex flex-col md:flex-row w-full items-start justify-start mt-4">
       <div className="flex flex-col md:pr-8 md:border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
-      <label className="block mb-2 " style={{color: colors.text.primary}}>Task Title</label>
-    <input
+      
+      <TextField
+      fullWidth
+      label="Task Title"
       value={newRoutine.title}
       onChange={(e) => setNewRoutine((prev) => ({ ...prev, title: e.target.value }))}
-      placeholder="Enter new task title..."
-      className="w-full border   rounded px-2 py-1"
-      style={{borderColor: "#767676", color: colors.text.primary}}
+      variant="outlined"
+      InputLabelProps={{ style: { color: colors.text.primary } }}
+      sx={{
+        mt: 1,
+        "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+        input: { color: colors.text.primary },
+        mb: 1
+      }}
     />
-      <label className="block mb-2 mt-4" style={{color: colors.text.primary}}>Description</label>
-    <textarea
-      value={newRoutine.description}
-      onChange={(e) => setNewRoutine((prev) => ({ ...prev, description: e.target.value }))}
-      placeholder="Enter task description..."
-      className="w-full border  rounded px-2 py-1"
-      style={{borderColor: "#767676", color: colors.text.primary }}
-    />
+     
+    <TextField
+  fullWidth
+  multiline
+  minRows={2}
+  label="Description"
+  value={newRoutine.description}
+  onChange={(e) =>
+    setNewRoutine((prev) => ({ ...prev, description: e.target.value }))
+  }
+  variant="outlined"
+  InputLabelProps={{ style: { color: colors.text.primary } }}
+  sx={{
+    mt: 1,
+    "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+    textarea: { color: colors.text.primary },
+    mb: 1
+  }}
+/>
+
     <div className="w-full gap-4 flex">
        {/* Start Date */}
-            <div className="w-full flex flex-col justify-start items-start">
-              <label className="block mb-2 mt-4" style={{color: colors.text.primary}}>Start Date</label>
-            <input
-              type="date"
-              value={newRoutine.start_date}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  start_date: e.target.value,
-                }))
-              }
-              className="w-full border  rounded  py-1"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            />
-            </div>
+         
+           <TextField
+            fullWidth
+            type="date"
+            label="Start Date"
+            value={newRoutine.start_date}
+            onChange={(e) =>
+              setNewRoutine((prev) => ({ ...prev, start_date: e.target.value }))
+            }
+            InputLabelProps={{ shrink: true, style: { color: colors.text.primary } }}
+            sx={{
+              mt: 1,
+              "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+              input: { color: colors.text.primary },
+            }}
+          />
+
+          
              {/* End Date */}
-           <div className="w-full flex flex-col justify-start items-start">
-             <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>End Date</label>
-            <input
-              type="date"
-              value={newRoutine.end_date}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  end_date: e.target.value,
-                }))
-              }
-              className="w-full  border rounded  py-1"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            />
-           </div>
+          
+            <TextField
+            fullWidth
+            type="date"
+            label="End Date"
+            value={newRoutine.end_date}
+            onChange={(e) =>
+              setNewRoutine((prev) => ({ ...prev, end_date: e.target.value }))
+            }
+            InputLabelProps={{ shrink: true, style: { color: colors.text.primary } }}
+            sx={{
+              mt: 1,
+              "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+              input: { color: colors.text.primary },
+            }}
+          />
+         
     </div>
     </div>
-      <div className="flex flex-col  md:ml-4 w-full items-start justify-start">
+      <div className="flex flex-col mb-2 md:ml-4 w-full items-start justify-start">
 
              {/* Frequency */}
           <div className="w-full flex flex-col justift-start items-start ">
-              <label className="block  mb-2" style={{color: colors.text.primary}}>Frequency</label>
-            <select
+              
+            <TextField
+              fullWidth
+              select
+              label="Frequency"
               value={newRoutine.frequency}
               onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  frequency: e.target.value,
-                }))
+                setNewRoutine((prev) => ({ ...prev, frequency: e.target.value }))
               }
-              className="w-full border rounded px-2"
-              style={{borderColor: "#767676", color: colors.text.primary}}
+              variant="outlined"
+              InputLabelProps={{ style: { color: colors.text.primary } }}
+              sx={{
+            
+                "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+                "& .MuiSelect-select": { color: colors.text.primary },
+                mb:1
+              }}
             >
-              <option value="">Select frequency</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="custom">Custom</option>
-            </select>
+              <MenuItem value="">Select frequency</MenuItem>
+              <MenuItem value="daily">Daily</MenuItem>
+              <MenuItem value="weekly">Weekly</MenuItem>
+              <MenuItem value="monthly">Monthly</MenuItem>
+              <MenuItem value="custom">Custom</MenuItem>
+            </TextField>
+
 
           </div>
             {/* Custom Interval (only show if frequency === custom) */}
@@ -390,53 +420,65 @@ const handleChange = (field, value) => {
                   className="w-1/2 border border-black rounded px-2 py-1"
                   style={{borderColor: "#767676", color: colors.text.primary}}
                 />
-                <select
-                  value={newRoutine.custom_unit || ""}
-                  onChange={(e) =>
-                    setNewRoutine((prev) => ({
-                      ...prev,
-                      custom_unit: e.target.value,
-                    }))
-                  }
-                  className="w-1/2  border rounded px-2 py-1"
-                  style={{borderColor: "#767676", color: colors.text.primary}}
-                >
-                  <option value="">Select unit</option>
-                  <option value="days">Days</option>
-                  <option value="weeks">Weeks</option>
-                  <option value="months">Months</option>
-                </select>
+                <TextField
+                fullWidth
+                select
+                label="Custom Unit"
+                value={formData.custom_unit || ''}
+                onChange={(e) => handleChange('custom_unit', e.target.value)}
+                variant="outlined"
+                InputLabelProps={{ style: { color: colors.text.primary } }}
+                sx={{
+                  mt: 1,
+                  "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+                  "& .MuiSelect-select": { color: colors.text.primary },
+                }}
+              >
+                <MenuItem value="">Select unit</MenuItem>
+                <MenuItem value="days">Days</MenuItem>
+                <MenuItem value="weeks">Weeks</MenuItem>
+                <MenuItem value="months">Months</MenuItem>
+              </TextField>
+
               </div>
             )}
 
-            {/* Reminder Time */}
-            <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>Reminder Time</label>
-            <input
-              type="time"
-              value={newRoutine.reminder_time}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  reminder_time: e.target.value,
-                }))
-              }
-              className="w-full  border rounded px-2 py-1"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            />
+          
+            <TextField
+            fullWidth
+            type="time"
+            label="Reminder Time"
+            value={newRoutine.reminder_time}
+            onChange={(e) =>
+              setNewRoutine((prev) => ({ ...prev, reminder_time: e.target.value }))
+            }
+            InputLabelProps={{ shrink: true, style: { color: colors.text.primary } }}
+            sx={{
+              mt: 1,
+              "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+              input: { color: colors.text.primary },
+              mb:1
+            }}
+          />
+
              {/* Time of Day (optional) */}
-            <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>Time of Day (Optional)</label>
-            <input
-              type="time"
-              value={newRoutine.time_of_day || ""}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  time_of_day: e.target.value,
-                }))
-              }
-              className="w-full border rounded px-2 py-1"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            />
+            
+            <TextField
+          fullWidth
+          type="time"
+          label="Time of Day (Optional)"
+          value={newRoutine.time_of_day}
+          onChange={(e) =>
+            setNewRoutine((prev) => ({ ...prev, time_of_day: e.target.value }))
+          }
+          InputLabelProps={{ shrink: true, style: { color: colors.text.primary } }}
+          sx={{
+            mt: 1,
+            "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+            input: { color: colors.text.primary },
+          }}
+        />
+
 
 </div>
     </div>
@@ -445,76 +487,95 @@ const handleChange = (field, value) => {
   ) : (
     <>
     <div className="mb-2 gap-4 h-[50vh] md:h-auto overflow-y-auto flex flex-col md:flex-row w-full items-start justify-start mt-4">
-      <div className="flex flex-col md:pr-8 md:border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
-      <div className="flex flex-col  w-full items-start justify-start" style={{color: colors.text.primary}}>
+      <div className=" pt-4 flex flex-col md:pr-8 md:border-r  w-full items-start justify-start" style={{borderColor: "#767676"}}>
+     <TextField
+  fullWidth
+  select
+  label="Link Type"
+  value={type}
+  onChange={(e) => setType(e.target.value)}
+  variant="outlined"
+  InputLabelProps={{ style: { color: colors.text.primary } }}
+  sx={{
+    mb: 2,
+    "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+    "& .MuiSelect-select": { color: colors.text.primary },
+  }}
+>
+  <MenuItem value="task">Task</MenuItem>
+  <MenuItem value="ai_subtask">AI Subtask</MenuItem>
+</TextField>
 
-        <label className="block mb-2" >Link Type</label>
-      <select
-        value={type}
-        onChange={(e) => setType(e.target.value)}
-        className="w-full border mb-4 rounded px-2 py-1"
-      >
-        <option value="task">Task</option>
-        <option value="ai_subtask">AI Subtask</option>
-      </select>
-    </div>
 
-    <div className="flex flex-col w-full justify-start items-start mb-2 " style={{color: colors.text.primary}}>
-      <label className="block mb-2 capitalize">Select {type}</label>
-      <select
-        value={selected}
-        onChange={(e) => setSelected(e.target.value)}
-        className="w-full border mb-4 rounded px-2 py-1"
-      >
-        <option value="">None</option>
-        {type === "ai_subtask"
-          ? recommendations.map((r) => (
-              <option key={r.subtask.id} value={r.subtask.id}>
-                {r.goalTitle} → {r.taskTitle} → {r.subtask.title}
-              </option>
-            ))
-          : options.map((opt) => (
-              <option key={opt.id} value={opt.id}>
-                {opt.title}
-              </option>
-            ))}
-      </select>
-    </div>
+   <TextField
+  fullWidth
+  select
+  label={`Select ${type}`}
+  value={selected}
+  onChange={(e) => setSelected(e.target.value)}
+  variant="outlined"
+  InputLabelProps={{ style: { color: colors.text.primary } }}
+  sx={{
+    mb: 2,
+    "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+    "& .MuiSelect-select": { color: colors.text.primary },
+  }}
+>
+  <MenuItem value="">None</MenuItem>
+  {type === "ai_subtask"
+    ? recommendations.map((r) => (
+        <MenuItem key={r.subtask.id} value={r.subtask.id}>
+          {r.goalTitle} → {r.taskTitle} → {r.subtask.title}
+        </MenuItem>
+      ))
+    : options.map((opt) => (
+        <MenuItem key={opt.id} value={opt.id}>
+          {opt.title}
+        </MenuItem>
+      ))}
+</TextField>
 
-    <div className="w-full gap-4 flex">
+
+    <div className="w-full space-x-4 flex">
        {/* Start Date */}
             <div className="w-full flex flex-col justify-start items-start">
-              <label className="block  mb-2 " style={{color: colors.text.primary}}>Start Date</label>
-            <input
-              type="date"
-              value={newRoutine.start_date}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  start_date: e.target.value,
-                }))
-              }
-              className="w-full border rounded  py-1"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            />
+             
+            <TextField
+  fullWidth
+  type="date"
+  label="Start Date"
+  value={newRoutine.start_date}
+  onChange={(e) =>
+    setNewRoutine((prev) => ({ ...prev, start_date: e.target.value }))
+  }
+  InputLabelProps={{ shrink: true, style: { color: colors.text.primary } }}
+  sx={{
+  
+    "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+    input: { color: colors.text.primary },
+  }}
+/>
+
             </div>
              {/* End Date */}
-           <div className="w-full flex flex-col justify-start items-start">
-             <label className="block  mb-2" style={{color: colors.text.primary}}>End Date</label>
-            <input
-              type="date"
-              value={newRoutine.end_date}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  end_date: e.target.value,
-                }))
-              }
-              className="w-full border rounded  py-1"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            />
+       
+            <TextField
+            fullWidth
+            type="date"
+            label="End Date"
+            value={newRoutine.end_date}
+            onChange={(e) =>
+              setNewRoutine((prev) => ({ ...prev, end_date: e.target.value }))
+            }
+            InputLabelProps={{ shrink: true, style: { color: colors.text.primary } }}
+            sx={{
+           
+              "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+              input: { color: colors.text.primary },
+            }}
+          />
            </div>
-           </div>
+          
 
       </div>
 
@@ -524,25 +585,31 @@ const handleChange = (field, value) => {
      <div className="flex flex-col  md:ml-4 w-full items-start justify-start">
 
              {/* Frequency */}
-          <div className="w-full flex flex-col justift-start items-start ">
-              <label className="block  mb-2" style={{color: colors.text.primary}}>Frequency</label>
-            <select
-              value={newRoutine.frequency}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  frequency: e.target.value,
-                }))
-              }
-              className="w-full  border rounded px-2"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            >
-              <option value="">Select frequency</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="custom">Custom</option>
-            </select>
+          <div className="w-full mb-2 flex flex-col justift-start items-start ">
+             
+            <TextField
+                fullWidth
+                select
+                label="Frequency"
+                value={newRoutine.frequency}
+                onChange={(e) =>
+                  setNewRoutine((prev) => ({ ...prev, frequency: e.target.value }))
+                }
+                variant="outlined"
+                InputLabelProps={{ style: { color: colors.text.primary } }}
+                sx={{
+              
+                  "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+                  "& .MuiSelect-select": { color: colors.text.primary },
+                }}
+              >
+                <MenuItem value="">Select frequency</MenuItem>
+                <MenuItem value="daily">Daily</MenuItem>
+                <MenuItem value="weekly">Weekly</MenuItem>
+                <MenuItem value="monthly">Monthly</MenuItem>
+                <MenuItem value="custom">Custom</MenuItem>
+              </TextField>
+
 
           </div>
             {/* Custom Interval (only show if frequency === custom) */}
@@ -562,53 +629,63 @@ const handleChange = (field, value) => {
                   className="w-1/2  border border-black rounded px-2 py-1"
                   style={{borderColor: "#767676", color: colors.text.primary}}
                 />
-                <select
-                  value={newRoutine.custom_unit || ""}
-                  onChange={(e) =>
-                    setNewRoutine((prev) => ({
-                      ...prev,
-                      custom_unit: e.target.value,
-                    }))
-                  }
-                  className="w-1/2  border rounded px-2 py-1"
-                  style={{borderColor: "#767676", color: colors.text.primary}}
-                >
-                  <option value="">Select unit</option>
-                  <option value="days">Days</option>
-                  <option value="weeks">Weeks</option>
-                  <option value="months">Months</option>
-                </select>
+                <TextField
+                fullWidth
+                select
+                label="Custom Unit"
+                value={formData.custom_unit || ''}
+                onChange={(e) => handleChange('custom_unit', e.target.value)}
+                variant="outlined"
+                InputLabelProps={{ style: { color: colors.text.primary } }}
+                sx={{
+                  mt: 1,
+                  "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+                  "& .MuiSelect-select": { color: colors.text.primary },
+                }}
+              >
+                <MenuItem value="">Select unit</MenuItem>
+                <MenuItem value="days">Days</MenuItem>
+                <MenuItem value="weeks">Weeks</MenuItem>
+                <MenuItem value="months">Months</MenuItem>
+              </TextField>
+
               </div>
             )}
 
-            {/* Reminder Time */}
-            <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>Reminder Time</label>
-            <input
-              type="time"
-              value={newRoutine.reminder_time}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  reminder_time: e.target.value,
-                }))
-              }
-              className="w-full border rounded px-2 py-1"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            />
-             {/* Time of Day (optional) */}
-            <label className="block  mb-2 mt-4" style={{color: colors.text.primary}}>Time of Day (Optional)</label>
-            <input
-              type="time"
-              value={newRoutine.time_of_day || ""}
-              onChange={(e) =>
-                setNewRoutine((prev) => ({
-                  ...prev,
-                  time_of_day: e.target.value,
-                }))
-              }
-              className="w-full  border rounded px-2 py-1"
-              style={{borderColor: "#767676", color: colors.text.primary}}
-            />
+              <TextField
+            fullWidth
+            type="time"
+            label="Reminder Time"
+            value={newRoutine.reminder_time}
+            onChange={(e) =>
+              setNewRoutine((prev) => ({ ...prev, reminder_time: e.target.value }))
+            }
+            InputLabelProps={{ shrink: true, style: { color: colors.text.primary } }}
+            sx={{
+              mt: 1,
+              "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+              input: { color: colors.text.primary },
+              mb: 1
+            }}
+
+          />
+           
+            <TextField
+          fullWidth
+          type="time"
+          label="Time of Day (Optional)"
+          value={newRoutine.time_of_day}
+          onChange={(e) =>
+            setNewRoutine((prev) => ({ ...prev, time_of_day: e.target.value }))
+          }
+          InputLabelProps={{ shrink: true, style: { color: colors.text.primary } }}
+          sx={{
+            mt: 1,
+            "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+            input: { color: colors.text.primary },
+            mb: 2
+          }}
+        />
 
 </div>
 
@@ -733,6 +810,7 @@ const handleChange = (field, value) => {
             </Select>
           </FormControl>
 
+
           {formData.frequency === "custom" && (
   <Box>
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -757,15 +835,26 @@ const handleChange = (field, value) => {
 
     <FormControl fullWidth margin="normal" sx={{ mt: 2 }}>
       <InputLabel>Custom Unit</InputLabel>
-      <Select
-        value={formData.custom_unit || ''}
-        label="Custom Unit"
-        onChange={(e) => handleChange('custom_unit', e.target.value)}
-      >
-        <MenuItem value="days">Days</MenuItem>
-        <MenuItem value="weeks">Weeks</MenuItem>
-        <MenuItem value="months">Months</MenuItem>
-      </Select>
+      <TextField
+  fullWidth
+  select
+  label="Custom Unit"
+  value={formData.custom_unit || ''}
+  onChange={(e) => handleChange('custom_unit', e.target.value)}
+  variant="outlined"
+  InputLabelProps={{ style: { color: colors.text.primary } }}
+  sx={{
+    mt: 1,
+    "& .MuiOutlinedInput-root fieldset": { borderColor: "#767676" },
+    "& .MuiSelect-select": { color: colors.text.primary },
+  }}
+>
+  <MenuItem value="">Select unit</MenuItem>
+  <MenuItem value="days">Days</MenuItem>
+  <MenuItem value="weeks">Weeks</MenuItem>
+  <MenuItem value="months">Months</MenuItem>
+</TextField>
+
     </FormControl>
   </Box>
 )}

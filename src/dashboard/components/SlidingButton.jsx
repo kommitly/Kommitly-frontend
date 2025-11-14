@@ -10,14 +10,14 @@ const SlidingButton = ({ options, selected, onChange }) => {
   const width = 100 / options.length;
 
   return (
-    <div className="flex  relative px-1 rounded-md md:w-7/12 w-full" style={{backgroundColor: colors.tag.primary}} >
+    <div className="flex  relative px-1 rounded-4xl md:w-7/12 w-10/12" style={{backgroundColor: colors.tag.primary}} >
 
  
                   <div className='relative w-full'>
       {/* Sliding Background */}
       <div
     
-        className="absolute top-1   bottom-1  w-1/3 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-sm transition-all duration-300 ease-in-out"
+        className="absolute top-1   bottom-1  w-1/3 bg-[#4F378A] shadow-sm shadow-[#4F378A] rounded-4xl transition-all duration-300 ease-in-out"
         style={{
           left: `${index * width}%`,
           width: `${width}%`,
@@ -30,7 +30,7 @@ const SlidingButton = ({ options, selected, onChange }) => {
           key={option}
           onClick={() => onChange(option)}
           className={`
-            ${options.length} relative z-10 w-1/3  px-4 py-2 text-sm lg:text-xs  2xl:text-base   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+            ${options.length} relative z-10 w-1/3  md:px-4 px-2 py-2 text-sm lg:text-xs  2xl:text-base   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
             ${selected === option ? "text-white" : colors.text.primary}
           `}
         >

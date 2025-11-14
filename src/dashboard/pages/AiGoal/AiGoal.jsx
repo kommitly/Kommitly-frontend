@@ -776,9 +776,9 @@ if (loading) {
                     <button onClick={() => setTaskOpen(true)} className='block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20' style={{ color: colors.text.primary }}>
                       Add Task 
                     </button>
-                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20" style={{ color: colors.text.primary }}>
+                  {/* {  <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20" style={{ color: colors.text.primary }}>
                       Pin to Sidebar
-                    </button>
+                    </button>} */}
 
                     <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-xs  hover:bg-[#D6CFFF]/20" style={{color: colors.background.warning }}>Delete</button>
                   </div>
@@ -803,20 +803,23 @@ if (loading) {
               )}
 
               {/* Modal for AI Task Form */}
-              <Modal open={taskOpen} onClose={() => setTaskOpen(false)}>
-                  <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6  rounded-xl w-96' sx={{backgroundColor: colors.menu.primary}}>
-                    <h2 className='text-xl font-semibold mb-4'>Add  Task</h2>
-                    <TextField fullWidth label='Title' name='title' value={formData.title} onChange={handleChange} margin='normal' />
-                    <TextField fullWidth label='Description' name='description' value={formData.description} onChange={handleChange} margin='normal' />
-                    <TextField fullWidth label='Due Date' type='datetime-local' name='due_date' value={formData.due_date} onChange={handleChange} margin='normal' InputLabelProps={{ shrink: true }} />
-                    <TextField fullWidth label='Task Timeline' name='task_timeline' value={formData.task_timeline} onChange={handleChange} margin='normal' />
-                   
-                    <div className='flex justify-end gap-4 mt-4'>
-                      <Button onClick={() => setTaskOpen(false)} variant='outlined'>Cancel</Button>
-                      <Button onClick={handlesumbitAiTask} variant='contained' color='primary'>Submit</Button>
-                    </div>
-                  </Box>
-                </Modal>
+           
+
+                 <ReusableFormModal
+                open={taskOpen}
+                onClose={() => setTaskOpen(false)}
+                title="Add Task"
+                colors={colors}
+                formData={formData}
+                onChange={handleChange}
+                onSubmit={handlesumbitAiTask}
+                fields={[
+                  { name: "title", label: "Title" },
+                  { name: "description", label: "Description" },
+                  { name: "due_date", label: "Due Date", type: "datetime-local" },
+                  { name: "task_timeline", label: "Task Timeline" },
+                ]}
+              />
 
       {/* Modal for AI Subtask Task Form */}
              <ReusableFormModal
@@ -881,7 +884,7 @@ if (loading) {
                           ease: "easeOut",
                           delay: index * 0.3, // Staggered delay based on index
                         }}>
-                        <div className="flex  transition-transform duration-300 hover:scale-[0.95] cursor-pointer justify-between md:gap-4 gap-2 relative  max-h-full  border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 lg:w-full md:w-11/12 w-full"   style={{
+                        <div className="flex  transition-transform duration-300 hover:scale-[0.95] cursor-pointer justify-between md:gap-4 gap-2 relative  max-h-full  border-l md:p-4 p-2 md:space-y-2 xl:space-y-2 rounded-2xl xl:border-l-[2px] 2xl:border-l-[2.5px] lg:border-l-[2.5px] md:border-l-[2.5px] 2xl:w-10/12 lg:w-full md:w-11/12 w-full"   style={{
         backgroundColor: allTasksCompleted
           ? theme.palette.background.paper // Adjust to your theme color
           : isActive
@@ -1143,7 +1146,7 @@ if (loading) {
             
           </div>
 
-          <Box className="hidden md:block actionable-steps xl:w-6/12 lg:w-5/12 md:w-5/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
+          <Box className="hidden md:block actionable-steps xl:w-6/12 lg:w-5/12 md:w-5/12 space-y-4 p-4 max-h-full rounded-2xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
               <div className=' items-center gap-4 mb-4 mt-4'>
                 <div className='flex items-center gap-4 w-full justify-between mb-2'>
                 <span className=' font-regular text-[#00000] text-sm xl:text-sm 2xl:text-base'
