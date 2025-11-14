@@ -6,13 +6,15 @@ import survey from '../../../assets/survey.svg';
 import flag from '../../../assets/flag-dynamic-color.svg';
 import { GoalsContext } from '../../../context/GoalsContext';
 import Loading from '../../components/Loading';
-
+import ReusableFormModal from '../../components/ReusableFormModal';
+import { FaPlus } from "react-icons/fa6";
 import {
   Box, Table, TableBody, TableCell, TableContainer, TableHead,
-  TableRow, Paper, TextField, Button, Typography, useTheme
+  TableRow, Paper, TextField, Typography, useTheme
 } from '@mui/material';
-
+import Button from '../../components/Button';
 import { tokens } from "../../../theme";
+import Empty from '../../components/Empty';
 
 const Goal = () => {
   const theme = useTheme();
@@ -31,7 +33,19 @@ const Goal = () => {
   const inputGoalRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [taskMenuVisible, setTaskMenuVisible] = useState(null);
+  const [taskOpen, setTaskOpen] = useState(false);
+  const [formData, setFormData] = useState({
+      title: "",
+      
+    });
 
+
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+ 
 
 
   const loadGoal = useCallback(async () => {
@@ -138,8 +152,8 @@ if (loading) {
       <div className='w-full'>
         <div className='flex items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
-        <div className='rounded-2xl h-36 p-12 font-semibold  flex justify-center items-center'
-        style={{backgroundColor: colors.primary[500], color: colors.primary[100]}}>
+        <div className='  font-semibold  flex justify-center items-center'
+        >
 
         {isGoalRenaming ? (
                     <input
@@ -152,50 +166,81 @@ if (loading) {
                       className="md:text-2xl font-semibold border-b border-b-[#6246AC] p-1 focus:outline-none"
                     />
                   ) : (
-                    <h1 className='md:text-2xl  xl:text-2xl 2xl:text-xl font-medium'>{goal.title}</h1>
+                    <h1 className='md:text-2xl  xl:text-2xl 2xl:text-xl font-medium'> {goal.title}</h1>
                   )}
         </div>
         </div>
 
 
-        <div className="relative">
+         {tasks.length === 0 ? (
+            <Button
+              
+              onClick={() => setTaskOpen(true)}
+              text="Add Task"
+
+            >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#65558F"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="16"
+                                          height="16"
+                                          viewBox="0 0 24 24"
+                                          fill="#6246AC"
+                                          stroke="#FFFFFF"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        className=""
+                                          style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
+                                        >
+                                          <line x1="12" y1="5" x2="12" y2="19" />
+                                          <line x1="5" y1="12" x2="19" y2="12" />
+                                        </svg>
+          
+            </Button>
+          ) : (
+            /* ORIGINAL 3 DOT MENU */
+            <div className="relative">
+              <svg
+                width="24" height="24"
+                fill="none" stroke="#65558F" strokeWidth="2"
+                onClick={() => setMenuVisible(!menuVisible)}
                 className="cursor-pointer"
-                onClick={toggleMenu}
               >
-                <circle cx="12" cy="5" r="1"></circle>
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="12" cy="19" r="1"></circle>
+                <circle cx="12" cy="5" r="1" />
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="12" cy="19" r="1" />
               </svg>
-               {menuVisible && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-                    <button 
-                      onClick={() => {
-                        setIsGoalRenaming(true);
-                        setTimeout(() => inputGoalRef.current?.focus(), 0); // Ensure focus on input
-                      }} 
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F4F1FF]"
-                    >
-                      Rename
-                    </button>
-                    <button onClick={() => addGoalToSidebar(goal.id)}  className="block w-full text-left px-4 py-2 text-sm text-[#006FDB] hover:bg-[#F4F1FF]">
-                      Pin to Sidebar
-                    </button>
 
-                    <button onClick={handleDelete} className="block w-full text-left px-4 py-2 text-sm text-[#E60178] hover:bg-[#F4F1FF]">Delete</button>
-                  </div>
-                )}
-              </div>
+              {menuVisible && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                  <button
+                    onClick={() => {
+                      setIsGoalRenaming(true);
+                      setTimeout(() => inputGoalRef.current?.focus(), 0);
+                    }}
+                    className="block w-full px-4 py-2 text-sm hover:bg-[#F4F1FF]"
+                  >
+                    Rename
+                  </button>
 
+                  <button
+                    onClick={() => addGoalToSidebar(goal.id)}
+                    className="block w-full px-4 py-2 text-sm text-[#006FDB] hover:bg-[#F4F1FF]"
+                  >
+                    Pin to Sidebar
+                  </button>
+
+                  <button
+                    onClick={handleDelete}
+                    className="block w-full px-4 py-2 text-sm text-[#E60178] hover:bg-[#F4F1FF]"
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+       
 
 
 
@@ -216,21 +261,24 @@ if (loading) {
           Category: {goal.category}
         </Typography>} */}
 
-        <Typography variant="h6" mt={4}>Tasks</Typography>
+      
 
-        {/* Add Task Form */}
-        <Box component="form" onSubmit={handleAddTask} display="flex" gap={2} mt={2}>
-          <TextField
-            label="New Task"
-            variant="outlined"
-            size="small"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-          />
-          <Button type="submit" variant="contained" color="primary">
-            Add Task
-          </Button>
-        </Box>
+          <ReusableFormModal
+                        open={taskOpen}
+                        onClose={() => setTaskOpen(false)}
+                        title="Add Task"
+                        colors={colors}
+                        formData={formData}
+                        onChange={handleChange}
+                        onSubmit={handleAddTask}
+                        fields={[
+                          { name: "title", label: "Title" },
+                        
+                        ]}
+                      />
+        
+
+
    {tasks.length > 0 ? (
                 tasks.map((task) => (
       
@@ -265,8 +313,12 @@ if (loading) {
                 ))
               ) : (
                <>
-              <div className='w-full flex justify-center items-center  h-24'>
-                 <p  >No tasks added yet</p>
+              <div className='w-full flex justify-center items-center h-[50vh] '>
+                <div className='h-24'>
+                    <Empty/>
+
+                </div>
+               
               </div>
                </>
                   
