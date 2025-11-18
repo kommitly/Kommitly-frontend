@@ -58,7 +58,7 @@ const Feature = () => {
           <Box 
             key={index}
             className="p-6 rounded-4xl border shadow-lg transition-transform transform hover:scale-105"
-          sx={{borderColor: "#4F378A"}}
+          sx={{borderColor: "#6D5BA6"}}
           >
             <Box className="mb-4">{feature.icon}</Box>
             <Typography 

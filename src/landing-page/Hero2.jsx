@@ -22,7 +22,7 @@ const FloatingIcon = ({ icon: Icon, delay, size, top, left, right, className }) 
         delay,
       }}
     >
-      <Icon size={size} color="#6F2DA8" />
+      <Icon size={size} color="#A89FE3" />
     </motion.div>
   );
 };
@@ -144,7 +144,7 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
                     <div className="flex gap-4 w-full justify-center items-center">
                         <Link
                             to="/registration?tab=signup"
-                            className="bg-[#4F378A] text-white flex justify-center items-center px-4 py-2 rounded-4xl shadow-lg hover:bg-[#6F2DA8] transition 2xl:text-xl xl:text-base lg:text-base"
+                            className="bg-[#A89FE3] text-white flex justify-center items-center px-4 py-2 rounded-4xl shadow-lg hover:bg-[#D6CFFF] hover:text-[#4F378A] transition 2xl:text-xl xl:text-base lg:text-base"
                         >
                             Get Started
                             <MdOutlineArrowOutward className="inline ml-2" />
@@ -152,7 +152,7 @@ const Hero2 = ({ clipRadius, bgColor, initialColor }) => {
                         
                         <button
                             aria-label="How-it-works"
-                            className="px-4 py-2 cursor-pointer text-white  hover:!text-[#6D5BA6] transition-colors transition 2xl:text-xl xl:text-base lg:text-base sm:text-xs"
+                            className="px-4 py-2 cursor-pointer text-white  hover:!text-[#A89FE3] transition-colors transition 2xl:text-xl xl:text-base lg:text-base sm:text-xs"
                             // Smoothly transition the button text color from white to the primary purple color
                             style={{
                                 color: `rgb(

@@ -123,7 +123,7 @@ const loadSuggestions = async () => {
                               fontWeight="bold" 
                               
                               >My Templates</Typography>
-                              <div className="hidden sm:block">
+                              <div >
                                 <Button onClick={openModal}  className=' flex items-center' text="Create Template">
                            <svg
                                           xmlns="http://www.w3.org/2000/svg"
@@ -147,27 +147,8 @@ const loadSuggestions = async () => {
 
                               </div>
 
-                     {/* Mobile floating + button */}
-<button
-  onClick={openModal}
-  className="sm:hidden fixed bottom-36 right-12 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
-  style={{ backgroundColor: colors.background.sidebar }}
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="26"
-    height="26"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#ffffff"
-    strokeWidth="3"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="12" y1="5" x2="12" y2="19" />
-    <line x1="5" y1="12" x2="19" y2="12" />
-  </svg>
-</button>
+                 
+
 
       
                         </div>
@@ -347,7 +328,7 @@ const loadSuggestions = async () => {
           key={index}
          
           className="p-5 rounded-4xl  shadow-md flex flex-col justify-between"
-          style={{ backgroundColor: colors.background.paper, color: colors.text.primary }}
+          style={{ backgroundColor: colors.primary[300], color: colors.text.primary }}
         >
           <div className="py-4">
             <h3 className="text-lg font-semibold">{s.name}</h3>

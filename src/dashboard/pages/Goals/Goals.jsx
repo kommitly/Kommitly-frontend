@@ -33,8 +33,26 @@ import Empty from '../../components/Empty';
 import FormButton from '../../components/FormButton'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'; 
 import ReusableFormModal from '../../components/ReusableFormModal';
+import { Target, Check, ArrowRight, Star, Bell, Calendar, LineChart } from 'lucide-react';
 
-
+const FloatingIcon = ({ icon: Icon, delay, size, top, left, right, className }) => {
+  return (
+    <motion.div
+      className={`absolute z-0 opacity-50 ${className}`}
+      style={{ top, left, right }} // ✅ include right here
+      initial={{ y: 0 }}
+      animate={{ y: [0, 10, 0] }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay,
+      }}
+    >
+      <Icon size={size} color="#A89FE3" />
+    </motion.div>
+  );
+};
 
 
 function CircularProgressWithLabel({ value, textColor = '#000000', progressColor = '#4F378A' , size = 40, fontSize = '0.6rem' }) {
@@ -580,15 +598,15 @@ useEffect(() => {
 
       <div className="md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0">
        
-        <Box className='w-full  container md:h-46 xl:h-50 2xl:h-64  h-42 flex items-center justify-between rounded-4xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
-        sx={{backgroundColor:colors.background.paper}}
+        <Box className='w-full relative  container md:h-46 xl:h-50 2xl:h-64  h-42 flex items-center justify-between rounded-4xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
+        sx={{backgroundColor:"#4F378A"}}
         >
-          <div className='space-y-4 h-full'>
+          <div className='space-y-4 relative h-full flex flex-col justify-center items-start'>
             <h1 className='text-2xl font-semibold'>
             <p
                
               className="font-semibold md:text-xl xl:text-xl  2xl:text-3xl text-base"
-              style={{ color: colors.text.primary }}
+              style={{ color: "#ffffff"}}
               
             >Manage your Goals 
             </p>
@@ -599,27 +617,70 @@ useEffect(() => {
           >
             Track your progress, and achieve more with AI assistance.
           </p>} */}
-            <CustomButton onClick={openModal} text='Create Goal'>
+            <Button onClick={openModal} sx={{backgroundColor: "#A89FE3", borderRadius: 100, color: "#FFFFFF", textTransform: "none", paddingX: 2, gap: 0.2}}>
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="#6246AC"
+                fill="#A89FE3"
                 stroke="#FFFFFF"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-              className="hidden md:block"
-                style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
+             
+                style={{ stroke: '#FFFFFF', }} // Inline style to ensure white stroke
               >
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-             
-            </CustomButton>
+             Create Goal
+            </Button>
           </div>
-          <img src={analysis} alt='Analysis' className='md:h-46  h-36 xl:h-52 2xl:h-60 ' />
+
+          <div className='relative w-1/2 h-full  '>
+
+<div 
+            style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: "#4F378A",
+             
+                transition: 'clip-path 0.05s linear'
+
+            }}
+        />
+
+        {/* --- FLOATING SVGS --- */}
+    <FloatingIcon icon={Target} size={30} delay={0} className="absolute top-[2%] left-[5%] md:top-[5%] md:left-[5%]" />
+    <FloatingIcon icon={Check} size={25} delay={1.5}   className="absolute top-[70%] left-[0%] md:top-[85%] md:left-[0%]" />
+    <FloatingIcon icon={ArrowRight} size={35} delay={3} top="50%" right="2%" className="rotate-320" />
+   {/* { <FloatingIcon icon={Star} size={20} delay={0.8} top="35%" right="4%" />} */}
+   <FloatingIcon icon={Bell} size={28} delay={2} className="absolute top-[16%] left-[45%] md:top-[25%] md:left-[50%]"/>
+    <FloatingIcon icon={Calendar} size={32} delay={0.5} className="absolute top-[1%] right-[2%] md:top-[5%] md:right-[2%]"/>
+    <FloatingIcon icon={LineChart} size={35} delay={3.5} className="absolute top-[70%] right-[30%] md:top-[88%] md:right-[30%]" />
+    
+
+
+
+
+
+
+
+          </div>
+
+
+
+
+
+
+
+
+
+         
         </Box>
 
         <div className='w-full mt-6'>

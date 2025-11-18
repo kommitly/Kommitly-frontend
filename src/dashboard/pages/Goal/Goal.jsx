@@ -15,6 +15,29 @@ import {
 import Button from '../../components/Button';
 import { tokens } from "../../../theme";
 import Empty from '../../components/Empty';
+import aiGoals from '../../../assets/goals.svg';
+import { CiCircleMore } from "react-icons/ci";
+import { RiProgress1Line } from "react-icons/ri";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { BsHourglassTop } from "react-icons/bs";
+
+const StatusIcon = ({ status, color, size = 16 }) => {
+  const iconColor = color || "#000";
+  switch (status?.toLowerCase().replace(/[-_]/g, " ")) {
+  case "pending":
+    return <CiCircleMore size={size} color={iconColor} />;
+  case "in progress":
+    return <RiProgress1Line size={size} color={iconColor} />;
+  case "completed":
+  case "done":
+    return <AiOutlineCheckCircle size={size} color={iconColor} />;
+  default:
+    return <CiCircleMore size={size} color={iconColor} />;
+}
+
+};
+
 
 const Goal = () => {
   const theme = useTheme();
@@ -24,8 +47,8 @@ const Goal = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
   const navigate = useNavigate();
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
   const [menuVisible, setMenuVisible] = useState(false);
   const [isGoalRenaming, setIsGoalRenaming] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -83,17 +106,25 @@ const Goal = () => {
   }, [isGoalRenaming]);
   
   const handleAddTask = async (e) => {
-    e.preventDefault();
-    if (!newTask) return;
+  e.preventDefault();
 
-    try {
-      const createdTask = await createTask({ goal: goalId, title: newTask });
-      setTasks((prevTasks) => [...prevTasks, createdTask]);
-      setNewTask('');
-    } catch (error) {
-      console.error('Error creating task:', error);
-    }
-  };
+  if (!formData.title.trim()) return;
+
+  try {
+    const createdTask = await createTask({
+      goal: goalId,
+      title: formData.title,
+    });
+
+    setTasks((prev) => [...prev, createdTask]);
+
+    setFormData({ title: "" });
+    setTaskOpen(false);
+  } catch (error) {
+    console.error("Error creating task:", error);
+  }
+};
+
 
   const handleDelete = async () => {
       try {
@@ -280,50 +311,87 @@ if (loading) {
 
 
    {tasks.length > 0 ? (
-                tasks.map((task) => (
-      
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table>
-          
+  <div className="mt-6 flex flex-col gap-4">
+    {tasks.map((task, index) => {
+      const isActive = false; // or your active logic
+      return (
+        <div
+          key={task.id}
+          onClick={() => navigate(`/dashboard/tasks/${task.id}`)}
+          className="flex transition-transform duration-300 hover:scale-[0.98] cursor-pointer justify-between gap-2 relative border-l md:p-4 p-2 md:space-y-2 rounded-2xl"
+          style={{
+            backgroundColor: theme.palette.background.paper,
+            borderLeftColor: theme.palette.primary.main,
+          }}
+        >
+          {/* LEFT ICON BOX */}
+          <div
+            className="md:w-1/4 w-24 rounded-lg p-4"
+            style={{
+              backgroundColor: colors.menu.primary,
+            }}
+          >
+             <img src={aiGoals} alt="goals"  className='h-20 object-cover'/>
+          </div>
 
-          <>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: '#F4F1FF' }}>
-                <TableCell><strong>Task</strong></TableCell>
-                <TableCell><strong>Status</strong></TableCell>
-                <TableCell><strong>Due date</strong></TableCell>
-                <TableCell><strong>Last Updated</strong></TableCell>
+          {/* RIGHT CONTENT */}
+          <div className="w-full">
+            <div className="flex items-center justify-between w-full mb-2">
+                <h3 className="md:text-sm text-sm xl:text-sm 2xl:text-base font-medium" style={{color: isActive ? colors.primary[100] : colors.text.primary}}>
+                                    {task.title}
+                                  </h3>
 
-              </TableRow>
-            </TableHead>
-            
-            <TableBody>
              
-                  <TableRow key={task.id}  onClick={() => navigate(`/dashboard/tasks/${task.id}`)}
-  sx={{ cursor: 'pointer', '&:hover': { backgroundColor: '#F4F1FF' } }}>
-                    <TableCell>{task.title}</TableCell>
-                    <TableCell>{task.status}</TableCell>
-                    <TableCell>{task.due_date ? new Date(task.due_date).toLocaleString() : 'Not set'}</TableCell>
-                    <TableCell>{new Date(task.last_updated).toLocaleString()}</TableCell>
-                  </TableRow>
-                  </TableBody>
-          </>
-          </Table>
-        </TableContainer>
-                ))
-              ) : (
-               <>
-              <div className='w-full flex justify-center items-center h-[50vh] '>
-                <div className='h-24'>
-                    <Empty/>
+            </div>
 
-                </div>
-               
-              </div>
-               </>
-                  
-                
-              )}
+            {/* STATUS + TIMELINE */}
+
+          
+                            <div className="flex gap-2 mb-1 mt-2 items-center">
+                              {isXs ? (<BsHourglassTop fontSize='small' style={{color: isActive ? colors.primary[100] : colors.text.secondary }}/>
+                                
+):( <p className="w-16 md:text-xs xl:text-xs 2xl:text-sm  text-xs font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Timeline:</p>)}
+
+                              <span
+                                  className="  2xl:text-sm text-xs rounded-sm md:text-xs xl:text-xs"
+                                  style={{
+                                    color: isActive ? colors.primary[100] : colors.text.secondary,
+                                    borderColor: isActive ? colors.primary[100] : colors.text.secondary,
+                                  }}
+                                >
+                                  {task.task_timeline || "No timeline"}
+                                </span>
+
+                            </div>
+
+             <div className="flex gap-2 items-center">
+                                                               {isXs ? (<StatusIcon 
+              status={task.status} 
+              color={isActive ? "#F6F3F3" : colors.text.secondary} 
+            />):( <p className="w-16 md:text-xs xl:text-xs 2xl:text-sm text-xs  font-medium " style={{color: isActive ? colors.primary[100] : colors.text.secondary }}>Status:</p>)}
+                                                                <span className="  2xl:text-sm  text-center  text-xs rounded-sm md:text-xs xl:text-xs  flex items-center " style={{color: isActive ? colors.primary[100] : colors.text.secondary , borderColor: isActive ? colors.primary[100] : colors.text.secondary}}>
+                                                                  {task.status}
+                                                                </span>
+                                                              </div>
+            
+
+            
+           
+          </div>
+        </div>
+      );
+    })}
+  </div>
+) : (
+  <>
+    <div className='w-full flex justify-center items-center h-[50vh] '>
+      <div className='h-24'>
+        <Empty />
+      </div>
+    </div>
+  </>
+)}
+
             
           
       </div>
