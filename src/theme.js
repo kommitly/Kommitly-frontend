@@ -23,7 +23,7 @@ export const tokens = (mode) => ({
           tertiary: "#A89FE3"  // Dusty Periwinkle (for contrast in dark mode)    
         },
         background: {
-          sidebar: "#2C1D57",
+          sidebar: "#4F378A",
           // default: "#1E1A2A", // Dark mode background
           default: "#13101B",
           paper: "#2C2640", // Darker surface

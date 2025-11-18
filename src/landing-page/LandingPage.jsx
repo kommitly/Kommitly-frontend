@@ -33,14 +33,14 @@ const LandingPage = () => {
         <div
             className="min-h-screen p-0  flex flex-col items-center w-full"
             style={{
-                backgroundColor: '#4F378A', 
+                backgroundColor: '#2C1D57', 
                 overflowX: 'hidden'
             }}
         >
             {/* PASS clipRadius TO TOPBAR */}
             <Topbar clipRadius={clipRadius} /> 
             
-            <Hero2 clipRadius={clipRadius} bgColor="#FFFFFF" initialColor="#4F378A"  />
+            <Hero2 clipRadius={clipRadius} bgColor="#FFFFFF" initialColor="#2C1D57"  />
             
             {/* ... rest of the components */}
             <Painpoint/>
