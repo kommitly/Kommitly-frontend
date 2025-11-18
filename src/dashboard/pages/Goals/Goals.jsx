@@ -643,7 +643,7 @@ useEffect(() => {
           </div>
 
 
-          <img src={Circles} alt='Circles'  className='md:h-46  h-34 xl:h-48 2xl:h-60 ' />
+          <img src={Circles} alt='Circles'  className='md:h-46  h-32 xl:h-48 2xl:h-60 ' />
 
         
 
