@@ -603,7 +603,7 @@ useEffect(() => {
       <div className="md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0">
        
         <Box className='w-full relative  container md:h-46 xl:h-50 2xl:h-64  h-42 flex items-center justify-between rounded-4xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
-        sx={{backgroundColor: "#4F378A"}}
+        sx={{backgroundColor: "#4F378A", boxShadow: "0px 0px 6px rgba(79, 55, 138, 0.7)"}}
         >
           <div className='space-y-4 relative h-full flex flex-col justify-center items-start'>
             <h1 className='text-2xl font-semibold'>
