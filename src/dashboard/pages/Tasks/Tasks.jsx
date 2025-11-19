@@ -21,6 +21,10 @@ import { Divider } from '@mui/material';
 import SlidingButton from "../../components/SlidingButton";import CircularProgress from '@mui/material/CircularProgress';
 import { useMediaQuery } from '@mui/material'
 import Empty from "../../components/Empty";
+import ReminderTimePicker from "../AiGoal/ReminderTimePicker";
+import FlagIcon from '@mui/icons-material/Flag';
+import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
+import SellIcon from '@mui/icons-material/Sell';
 
 
 
@@ -56,6 +60,9 @@ const Tasks = () => {
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
   const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
   const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
+
+  const [openQuickModal, setOpenQuickModal] = useState(false);
+  const [showCustomReminderPicker, setShowCustomReminderPicker] = useState(false);
 
   
   
@@ -113,6 +120,46 @@ function CircularProgressWithLabel({ value, textColor = '#000000', progressColor
       console.log("ai goals", goals.ai_goals);
     }
   }, [tasks, goals]);
+
+  //Quck add modal for  hourly slot task
+ const handleHourClick = (hourLabel) => {
+  // Example: suppose your selected date is stored in `selectedDate`
+  const date = new Date(selectedDate);
+
+  // Convert "1am" or "2pm" into a number
+  let hour = parseInt(hourLabel);
+  if (hourLabel.toLowerCase().includes("pm") && hour !== 12) hour += 12;
+  if (hourLabel.toLowerCase().includes("am") && hour === 12) hour = 0;
+
+  date.setHours(hour, 0, 0, 0); // set time on selected day
+
+  setTask({
+    title: "",
+    reminder_time: null,
+    due_date: date,
+    subtasks: [],
+  });
+  setOpenQuickModal(true);
+};
+
+
+ const handleCloseQuickModal = () => setOpenQuickModal(false);
+
+ const handleChange = (e) => {
+      const { name, value } = e.target;
+      setTask((prev) => ({ ...prev, [name]: value }));
+      // If user chooses "custom", show time picker
+      if (name === "reminder_offset") {
+        setShowCustomReminderPicker(value === "custom");
+      }
+    };
+
+    const handleCustomReminderChange = (time) => {
+  setTask((prev) => ({
+    ...prev,
+    custom_reminder_time: time,
+  }));
+};
   
   
 // Filter tasks based on selected date
@@ -203,8 +250,8 @@ const renderTaskBlock = (hour) => {
   
   const filterLabels = [
  // { key: "recentlyAdded", label: "Recently Added" },
-  { key: "inProgress", label: "In Progress" },
   { key: "pending", label: "Pending" },
+  { key: "inProgress", label: "In Progress" },
   { key: "completed", label: "Completed" }
 ];
 
@@ -212,7 +259,9 @@ const renderTaskBlock = (hour) => {
    const aiTaskProgress =(aiTask) => {
   if (aiTask.ai_subtasks && aiTask.ai_subtasks.length > 0) {
     console.log("subtasks for this ai task", aiTask.ai_subtasks);
-    const completedSubtasks = aiTask.ai_subtasks.filter(subtask => subtask.completed).length;
+    console.log("number of subtasks", aiTask.ai_subtasks.length);
+    const completedSubtasks = aiTask.ai_subtasks.filter(subtask => subtask.status==="completed").length;
+    console.log("number of completed subtasks", completedSubtasks);
     return (completedSubtasks / aiTask.ai_subtasks.length) * 100;
   }
   return aiTask.progress || 0;
@@ -222,7 +271,7 @@ const renderTaskBlock = (hour) => {
   const taskProgress = (task) => {
   if (task.subtasks && task.subtasks.length > 0) {
     console.log("subtasks for this task", task.subtasks);
-    const completedSubtasks = task.subtasks.filter(subtask => subtask.completed).length;
+    const completedSubtasks = task.subtasks.filter(subtask => subtask.status==="completed").length;
     return (completedSubtasks / task.subtasks.length) * 100;
   }
   return task.progress || 0;
@@ -335,11 +384,7 @@ const renderTaskBlock = (hour) => {
        };
 
        //change in task properties
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setTask((prev) => ({ ...prev, [name]: value }));
-    };
-    
+  
     const handleDueDateChange = (date) => {
       setTask((prev) => ({
         ...prev,
@@ -654,6 +699,182 @@ if (!loading && tasks.length === 0) {
           </div>
           </div>
     </Backdrop>
+    
+    <Backdrop
+      sx={(theme) => ({ color: "#000000", zIndex: theme.zIndex.drawer + 1 })}
+      open={openQuickModal}
+      onClick={handleCloseQuickModal}
+    >
+      <div
+        className="bg-white w-10/12 sm:w-4/12 p-6 rounded-lg shadow-lg text-center"
+        onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-xl font-bold text-[#6F2DA8]">Quick Add Task</h1>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#333"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="cursor-pointer"
+            onClick={handleCloseQuickModal}
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>
+
+        {/* Floating Label Input - Title */}
+        <div className="relative mb-6">
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="peer w-full border border-gray-300 rounded-md px-3 pt-5 pb-2 text-sm text-gray-900 placeholder-transparent focus:outline-none focus:border-[#6F2DA8]"
+            placeholder="Title"
+          />
+          <label
+            htmlFor="title"
+            className="absolute left-3 top-2 text-gray-500 text-xs transition-all duration-200 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:text-xs peer-focus:text-[#6F2DA8] peer-focus:top-2"
+          >
+            Title
+          </label>
+        </div>
+
+        {/* Floating Label Input - Reminder 
+        <div className="relative mb-6">
+          <div className="flex items-center gap-2">
+            <FaClock className="text-gray-500" />
+            <div className="relative w-full">
+              <DatePicker
+                id="reminder-time"
+                selected={
+                  task.reminder_time
+                    ? new Date(`1970-01-01T${task.reminder_time}`)
+                    : null
+                }
+                onChange={handleReminderTimeChange}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={15}
+                timeCaption="Time"
+                dateFormat="HH:mm:ss"
+                placeholderText="Reminder"
+                className="peer w-full border border-gray-300 rounded-md px-3 pt-5 pb-2 text-sm text-gray-900 placeholder-transparent focus:outline-none focus:border-[#6F2DA8]"
+              />
+              <label
+                htmlFor="reminder-time"
+                className="absolute left-3 top-2 text-gray-500 text-xs transition-all duration-200 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:text-xs peer-focus:text-[#6F2DA8] peer-focus:top-2"
+              >
+                Reminder
+              </label>
+            </div>
+          </div>
+        </div>  */}
+
+        <div className="flex gap-7 mt-4">
+            <div className="flex items-center space-x-2">
+              {/*Clock icon*/}
+               <span className='bg-[#D6CFFF] p-2 rounded-md'>
+                         <FaClock className="text-[#4F378A] " size={12} />
+                              </span>
+              {/*Label*/}
+              <label htmlFor="reminder-time" className="text-gray-700 font-semibold">Reminder</label>
+              </div>
+              {/*Time Picker Input*/}
+              <div className="flex gap-6 items-center relative">
+          <select
+            name="reminder_offset"
+            className="text-sm p-4 "
+            onChange={handleChange}
+            value={task.reminder_offset || "15"} // default to 15 mins if not set
+          >
+            <option value="15">15 minutes before</option>
+            <option value="30">30 minutes before</option>
+            <option value="60">1 hour before</option>
+            <option value="1440">1 day before</option>
+            <option value="custom">Custom</option>
+          </select>
+        
+         {showCustomReminderPicker && (
+               <div className="mt-2">
+                 <ReminderTimePicker
+                   value={task.custom_reminder_time}
+                   onChange={handleCustomReminderChange}
+                 />
+               </div>
+             )}
+        </div>
+        
+          
+          </div> 
+          
+
+        {/* Subtasks Section */}
+        <div className="mt-4 text-left">
+          <div className="flex justify-between items-center">
+            <label className="block text-[#6F2DA8] text-lg font-semibold">
+              Subtasks
+            </label>
+          </div>
+
+          <ul className="mt-2">
+            {newSubtasks.map((subtask, index) => (
+              <li
+                key={index}
+                className="flex items-center gap-2 mt-1 text-gray-700 cursor-pointer hover:text-[#6F2DA8]"
+                onClick={() => setSelectedSubtask(subtask)}
+              >
+                <FaTasks className="text-gray-500" /> {subtask.title}
+              </li>
+            ))}
+          </ul>
+
+          {showInput ? (
+            <div className="mt-3 flex gap-2">
+              <input
+                type="text"
+                value={newSubtask}
+                onChange={(e) => setNewSubtask(e.target.value)}
+                placeholder="Enter subtask"
+                className="w-full border border-gray-300 p-2 rounded-md text-sm"
+              />
+              <button
+                onClick={handleAddSubtask}
+                className="bg-[#6F2DA8] text-white px-3 py-2 rounded-md text-sm hover:bg-purple-700"
+              >
+                Add
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowInput(true)}
+              className="mt-3 flex text-[#6F2DA8] text-sm hover:underline"
+            >
+              + Add Subtask
+            </button>
+          )}
+        </div>
+
+        {/* Submit Button */}
+        <div className="flex justify-end w-full">
+          <button
+            onClick={handleAddTask}
+            className="mt-5 px-4 py-2 bg-[#6F2DA8] hover:bg-purple-700 text-white rounded-md"
+          >
+            Create Task
+          </button>
+        </div>
+      </div>
+    </Backdrop>
+    
 
     <div className=" md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0"> 
        
@@ -669,7 +890,7 @@ if (!loading && tasks.length === 0) {
               
             >Manage your Tasks 
             </p></h1>
-                   <Button onClick={openModal}  className=' flex items-center text-sm font-light text-white px-4 gap-2 py-2 cursor-pointer rounded-lg' sx={{backgroundColor:"#4F378A", borderRadius: '6px', paddingX: '12px'}}>
+                   <Button onClick={openModal} text=' Create Task' >
                                    <svg
                                    xmlns="http://www.w3.org/2000/svg"
                                    width="16"
@@ -680,21 +901,15 @@ if (!loading && tasks.length === 0) {
                                    strokeWidth="2"
                                    strokeLinecap="round"
                                    strokeLinejoin="round"
-                                 className="hidden md:block"
+                                
                                    style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
                                  >
                                    <line x1="12" y1="5" x2="12" y2="19" />
                                    <line x1="5" y1="12" x2="19" y2="12" />
                                  </svg>
-                                 <p
-                                   
-                                   className='md:text-xs text-xs xl:text-sm 2xl:text-xl '
-                                   style={{ color: colors.primary[100] }}
-                                  
-                                 >
-                                 Create New Task
-                                 </p>
+                                
                                </Button>
+                   
                   </div>
                   <img src={analysis} alt='Analysis' className='md:h-46  h-28 xl:h-52 2xl:h-60' />
                 </Box>
@@ -709,7 +924,7 @@ if (!loading && tasks.length === 0) {
                         >AI Tasks </Typography>
           </h1>
           <SlidingButton
-  options={["inProgress", "pending", "completed"]}
+  options={["pending", "inProgress", "completed"]}
   selected={selectedAiCategory}
   onChange={setSelectedAiCategory}
 />
@@ -723,8 +938,11 @@ if (!loading && tasks.length === 0) {
 
       <div className='relative mt-4'>
         {filteredAiTasks.length === 0 ? (
-  <div className="text-sm text-gray-600 w-full text-center py-4">
-    No AI Tasks fall under this category.
+  <div className="w-full md:h-[16vh] h-[12vh] flex justify-center">
+    
+     <div className= 'w-1/8'>
+      <Empty/>
+      </div>
   </div>
 ) : (
   <>
@@ -755,7 +973,7 @@ if (!loading && tasks.length === 0) {
 
       <div ref={aiTasksContainerRef} className='flex gap-2  overflow-x-auto no-scrollbar   w-10/12 md:ml-14 ml-10'>
         {filteredAiTasks.map((task) => (
-          <Link key={task.id} to={`/dashboard/ai-task/${task.id}`}>
+          <Link key={task.ai_goal} to={`/dashboard/ai-goal/${task.ai_goal}`}>
           <li className=' w-1/3 min-w-[280px] min-h-[100px] list-none '>
           <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl transition-transform duration-300 hover:scale-[0.95]'sx={{backgroundColor:colors.background.paper}}>
             <div className='w-1/4  full overflow-hidden '>
@@ -818,15 +1036,13 @@ if (!loading && tasks.length === 0) {
 
                       {/* New subtasks section below title */}
 <div className="flex items-center pl-0 gap-0 mt-2  ">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-     xmlns="http://www.w3.org/2000/svg">
-  
-  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.75"/>
-  <circle cx="12" cy="12" r="5.5" stroke="currentColor" strokeWidth="1.75"/>
-  <circle cx="12" cy="12" r="2" fill="currentColor"/>
-  <path d="M16.5 7.5l3-3" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"/>
-  <path d="M15.2 8.8l3.6-3.6l.3 2.4l2.4.3l-3.6 3.6z" fill="currentColor"/>
-</svg>
+  <div className='flex items-center gap-2'>
+                                                         <SellIcon className='text-[#65558F] text-xs' />
+                                                         <span className='text-xs  lg:text-xs   2xl:text-xs   font-normal' style={{ color: colors.primary[500] }}>
+                                                         
+                                                         </span>
+ 
+                                                       </div>
 
  
 </div>
@@ -867,7 +1083,7 @@ if (!loading && tasks.length === 0) {
         </Typography>
       </h1>
       <SlidingButton
-  options={["inProgress", "pending", "completed"]}
+  options={["pending", "inProgress", "completed"]}
   selected={selectedCategory}
   onChange={setSelectedCategory}
 />
@@ -903,10 +1119,18 @@ if (!loading && tasks.length === 0) {
           <div ref={tasksContainerRef} className='flex gap-2 overflow-x-auto no-scrollbar  w-10/12 md:ml-14 ml-10'>
             {filteredTasks.map((task) => (
               <Link key={task.id} to={`/dashboard/tasks/${task.id}`}> 
-              <li className=' w-1/3 min-w-[280px] min-h-[100px] list-none  '>
+              <li className=' w-1/3 min-w-[280px] min-h-[100px] list-none'>
                 <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl transition-transform duration-300 hover:scale-[0.95]' sx={{backgroundColor:colors.background.paper}}>
                   <div className='w-1/4 full overflow-hidden '>
                    {/*<img src={aiGoals} alt="goals"  className='h-auto'/> */}
+                    <CircularProgressWithLabel  value={taskProgress(task)} 
+                                progressColor={colors.primary[500]}
+                                textColor={colors.text.primary}
+                                size={50}
+                                fontSize={
+                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
+                                } 
+                                />
                   </div>
                   <div className='w-full h-auto flex flex-col gap-0'>
                     <div className='flex h-auto mb-1 items-start  justify-between'>
@@ -954,34 +1178,14 @@ if (!loading && tasks.length === 0) {
                     </div>
                       {/* New subtasks section below title */}
 <div className="flex items-center pl-0 gap-0 mt-2  text-gray-600">
- <svg className="mt-1 "
-  xmlns="http://www.w3.org/2000/svg"
-  width="24"
-  height="24"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#4F378A"
-  strokeWidth="2"
-  strokeLinecap="round"
-  strokeLinejoin="round"
->
+  <div className='flex items-center gap-2'>
+                                                         <SellIcon className='text-[#65558F] text-xs' />
+                                                         <span className='text-xs  lg:text-xs   2xl:text-xs   font-normal' style={{ color: colors.primary[500] }}>
+                                                         
+                                                         </span>
+ 
+                                                       </div>
   
-  <line x1="4" y1="4" x2="18" y2="4" />
-  
-  
-  <line x1="10" y1="4" x2="10" y2="12" />
-  
-  
-  <line x1="10" y1="8" x2="16" y2="8" />
-  
-  
-  <line x1="10" y1="12" x2="16" y2="12" />
-</svg>
-
-
-  <span className=" text-xs text-[#65558F]"  >
-    {task.subtasks.filter(s => s.status === "completed").length}/{task.subtasks.length} 
-  </span>
 </div>
 
                   </div>  
@@ -993,9 +1197,15 @@ if (!loading && tasks.length === 0) {
           </div>
 
           {filteredTasks.length === 0 ? (
-  <div className="text-sm text-gray-600 w-full text-center py-4">
-    No Tasks fall under this category.
-  </div>
+   <div className='w-full md:h-[16vh] h-[12vh] flex justify-center'>
+            <div className='w-1/8'>
+  
+                 <Empty  /> 
+  
+              </div>
+  
+          
+            </div>
 ) : (
   <>
           
@@ -1039,13 +1249,13 @@ if (!loading && tasks.length === 0) {
         {hours.map((hourLabel, hourIndex) => (
   <div
     key={hourIndex}
-    className="border-t border-gray-300  h-16 relative pl-4 text-sm text-gray-600"
+    className="border-t border-gray-300 h-16 relative pl-4 text-sm text-gray-600"
   >
     <div className="absolute left-0 top-0">
-      <button onClick={openModal}>{hourLabel}
+      <button onClick={() => handleHourClick(hourLabel)}>{hourLabel}
         </button>
       </div>
-    <div className="ml-10 h-auto   relative">
+    <div className="ml-10 h-auto text-xs  relative">
       {renderTaskBlock(hourIndex)}
     </div>
   </div>

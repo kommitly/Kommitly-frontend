@@ -201,19 +201,32 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
       const updatedSubtasks = [...task.subtasks]; 
       const subtask = updatedSubtasks[index];
       subtask.completed = !subtask.completed; // Toggle completion
+
+      subtask.status = subtask.completed ? "completed" : "pending";
   
-      await updateSubtask({
-        taskId: task.id, 
-        subtaskId: subtask.id, 
-        updatedData: { completed: subtask.completed } 
-      });
+      await updateSubtask(
+  task.id,
+  subtask.id,
+   {
+  completed: subtask.completed,
+  status: subtask.status,
+  description: subtask.description,
+  reminder_time: subtask.reminder_time
+});
+
   
-      setTask({ ...task, subtasks: updatedSubtasks }); // Update UI after API call
-    } catch (error) {
-      console.error("Failed to update subtask:", error);
-    }
-  };
-    
+     // Update the task UI
+    const allCompleted = updatedSubtasks.every(st => st.completed);
+    setTask({
+      ...task,
+      subtasks: updatedSubtasks,
+      status: allCompleted ? "completed" : task.subtasks.length ? task.status : "pending"
+    });
+
+  } catch (error) {
+    console.error("Failed to update subtask:", error);
+  }
+};
 
     
 
@@ -439,8 +452,26 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
             Status:
           </p>
           </div>
-          <p className="p-2 rounded-md" style={{backgroundColor: colors.background.paper, color: colors.text.secondary}}>{task.status}</p>
-        </div>
+         <div className="mt-2">
+  <select
+    value={
+      task.subtasks && task.subtasks.length > 0
+        ? task.subtasks.every((sub) => sub.status === 'completed')
+          ? 'completed'
+          : 'pending'
+        : task.status
+    }
+    onChange={(e) => setTask((prev) => ({ ...prev, status: e.target.value }))}
+    disabled={task.subtasks && task.subtasks.length > 0} // disable if there are subtasks
+    className="p-2 rounded-md"
+    style={{ backgroundColor: colors.background.paper, color: colors.text.secondary }}
+  >
+    <option value="pending">Pending</option>
+    <option value="completed">Completed</option>
+  </select>
+</div>
+
+    </div>
   
   <div className="mt-4 flex gap-4">
         <div className="flex items-center space-x-2">
@@ -552,7 +583,7 @@ className="w-full p-2 pl-8 rounded-md"
       </div>
 
       {/* Subtask List */}
-      <ul className="mt-2">
+      <ul className="mt-2 ">
         {task.subtasks.map((subtask, index) => (
           <li
             key={index}

@@ -156,7 +156,7 @@ const handleCustomReminderChange = (time) => {
             <textarea
               id="description"
               name="description"
-              className="pl-5   outline-none focus:ring-0 focus:outline-none placeholder:text-xm"
+              className="pl-9   outline-none focus:ring-0 focus:outline-none placeholder:text-xm"
               value={localSubtask.description || ""}
               placeholder="Enter Subtask description"
               onChange={handleSubtaskChange}
