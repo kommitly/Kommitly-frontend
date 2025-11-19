@@ -11,11 +11,10 @@ import aiGoals from '../../../assets/goals.svg';
 import CalendarComponent from './Calendar';
 import dayjs from "dayjs";
 import DatePicker from "react-datepicker";
-import Button from "../../components/Button"
 import 'react-datepicker/dist/react-datepicker.css'; // Import DatePicker styles
 import { FaCalendarAlt, FaClock, FaTasks } from "react-icons/fa"; // Import calendar icon
 import TaskItem from '../../components/TaskItem'; // Import TaskItem component
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme, Button } from "@mui/material";
 import { tokens } from "../../../theme";
 import { Divider } from '@mui/material';
 import SlidingButton from "../../components/SlidingButton";import CircularProgress from '@mui/material/CircularProgress';
@@ -25,6 +24,7 @@ import ReminderTimePicker from "../AiGoal/ReminderTimePicker";
 import FlagIcon from '@mui/icons-material/Flag';
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import SellIcon from '@mui/icons-material/Sell';
+import Circles from '../../../assets/Circles.svg';
 
 
 
@@ -464,7 +464,7 @@ if (!loading && tasks.length === 0) {
 
   {/* Desktop button */}
   <div className="hidden sm:block">
-    <Button onClick={openModal} text="Create Task">
+    <Button onClick={openModal} text="Create Tasks">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -737,15 +737,10 @@ if (!loading && tasks.length === 0) {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="peer w-full border border-gray-300 rounded-md px-3 pt-5 pb-2 text-sm text-gray-900 placeholder-transparent focus:outline-none focus:border-[#6F2DA8]"
+            className="peer w-full border border-gray-300 rounded-md px-3 pt-3 pb-2 text-sm text-gray-900 placeholder-transparent focus:outline-none focus:border-[#6F2DA8]"
             placeholder="Title"
           />
-          <label
-            htmlFor="title"
-            className="absolute left-3 top-2 text-gray-500 text-xs transition-all duration-200 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:text-xs peer-focus:text-[#6F2DA8] peer-focus:top-2"
-          >
-            Title
-          </label>
+         
         </div>
 
         {/* Floating Label Input - Reminder 
@@ -879,39 +874,39 @@ if (!loading && tasks.length === 0) {
     <div className=" md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0"> 
        
         <Box className='w-full  container md:h-46 xl:h-50 2xl:h-64  h-36 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
-        sx={{backgroundColor:colors.background.paper}}
+        sx={{backgroundColor: "#4F378A", boxShadow: "0px 0px 6px rgba(79, 55, 138, 0.7)"}}
         >
       
-                  <div className='space-y-4 h-full'>
+                  <div className='space-y-4 relative h-full flex flex-col justify-centre items-start'>
                     <h1 className='text-2x1  font-semibold'><p
                
               className="font-semibold md:text-xl  xl:text-xl  2xl:text-3xl text-base"
-              style={{ color: colors.text.primary }}
+              style={{ color: "#ffffff"}}
               
             >Manage your Tasks 
             </p></h1>
-                   <Button onClick={openModal} text=' Create Task' >
+                   <Button onClick={openModal} sx={{backgroundColor: "#A89FE3", borderRadius: 100, color: "#FFFFFF", textTransform: "none", paddingY: 0.5, paddingX: 2, gap: 0.2}}>
                                    <svg
                                    xmlns="http://www.w3.org/2000/svg"
                                    width="16"
                                    height="16"
                                    viewBox="0 0 24 24"
-                                   fill="#6246AC"
+                                   fill="#A89FE3"
                                    stroke="#FFFFFF"
                                    strokeWidth="2"
                                    strokeLinecap="round"
                                    strokeLinejoin="round"
                                 
-                                   style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
+                                   style={{ stroke: '#FFFFFF', }} // Inline style to ensure white stroke
                                  >
                                    <line x1="12" y1="5" x2="12" y2="19" />
                                    <line x1="5" y1="12" x2="19" y2="12" />
                                  </svg>
-                                
+                                Create Task
                                </Button>
                    
                   </div>
-                  <img src={analysis} alt='Analysis' className='md:h-46  h-28 xl:h-52 2xl:h-60' />
+                   <img src={Circles} alt='Circles'  className='md:h-46  h-32 xl:h-48 2xl:h-60 ' />
                 </Box>
 
   <div>
@@ -1232,6 +1227,7 @@ if (!loading && tasks.length === 0) {
 
       
 </div> 
+
 <Box className='hidden md:block mt-4 sm:col-span-5 space-y-4 mx-4 rounded-2xl  p-6'sx={{backgroundColor:colors.background.paper}}>
 
       {/* Calendar Component */}
@@ -1267,7 +1263,7 @@ if (!loading && tasks.length === 0) {
 
 
   
-  </Box> 
+  </Box>   
 </div>
     
   );
