@@ -532,7 +532,7 @@ if (!loading && tasks.length === 0) {
 }
   
     return (
-<div className="w-full  grid gap-1 grid-cols-1  sm:grid-cols-12 p-2 flex min-h-screen">
+<div className="w-full p-4  grid gap-1 grid-cols-1  sm:grid-cols-12 p-2 flex min-h-screen">
     
 
     
