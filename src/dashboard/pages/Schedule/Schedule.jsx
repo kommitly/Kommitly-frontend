@@ -1023,10 +1023,7 @@ const handleChange = (field, value) => {
       >
         <div
           className="p-5 rounded-4xl  w-full h-full shadow-md flex flex-col justify-between"
-          style={{
-            backgroundColor: colors.background.paper,
-            color: colors.text.primary,
-          }}
+           style={{ backgroundColor: colors.background.sidebar,  color: colors.primary[100] }}
         >
           <div className="py-4">
             <h3 className="text-lg font-semibold">
