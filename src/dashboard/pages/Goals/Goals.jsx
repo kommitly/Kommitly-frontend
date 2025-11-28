@@ -13,11 +13,13 @@ import { createGoal } from '../../../utils/Api';
 import CircularProgress from '@mui/material/CircularProgress';
 import background from '../../../assets/goal.svg';
 import SlidingButton from '../../components/SlidingButton';
+import GoalCards from '../../components/GoalCards';
 import { Divider } from '@mui/material';
 import GoalsPieChart from './GoalsPieChart'; // Import the PieChart component
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
 import { IoSearch } from "react-icons/io5";
+import { FaChartBar, FaUser, FaTasks, FaCheck } from "react-icons/fa";
 import {
   Backdrop,
   Box,
@@ -35,6 +37,106 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ReusableFormModal from '../../components/ReusableFormModal';
 import { Target, Check, ArrowRight, Star, Bell, Calendar, LineChart } from 'lucide-react';
 import Circles from '../../../assets/Circles.svg';
+import { BarChart } from '@mui/x-charts/BarChart';
+import { animated, useSpring } from '@react-spring/web';
+
+
+
+
+
+function getCompletionTrends(goals = [], view ) {
+  const now = dayjs();
+  let range = 7;
+  let format = "ddd"; // e.g. Mon
+
+  if (view === "monthly") {
+    range = 30;
+    format = "MMM D"; // e.g. Jun 5
+  } else if (view === "yearly") {
+    range = 12;
+    format = "MMM"; // e.g. Jan
+  }
+
+  const trend = Array(range).fill(0).map((_, i) => ({
+    name:
+      view === "yearly"
+        ? now.subtract(range - 1 - i, "month").format(format)
+        : now.subtract(range - 1 - i, "day").format(format),
+    value: 0,
+  }));
+
+  const incrementDayCount = (timestamp) => {
+    if (!timestamp) return;
+    const time = dayjs(timestamp);
+    const label =
+      view === "yearly"
+        ? time.format("MMM")
+        : view === "monthly"
+        ? time.format("MMM D")
+        : time.format("ddd");
+
+    const index = trend.findIndex(item => item.name === label);
+    if (index !== -1) trend[index].value += 1;
+  };
+
+  goals.forEach(goal => {
+    goal.tasks?.forEach(task => {
+      incrementDayCount(task.completed_at);
+      task.subtasks?.forEach(subtask => incrementDayCount(subtask.completed_at));
+    });
+  });
+
+  return trend;
+}
+
+function getAiCompletionTrends(ai_goals = [], aiView  ) {
+ 
+  const now = dayjs();
+  let range = 7;
+  let format = "ddd"; // e.g. Mon
+
+  if (aiView === "monthly") {
+    range = 30;
+    format = "MMM D"; // e.g. Jun 5
+  } else if (aiView === "yearly") {
+    range = 12;
+    format = "MMM"; // e.g. Jan
+  }
+
+
+const trend = Array(range).fill(0).map((_, i) => ({
+    name:
+      aiView === "yearly"
+        ? now.subtract(range - 1 - i, "month").format(format)
+        : now.subtract(range - 1 - i, "day").format(format),
+    value: 0,
+  }));
+
+  const incrementDayCount = (timestamp) => {
+    if (!timestamp) return;
+    const time = dayjs(timestamp);
+    const label =
+      aiView === "yearly"
+        ? time.format("MMM")
+        : aiView === "monthly"
+        ? time.format("MMM D")
+        : time.format("ddd");
+
+    const index = trend.findIndex(item => item.name === label);
+    if (index !== -1) trend[index].value += 1;
+  };
+
+
+  // AI goals
+  ai_goals.forEach(goal => {
+    goal.ai_tasks?.forEach(task => {
+      incrementDayCount(task.completed_at);
+      task.ai_subtasks?.forEach(subtask => incrementDayCount(subtask.completed_at));
+    });
+  });
+  
+  return trend;
+}
 
 
 
@@ -57,6 +159,21 @@ const FloatingIcon = ({ icon: Icon, delay, size, top, left, right, className }) 
     </motion.div>
   );
 };
+
+
+function StatCard({ icon, title, value }) {
+  return (
+    <Card>
+      <CardContent className="flex items-center space-x-4 p-4">
+        <div className="text-[#4F378A] bg-[#A89FE3] p-2 rounded-sm text-xl">{icon}</div>
+        <div>
+          <p className="text-sm text-muted-foreground">{title}</p>
+          <p className="text-xl font-bold">{value}</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 
 function CircularProgressWithLabel({ value, textColor = '#000000', progressColor = '#4F378A' , size = 40, fontSize = '0.6rem' }) {
@@ -164,7 +281,7 @@ const Goals = () => {
         }
     };
 
-
+  
 useEffect(() => {
     // Check if the goals object and its internal arrays are present to stop loading
     if (goals && goals.goals && goals.ai_goals) {
@@ -196,6 +313,8 @@ useEffect(() => {
     return [...userGoals, ...generatedAiGoals];
   }, [goals]);
 
+
+ 
 
   // --- Unified Filtering Function ---
   const filterGoals = () => {
@@ -602,7 +721,7 @@ useEffect(() => {
 
       <div className="md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0">
        
-        <Box className='w-full relative  container md:h-46 xl:h-50 2xl:h-64  h-42 flex items-center justify-between rounded-4xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
+        <Box className='w-full relative mb-4  container md:h-46 xl:h-50 2xl:h-64  h-42 flex items-center justify-between rounded-4xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
         sx={{backgroundColor: "#4F378A", boxShadow: "0px 0px 6px rgba(79, 55, 138, 0.7)"}}
         >
           <div className='space-y-4 relative h-full flex flex-col justify-center items-start'>
@@ -660,7 +779,9 @@ useEffect(() => {
          
         </Box>
 
-        <div className='w-full mt-6'>
+        <GoalCards/>
+
+        <div className='w-full mt-4'>
       {/* --- Unified Header and Filters --- */}
       <div className="w-full flex flex-col md:flex-row justify-between items-center mt-4">
 
@@ -721,18 +842,7 @@ useEffect(() => {
           </div>
         ) : (
           <>
-            {/* Left Scroll Button (Hidden on XS/SM screens where swiping is preferred, but kept for desktop UX) */}
-         {/* {   <button
-              onClick={() => scrollGoals('left')}
-              className='absolute cursor-pointer left-0 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-10 hidden md:flex'
-              style={{ backgroundColor: colors.tag.primary }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>} */}
-
-            {/* Scrollable Goals Container */}
+         
             <div 
               ref={goalsContainerRef} 
               // Adjust padding/margin for scroll buttons on desktop, or full width on mobile
@@ -740,7 +850,7 @@ useEffect(() => {
             >
               {finalFilteredGoals.map((goal) => (
                 // Use the pre-calculated linkPath
-                <Link key={goal.id} to={goal.linkPath} className='w-full min-w-[280px] list-none block'>
+                <Link key={goal.id} to={goal.linkPath} className='md:w-6/12 w-full min-w-[280px] list-none block'>
                   <li className='w-full h-full list-none'>
                     <Box className='flex w-full px-2 py-4 h-full rounded-2xl transition-transform duration-300 hover:scale-[0.95] relative'
                          sx={{ backgroundColor: colors.background.paper }}>
@@ -783,29 +893,29 @@ useEffect(() => {
               ))}
             </div>
 
-            {/* Right Scroll Button (Hidden on XS/SM screens where swiping is preferred, but kept for desktop UX) */}
-           {/* { <button
-              onClick={() => scrollGoals('right')}
-              className='absolute cursor-pointer right-0 top-1/2 transform -translate-y-1/2 w-10 h-10 p-2 rounded-full flex items-center justify-center z-10 hidden md:flex'
-              style={{ backgroundColor: colors.tag.primary }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>} */}
           </>
         )}
       </div>
+
+         
+    </div>
+
+    
+
+
+
+      
+
+
+
+
     </div>
 
 
 
 
 
-      
 
-      
-    </div>
     <Box className='  block col-span-12 md:col-span-5   space-y-4 md:ml-4 rounded-4xl md:rounded-2xl justify-center  md:mt-4 mt-8 p-4' sx={{backgroundColor:colors.background.paper}}>
         
         <div className=''>
@@ -838,7 +948,7 @@ useEffect(() => {
     ) : (
           filteredPeriods.map((goal, index) => (
             <>
-            <Link to={`/dashboard/ai-goal/${goal.id}`} className='w-full'>
+            <Link to={`/dashboard/ai-goal/${goal.id}`} className=' w-full'>
              <li key={goal.id} className='p-4 gap-2 flex   rounded-2xl  transition-transform duration-300 hover:scale-[0.95] ' style={{ backgroundColor: colors.background.paper }}>
              
              <div className=' flex justify-center items-center  '>

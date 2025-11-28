@@ -183,9 +183,6 @@ const DashboardSidebar = () => {
   .slice(-2);
 
 
-useEffect(() => {
-  console.log("Recent AI Goals:", recentAiGoals);
-}, [goals, hiddenGoals]); // Removed recentAiGoals from dependencies
 
   
 

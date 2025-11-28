@@ -47,7 +47,7 @@ export const GoalsProvider = ({ children }) => {
 const reloadGoals = async () => {
   try {
     const fetchedGoals = await fetchGoals();
-    console.log("Reloaded Goals:", fetchedGoals);
+    
     setGoals(fetchedGoals ?? { goals: [], ai_goals: [] });
   
     return fetchedGoals;  // Return them here!

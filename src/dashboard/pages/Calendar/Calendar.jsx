@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import moment from "moment-timezone";
 import Snackbar from '@mui/material/Snackbar';
 import { AuthContext } from '../../../context/AuthContext';
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, useMemo } from "react";
 import {fetchTasks, fetchGoals, updateAiSubtaskById, updateTaskById, createTask } from "../../../utils/Api";
 import { DialogContent, TextField } from "@mui/material";
 import Backdrop from '@mui/material/Backdrop';
@@ -513,6 +513,19 @@ const handleReschedule = () => {
   }
 };
 
+
+const selectedDayEvents = React.useMemo(() => {
+  if (!selectedDateInfo) return [];
+
+  const selectedDate = moment(selectedDateInfo.startStr).format("YYYY-MM-DD");
+
+  return currentEvents.filter(evt => {
+    const evtDate = moment(evt.start).format("YYYY-MM-DD");
+    return evtDate === selectedDate;
+  });
+}, [selectedDateInfo, currentEvents]);
+
+
     return (
         <div className="m-[20px] pt-4">
              <div className="mb-[30px]  w-full justify-between flex">
@@ -915,8 +928,10 @@ const handleReschedule = () => {
                 p="15px"
                 borderRadius="8px"
                 width="100%"
-                height="auto"
+                height={isSmallScreen ? "40vh":"80vh"}
                 overflow="hidden"
+                marginBottom={isSmallScreen ?  "2rem":"0rem"}
+                marginTop={isSmallScreen ?  "1rem":"0rem"}
                 >
                     <Typography variant="h4" sx={{color: colors.text.primary}}>Upcoming Events</Typography>
                     <List overflowY="auto"  sx={{ height: '100%', maxHeight: 'calc(100% - 50px)', overflowY: 'auto', marginTop: '10px' ,   '&::-webkit-scrollbar': { display: 'none' }, // Chrome, Safari
@@ -924,84 +939,38 @@ const handleReschedule = () => {
     'scrollbar-width': 'none', // Firefox
     }}
     >
-                        {currentEvents.length === 0 ? (
-    <div className="w-full flex justify-center items-center h-full">
-      <div className="w-1/2 h-full">
-      <Empty/>
-    </div>
-    </div>
-  ) : (
-    currentEvents
-  .slice() // make a shallow copy to avoid mutating state directly
-  .sort((a, b) => new Date(b.start) - new Date(a.start)) // newest first
-  .map((event) => (
-  <ListItem
-  key={event.id}
-  sx={{
-    backgroundColor: colors.background.default,
-    margin: "10px 0",
-    borderRadius: "8px",
-    color: colors.text.primary,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    paddingTop: "2px",
-    paddingRight: "10px",
-  }}
->
-  {/* Left section: title, time, and View button */}
-  <Box sx={{ display: 'flex', flexDirection: 'column', width: "100%" }}>
-    <ListItemText
-      primary={event.title}
-      primaryTypographyProps={{
-        fontSize: '0.9rem',
-        fontWeight: 500,
-        color: colors.text.primary,
-        margin: "0px"
-      }}
-      secondaryTypographyProps={{
-        fontSize: '0.65rem',
-        fontWeight: 400,
-        color: colors.text.placeholder,
-        marginY: '4px',
-      }}
-      secondary={formatDate(event.start)}
-    />
-<div
-className="w-full  flex justify-center "
->
-      <Button
-      size="small"
-      sx={{
-        alignSelf: 'start',
-        marginBottom: '4px',
-        textTransform: 'none',
-        fontSize: '0.65rem',
-        border: "1px solid #4F378A",
-        width:"100%"
-      }}
-     onClick={() => handleEventClick({ event })}
+       <div className="flex flex-col gap-2 mt-4">
+  {Array.from({ length: 24 }).map((_, hour) => {
+    const label = moment({ hour }).format("h A");
 
-    >
-      View Event
-    </Button>
+    const tasksAtHour = selectedDayEvents.filter(evt => {
+      return moment(evt.start).hour() === hour;
+    });
+
+    return (
+      <div key={hour} className="flex items-start gap-3 py-2 border-b border-gray-200">
+        <div className="w-16 text-sm text-gray-500">{label}</div>
+
+        <div className="flex-1">
+          {tasksAtHour.length === 0 ? (
+            <div className="text-gray-400 text-xs">—</div>
+          ) : (
+            tasksAtHour.map(task => (
+              <div
+                key={task.id}
+                className="p-2 rounded-lg text-sm"
+                style={{ background: colors.primary[400], color: "white" }}
+              >
+                {task.title}
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
+  })}
 </div>
-  </Box>
 
-  {/* Right section: More icon */}
-  <MoreVertIcon
-    sx={{
-      color: colors.text.secondary,
-      marginLeft: 'auto',
-      cursor: 'pointer',
-      marginTop: "10px"
-    }}
-    onClick={(e) => handleMenuOpen(e, event)}
-  />
-</ListItem>
-
-))
-  )}
 
                     </List>
                     <Menu

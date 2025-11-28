@@ -14,6 +14,7 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { ProfileProvider } from './context/ProfileContext.jsx'
 import { ImportContactsRounded } from '@mui/icons-material'
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { DashboardStatsProvider } from "./context/DashboardStatsContext";
 
 
 const clientId= "501169252647-til0o67ldlrpmnbd08td1o4anhnkjpr8.apps.googleusercontent.com";
@@ -28,9 +29,13 @@ createRoot(document.getElementById('root')).render(
       <ProfileProvider>
       <GoalsProvider> 
         <TasksProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DashboardStatsProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
             <App />
           </LocalizationProvider>
+
+          </DashboardStatsProvider>
+          
         </TasksProvider>
       </GoalsProvider>
       </ProfileProvider>

@@ -920,7 +920,7 @@ const handleChange = (field, value) => {
                           View in Calendar
                         </Button>} */}
 
-                          <div className="hidden sm:block">
+                          <div className="">
                              <Button  text="Create Routine" onClick={()=> {
                                                         setOpen(true)
                                                       }}  >
@@ -946,27 +946,7 @@ const handleChange = (field, value) => {
 
                           </div>
                         
-                              {/* Mobile floating + button */}
-<button
-  onClick={()=> {  setOpen(true)}} 
-  className="sm:hidden fixed bottom-36 right-12 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
-  style={{ backgroundColor: colors.background.sidebar }}
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="26"
-    height="26"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#ffffff"
-    strokeWidth="3"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="12" y1="5" x2="12" y2="19" />
-    <line x1="5" y1="12" x2="19" y2="12" />
-  </svg>
-</button>
+                         
 
                       
                     
@@ -1024,7 +1004,7 @@ const handleChange = (field, value) => {
         <div
           className="p-5 rounded-4xl  w-full h-full shadow-md flex flex-col justify-between"
           style={{
-            backgroundColor: colors.background.paper,
+            backgroundColor: colors.primary[300],
             color: colors.text.primary,
           }}
         >

@@ -977,6 +977,27 @@ const saveTemplateSuggestion = async (templateData ) => {
 
 
 
+const fetchDashboardStats = async () => {
+  const url = "https://kommitly-backend.onrender.com/api/users/stats/";
+  try {
+    const token = getToken();
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching dashboard stats:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+
+
+
 
 
 
@@ -1032,7 +1053,8 @@ export {
   markDailyActivityComplete,
   fetchTemplatesSuggestions,
   saveTemplateSuggestion,
-  markAllNotificationAsRead
+  markAllNotificationAsRead,
+  fetchDashboardStats
 
 
 };
