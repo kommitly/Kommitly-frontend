@@ -19,9 +19,11 @@ import { tokens } from "../../../theme";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Empty from "../../components/Empty";
+import Loading from "../../components/Loading";
 
 
 export default function DailyTemplateDetail() {
+  const [loading, setLoading] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
@@ -44,12 +46,15 @@ export default function DailyTemplateDetail() {
 
   useEffect(() => {
   if (isSuggested && suggestedTemplate) {
+    setLoading(true);
     // If it's a suggested template, use data from location.state
     setTemplate(suggestedTemplate);
     setActivities(suggestedTemplate.activities || []);
+    setLoading(false);
   } else if (templateId) {
     // If it's a saved template, fetch it by ID
     const loadTemplate = async () => {
+      setLoading(true);
       const data = await fetchDailyTemplates();
       const found = data.find((t) => t.id === parseInt(templateId));
 
@@ -58,6 +63,7 @@ export default function DailyTemplateDetail() {
         setTemplate(found);
         setActivities((found.activities || []).filter(a => a.date === today));
       }
+      setLoading(false);
     };
     loadTemplate();
   }
@@ -81,8 +87,10 @@ useEffect(() => {
 }, []);
 
   const loadActivities = async () => {
+    setLoading(true);
     const data = await fetchDailyActivities();
     setActivities(data.filter((a) => a.template === template.id));
+    setLoading(false);
   };
 
   const toggleMenu = () => {
@@ -284,12 +292,13 @@ const handleSaveSuggestedTemplate = async (templateData) => {
 
         {/* Activity List */}
         <div className="space-y-4 md:mt-0 mt-4 h-screen max-h-10/12 overflow-y-auto no-scrollbar mb-4 md:p-0 p-4 md:col-span-7 col-span-12">
-            {(!activities || activities.length === 0) ? (
-    <div className="flex h-9/12 flex-col items-center justify-center  text-center">
-     <Empty/>
-      
-    </div>
-  ) : (
+          {loading ? (
+  <Loading />
+) : activities.length === 0 ? (
+  <div className="flex h-9/12 flex-col items-center justify-center text-center">
+    <Empty />
+  </div>
+) : (
     activities
   ?.slice()
   .sort((a, b) => a.start_time.localeCompare(b.start_time))

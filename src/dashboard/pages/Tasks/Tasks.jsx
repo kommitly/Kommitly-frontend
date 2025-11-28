@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef, useMemo } from "react";
 import { TasksContext} from '../../../context/TasksContext';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -11,11 +11,10 @@ import aiGoals from '../../../assets/goals.svg';
 import CalendarComponent from './Calendar';
 import dayjs from "dayjs";
 import DatePicker from "react-datepicker";
-import Button from "../../components/Button"
 import 'react-datepicker/dist/react-datepicker.css'; // Import DatePicker styles
 import { FaCalendarAlt, FaClock, FaTasks } from "react-icons/fa"; // Import calendar icon
 import TaskItem from '../../components/TaskItem'; // Import TaskItem component
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme, Button } from "@mui/material";
 import { tokens } from "../../../theme";
 import { Divider } from '@mui/material';
 import SlidingButton from "../../components/SlidingButton";import CircularProgress from '@mui/material/CircularProgress';
@@ -25,7 +24,12 @@ import ReminderTimePicker from "../AiGoal/ReminderTimePicker";
 import FlagIcon from '@mui/icons-material/Flag';
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import SellIcon from '@mui/icons-material/Sell';
-
+import Circles from '../../../assets/Circles.svg';
+import FormButton from '../../components/FormButton'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'; 
+import ReusableFormModal from '../../components/ReusableFormModal';
+import { Target, Check, ArrowRight, Star, Bell, Calendar, LineChart } from 'lucide-react';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 
 
@@ -41,7 +45,6 @@ const Tasks = () => {
   const [title, setTitle] = useState('');
   const aiTasksContainerRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [aiTasks, setAiTasks] = useState([]);
   const [menuVisible, setMenuVisible] = useState({});
   const {removeTask, addTaskToSidebar} = useContext(TasksContext); // Use the TasksContext
   const [showFilters, setShowFilters] = useState(false);
@@ -63,6 +66,118 @@ const Tasks = () => {
 
   const [openQuickModal, setOpenQuickModal] = useState(false);
   const [showCustomReminderPicker, setShowCustomReminderPicker] = useState(false);
+  const [taskTypeFilter, setTaskTypeFilter] = useState("all"); 
+  
+  const cycleTaskTypeFilter = () => {
+  
+   setTaskTypeFilter(prevFilter => {
+          switch (prevFilter) {
+              case 'all':
+                  return 'ai'; // 1. All -> AI Goals
+              case 'ai':
+                  return 'user'; // 2. AI Goals -> My Goals (User)
+              case 'user':
+              default:
+                  return 'all'; // 3. My Goals (User) -> All Goals (Cycle back)
+          }
+      });
+};
+
+ 
+const getTaskFilterLabel = (filter) => {
+  switch (filter) {
+    case "ai": return "AI Tasks";
+    case "user": return "My Tasks";
+    default: return "All Tasks";
+  }
+};
+
+const getTaskFilterIcon = (filter) => {
+  switch (filter) {
+    case "ai": return <AutoFixHighIcon />;
+    default: return null;
+  }
+};
+
+
+  useEffect(() => {
+    if (tasks.length > 0) { // Check if tasks array has items
+      setLoading(false);
+      console.log("tasks", tasks);
+      
+    }
+    if (tasks.length ===0){
+      console.log("No tasks found");
+    }
+    if (goals.goals && goals.ai_goals) {
+      setLoading(false);
+      console.log("ai goals", goals.ai_goals);
+    }
+  }, [tasks, goals]);
+
+const allTasks = useMemo(() => {
+  if (!tasks || !goals?.ai_goals) return [];
+
+  // Flatten AI tasks
+  const aiTasks = goals.ai_goals.flatMap(goal =>
+    (goal.ai_tasks || []).map(task => ({
+      ...task,
+      isAiTask: true,
+      type: "ai",
+      parentGoalId: goal.id,
+      linkPath: `/dashboard/ai-task/${task.id}`,
+      // ✅ ADD GOAL TAG TO AI TASK HERE
+      tag: goal.tag, // <-- This ensures the AI task inherits the parent goal's tag
+    }))
+  );
+
+  // Mark User Tasks
+  const userTasks = tasks.map(task => ({
+    ...task,
+    isAiTask: false,
+    type: "user",
+    linkPath: `/dashboard/task/${task.id}`
+    // User tasks will use their own existing 'tag' property if defined
+  }));
+
+  return [...userTasks, ...aiTasks];
+}, [tasks, goals]);
+
+const filterTasks = () => {
+  let filtered = allTasks;
+
+  // --- 1. Filter by Status using the 'status' property (Recommended) ---
+  filtered = filtered.filter(task => {
+    // If the category is 'all' or no category is selected, include all tasks
+    if (selectedCategory === 'all' || !selectedCategory) {
+      return true;
+    }
+    
+    // Check if the task's status matches the selected category
+    // This assumes task.status is provided by the backend (e.g., 'pending', 'inProgress', 'completed')
+    return task.status === selectedCategory; 
+  });
+
+  // --- 2. Filter by Task Type (All, AI, User) ---
+  switch (taskTypeFilter) {
+    case "ai":
+      filtered = filtered.filter(t => t.isAiTask);
+      break;
+    case "user":
+      filtered = filtered.filter(t => !t.isAiTask);
+      break;
+    case "all":
+    default:
+      break;
+  }
+
+  return filtered;
+};
+
+
+const finalFilteredTasks = filterTasks();
+
+
 
   
   
@@ -106,20 +221,6 @@ function CircularProgressWithLabel({ value, textColor = '#000000', progressColor
 
 
 
-  useEffect(() => {
-    if (tasks.length > 0) { // Check if tasks array has items
-      setLoading(false);
-      console.log("tasks", tasks);
-      
-    }
-    if (tasks.length ===0){
-      console.log("No tasks found");
-    }
-    if (goals.goals && goals.ai_goals) {
-      setLoading(false);
-      console.log("ai goals", goals.ai_goals);
-    }
-  }, [tasks, goals]);
 
   //Quck add modal for  hourly slot task
  const handleHourClick = (hourLabel) => {
@@ -216,87 +317,12 @@ const renderTaskBlock = (hour) => {
 
 
 
-  //filter ai tasks
-  const filterAiTasks = (category) => {
-    if (!goals.ai_goals || goals.ai_goals.length === 0) return [];
-  
-    const aiTasks = goals.ai_goals.flatMap(goal => goal.ai_tasks) ?? [];
-    console.log("AI Tasks:", aiTasks);
-    const aiSubtasks = aiTasks.flatMap(task => task.ai_subtasks) ?? [];
-
-    console.log("AI Subtasks:", aiSubtasks);
-  
-    switch (category) {
-      //case 'recentlyAdded':
-       // return [...aiTasks].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      //case 'inProgress':
-        //return aiTasks.filter(task => task.progress > 0 && task.progress < 100);
-
-        case 'inProgress':
-        return aiTasks.filter(task => task.status === 'in-progress');
-
-      //case 'pending':
-        //return aiTasks.filter(task => task.progress === 0);
-        case 'pending':
-    return aiTasks.filter(task => task.status === 'pending');
-      //case 'completed':
-        //return aiTasks.filter(task => task.progress === 100);
-        case 'completed':
-    return aiTasks.filter(task => task.status === 'completed');
-      default:
-        return [];
-    }
-  };
-  
-  const filterLabels = [
- // { key: "recentlyAdded", label: "Recently Added" },
-  { key: "pending", label: "Pending" },
-  { key: "inProgress", label: "In Progress" },
-  { key: "completed", label: "Completed" }
-];
 
 
-   const aiTaskProgress =(aiTask) => {
-  if (aiTask.ai_subtasks && aiTask.ai_subtasks.length > 0) {
-    console.log("subtasks for this ai task", aiTask.ai_subtasks);
-    console.log("number of subtasks", aiTask.ai_subtasks.length);
-    const completedSubtasks = aiTask.ai_subtasks.filter(subtask => subtask.status==="completed").length;
-    console.log("number of completed subtasks", completedSubtasks);
-    return (completedSubtasks / aiTask.ai_subtasks.length) * 100;
-  }
-  return aiTask.progress || 0;
- }
-    
-
-  const taskProgress = (task) => {
-  if (task.subtasks && task.subtasks.length > 0) {
-    console.log("subtasks for this task", task.subtasks);
-    const completedSubtasks = task.subtasks.filter(subtask => subtask.status==="completed").length;
-    return (completedSubtasks / task.subtasks.length) * 100;
-  }
-  return task.progress || 0;
-};
 
 
-  
-  const filterTasks = (category) => {
-    switch (category) {
-     // case 'recentlyAdded':
-        //return [...tasks].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      case 'inProgress':
-        return tasks.filter(task => task.progress > 0 && task.progress < 100);
-      //case 'pending':
-        //return tasks.filter(task => task.progress === 0);
-         case 'pending':
-        return tasks.filter(task => task.status === 'pending');
-      //case 'completed':
-        //return tasks.filter(task => task.progress === 100);
-         case 'completed':
-        return tasks.filter(task => task.status === 'completed');
-      default:
-        return [];
-    }
-  };
+
+
   
 
   const openModal = () => {
@@ -336,23 +362,9 @@ const renderTaskBlock = (hour) => {
         console.error("Error creating task:", error);
       }
     };
-    
-    const scrollTasks = (direction) => {
-      if (tasksContainerRef.current) {
-        const scrollAmount = direction === 'left' ? -300 : 300;
-        tasksContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      }
-    };
-    const scrollAiTasks = (direction) => {
-      if (aiTasksContainerRef.current) {
-        const scrollAmount = direction === 'left' ? -300 : 300;
-        aiTasksContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      }
-    };
 
-  const filteredTasks = filterTasks(selectedCategory);
-  const filteredAiTasks = filterAiTasks(selectedAiCategory);
 
+  
   /*const toggleTaskMenu = (taskId) => {
     console.log(`Toggled task menu for task ID: ${taskId}`);
       setMenuVisible(prev => ({
@@ -464,7 +476,7 @@ if (!loading && tasks.length === 0) {
 
   {/* Desktop button */}
   <div className="hidden sm:block">
-    <Button onClick={openModal} text="Create Task">
+    <Button onClick={openModal} text="Create Tasks">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -520,7 +532,7 @@ if (!loading && tasks.length === 0) {
 }
   
     return (
-<div className="w-full  grid gap-1 grid-cols-1  sm:grid-cols-12 p-2 flex min-h-screen">
+<div className="w-full p-4  grid gap-1 grid-cols-1  sm:grid-cols-12 p-2 flex min-h-screen">
     
 
     
@@ -737,15 +749,10 @@ if (!loading && tasks.length === 0) {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="peer w-full border border-gray-300 rounded-md px-3 pt-5 pb-2 text-sm text-gray-900 placeholder-transparent focus:outline-none focus:border-[#6F2DA8]"
+            className="peer w-full border border-gray-300 rounded-md px-3 pt-3 pb-2 text-sm text-gray-900 placeholder-transparent focus:outline-none focus:border-[#6F2DA8]"
             placeholder="Title"
           />
-          <label
-            htmlFor="title"
-            className="absolute left-3 top-2 text-gray-500 text-xs transition-all duration-200 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:text-xs peer-focus:text-[#6F2DA8] peer-focus:top-2"
-          >
-            Title
-          </label>
+         
         </div>
 
         {/* Floating Label Input - Reminder 
@@ -878,360 +885,191 @@ if (!loading && tasks.length === 0) {
 
     <div className=" md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0"> 
        
-        <Box className='w-full  container md:h-46 xl:h-50 2xl:h-64  h-36 flex items-center justify-between rounded-2xl bg-[#F4F1FF] md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
-        sx={{backgroundColor:colors.background.paper}}
-        >
+        <Box className='w-full relative  container md:h-46 xl:h-50 2xl:h-64  h-42 flex items-center justify-between rounded-4xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
+        sx={{backgroundColor: "#4F378A", boxShadow: "0px 0px 6px rgba(79, 55, 138, 0.7)"}}
+         >
       
-                  <div className='space-y-4 h-full'>
+                  <div className='space-y-4 relative h-full flex flex-col justify-center items-start'>
                     <h1 className='text-2x1  font-semibold'><p
                
               className="font-semibold md:text-xl  xl:text-xl  2xl:text-3xl text-base"
-              style={{ color: colors.text.primary }}
+              style={{ color: "#ffffff"}}
               
             >Manage your Tasks 
             </p></h1>
-                   <Button onClick={openModal} text=' Create Task' >
+                   <Button onClick={openModal} sx={{backgroundColor: "#A89FE3", borderRadius: 100, color: "#FFFFFF", textTransform: "none", paddingY: 0.5, paddingX: 2, gap: 0.2}}>
                                    <svg
                                    xmlns="http://www.w3.org/2000/svg"
                                    width="16"
                                    height="16"
                                    viewBox="0 0 24 24"
-                                   fill="#6246AC"
+                                   fill="#A89FE3"
                                    stroke="#FFFFFF"
                                    strokeWidth="2"
                                    strokeLinecap="round"
                                    strokeLinejoin="round"
                                 
-                                   style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
+                                   style={{ stroke: '#FFFFFF', }} // Inline style to ensure white stroke
                                  >
                                    <line x1="12" y1="5" x2="12" y2="19" />
                                    <line x1="5" y1="12" x2="19" y2="12" />
                                  </svg>
-                                
+                                Create Task
                                </Button>
                    
                   </div>
-                  <img src={analysis} alt='Analysis' className='md:h-46  h-28 xl:h-52 2xl:h-60' />
+                   <img src={Circles} alt='Circles'  className='md:h-46  h-32 xl:h-48 2xl:h-60 ' />
                 </Box>
 
-  <div>
-        <h1 className='text-lg font-medium mt-8'>
-          <Typography
-                        component="span"
-                        variant="h3"
-                        className=" text-semibold"
-                        color='text.primary'
-                        >AI Tasks </Typography>
-          </h1>
-          <SlidingButton
-  options={["pending", "inProgress", "completed"]}
-  selected={selectedAiCategory}
-  onChange={setSelectedAiCategory}
-/>
 
-                  
-                  
-                 
-
-        </div>
-
-
-      <div className='relative mt-4'>
-        {filteredAiTasks.length === 0 ? (
-  <div className="w-full md:h-[16vh] h-[12vh] flex justify-center">
+<div className='w-full mt-6'>
+  <div className="w-full flex flex-col md:flex-row justify-between items-center mt-4">
     
-     <div className= 'w-1/8'>
-      <Empty/>
-      </div>
-  </div>
-) : (
-  <>
+    {/* Status Filter */}
+    <SlidingButton
+      options={["pending", "inProgress", "completed"]}
+      selected={selectedCategory}
+      onChange={setSelectedCategory}
+      className="mb-4"
+    />
 
-       {filteredAiTasks.length > 0 && ( // Show left scroll button only if there are more than 3 tasks
-  <button 
-    onClick={() => scrollAiTasks('left')} 
-    className="absolute cursor-pointer left-0 top-8 transform -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center"
-    style={{ backgroundColor: colors.tag.primary }}
-  >  
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="15 18 9 12 15 6" />
-    </svg>
-  </button>
-)}
-
-
-
-      <div ref={aiTasksContainerRef} className='flex gap-2  overflow-x-auto no-scrollbar   w-10/12 md:ml-14 ml-10'>
-        {filteredAiTasks.map((task) => (
-          <Link key={task.ai_goal} to={`/dashboard/ai-goal/${task.ai_goal}`}>
-          <li className=' w-1/3 min-w-[280px] min-h-[100px] list-none '>
-          <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl transition-transform duration-300 hover:scale-[0.95]'sx={{backgroundColor:colors.background.paper}}>
-            <div className='w-1/4  full overflow-hidden '>
-              {/*<img src={aiGoals} alt="goals" className='h-auto'/> */}
-              <CircularProgressWithLabel  value={aiTaskProgress(task)} 
-                                progressColor={colors.primary[500]}
-                                textColor={colors.text.primary}
-                                size={50}
-                                fontSize={
-                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
-                                } 
-                                />
-            </div>
-            <div className='w-full h-auto flex flex-col gap-0'>
-              <div className='flex  items-start h-auto mb-1 justify-between'>
-                <span className='w-full h-auto font-regular' >
-                  {task.title}
-                </span>
-
-                
-                <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#65558F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer" 
-                
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevents clicking the menu from triggering other actions
-                  e.preventDefault(); // Prevents the default action of the event
-                  toggleTaskMenu(task.id)}}>
-                  <circle cx="12" cy="5" r="1"></circle>
-                  <circle cx="12" cy="12" r="1"></circle>
-                  <circle cx="12" cy="19" r="1"></circle>
-                </svg>
-
-                {menuVisible[task.id] && (
-                        <div className="absolute  mt-2 w-30 bg-white shadow-lg rounded-md z-[100]">
-                          <button
-                            className="block w-full text-left px-3 py-1 text-xs text-black hover:bg-gray-100"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault(); // Prevents the default action of the event
-                              addTaskToSidebar(task.id);
-
-                            }}
-                          >
-                            Add to Sidebar
-                          </button>
-                          <button
-                            className="block w-full text-left px-3 py-1 text-xs text-[#E60178] hover:bg-gray-100"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault(); // Prevents the default action of the event
-                              handleDeleteTask(task.id);
-                            }}
-                          >
-                            Delete Task
-                          </button>
-                        </div>
-                      )}
-                      </div>
-                       </div>
-
-                      {/* New subtasks section below title */}
-<div className="flex items-center pl-0 gap-0 mt-2  ">
-  <div className='flex items-center gap-2'>
-                                                         <SellIcon className='text-[#65558F] text-xs' />
-                                                         <span className='text-xs  lg:text-xs   2xl:text-xs   font-normal' style={{ color: colors.primary[500] }}>
-                                                         
-                                                         </span>
- 
-                                                       </div>
-
- 
-</div>
-
-             
-              {/*<div className="flex items-center">
-                  <p className="w-20 md:text-xs xl:text-xs 2xl:text-sm font-medium text-[#65558F]">Timeline:</p>
-                  <span className="px-3 py-0.5 border border-[#65558F] 2xl:text-sm  rounded-sm md:text-xs xl:text-xs text-[#65558F]">
-                  {task.task_timeline}
-                  </span>
-                  </div>*/}
-            </div>
-          </Box>
-          </li>
-          </Link>
-        ))}
-     </div>
-    
-     <button onClick={() => scrollAiTasks('right')} className='absolute right-0 top-8 transform -translate-y-1/2  w-10 h-10 p-2 rounded-full cursor-pointer' style={{ backgroundColor: colors.tag.primary }}>
-       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-         <polyline points="9 18 15 12 9 6" />
-       </svg>
-     </button>
-     </>
-     )}
-     
+    {/* Task Type Filter (All / AI / User) */}
+    <div className='flex-shrink-0 ml-4 w-full md:mt-0 mt-2 md:w-auto flex justify-end'>
+      <Button
+        onClick={cycleTaskTypeFilter}
+        sx={{
+          color: colors.text.secondary,
+          backgroundColor: 'transparent',
+          padding: '6px 10px',
+          fontWeight: 'semibold',
+          border: `1px solid ${colors.divider}`, 
+          textTransform: 'none',
+          borderRadius: '100px',
+          '&:hover': {
+            backgroundColor: colors.background.default, 
+          },
+          minWidth: '120px'
+        }}
+        startIcon={getTaskFilterIcon(taskTypeFilter)}
+        endIcon={<KeyboardArrowDownIcon />}
+      >
+        {getTaskFilterLabel(taskTypeFilter)}
+      </Button>
     </div>
 
-    <div>
-      <h1 className='text-lg font-medium mt-8'>
-        <Typography
-                    component="span"
-                    variant="h3"
-                    className=" text-semibold"
-                    color='text.primary'
-                  >
-                  Tasks
-        </Typography>
-      </h1>
-      <SlidingButton
-  options={["pending", "inProgress", "completed"]}
-  selected={selectedCategory}
-  onChange={setSelectedCategory}
-/>
-  
-                  
-                  
+  </div>
+
+
+
+
+<div className='relative mt-4'>
+        {tasks.length === 0 ? (
+          <div className='w-full flex justify-center items-center h-[12vh]'>
+            <div className='w-24'><Empty /></div>
+            <Typography variant="body1" className="ml-4">Start by adding your first task!</Typography>
+          </div>
+        ) : finalFilteredTasks.length === 0 ? (
+          <div className='w-full h-[12vh]  flex justify-center items-center'>
+            <div className='w-1/6  flex justify-center items-center'>
+                     <Empty />
+              </div>
+    
+          </div>
+        ) : (
+          <>
+            {/* Left Scroll Button (Hidden on XS/SM screens where swiping is preferred, but kept for desktop UX) */}
+         {/* {   <button
+              onClick={() => scrollGoals('left')}
+              className='absolute cursor-pointer left-0 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-10 hidden md:flex'
+              style={{ backgroundColor: colors.tag.primary }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>} */}
+
+            {/* Scrollable Goals Container */}
+            <div 
+          
+              // Adjust padding/margin for scroll buttons on desktop, or full width on mobile
+              className='flex gap-4 overflow-x-auto no-scrollbar w-full md:w-full md:mx-auto'
+            >
+              {finalFilteredTasks.map((t) => (
+                // Use the pre-calculated linkPath
+                <Link key={t.id} to={t.linkPath} className='w-full min-w-[280px] list-none block'>
+                  <li className='w-full h-full list-none'>
+                    <Box className='flex w-full px-2 py-4 h-full rounded-2xl transition-transform duration-300 hover:scale-[0.95] relative'
+                         sx={{ backgroundColor: colors.background.paper }}>
+
+                      {/* AI Icon for distinction */}
+                      {t.isAiTask && (
+                        <AutoFixHighIcon
+                          className='absolute top-2 right-2'
+                          style={{ color: colors.primary[500], fontSize: '1.2rem' }}
+                        />
+                      )}
+
+                      
+                      <div className='w-full flex flex-col gap-2 pl-2'>
+                        <div className='flex w-11/12 justify-between'>
+                          <span className='w-full h-auto font-regular text-sm lg:text-sm 2xl:text-lg'>
+                            {t.title}
+                          </span>
+                        </div>
+                        <div className='flex items-center gap-2'>
+                          <SellIcon className='text-[#65558F] text-xs' /> 
+                          <span className='text-xs font-normal' style={{ color: colors.primary[500] }}>
+                            {t.tag ? t.tag : 'No Tag'}
+                          </span>
+                        </div>
+                      </div>
+                    </Box>
+                  </li>
+                </Link>
+              ))}
+            </div>
+
+            {/* Right Scroll Button (Hidden on XS/SM screens where swiping is preferred, but kept for desktop UX) */}
+           {/* { <button
+              onClick={() => scrollGoals('right')}
+              className='absolute cursor-pointer right-0 top-1/2 transform -translate-y-1/2 w-10 h-10 p-2 rounded-full flex items-center justify-center z-10 hidden md:flex'
+              style={{ backgroundColor: colors.tag.primary }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>} */}
+          </>
+        )}
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
                           
 
 
 
-        </div>
+     
    
 
     
-    <div className='relative mt-4'>
-      {filteredTasks.length > 0 && (
-        <button onClick={() => scrollTasks('left')} className='absolute cursor-pointer left-0 top-1/2 transform -translate-y-1/2  w-10 h-10 rounded-full flex items-center justify-center' style={{ backgroundColor: colors.tag.primary }}
-        >  <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6" />
-           </svg>
-        </button>
-      )}
-          <div ref={tasksContainerRef} className='flex gap-2 overflow-x-auto no-scrollbar  w-10/12 md:ml-14 ml-10'>
-            {filteredTasks.map((task) => (
-              <Link key={task.id} to={`/dashboard/tasks/${task.id}`}> 
-              <li className=' w-1/3 min-w-[280px] min-h-[100px] list-none'>
-                <Box className='flex w-full items-center h-full px-2 py-4 rounded-xl transition-transform duration-300 hover:scale-[0.95]' sx={{backgroundColor:colors.background.paper}}>
-                  <div className='w-1/4 full overflow-hidden '>
-                   {/*<img src={aiGoals} alt="goals"  className='h-auto'/> */}
-                    <CircularProgressWithLabel  value={taskProgress(task)} 
-                                progressColor={colors.primary[500]}
-                                textColor={colors.text.primary}
-                                size={50}
-                                fontSize={
-                                  isXs ? '0.8rem' : isSm ? '0.6rem' : isMd ? '0.7rem' : isLg ? '0.8rem' : isXl ? '0.9rem' : '1rem'
-                                } 
-                                />
-                  </div>
-                  <div className='w-full h-auto flex flex-col gap-0'>
-                    <div className='flex h-auto mb-1 items-start  justify-between'>
-                    <span className='w-full h-auto font-regular'>
-                    {task.title}
-                    </span>
-
-                    <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#65558F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer" 
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevents clicking the menu from triggering other actions
-                  e.preventDefault(); // Prevents the default action of the event
-                  toggleTaskMenu(task.id);
-                  }}>
-                  <circle cx="12" cy="5" r="1"></circle>
-                  <circle cx="12" cy="12" r="1"></circle>
-                  <circle cx="12" cy="19" r="1"></circle>
-                </svg>
-
-                {menuVisible[task.id] && (
-                        <div className="absolute mt-2 w-30 bg-white shadow-lg rounded-md z-[100]">
-                          <button
-                            className="block w-full  text-left px-3 py-1 text-xs text-black hover:bg-gray-100"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault(); // Prevents the default action of the event
-                              addTaskToSidebar(task.id);
-                            }}
-                          >
-                            Add to Sidebar
-                          </button>
-                          <button
-                            className="block w-full text-left px-3 py-1 text-xs text-[#E60178] hover:bg-gray-100"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault(); // Prevents the default action of the event
-                              handleDeleteTask(task.id);
-                            }}
-                          >
-                            Delete Task
-                          </button>
-                        </div>
-                      )}
-                      </div>
-                    </div>
-                      {/* New subtasks section below title */}
-<div className="flex items-center pl-0 gap-0 mt-2  text-gray-600">
-  <div className='flex items-center gap-2'>
-                                                         <SellIcon className='text-[#65558F] text-xs' />
-                                                         <span className='text-xs  lg:text-xs   2xl:text-xs   font-normal' style={{ color: colors.primary[500] }}>
-                                                         
-                                                         </span>
- 
-                                                       </div>
-  
-</div>
-
-                  </div>  
-                    
-                </Box>
-              </li>
-              </Link>
-            ))}
-          </div>
-
-          {filteredTasks.length === 0 ? (
-   <div className='w-full md:h-[16vh] h-[12vh] flex justify-center'>
-            <div className='w-1/8'>
-  
-                 <Empty  /> 
-  
-              </div>
-  
-          
-            </div>
-) : (
-  <>
-          
-        <button onClick={() => scrollTasks('right')} className='absolute right-0 top-1/2 transform -translate-y-1/2  w-10 h-10 p-2 rounded-full cursor-pointer' style={{ backgroundColor: colors.tag.primary }}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-              >
-               <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
-        </>
-          )}
-    </div>
-
        
 
       
 </div> 
+
 <Box className='hidden md:block mt-4 sm:col-span-5 space-y-4 mx-4 rounded-2xl  p-6'sx={{backgroundColor:colors.background.paper}}>
 
       {/* Calendar Component */}
@@ -1267,7 +1105,7 @@ if (!loading && tasks.length === 0) {
 
 
   
-  </Box> 
+  </Box>   
 </div>
     
   );

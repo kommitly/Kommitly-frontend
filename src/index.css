@@ -519,3 +519,27 @@ aside.ps-sidebar-root.ps-collapsed {
   }
 }
 
+
+.color-empty {
+  fill: #eeeeee;
+}
+
+.color-scale-0 {
+  fill: #F6F3F3;
+}
+
+.color-scale-1 {
+  fill: #D6CFFF; /* light green */
+}
+
+.color-scale-2 {
+  fill: #A89FE3;
+}
+
+.color-scale-3 {
+  fill: #6D5BA6;
+}
+
+.color-scale-4 {
+  fill: #4F378A; /* darkest */
+}
