@@ -37,7 +37,7 @@ const GoalCards = () => {
                     style={{ backgroundColor: colors.primary[300] }}
                 >
                     <span className="text-2xl mt-4">{stats.longest_streak} 🏆</span>
-                    <span className='w-full flex justify-center items-center'>
+                    <span className='w-full mt-2 flex justify-center items-center'>
      <Typography variant="body2"  sx={{color: "#fff"}}>
                     Longest Streak
                 </Typography>

@@ -30,7 +30,7 @@ const SlidingButton = ({ options, selected, onChange }) => {
           key={option}
           onClick={() => onChange(option)}
           className={`
-            ${options.length} relative z-10 w-1/3  md:px-4 px-2 py-2 text-sm lg:text-xs  2xl:text-base   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
+            ${options.length} relative z-10 w-1/3  md:px-4 px-2 py-2 text-xs lg:text-xs  2xl:text-base   text-center transition-colors duration-200 cursor-pointer hover:text-[#6D5BA6]
             ${selected === option ? "text-white" : colors.text.primary}
           `}
         >
