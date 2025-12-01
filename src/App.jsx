@@ -37,7 +37,6 @@ import '@fontsource/roboto/700.css';
 import Tasks from './dashboard/pages/Tasks/Tasks';
 import Taskpage from './dashboard/pages/Task/Task';
 import AiSubtaskPage from "./dashboard/pages/AiGoal/AiSubtaskPage";
-import Stats from "./dashboard/pages/Analytics/Stats";
 import Calendar from "./dashboard/pages/Calendar/Calendar";
 import VerifyRedirect from "./landing-page/VerifyRedirect";
 
@@ -93,7 +92,7 @@ function App() {
                 <Route path="routine" element={<Schedule/>} />
                 <Route path="templates" element={<DailyTemplatesPage/>} />
                 <Route path="templates/:templateId" element={<DailyTemplateDetail />} />
-                <Route path="analytics" element={<Stats />} />
+               
                 <Route path="settings" element={<Settings/>} />
                 <Route path="templates/suggested/:templateName" element={<DailyTemplateDetail />} />
                 <Route path="templates/:templateId/history" element={<DailyActivityHistory />} />

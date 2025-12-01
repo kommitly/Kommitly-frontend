@@ -3,33 +3,23 @@ import { TasksContext} from '../../../context/TasksContext';
 import { GoalsContext } from '../../../context/GoalsContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { IoSearch } from "react-icons/io5";  // Correct module for IoSearch
 import Backdrop from '@mui/material/Backdrop'; // Import Backdrop from MUI
-import analysis from '../../../assets/analyze-data.svg'; // Adjust the path as necessary
-import { createTask, deleteTaskById, createSubtask } from "../../../utils/Api";
-import aiGoals from '../../../assets/goals.svg';
-import CalendarComponent from './Calendar';
-import dayjs from "dayjs";
+import { createTask, fetchDashboardStats, createSubtask } from "../../../utils/Api";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'; // Import DatePicker styles
 import { FaCalendarAlt, FaClock, FaTasks } from "react-icons/fa"; // Import calendar icon
-import TaskItem from '../../components/TaskItem'; // Import TaskItem component
-import { Box, IconButton, Typography, useTheme, Button } from "@mui/material";
+import { Box, IconButton, Stack, Typography, useTheme, Button } from "@mui/material";
 import { tokens } from "../../../theme";
-import { Divider } from '@mui/material';
 import SlidingButton from "../../components/SlidingButton";import CircularProgress from '@mui/material/CircularProgress';
-import { useMediaQuery } from '@mui/material'
 import Empty from "../../components/Empty";
 import ReminderTimePicker from "../AiGoal/ReminderTimePicker";
-import FlagIcon from '@mui/icons-material/Flag';
-import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import SellIcon from '@mui/icons-material/Sell';
 import Circles from '../../../assets/Circles.svg';
-import FormButton from '../../components/FormButton'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'; 
-import ReusableFormModal from '../../components/ReusableFormModal';
-import { Target, Check, ArrowRight, Star, Bell, Calendar, LineChart } from 'lucide-react';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'; 
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 
 
@@ -38,31 +28,23 @@ const Tasks = () => {
   const {tasks, addTask} = useContext(TasksContext); // Use the TasksContext
   const {goals, ai_goals} = useContext(GoalsContext); // Use the GoalsContext
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(dayjs());
-  const [selectedAiCategory, setSelectedAiCategory] = useState('inProgress');
+
   const [selectedCategory, setSelectedCategory] = useState('inProgress');
-  const tasksContainerRef = useRef(null);
+
   const [title, setTitle] = useState('');
-  const aiTasksContainerRef = useRef(null);
+
   const [open, setOpen] = useState(false);
-  const [menuVisible, setMenuVisible] = useState({});
+
   const {removeTask, addTaskToSidebar} = useContext(TasksContext); // Use the TasksContext
-  const [showFilters, setShowFilters] = useState(false);
+  const [dashboardStats, setDashboardStats] = useState(null);
   const [task, setTask] = useState({ title: "", due_date:null, reminder_time: null, priority: "Low", subtasks: [] });
-  const [selectedFile, setSelectedFile] = useState(null); // State for selected file
+
   const [newSubtask, setNewSubtask] = useState('');
   const [showInput, setShowInput] = useState(false);
-  const [selectedSubtask, setSelectedSubtask] = useState(null);
+  
   const [newSubtasks, setNewSubtasks] = useState([]);
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
-  const isSm = useMediaQuery(theme.breakpoints.only("sm"));
-  const isLg = useMediaQuery(theme.breakpoints.only("lg"));
-  const isXl = useMediaQuery(theme.breakpoints.only("xl"));
-  const isMd = useMediaQuery(theme.breakpoints.only("md"));
-  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
-  const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
-  const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [openQuickModal, setOpenQuickModal] = useState(false);
   const [showCustomReminderPicker, setShowCustomReminderPicker] = useState(false);
@@ -99,21 +81,38 @@ const getTaskFilterIcon = (filter) => {
   }
 };
 
-
+// 2. UPDATED useEffect for fetching tasks and stats
   useEffect(() => {
-    if (tasks.length > 0) { // Check if tasks array has items
+    let tasksLoaded = tasks.length > 0;
+    let goalsLoaded = goals.goals && goals.ai_goals;
+
+    if (tasksLoaded || goalsLoaded) {
       setLoading(false);
-      console.log("tasks", tasks);
-      
     }
-    if (tasks.length ===0){
-      console.log("No tasks found");
-    }
-    if (goals.goals && goals.ai_goals) {
-      setLoading(false);
-      console.log("ai goals", goals.ai_goals);
-    }
+    
+    // Fetch dashboard stats regardless of task length to populate the insights column
+    fetchStats(); 
+
+    // console logs remain the same
+    if (tasks.length > 0) { console.log("tasks", tasks); }
+    if (tasks.length === 0) { console.log("No tasks found"); }
+    if (goals.goals && goals.ai_goals) { console.log("ai goals", goals.ai_goals); }
+    
   }, [tasks, goals]);
+
+  // Function to fetch stats
+  const fetchStats = async () => {
+    try {
+      const stats = await fetchDashboardStats();
+      setDashboardStats(stats);
+      // Only mark loading false here if this is the last resource being loaded, 
+      // otherwise, rely on the useEffect above based on tasks/goals.
+    } catch (error) {
+      console.error("Error fetching dashboard stats:", error);
+    }
+  };
+
+
 
 const allTasks = useMemo(() => {
   if (!tasks || !goals?.ai_goals) return [];
@@ -180,68 +179,7 @@ const finalFilteredTasks = filterTasks();
 
 
   
-  
-  
 
-function CircularProgressWithLabel({ value, textColor = '#000000', progressColor = '#4F378A' , size = 40, fontSize = '0.6rem' }) {
-  
-  return (
-    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress
-        variant="determinate"
-        value={value}
-        size={size}
-        sx={{ color: progressColor }}
-      />
-      <Box
-        sx={{
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          position: 'absolute',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography
-          variant="caption"
-          component="div"
-          sx={{ color: textColor, fontSize: fontSize }}
-        >
-          {`${Math.round(value)}%`}
-        </Typography>
-      </Box>
-    </Box>
-  );
-}
-
-
-
-
-
-
-  //Quck add modal for  hourly slot task
- const handleHourClick = (hourLabel) => {
-  // Example: suppose your selected date is stored in `selectedDate`
-  const date = new Date(selectedDate);
-
-  // Convert "1am" or "2pm" into a number
-  let hour = parseInt(hourLabel);
-  if (hourLabel.toLowerCase().includes("pm") && hour !== 12) hour += 12;
-  if (hourLabel.toLowerCase().includes("am") && hour === 12) hour = 0;
-
-  date.setHours(hour, 0, 0, 0); // set time on selected day
-
-  setTask({
-    title: "",
-    reminder_time: null,
-    due_date: date,
-    subtasks: [],
-  });
-  setOpenQuickModal(true);
-};
 
 
  const handleCloseQuickModal = () => setOpenQuickModal(false);
@@ -263,57 +201,7 @@ function CircularProgressWithLabel({ value, textColor = '#000000', progressColor
 };
   
   
-// Filter tasks based on selected date
-  const filteredTasksByDate = tasks.filter((task) => {
-    if (!task.due_date) return false; // Ensure task has a due date
-  
-    const taskDate = new Date(task.due_date).toISOString().split("T")[0]; // Extract "YYYY-MM-DD"
-    const selectedDateFormatted = selectedDate.format("YYYY-MM-DD"); // Ensure consistency
-  
-    return taskDate === selectedDateFormatted;
-  });
-  
-  // Filter tasks based on selected date
-  const hours = Array.from({ length: 24 }, (_, i) => {
-  const suffix = i < 12 ? "am" : "pm";
-  const hour = i % 12 === 0 ? 12 : i % 12;
-  return `${hour}${suffix}`;
-});
 
-const renderTaskBlock = (hour) => {
-  const tasksThisHour = filteredTasksByDate.filter((task) => {
-    const taskHour = new Date(task.due_date).getHours();
-    return taskHour === hour;
-  });
-
-  const taskCount = tasksThisHour.length;
-
-  return tasksThisHour.map((task, index) => {
-    const taskTime = new Date(task.due_date);
-
-    const height = 100 / taskCount;       // each task gets equal slice
-    const topOffset = index * height;     // stack them one after another
-
-      return (
-        <div
-          key={index}
-          className="absolute   left-[0px] right-4 bg-[#6246AC] text-white  px-2 py-1 rounded shadow"
-          style={{
-            top: `${topOffset}%`,
-            height: "50px", // You can adjust or make this dynamic if needed
-          }}
-        >
-          <div className="text-s"> {task.title} </div>
-          <div className="mt-1 text-xs">
-           {taskTime.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-          })} </div>
-        </div>
-      );
-    });
-};
 
 
 
@@ -364,38 +252,9 @@ const renderTaskBlock = (hour) => {
     };
 
 
-  
-  /*const toggleTaskMenu = (taskId) => {
-    console.log(`Toggled task menu for task ID: ${taskId}`);
-      setMenuVisible(prev => ({
-        [taskId]: !prev[taskId],
-        
-      }
-    ));
-    console.log("menuVisible");
-    };*/
 
-    const toggleTaskMenu = (taskId) => {
-      setMenuVisible((prev) => ({
-        ...prev,
-        [taskId]: !prev[taskId]
-      }));
-    };
 
-    //Delete task
-       const handleDeleteTask = async (taskId) => {
-         try {
-           await deleteTaskById(taskId);
-           removeTask(taskId); // if task is stored in local state
-           alert("Task deleted successfully!");
-       
-         } catch (error) {
-           console.error("Error deleting task:", error);
-           alert("Failed to delete task.");
-         }
-       };
 
-       //change in task properties
   
     const handleDueDateChange = (date) => {
       setTask((prev) => ({
@@ -755,36 +614,7 @@ if (!loading && tasks.length === 0) {
          
         </div>
 
-        {/* Floating Label Input - Reminder 
-        <div className="relative mb-6">
-          <div className="flex items-center gap-2">
-            <FaClock className="text-gray-500" />
-            <div className="relative w-full">
-              <DatePicker
-                id="reminder-time"
-                selected={
-                  task.reminder_time
-                    ? new Date(`1970-01-01T${task.reminder_time}`)
-                    : null
-                }
-                onChange={handleReminderTimeChange}
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={15}
-                timeCaption="Time"
-                dateFormat="HH:mm:ss"
-                placeholderText="Reminder"
-                className="peer w-full border border-gray-300 rounded-md px-3 pt-5 pb-2 text-sm text-gray-900 placeholder-transparent focus:outline-none focus:border-[#6F2DA8]"
-              />
-              <label
-                htmlFor="reminder-time"
-                className="absolute left-3 top-2 text-gray-500 text-xs transition-all duration-200 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:text-xs peer-focus:text-[#6F2DA8] peer-focus:top-2"
-              >
-                Reminder
-              </label>
-            </div>
-          </div>
-        </div>  */}
+   
 
         <div className="flex gap-7 mt-4">
             <div className="flex items-center space-x-2">
@@ -977,22 +807,13 @@ if (!loading && tasks.length === 0) {
           </div>
         ) : (
           <>
-            {/* Left Scroll Button (Hidden on XS/SM screens where swiping is preferred, but kept for desktop UX) */}
-         {/* {   <button
-              onClick={() => scrollGoals('left')}
-              className='absolute cursor-pointer left-0 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-10 hidden md:flex'
-              style={{ backgroundColor: colors.tag.primary }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>} */}
+        
 
             {/* Scrollable Goals Container */}
             <div 
           
               // Adjust padding/margin for scroll buttons on desktop, or full width on mobile
-              className='flex gap-4 overflow-x-auto no-scrollbar w-full md:w-full md:mx-auto'
+              className='flex gap-2 overflow-x-auto no-scrollbar w-full md:w-full md:mx-auto'
             >
               {finalFilteredTasks.map((t) => (
                 // Use the pre-calculated linkPath
@@ -1029,16 +850,6 @@ if (!loading && tasks.length === 0) {
               ))}
             </div>
 
-            {/* Right Scroll Button (Hidden on XS/SM screens where swiping is preferred, but kept for desktop UX) */}
-           {/* { <button
-              onClick={() => scrollGoals('right')}
-              className='absolute cursor-pointer right-0 top-1/2 transform -translate-y-1/2 w-10 h-10 p-2 rounded-full flex items-center justify-center z-10 hidden md:flex'
-              style={{ backgroundColor: colors.tag.primary }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>} */}
           </>
         )}
       </div>
@@ -1069,43 +880,127 @@ if (!loading && tasks.length === 0) {
 
       
 </div> 
+{/* 🚀 AI TASK COACH INSIGHTS (RIGHT COLUMN) 🚀 */}
+{/* 🚀 AI TASK COACH INSIGHTS (RIGHT COLUMN) 🚀 */}
+<Box
+  className="mt-4 md:col-span-5 col-span-12 md:ml-4 ml-0 rounded-2xl p-6"
+  sx={{
+    backgroundColor: colors.background.paper,
+    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+  }}
+>
 
-<Box className='hidden md:block mt-4 sm:col-span-5 space-y-4 mx-4 rounded-2xl  p-6'sx={{backgroundColor:colors.background.paper}}>
+  {dashboardStats ? (
+    <Stack spacing={4}>
+      {/* === 1. TODAY'S FOCUS === */}
+      <Box>
+        <Typography
+          variant="subtitle1"
+          fontWeight="bold"
+          display="flex"
+          alignItems="center"
+          gap={1}
+          sx={{ color: colors.text.secondary }}
+        >
+        
+          Today's Productivity
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{ color: colors.text.primary, mt: 1 }}
+        >
+          <span style={{ color: "#10D3F1", fontWeight: "bold", fontSize: "1.1rem" }}>
+            {dashboardStats.tasks_completed_today.count + dashboardStats.ai_tasks_completed_today.count}
+          </span>{" "}
+          Tasks Finished Today!
+        </Typography>
+        {dashboardStats.ai_tasks_completed_week.count > 0 && (
+          <Typography
+            variant="body2"
+            sx={{ color: colors.text.secondary, mt: 0.5 }}
+          >
+            ✅ Weekly Win: Completed "{dashboardStats.ai_tasks_completed_week.titles[0]}" this week.
+          </Typography>
+        )}
+      </Box>
 
-      {/* Calendar Component */}
-      <div className="calendar">
-      <CalendarComponent onDateChange={setSelectedDate} />
-      </div>
+      {/* === 2. COMMITMENT GAPS === */}
+      <Box>
+        <Typography
+          variant="subtitle1"
+          fontWeight="bold"
+          display="flex"
+          alignItems="center"
+          gap={1}
+          sx={{ color: colors.text.secondary }}
+        >
+          <WarningAmberIcon fontSize="small" sx={{ color: colors.background.warning }} />
+          Commitment Gaps
+        </Typography>
+        <Stack spacing={1} mt={1}>
+          {dashboardStats.least_tags.length > 0 ? (
+            dashboardStats.least_tags.map(([tag, count]) => (
+              <Box key={tag} sx={{ p: 1, borderRadius: 2, backgroundColor: colors.background.default }}>
+                <Typography variant="body2" sx={{ color: colors.text.primary, fontWeight: "bold" }}>
+                  🚨 {tag}: {count} overdue task(s)
+                </Typography>
+                <Typography variant="caption" sx={{ color: colors.background.warning }}>
+                  Nudge: This area is suffering from procrastination. Break down the oldest task now.
+                </Typography>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body2" sx={{ color: "#10D3F1" }}>
+              Great job! No overdue tasks detected.
+            </Typography>
+          )}
+        </Stack>
+      </Box>
 
-      {/* Task List */}
-      <h3 className="text-lg font-medium pl-2 mt-10 text-gray-800" style={{
-                  color: colors.text.primary,
-                }}>
-          Tasks for {selectedDate.format("YYYY-MM-DD")}
-        </h3>
-      <div className="mt-4  rounded-xl bg-black  p-4 h-[250px] overflow-y-auto border" style={{ backgroundColor: colors.background.default }}>
-        {hours.map((hourLabel, hourIndex) => (
-  <div
-    key={hourIndex}
-    className="border-t border-gray-300 h-16 relative pl-4 text-sm text-gray-600"
-  >
-    <div className="absolute left-0 top-0">
-      <button onClick={() => handleHourClick(hourLabel)}>{hourLabel}
-        </button>
-      </div>
-    <div className="ml-10 h-auto text-xs  relative">
-      {renderTaskBlock(hourIndex)}
-    </div>
-  </div>
-))}
+      {/* === 3. EFFORT & FOCUS SUMMARY === */}
+      <Box>
+        <Typography
+          variant="subtitle1"
+          fontWeight="bold"
+          display="flex"
+          alignItems="center"
+          gap={1}
+          sx={{ color: colors.text.secondary }}
+        >
+          <TrendingUpIcon fontSize="small" sx={{ color: "#20A0E6" }} />
+          Effort & Success Map
+        </Typography>
+        <Stack spacing={1} mt={1}>
+          {dashboardStats.popular_tags.length > 0 && (
+            <Box sx={{ p: 1, borderRadius: 2, backgroundColor: colors.background.default }}>
+              <Typography variant="body2" sx={{ color: colors.text.primary }}>
+                ✨ Current Focus: {dashboardStats.popular_tags[0][0]} ({dashboardStats.popular_tags[0][1]} recent activities)
+              </Typography>
+              <Typography variant="caption" sx={{ color: colors.text.secondary }}>
+                Your energy is here. Ensure this focus supports your main goals.
+              </Typography>
+            </Box>
+          )}
+          {dashboardStats.top_tags.length > 0 && (
+            <Box sx={{ p: 1, borderRadius: 2, backgroundColor: colors.background.default }}>
+              <Typography variant="body2" sx={{ color: colors.text.primary }}>
+                🏆 Proven Success: {dashboardStats.top_tags[0][0]} (Completed {dashboardStats.top_tags[0][1]} tasks)
+              </Typography>
+              <Typography variant="caption" sx={{ color: colors.text.secondary }}>
+                Leverage this momentum. Apply successful strategies here to your Commitment Gaps.
+              </Typography>
+            </Box>
+          )}
+        </Stack>
+      </Box>
+    </Stack>
+  ) : (
+    <Box className="w-full flex justify-center items-center h-full min-h-[150px]">
+      <CircularProgress size={28} sx={{ color: colors.primary[500] }} />
+    </Box>
+  )}
+</Box>
 
-    </div>
-    
-
-
-
-  
-  </Box>   
 </div>
     
   );

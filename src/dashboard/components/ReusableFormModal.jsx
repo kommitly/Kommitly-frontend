@@ -9,6 +9,7 @@ const ReusableFormModal = ({
   onChange,
   onSubmit,
   colors,
+  children,   
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
@@ -47,11 +48,13 @@ const ReusableFormModal = ({
               onChange={onChange}
               margin="normal"
               InputLabelProps={
-                field.type === "datetime-local" ? { shrink: true } : {}
-              }
+              (field.type === "date" || field.type === "time") ? { shrink: true } : {}
+            }
             />
           )
         )}
+
+        {children}
 
         <div className="flex justify-end gap-4 mt-4">
           <Button onClick={onClose} variant="outlined">

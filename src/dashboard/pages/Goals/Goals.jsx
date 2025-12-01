@@ -846,7 +846,7 @@ useEffect(() => {
             <div 
               ref={goalsContainerRef} 
               // Adjust padding/margin for scroll buttons on desktop, or full width on mobile
-              className='flex gap-4 overflow-x-auto no-scrollbar w-full md:w-full md:mx-auto'
+              className='flex gap-2 overflow-x-auto no-scrollbar w-full md:w-full md:mx-auto'
             >
               {finalFilteredGoals.map((goal) => (
                 // Use the pre-calculated linkPath

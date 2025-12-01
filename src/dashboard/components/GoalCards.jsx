@@ -24,7 +24,7 @@ const GoalCards = () => {
 
     return (
         <div className="md:mt-4 mt-8 mb-8 md:mb-0 flex  flex-col gap-4">
-            <div className='w-full h-24 flex gap-4'>
+            <div className='w-full h-24 flex gap-2'>
                 <div 
                     className="w-4/12  flex flex-col justify-center items-center rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
                     style={{ backgroundColor: colors.primary[200] }}
@@ -36,7 +36,7 @@ const GoalCards = () => {
                     className="w-4/12 flex flex-col justify-center items-center rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
                     style={{ backgroundColor: colors.primary[300] }}
                 >
-                    <span className="text-2xl mt-4">{stats.longest_streak} 🏆</span>
+                    <span className="text-2xl  mt-4">{stats.longest_streak} 🏆</span>
                     <span className='w-full mt-2 flex justify-center items-center'>
      <Typography variant="body2"  sx={{color: "#fff"}}>
                     Longest Streak

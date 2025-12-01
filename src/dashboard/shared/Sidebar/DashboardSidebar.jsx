@@ -680,49 +680,6 @@ sx={{
                      
                        
 
-                       {((goals?.goals?.length > 0 || goals?.ai_goals?.length > 0 || tasks?.length > 0)) && (
-  <MenuItem 
-    title="Stats"
-    onClick={() => {
-      navigate("/dashboard/analytics");
-      setSelected("Stats");
-      if (!isCollapsed) setIsCollapsed(true);
-    }}
-    icon={
-      selected === "Stats" ? (
-        <LeaderboardIcon
-          sx={{
-            fontSize: {
-              xs: "1.5rem",
-              sm: "1.5rem",
-              md: "1.5rem",
-              lg: "1.5rem",
-              xl: "2rem",
-              xxl: "1.5rem",
-            },
-          }}
-        />
-      ) : (
-        <LeaderboardOutlinedIcon
-          sx={{
-            fontSize: {
-              xs: "1.5rem",
-              sm: "1.5rem",
-              md: "1.5rem",
-              lg: "1.5rem",
-              xl: "2rem",
-              xxl: "1.5rem",
-            },
-          }}
-        />
-      )
-    }
-    active={selected === "Stats"}
-  >
-    Stats
-  </MenuItem>
-)}
-
                     
                        
                   

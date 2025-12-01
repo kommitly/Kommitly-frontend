@@ -53,8 +53,8 @@ const Empty = () => {
 </g>
 <path d="M468.421 366.606C462.557 366.584 457.512 365.14 453.284 362.277C449.08 359.413 445.841 355.265 443.569 349.834C441.319 344.402 440.205 337.868 440.228 330.231C440.228 322.618 441.353 316.129 443.603 310.765C445.875 305.402 449.114 301.322 453.319 298.527C457.546 295.709 462.58 294.3 468.421 294.3C474.262 294.3 479.284 295.709 483.489 298.527C487.716 301.345 490.966 305.436 493.239 310.8C495.512 316.14 496.637 322.618 496.614 330.231C496.614 337.89 495.478 344.436 493.205 349.868C490.955 355.3 487.728 359.447 483.523 362.311C479.319 365.175 474.284 366.606 468.421 366.606ZM468.421 354.368C472.421 354.368 475.614 352.356 478 348.334C480.387 344.311 481.569 338.277 481.546 330.231C481.546 324.936 481 320.527 479.909 317.004C478.841 313.481 477.319 310.834 475.341 309.061C473.387 307.288 471.08 306.402 468.421 306.402C464.444 306.402 461.262 308.39 458.875 312.368C456.489 316.345 455.284 322.3 455.262 330.231C455.262 335.595 455.796 340.072 456.864 343.663C457.955 347.231 459.489 349.913 461.466 351.709C463.444 353.481 465.762 354.368 468.421 354.368Z" fill="white"/>
 <defs>
-<filter id="filter0_d_871_9458" x="103.066" y="36.8555" width="344.543" height="387.979" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<filter id="filter0_d_871_9458" x="103.066" y="36.8555" width="344.543" height="387.979" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+<feFlood floodOpacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
 <feGaussianBlur stdDeviation="2"/>
@@ -63,8 +63,8 @@ const Empty = () => {
 <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_871_9458"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_871_9458" result="shape"/>
 </filter>
-<filter id="filter1_d_871_9458" x="138.383" y="45.0723" width="331.004" height="368.998" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<filter id="filter1_d_871_9458" x="138.383" y="45.0723" width="331.004" height="368.998" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+<feFlood floodOpacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dx="-8" dy="4"/>
 <feGaussianBlur stdDeviation="2"/>
@@ -73,8 +73,8 @@ const Empty = () => {
 <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_871_9458"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_871_9458" result="shape"/>
 </filter>
-<filter id="filter2_d_871_9458" x="388.387" y="255.072" width="158" height="158" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<filter id="filter2_d_871_9458" x="388.387" y="255.072" width="158" height="158" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+<feFlood floodOpacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
 <feGaussianBlur stdDeviation="2"/>
