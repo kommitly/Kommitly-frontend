@@ -14,11 +14,15 @@ const DashboardContent = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
-
+  const isLg = useMediaQuery(theme.breakpoints.only("lg"));
+  const isMd = useMediaQuery(theme.breakpoints.only("md"));
+  const isSm = useMediaQuery(theme.breakpoints.only("sm"));
   const isXl = useMediaQuery(theme.breakpoints.only("xl"));
+  const isXxl = useMediaQuery(theme.breakpoints.only("xxl"));
+  const isXxxl = useMediaQuery(theme.breakpoints.only("xxxl"));
 
   return (
-    <div className="flex h-screen relative w-full">
+    <div className="flex h-screen  relative w-full">
       {/* Backdrop for mobile when sidebar is expanded */}
       {isMobile && !isCollapsed && (
         <Backdrop
@@ -33,8 +37,11 @@ const DashboardContent = () => {
       )}
 
       {/* Sidebar */}
-      <DashboardSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+  
+       <DashboardSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+       
 
+  
       {/* Main content */}
       <main
         className="w-full no-scrollbar"
@@ -43,10 +50,25 @@ const DashboardContent = () => {
             ? isCollapsed
               ? isXl
                 ? "60px"
+                : isXxxl
+              ? "70px"
+              : isXxl
+              ? "50px"
                 : "20px"
+
               : isXl
+              ? "100px"
+              : isXxxl
+              ? "210px"
+              : isXxl
+              ? "100px"
+              : isMd
+              ? "0px"
+              : isSm
               ? "60px"
-              : "10px"
+               : isLg
+              ? "0px"
+              : "80px"
             : "0px",
           position: isMobile ? "fixed" : "relative",
           height: isMobile ? "100vh" : "auto",
@@ -54,7 +76,7 @@ const DashboardContent = () => {
         }}
       >
         {/* Navbar */}
-        <div className="relative mt-2 z-50 w-full">
+        <div className="relative mt-2 z-50 w-full" >
           <Navbar setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />
         </div>
 

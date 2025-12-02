@@ -549,7 +549,7 @@ const selectedDayEvents = React.useMemo(() => {
 
 
     return (
-        <div className="m-[20px] pt-4">
+        <div className=" m-[20px] pt-4">
              <div className="mb-[30px]  w-full justify-between flex">
                         <Typography 
                         variant="h3" 

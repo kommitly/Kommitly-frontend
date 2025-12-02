@@ -691,7 +691,7 @@ useEffect(() => {
     
     ) : (
       <>
-     <div className='w-full sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full p-4 grid gap-1 grid-cols-12  sm:grid-cols-12 justify-center  flex min-h-screen'>
+     <div className='w-full   sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full p-4 grid gap-1 grid-cols-12  sm:grid-cols-12 justify-center  flex min-h-screen'>
        
 
          <ReusableFormModal
@@ -719,7 +719,7 @@ useEffect(() => {
 
         
 
-      <div className="md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0">
+      <div className="md:flex  flex-col md:col-span-7 col-span-12  md:p-0 p-0">
        
         <Box className='w-full relative mb-4  container md:h-46 xl:h-50 2xl:h-64  h-42 flex items-center justify-between rounded-4xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
         sx={{backgroundColor: "#4F378A", boxShadow: "0px 0px 6px rgba(79, 55, 138, 0.7)"}}

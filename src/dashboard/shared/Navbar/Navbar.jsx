@@ -201,7 +201,8 @@ export const Navbar = () => {
 
   
   return (
-  <div className={`fixed top-0   ${isCollapsed ? 'md:left-28 xs:left-0 lg:left-24 xl:left-24  2xl:left-38' : 'md:left-58 lg:left-62 xl:left-62 2xl:left-80 '}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
+    <div className={`relative  ${isCollapsed ?  ' w-11/12' : 'w-10/12' }`}>
+       <div className={`fixed top-0   ${isCollapsed ? 'md:left-28 xs:left-0 lg:left-24 xl:left-24  2xl:left-38' : 'md:left-58 lg:left-62 xl:left-62 2xl:left-80  left-50'}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: {
       xs: isCollapsed ? 1 : 8,
@@ -238,7 +239,7 @@ export const Navbar = () => {
                     <p
                  
                   style={{ color: colors.text.primary }}
-                  className=' font-regular mb-0 md:text-base text-lg 2xl:text-3xl lg:text-lg xl:text-xl'
+                  className=' font-regular mb-0 md:text-base text-lg 2xl:text-xl lg:text-lg xl:text-xl'
                 >
                 Hello
       
@@ -249,7 +250,7 @@ export const Navbar = () => {
               <span className='text-secondary'>
               <p
                   style={{ color: colors.primary[500] }}
-                  className='font-regular mb-0 text-lg 2xl:text-3xl md:text-base lg:text-lg xl:text-xl'
+                  className='font-regular mb-0 text-lg 2xl:text-xl md:text-base lg:text-lg xl:text-xl'
                 >
                  {user.user.first_name}
       
@@ -258,7 +259,7 @@ export const Navbar = () => {
              
       
               </span>
-              <span role="img" aria-label="waving hand" className='ml-2 text-lg 2xl:text-3xl xl:text-base md:text-base lg:text-lg'>
+              <span role="img" aria-label="waving hand" className='ml-2 text-lg 2xl:text-xl xl:text-base md:text-base lg:text-lg'>
             👋
               </span>
           
@@ -537,6 +538,9 @@ export const Navbar = () => {
        
     </Box>
     </div>
+
+    </div>
+ 
         
   )
 }
