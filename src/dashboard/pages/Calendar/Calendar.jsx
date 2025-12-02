@@ -571,19 +571,9 @@ const selectedDayEvents = React.useMemo(() => {
                 </div>
             <div className="flex flex-col md:flex-row justify-between gap-4">
                
-                  <Backdrop
-                        sx={(theme) => ({ color: colors.menu.primary, zIndex: theme.zIndex.drawer + 1 })}
-                        open={open}
-                        onClick={handleClose}
-                      >
-                        <div className=" md:w-4/12 w-11/12 h-auto p-6 rounded-lg shadow-lg text-center"
-                        style={{backgroundColor: colors.menu.primary,}}
-                        onClick={(e) => e.stopPropagation()} // ⬅ stop the click from closing 
-                        >
+                 
                        
                       
- 
-// In Calender.jsx, where you render ReusableFormModal
 
 <ReusableFormModal
   open={open}
@@ -647,9 +637,7 @@ const selectedDayEvents = React.useMemo(() => {
 
 
                             
-                            </div>
                     
-                    </Backdrop>
                      <Snackbar
                       open={openSnackbar}
                       autoHideDuration={3000}

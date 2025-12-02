@@ -906,7 +906,7 @@ if (!loading && tasks.length === 0) {
 {/* 🚀 AI TASK COACH INSIGHTS (RIGHT COLUMN) 🚀 */}
 {/* 🚀 AI TASK COACH INSIGHTS (RIGHT COLUMN) 🚀 */}
 <Box
-  className="mt-4 md:col-span-5 col-span-12 md:ml-4 ml-0 rounded-2xl p-6"
+  className="mt-4 md:col-span-5 md:h-[86vh] h-auto col-span-12 md:ml-4 ml-0 rounded-2xl p-6"
   sx={{
     backgroundColor: colors.background.paper,
     boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
@@ -914,7 +914,7 @@ if (!loading && tasks.length === 0) {
 >
 
   {dashboardStats ? (
-    <Stack spacing={4}>
+    <Stack spacing={2}>
       {/* === 1. TODAY'S FOCUS === */}
       <Box>
         <Typography
@@ -950,6 +950,7 @@ if (!loading && tasks.length === 0) {
           </Typography>
         )}
       </Box>
+      
 
       {/* === 2. COMMITMENT GAPS === */}
       <Box>

@@ -271,7 +271,7 @@ const handleChange = (field, value) => {
               open={open}
               onClick={handleClose}
             >
-              <div className="md:w-8/12 w-11/12 h-10/12 md:h-auto md:ml-18  p-6 rounded-lg shadow-lg text-center" onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
+              <div className="md:w-8/12 w-11/12 h-11/12 md:h-auto md:ml-18  p-6 rounded-lg shadow-lg text-center" onClick={(e) => e.stopPropagation()} style={{backgroundColor: colors.menu.primary}} >
             
                     <div className="w-full -mt-4" style={{color: colors.text.primary}}>
                      <SlidingButton2
@@ -699,13 +699,7 @@ const handleChange = (field, value) => {
 
 
        <div className="flex gap-4 mt-8 w-full">
-         <button
-          type="submit"
-          className=" w-1/2 py-1 mt-4  text-white rounded-lg"
-          style={{backgroundColor: colors.primary[500]}}
-        >
-          Add
-        </button>
+        
          <button
         
          onClick={handleClose}
@@ -720,6 +714,13 @@ const handleChange = (field, value) => {
         }}
         >
           Close
+        </button>
+         <button
+          type="submit"
+          className=" w-1/2 py-1 mt-4  text-white rounded-lg"
+          style={{backgroundColor: colors.primary[500]}}
+        >
+          Add
         </button>
        </div>
       </form>

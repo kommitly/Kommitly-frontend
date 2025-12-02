@@ -57,10 +57,11 @@ const ReusableFormModal = ({
         {children}
 
         <div className="flex justify-end gap-4 mt-4">
-          <Button onClick={onClose} variant="outlined">
+          <Button onClick={onClose} variant="outlined" sx={{textTransform: "none"}}
+          >
             Cancel
           </Button>
-          <Button onClick={onSubmit} variant="contained" color="primary">
+          <Button onClick={onSubmit} variant="contained" color="primary" sx={{textTransform: "none"}}>
             Submit
           </Button>
         </div>
