@@ -14,7 +14,7 @@ import { Box,  IconButton, Typography, useTheme, Divider } from "@mui/material";
 import { tokens } from "../../../theme";
 import Button from "../../components/Button";
 import { useSidebar } from '../../../context/SidebarContext';
-
+import ReusableFormModal from '../../components/ReusableFormModal';
 
 
 export default function DailyTemplatesPage() {
@@ -30,6 +30,15 @@ export default function DailyTemplatesPage() {
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+     
+       title: "",
+       description: "",
+     
+     });
+   const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
 
   useEffect(() => {
@@ -55,27 +64,34 @@ const loadSuggestions = async () => {
   }
 };
 
-  const addTemplate = async () => {
-    // Only require the name field
-    if (!newTemplate.trim()) {
-        alert("Template name cannot be empty."); // Optional user feedback
-        return;
-    }
 
-    
-    const template_data = { 
-        name: newTemplate.trim(),
-        description: newDescription.trim() // Send the description
-    };
+const addTemplate = async () => {
 
-    // 2. Call the API
-    const template = await createDailyTemplates(template_data);
-    
-    // 3. Update local state and clear inputs
-    setTemplates([...templates, template]);
-    setNewTemplate("");
-    setNewDescription(""); // <-- CLEAR THE NEW DESCRIPTION STATE
+  if (!formData.title.trim()) {
+    alert("Template name cannot be empty.");
+    return;
+  }
+
+  const template_data = {
+    name: formData.title.trim(),
+    description: formData.description.trim(),
+  };
+
+  const template = await createDailyTemplates(template_data);
+
+  setTemplates([...templates, template]);
+
+  // reset form
+  setFormData({
+    title: "",
+    description: "",
+  });
 };
+
+  
+
+
+
   const deleteTemplate = async (id) => {
     await deleteTemplatesById(id);
     setTemplates(templates.filter((t) => t.id !== id));
@@ -153,92 +169,27 @@ const loadSuggestions = async () => {
       
                         </div>
 
-      <Backdrop
-          sx={(theme) => ({  zIndex: theme.zIndex.drawer + 1 })}
-          open={open}// Use open state for backdrop
-          onClick={handleClose} // Clicking outside should close it
-        >
-           <div 
-            className=" md:w-4/12 w-11/12 rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.menu.primary }} 
-            onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
-          >
-             {/* Add new template */}
-      <div className="flex  flex-col  mb-2">
-         <div className='flex px-6 mt-4  w-full  justify-end'>
-                    <div className='flex  w-full items-center justify-between'>
-                    <h1 className='text-xl font-semibold  flex items-center justify-center gap-2' style={{ color: colors.text.secondary }}>
-                      New Template
-                    </h1>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke={colors.text.primary}
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="cursor-pointer"
-                      onClick={handleClose}
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>  
-                    
-        
-        
-        
-                    </div>
-        
-                    </div>
-                    <div className='mt-4'>
-                                      <Divider orientation="horizontal" sx={{ borderColor: "#00000", opacity: 0.8 }} />
-                                    </div>
-                    
-        <div  className="flex px-6  mt-4 flex-col w-full   gap-4">
-            <p className='text-sm text-start  ' style={{color:colors.text.primary}}>Title</p>
-        <input
-          value={newTemplate}
-          onChange={(e) => setNewTemplate(e.target.value)}
-          placeholder="New template name..."
-          className="flex-1 border rounded px-2 py-1"
-        />
-        </div>
-
-         <div className="flex p-6  flex-col w-full   gap-4">
-        <p className='text-sm text-start  ' style={{color:colors.text.primary}}>Description</p>
      
 
-
-        <input 
-        value={newDescription}
-        onChange={(e) => setNewDescription(e.target.value)}
-        placeholder="Template description (optional)..."
-        className="flex-1 border rounded px-2 py-1 mb-2" // Added mb-2 for spacing
-      />
-      </div>
-       <div className="w-full mb-8  px-6">
-         <button
-          onClick={() => {
-        // Prevent modal background handler from firing
-        addTemplate();       // Execute the template creation
-        handleClose();
-    }}
-          className="mt-8 w-full py-2 text-white rounded-lg cursor-pointer hover:opacity-70"
-  style={{ backgroundColor: colors.primary[500] }}
-        >
-          Add Template
-        </button>
-       </div>
-      </div>
+        <ReusableFormModal
+  open={open}
+  onClose={handleClose}
+  title="New Template"
+  colors={colors}
+  formData={formData}
+  onChange={handleChange}
+  onSubmit={() => {
+    addTemplate();
+    handleClose();
+  }}
+  fields={[
+    { name: "title", label: "Title" },
+    { name: "description", label: "Description" },
+  ]}
+/>
 
 
 
-          </div>
-        
-
-      </Backdrop>
 
      
       {/* Templates list */}

@@ -12,6 +12,7 @@ import {
 } from "../../../utils/Api"; 
 import Modal from '@mui/material/Modal';
 import ActivityForm from "./ActivityForm";
+import CustomButton from '../../components/Button';
 import { useTheme, Backdrop, Box, Button } from "@mui/material";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -145,7 +146,7 @@ const handleSaveSuggestedTemplate = async (templateData) => {
   return (
     <div className=" p-4 ">
       <div className="w-full flex justify-between">
-     <div className=" w-full md:mb-8 mb-4  flex flex-col ">
+     <div className=" w-full md:mb-8 mb-0  flex flex-col ">
          <h2 className="text-xl font-medium space-x-2">
         
 
@@ -260,13 +261,29 @@ const handleSaveSuggestedTemplate = async (templateData) => {
       {/* Add Activity Button (mobile) */}
         {!isSuggested && (
           <div className="w-full flex p-2 justify-end">
-            <button
+            <CustomButton
               onClick={() => setShowForm(true)}
-              className="md:hidden text-white px-3 py-1 rounded"
-              style={{ backgroundColor: colors.primary[500] }}
+              className="md:hidden "
+              text="Add Activity"
+             
             >
-              + Add Activity
-            </button>
+             <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="#6246AC"
+                stroke="#FFFFFF"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+             
+                style={{ stroke: '#FFFFFF' }} // Inline style to ensure white stroke
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </CustomButton>
           </div>
         )}
 
