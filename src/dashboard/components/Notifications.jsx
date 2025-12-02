@@ -37,7 +37,7 @@ const Notifications = ({ notifications, setNotifications }) => {
 
   return (
     <div
-      className="max-h-96 overflow-y-auto no-scrollbar shadow-lg rounded-lg"
+      className="max-h-96 p-2 overflow-y-auto no-scrollbar shadow-lg rounded-lg"
       style={{ backgroundColor: colors.menu.primary }}
     >
       <h3
@@ -65,11 +65,11 @@ const Notifications = ({ notifications, setNotifications }) => {
           <React.Fragment key={notif.id}>
             <Box
               onClick={() => handleNotificationClick(notif, idx)}
-              className="py-3 mb-2 cursor-pointer transition duration-150"
+              className="py-3 mb-2 mt-2  rounded-lg cursor-pointer transition duration-150"
               sx={{
                 backgroundColor: notif.is_read
                   ? colors.menu.primary
-                  : colors.background.default,
+                  : colors.menu.notifications,
                 '&:hover': {
                   backgroundColor: colors.background.paper,
                 },
@@ -99,7 +99,10 @@ const Notifications = ({ notifications, setNotifications }) => {
                 </span>
               </div>
             </Box>
-            {idx !== notifications.length - 1 && <Divider />}
+            {idx !== notifications.length - 1 && <span  >
+              <Divider />
+
+            </span> }
           </React.Fragment>
         ))
       ) : (

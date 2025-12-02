@@ -95,9 +95,9 @@ export default function DailyActivityHistory() {
     <div className="p-4">
      
         <Typography 
-                              variant="h2" 
+                              variant="h5" 
                               color={colors.text.primary} 
-                              fontWeight="bold" 
+                              fontWeight="semibold" 
                               marginBottom={4}
                               
                               >   Activity Completion Heatmap</Typography>

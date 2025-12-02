@@ -22,7 +22,10 @@ import { FaTrashAlt } from "react-icons/fa";
 import { TbSubtask } from "react-icons/tb";
 import { TbCheck } from "react-icons/tb";
 import { TbListDetails } from "react-icons/tb"; // or TbListCheck
-
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 
@@ -383,7 +386,7 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
 
 
       <div 
-      className="max-w-xl ml-1 p-2 ">
+      className="w-full ml-1 p-2 ">
 
     {/* <TaskItem
     task={task}
@@ -404,33 +407,38 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
   />*/}
 
   <div className="w-full  flex-col flex-wrap  ">
-  <div className=" w-full gap-4 ">
-        <div className="flex items-center  space-x-2">
-          {/* Description Icon */}
-           <span className='bg-[#D6CFFF] p-2 rounded-md'>
-                                      <FaTasks className="text-[#4F378A] " size={12} />
-                                    </span>
-          {/* Label */}
-          <label htmlFor="description" className="text-gray-700 font-semibold">
-            Description
-          </label>
-          </div>
-          {/* Description Input */}
-        
-        <div className="w-full flex pl-9  flex-wrap  ">
-        <textarea
-        name="description"
-        className="mt-1 w-full flex flex-wrap outline-none focus:ring-0 focus:outline-none placeholder:text-xm"
-        value={task.description || ''} 
-        placeholder="Enter task description..."
-        onChange={handleChange}
-        />
-        
+  <Accordion sx={{ boxShadow: "none", borderRadius: "8px", width: "100%", backgroundColor: colors.primary[100],   // ← remove bg
+    "&::before": { display: "none" },  }}>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <p className="font-regular ">Task Details</p>
+    </AccordionSummary>
+
+    <AccordionDetails>
+
+      {/* DESCRIPTION */}
+      <div className="w-full gap-4">
+        <div className="flex items-center space-x-2">
+          <span className="bg-[#D6CFFF] p-2 rounded-md">
+            <FaTasks className="text-[#4F378A]" size={12} />
+          </span>
+          <label className="text-gray-700 font-semibold">Description</label>
         </div>
+
+        <div className="w-full flex pl-9">
+          <textarea
+            name="description"
+            className="mt-1 w-full outline-none focus:ring-0 placeholder:text-sm"
+            value={task.description || ""}
+            placeholder="Enter task description..."
+            onChange={handleChange}
+          />
         </div>
-       <div className="w-full  mt-4 flex gap-16 items-center">
-        <div className="flex items-center  space-x-2">
-         <span className= 'bg-[#D6CFFF] p-2 rounded-md'> 
+      </div>
+
+      {/* STATUS */}
+      <div className="w-full mt-4 flex gap-16 items-center">
+        <div className="flex items-center space-x-2">
+          <span className="bg-[#D6CFFF] p-2 rounded-md">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={12}
@@ -445,66 +453,47 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
               <circle cx="12" cy="12" r="10" />
               <path d="M9 12l2 2l4-4" />
             </svg>
-            </span>
-          {/* Label */}
-          
-          <p className="font-semibold">
-            Status:
-          </p>
-          </div>
-         <div className="mt-2">
-  <select
-    value={
-      task.subtasks && task.subtasks.length > 0
-        ? task.subtasks.every((sub) => sub.status === 'completed')
-          ? 'completed'
-          : 'pending'
-        : task.status
-    }
-    onChange={(e) => setTask((prev) => ({ ...prev, status: e.target.value }))}
-    disabled={task.subtasks && task.subtasks.length > 0} // disable if there are subtasks
-    className="p-2 rounded-md"
-    style={{ backgroundColor: colors.background.paper, color: colors.text.secondary }}
-  >
-    <option value="pending">Pending</option>
-    <option value="completed">Completed</option>
-  </select>
-</div>
+          </span>
+          <p className="font-semibold">Status:</p>
+        </div>
 
-    </div>
-  
-  <div className="mt-4 flex gap-4">
+        <select
+          value={
+            task.subtasks?.length > 0
+              ? task.subtasks.every((s) => s.status === "completed")
+                ? "completed"
+                : "pending"
+              : task.status
+          }
+          onChange={(e) => setTask((prev) => ({ ...prev, status: e.target.value }))}
+          disabled={task.subtasks?.length > 0}
+          className="p-2 rounded-md"
+        >
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+
+      {/* DUE DATE */}
+      <div className="mt-4 flex gap-4">
         <div className="flex items-center space-x-2">
-          {/* Calendar Icon */}
-           <span className='bg-[#D6CFFF] p-2 rounded-md'>
-                                   <FaCalendarAlt className="text-[#4F378A] " size={12} />
-                                       </span>  
-          {/* Label */}
-          <label htmlFor="due-date" className="text-gray-700 w-20 font-semibold">
-            Due Date
-          </label>
-           
-          </div>
-          {/* Date Picker Input */}
-          <div className="relative pl-4">
+          <span className="bg-[#D6CFFF] p-2 rounded-md">
+            <FaCalendarAlt className="text-[#4F378A]" size={12} />
+          </span>
+          <label className="text-gray-700 font-semibold">Due Date</label>
+        </div>
+
+        <div className="relative pl-4">
           <SubtaskDateTimePicker
-  id="due-date"
-  value={task.due_date ? dayjs(task.due_date) : null}
-  onChange={(newValue) => {
-    setTask((prev) => ({
-      ...prev,
-      due_date: newValue ? newValue.toISOString() : null,
-    }));
-  }}
-/>
-
-
+            value={task.due_date ? dayjs(task.due_date) : null} 
+            onChange={handleDueDateChange}
           
+          />
         </div>
       </div>
-  
-      
-  <div className="flex gap-7 mt-4">
+
+      {/* REMINDER */}
+       <div className="flex gap-7 mt-4">
     <div className="flex items-center space-x-2">
       {/*Clock icon*/}
        <span className='bg-[#D6CFFF] p-2 rounded-md'>
@@ -537,37 +526,10 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
        </div>
      )}
 </div>
+</div>
 
-  
-  </div> 
-  
-{/* {<div className="flex mt-4 gap-14">
-    <div className="flex items-center space-x-2 ">
-
-      <FaTasks className="text-gray-500" />
-      <label className="block text-gray-700">Priority</label>
-      </ div>
-      <div className="relative">
-      <select
-value={task.priority || ''}
-onChange={(e) => setTask((prev) => ({ ...prev, priority: e.target.value }))}
-className="w-full p-2 pl-8 rounded-md"
->
-<option value="Low">🟢 Low</option>
-<option value="Medium">🟡 Medium</option>
-<option value="High">🔴 High</option>
-</select>
-    </div>
-    </div>} */}
-  
-{/* {  <div className="mt-4  w-full gap-4">
-          <label className="block text-gray-700">Files and Media</label>
-        <input
-          type="file"
-          className="mt-2 bg-[#6246AC] text-white px-4 py-2  border rounded hover:bg-purple-600"
-          onChange={(e) => setSelectedFile(e.target.files[0])}
-        />
-          </div>} */}
+    </AccordionDetails>
+  </Accordion>
   
      <div className="mt-4 w-full">
   {/* Only show this whole section if there are subtasks */}

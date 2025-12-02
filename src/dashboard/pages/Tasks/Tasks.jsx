@@ -8,8 +8,9 @@ import { createTask, fetchDashboardStats, createSubtask } from "../../../utils/A
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'; // Import DatePicker styles
 import { FaCalendarAlt, FaClock, FaTasks } from "react-icons/fa"; // Import calendar icon
-import { Box, IconButton, Stack, Typography, useTheme, Button } from "@mui/material";
+import { Box, IconButton, Stack, Typography, useTheme, } from "@mui/material";
 import { tokens } from "../../../theme";
+import CustomButton from "../../components/Button";
 import SlidingButton from "../../components/SlidingButton";import CircularProgress from '@mui/material/CircularProgress';
 import Empty from "../../components/Empty";
 import ReminderTimePicker from "../AiGoal/ReminderTimePicker";
@@ -20,22 +21,60 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber'; 
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-
+import ReusableFormModal from '../../components/ReusableFormModal';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Switch from '@mui/material/Switch';
+import { DialogContent, TextField } from "@mui/material";
+import { Button, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from "@mui/material";
 
 
 const Tasks = () => {
   const navigate = useNavigate();
-  const {tasks, addTask} = useContext(TasksContext); // Use the TasksContext
+  const {
+  tasks,
+  addTask,
+  removeTask,
+  addTaskToSidebar
+} = useContext(TasksContext);
+
   const {goals, ai_goals} = useContext(GoalsContext); // Use the GoalsContext
   const [loading, setLoading] = useState(true);
 
-  const [selectedCategory, setSelectedCategory] = useState('inProgress');
+  const [selectedCategory, setSelectedCategory] = useState('in-progress');
 
   const [title, setTitle] = useState('');
+  const [dueDate, setDueDate] = useState("");
+  const [reminderEnabled, setReminderEnabled] = useState(true); // default ON
+   
+  const [dueTime, setDueTime] = useState("");
 
-  const [open, setOpen] = useState(false);
-
-  const {removeTask, addTaskToSidebar} = useContext(TasksContext); // Use the TasksContext
+   const fields = [
+    { name: "title", label: "Title", type: "text" },
+    { name: "dueDate", label: "Date", type: "date" },
+    { name: "dueTime", label: "Time", type: "time" },
+   
+  ];
+  const [formData, setFormData] = useState({
+    title: "",
+    dueDate: "",
+    dueTime: "",
+    reminderOption: "",
+    customReminderTime: "",
+  });
+  
+    const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  
+  
+  
+    const label = { inputProps: { 'aria-label': 'Reminder switch ' } };
+  const [openNewSnackbar, setOpenNewSnackbar] = useState(false);
+      
   const [dashboardStats, setDashboardStats] = useState(null);
   const [task, setTask] = useState({ title: "", due_date:null, reminder_time: null, priority: "Low", subtasks: [] });
 
@@ -45,7 +84,7 @@ const Tasks = () => {
   const [newSubtasks, setNewSubtasks] = useState([]);
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
-
+  const [open, setOpen] = useState(false);
   const [openQuickModal, setOpenQuickModal] = useState(false);
   const [showCustomReminderPicker, setShowCustomReminderPicker] = useState(false);
   const [taskTypeFilter, setTaskTypeFilter] = useState("all"); 
@@ -80,6 +119,9 @@ const getTaskFilterIcon = (filter) => {
     default: return null;
   }
 };
+
+
+
 
 // 2. UPDATED useEffect for fetching tasks and stats
   useEffect(() => {
@@ -135,7 +177,7 @@ const allTasks = useMemo(() => {
     ...task,
     isAiTask: false,
     type: "user",
-    linkPath: `/dashboard/task/${task.id}`
+    linkPath: `/dashboard/tasks/${task.id}`
     // User tasks will use their own existing 'tag' property if defined
   }));
 
@@ -153,7 +195,7 @@ const filterTasks = () => {
     }
     
     // Check if the task's status matches the selected category
-    // This assumes task.status is provided by the backend (e.g., 'pending', 'inProgress', 'completed')
+    // This assumes task.status is provided by the backend (e.g., 'pending', 'in-progress', 'completed')
     return task.status === selectedCategory; 
   });
 
@@ -177,28 +219,16 @@ const filterTasks = () => {
 const finalFilteredTasks = filterTasks();
 
 
-
+  const handleClose = () => {
+    setOpen(false);
+  };
   
 
 
 
  const handleCloseQuickModal = () => setOpenQuickModal(false);
 
- const handleChange = (e) => {
-      const { name, value } = e.target;
-      setTask((prev) => ({ ...prev, [name]: value }));
-      // If user chooses "custom", show time picker
-      if (name === "reminder_offset") {
-        setShowCustomReminderPicker(value === "custom");
-      }
-    };
-
-    const handleCustomReminderChange = (time) => {
-  setTask((prev) => ({
-    ...prev,
-    custom_reminder_time: time,
-  }));
-};
+ 
   
   
 
@@ -215,15 +245,20 @@ const finalFilteredTasks = filterTasks();
 
   const openModal = () => {
     setOpen(true);
-     console.log("Modal rendered");
+    console.log("Modal rendered");
   }
 
+    const openCreateModal = () => {
+    setOpenQuickModal(true);
+    console.log("Create Modal rendered");
+  }
+  
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+
 
   const handleAddTask = async () => {
+     const { title, dueDate, dueTime, reminderOption, customReminderTime } = formData;
+
       if (!title) {
         alert("Please enter title !");
         return;
@@ -250,6 +285,173 @@ const finalFilteredTasks = filterTasks();
         console.error("Error creating task:", error);
       }
     };
+
+
+
+
+    const handleCreateTask = async () => {
+      const { title, dueDate, dueTime, reminderOption, customReminderTime } = formData;
+    
+      // VALIDATION
+      if (!title) {
+        alert("Please enter title!");
+        return;
+      }
+    
+      if (!dueDate) {
+        alert("Please select a due date!");
+        return;
+      }
+    
+      try {
+        // 1. DUE DATE: Combine date and time into a local ISO-like string (e.g., "2025-12-01T16:46")
+        // This string does not contain 'Z' or a timezone offset, so the backend interprets it
+        // based on its default settings (often as UTC, or as a naive local timestamp).
+        const dueDateTime = `${dueDate}T${dueTime || "00:00"}`; 
+    
+        // REMINDER
+        let reminderTime = null;
+    
+        if (reminderEnabled) {
+          if (reminderOption !== "custom") {
+            const [hrs, mins] = reminderOption.split(":").map(Number);
+            
+            // 2. REMINDER TIME (BEFORE/OFFSET): Calculate the time by subtracting the offset locally.
+            // We use the basic moment object and manipulate it to get the resulting time string.
+            // NOTE: This assumes the subtraction logic is solely concerned with hours/minutes.
+            // This relies on Moment.js parsing the string as local time.
+            const reminderMoment = moment(dueDateTime) // Parse as local time
+              .subtract(hrs, "hours")
+              .subtract(mins, "minutes");
+    
+            // Format only the time component (HH:mm:ss)
+            reminderTime = reminderMoment.format("HH:mm:ss"); 
+          } else {
+            // 3. REMINDER TIME (CUSTOM): The custom time is already a local time string.
+            // We just need to ensure it's in the correct 'HH:mm:ss' format.
+            // Since customReminderTime is from a <TextField type="time">, it's already 'HH:mm'.
+            reminderTime = `${customReminderTime}:00`; 
+          }
+        }
+    
+        // CREATE TASK
+        const newTask = await createTask({
+          title,
+          due_date: dueDateTime, // Sending the local ISO string
+          reminder_time: reminderTime // Sending the local time string
+        });
+
+        
+    
+        console.log("Task created:", newTask);
+        
+    
+        addTask(newTask);
+    
+    
+    
+        // RESET
+        setOpenQuickModal(false);
+        setFormData({
+          title: "",
+          dueDate: "",
+          dueTime: "",
+          reminderOption: "00:30",
+          customReminderTime: "09:00"
+        });
+        setReminderEnabled(true);
+    
+        setOpenNewSnackbar(true);
+        navigate(`/dashboard/tasks/${newTask.id}`);
+    
+      } catch (error) {
+        console.error("Error creating task:", error);
+      }
+    };
+    
+
+       const handleAddNewTask = async () => {
+      const { title, dueDate, dueTime, reminderOption, customReminderTime } = formData;
+    
+      // VALIDATION
+      if (!title) {
+        alert("Please enter title!");
+        return;
+      }
+    
+      if (!dueDate) {
+        alert("Please select a due date!");
+        return;
+      }
+    
+      try {
+        // 1. DUE DATE: Combine date and time into a local ISO-like string (e.g., "2025-12-01T16:46")
+        // This string does not contain 'Z' or a timezone offset, so the backend interprets it
+        // based on its default settings (often as UTC, or as a naive local timestamp).
+        const dueDateTime = `${dueDate}T${dueTime || "00:00"}`; 
+    
+        // REMINDER
+        let reminderTime = null;
+    
+        if (reminderEnabled) {
+          if (reminderOption !== "custom") {
+            const [hrs, mins] = reminderOption.split(":").map(Number);
+            
+            // 2. REMINDER TIME (BEFORE/OFFSET): Calculate the time by subtracting the offset locally.
+            // We use the basic moment object and manipulate it to get the resulting time string.
+            // NOTE: This assumes the subtraction logic is solely concerned with hours/minutes.
+            // This relies on Moment.js parsing the string as local time.
+            const reminderMoment = moment(dueDateTime) // Parse as local time
+              .subtract(hrs, "hours")
+              .subtract(mins, "minutes");
+    
+            // Format only the time component (HH:mm:ss)
+            reminderTime = reminderMoment.format("HH:mm:ss"); 
+          } else {
+            // 3. REMINDER TIME (CUSTOM): The custom time is already a local time string.
+            // We just need to ensure it's in the correct 'HH:mm:ss' format.
+            // Since customReminderTime is from a <TextField type="time">, it's already 'HH:mm'.
+            reminderTime = `${customReminderTime}:00`; 
+          }
+        }
+    
+        // CREATE TASK
+        const newTask = await createTask({
+          title,
+          due_date: dueDateTime, // Sending the local ISO string
+          reminder_time: reminderTime // Sending the local time string
+        });
+
+        
+    
+        console.log("Task created:", newTask);
+        
+    
+        addTask(newTask);
+    
+    
+    
+        // RESET
+        setOpen(false);
+        setFormData({
+          title: "",
+          dueDate: "",
+          dueTime: "",
+          reminderOption: "00:30",
+          customReminderTime: "09:00"
+        });
+        setReminderEnabled(true);
+    
+        setOpenNewSnackbar(true);
+
+        navigate(`/dashboard/tasks/${newTask.id}`);
+    
+      } catch (error) {
+        console.error("Error creating task:", error);
+      }
+    };
+    
+    
 
 
 
@@ -334,8 +536,8 @@ if (!loading && tasks.length === 0) {
   </Typography>
 
   {/* Desktop button */}
-  <div className="hidden sm:block">
-    <Button onClick={openModal} text="Create Tasks">
+
+    <CustomButton  onClick={openModal} text="Create Tasks">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -351,9 +553,75 @@ if (!loading && tasks.length === 0) {
         <line x1="12" y1="5" x2="12" y2="19" />
         <line x1="5" y1="12" x2="19" y2="12" />
       </svg>
-    </Button>
-  </div>
+    </CustomButton>
+
 </div>
+ 
+        <ReusableFormModal
+          open={open}
+          onClose={handleClose}
+          title="New Task"
+          fields={fields} // This only contains title, date, time now
+          formData={formData}
+          onChange={handleChange}
+          onSubmit={handleAddNewTask}
+          colors={colors}
+        >
+          {/* 1. REMINDER TOGGLE (Your desired TOP element) */}
+          <div className="flex justify-between items-center mt-2">
+            <span style={{ color: colors.text.primary }}>Reminder</span>
+            <Switch
+              checked={reminderEnabled}
+              onChange={(e) => setReminderEnabled(e.target.checked)}
+            />
+          </div>
+        
+          {/* 2. REMINDER OPTION DROPDOWN (Now rendered after the Toggle) */}
+          {reminderEnabled && ( // Optionally hide the select if reminder is disabled
+            <TextField
+              select
+              fullWidth
+              label="Reminder Time" // This was the label of your old fields item
+              name="reminderOption"
+              value={formData.reminderOption || "00:30"} // Ensure a default value is set
+              onChange={handleChange}
+              margin="normal"
+            >
+              {/* Recreate the options from your original fields array */}
+              <MenuItem value="00:05">5 minutes before</MenuItem>
+              <MenuItem value="00:10">10 minutes before</MenuItem>
+              <MenuItem value="00:30">30 minutes before</MenuItem>
+              <MenuItem value="01:00">1 hour before</MenuItem>
+              <MenuItem value="custom">Custom…</MenuItem>
+            </TextField>
+          )}
+        
+          {/* 3. CUSTOM REMINDER */}
+          {reminderEnabled && formData.reminderOption === "custom" && (
+            <TextField
+              fullWidth
+              type="time"
+              label="Custom Reminder"
+              name="customReminderTime"
+              value={formData.customReminderTime}
+              onChange={handleChange}
+              margin="normal"
+              InputLabelProps={{ shrink: true }}
+            />
+          )}
+        </ReusableFormModal>
+
+          <Snackbar
+                              open={openNewSnackbar}
+                              autoHideDuration={3000}
+                              onClose={() => setOpenNewSnackbar(false)}
+                              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                            >
+                              <MuiAlert onClose={() => setOpenNewSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                                Task successfully created!
+                              </MuiAlert>
+                            </Snackbar>
+
 
           <div className="flex flex-col items-center justify-center h-[50vh] w-full text-center p-6">
             <div className="w-7/12">
@@ -362,7 +630,7 @@ if (!loading && tasks.length === 0) {
         
           </div>
 
-          {/* Mobile floating + button */}
+          {/* Mobile floating + button 
 <button
   onClick={openModal}
   className="sm:hidden fixed bottom-36 right-12 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
@@ -384,333 +652,88 @@ if (!loading && tasks.length === 0) {
   </svg>
 </button>
 
+*/}
+
 
      
     </div>
   );
 }
+
+ 
   
     return (
 <div className="w-full p-4  grid gap-1 grid-cols-1  sm:grid-cols-12 p-2 flex min-h-screen">
     
-
-    
-    <Backdrop
-          sx={(theme) => ({ color: '#000000', zIndex: theme.zIndex.drawer + 1 })}
-          open={open}
-          onClick={handleClose} // Clicking outside should close it
+ <ReusableFormModal
+          open={openQuickModal}
+          onClose={handleCloseQuickModal}
+          title="New Task"
+          fields={fields} // This only contains title, date, time now
+          formData={formData}
+          onChange={handleChange}
+          onSubmit={handleCreateTask}
+          colors={colors}
         >
-          <div 
-            className="bg-white w-10/12 sm:w-5/12 p-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: colors.background.default }}  
-            onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
-          >
-            <div className='flex w-full mb-4 justify-end'>
-            <div className='flex w-2/3 items-center justify-between'>
-            <h1 className='text-xl font-bold text-[#6F2DA8] mt-4 flex items-center justify-center gap-2'>
-              New Task
-            </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke={colors.text.primary}
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="cursor-pointer"
-              onClick={handleClose}
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>  
-            
-
-
-
-            </div>
-
-            </div>
-            
-           
-
-            <div className="flex items-center mb-4 gap-2">
-              <p className='text-sm text-start w-8 ' style={{color:colors.text.primary}}>Title</p>
-              <input
-                type="text"
-                placeholder="Enter task title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 border text-black border-gray-200 rounded-lg focus:outline-none" style={{color:colors.text.primary}}
-              />
-            </div>
-
-         
-
-       <div className="flex flex-col sm:flex-row justify-between mb-4 gap-6 sm:gap-2">
-
-        <div className="flex items-center space-x-2">
-          {/* Calendar Icon */}
-          <FaCalendarAlt className="text-gray-500" />
-          {/* Date Picker Input */}
-          <div className="relative" style={{color:colors.text.primary}}>
-            <DatePicker
-              id="due-date"
-              selected={task.due_date ? new Date(task.due_date) : null}
-              onChange={handleDueDateChange}
-              showTimeSelect
-              dateFormat="yyyy-MM-dd h:mm aa"
-              placeholderText="Due_date"
-              className="p-2  rounded-md border border-gray-200" style={{color:colors.text.primary}}
+          {/* 1. REMINDER TOGGLE (Your desired TOP element) */}
+          <div className="flex justify-between items-center mt-2">
+            <span style={{ color: colors.text.primary }}>Reminder</span>
+            <Switch
+              checked={reminderEnabled}
+              onChange={(e) => setReminderEnabled(e.target.checked)}
             />
-      </div>
-        </div>
-
-         
-            <div className="flex items-center space-x-2">
-              {/*Clock icon*/}
-              <FaClock className="  text-gray-500" />
-              
-              {/*Time Picker Input*/}
-              <div className="relative" style={{color:colors.text.primary}}>
-           <DatePicker
-  id="reminder-time"
-  selected={
-    task.reminder_time
-      ? new Date(`1970-01-01T${task.reminder_time}`) // time-only string → Date
-      : null
-  }
-  onChange={handleReminderTimeChange}
-  showTimeSelect
-  showTimeSelectOnly
-  timeIntervals={15}
-  timeCaption="Time"
-  dateFormat="HH:mm:ss"
-  placeholderText="Reminder"
-  className="p-2 rounded-md border border-gray-200" style={{color:colors.text.primary}}
-/>
-
-           </div>
-          </div> 
-
-          <div className="flex  gap-2">
-                  <div className="flex items-center space-x-2 ">
-                    {/* Description Icon */}
-                    <FaTasks className="text-gray-500" />
-                    
-                    </ div>
-                    {/*Description input*/}
-                    <div className="relative" style={{color:colors.text.primary}}>
-                    <select
-              value={task.priority || ''}
-              onChange={(e) => setTask((prev) => ({ ...prev, priority: e.target.value }))}
-              className="w-full p-2 rounded-md border border-gray-200" style={{color:colors.text.primary}}
+          </div>
+        
+          {/* 2. REMINDER OPTION DROPDOWN (Now rendered after the Toggle) */}
+          {reminderEnabled && ( // Optionally hide the select if reminder is disabled
+            <TextField
+              select
+              fullWidth
+              label="Reminder Time" // This was the label of your old fields item
+              name="reminderOption"
+              value={formData.reminderOption || "00:30"} // Ensure a default value is set
+              onChange={handleChange}
+              margin="normal"
             >
-              <option value="Low">🟢 Low</option>
-              <option value="Medium">🟡 Medium</option>
-              <option value="High">🔴 High</option>
-            </select>
-                  </div>
-                  </div>
-
-                   </div>
-            
-             {/* Subtask List */}
-
-          <div className="mt-4  w-full">
-        {/* Subtasks Title & Progress Bar */}
-        <div className="flex justify-between w-full items-center">
-          <label className="block text-[#6F2DA8] text-lg font-semibold" style={{color:colors.text.primary}}>Subtasks</label>
-         
-        </div>
-       {/* Subtask List */}
-       
-          <ul className="mt-2">
-            {newSubtasks.map((subtask, index) => (
-              <li key={index} className="flex items-center gap-2 mt-1" style={{color:colors.text.primary}}
-              onClick={() => setSelectedSubtask(subtask)}
-              >
-                  {subtask.title}
-              </li>
-            ))}
-          </ul>
-        
-  
-  
-        {/* Add Subtask Button & Input Field */}
-        {showInput ? (
-          <div className="mt-3 flex gap-2" style={{color:colors.text.primary}}>
-            <input
-              type="text"
-              value={newSubtask}
-              onChange={(e) => setNewSubtask(e.target.value)}
-              placeholder="Enter subtask"
-              className="w-full border border-gray-200 p-2 rounded-md" style={{color:colors.text.primary}}
-            />
-            <button onClick={handleAddSubtask} className="bg-[#6246AC] text-white px-3 py-2 rounded-md">
-              Add
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setShowInput(true)}
-            className="mt-3  flex text-[#6246AC]  hover:underline "
-          >
-            + Add Subtask
-          </button>
-        )}
-        </div>
-
-                      
-               <div className="flex justify-end w-full"> 
-            <button onClick={handleAddTask} className="mt-4 px-4 py-2 bg-[#6246AC] hover:bg-purple-600 text-white rounded-lg">
-              Create Task
-            </button>
-          </div>
-          </div>
-    </Backdrop>
-    
-    <Backdrop
-      sx={(theme) => ({ color: "#000000", zIndex: theme.zIndex.drawer + 1 })}
-      open={openQuickModal}
-      onClick={handleCloseQuickModal}
-    >
-      <div
-        className="bg-white w-10/12 sm:w-4/12 p-6 rounded-lg shadow-lg text-center"
-        onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside
-      >
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-bold text-[#6F2DA8]">Quick Add Task</h1>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#333"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="cursor-pointer"
-            onClick={handleCloseQuickModal}
-          >
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </div>
-
-        {/* Floating Label Input - Title */}
-        <div className="relative mb-6">
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="peer w-full border border-gray-300 rounded-md px-3 pt-3 pb-2 text-sm text-gray-900 placeholder-transparent focus:outline-none focus:border-[#6F2DA8]"
-            placeholder="Title"
-          />
-         
-        </div>
-
-   
-
-        <div className="flex gap-7 mt-4">
-            <div className="flex items-center space-x-2">
-              {/*Clock icon*/}
-               <span className='bg-[#D6CFFF] p-2 rounded-md'>
-                         <FaClock className="text-[#4F378A] " size={12} />
-                              </span>
-              {/*Label*/}
-              <label htmlFor="reminder-time" className="text-gray-700 font-semibold">Reminder</label>
-              </div>
-              {/*Time Picker Input*/}
-              <div className="flex gap-6 items-center relative">
-          <select
-            name="reminder_offset"
-            className="text-sm p-4 "
-            onChange={handleChange}
-            value={task.reminder_offset || "15"} // default to 15 mins if not set
-          >
-            <option value="15">15 minutes before</option>
-            <option value="30">30 minutes before</option>
-            <option value="60">1 hour before</option>
-            <option value="1440">1 day before</option>
-            <option value="custom">Custom</option>
-          </select>
-        
-         {showCustomReminderPicker && (
-               <div className="mt-2">
-                 <ReminderTimePicker
-                   value={task.custom_reminder_time}
-                   onChange={handleCustomReminderChange}
-                 />
-               </div>
-             )}
-        </div>
-        
-          
-          </div> 
-          
-
-        {/* Subtasks Section */}
-        <div className="mt-4 text-left">
-          <div className="flex justify-between items-center">
-            <label className="block text-[#6F2DA8] text-lg font-semibold">
-              Subtasks
-            </label>
-          </div>
-
-          <ul className="mt-2">
-            {newSubtasks.map((subtask, index) => (
-              <li
-                key={index}
-                className="flex items-center gap-2 mt-1 text-gray-700 cursor-pointer hover:text-[#6F2DA8]"
-                onClick={() => setSelectedSubtask(subtask)}
-              >
-                <FaTasks className="text-gray-500" /> {subtask.title}
-              </li>
-            ))}
-          </ul>
-
-          {showInput ? (
-            <div className="mt-3 flex gap-2">
-              <input
-                type="text"
-                value={newSubtask}
-                onChange={(e) => setNewSubtask(e.target.value)}
-                placeholder="Enter subtask"
-                className="w-full border border-gray-300 p-2 rounded-md text-sm"
-              />
-              <button
-                onClick={handleAddSubtask}
-                className="bg-[#6F2DA8] text-white px-3 py-2 rounded-md text-sm hover:bg-purple-700"
-              >
-                Add
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowInput(true)}
-              className="mt-3 flex text-[#6F2DA8] text-sm hover:underline"
-            >
-              + Add Subtask
-            </button>
+              {/* Recreate the options from your original fields array */}
+              <MenuItem value="00:05">5 minutes before</MenuItem>
+              <MenuItem value="00:10">10 minutes before</MenuItem>
+              <MenuItem value="00:30">30 minutes before</MenuItem>
+              <MenuItem value="01:00">1 hour before</MenuItem>
+              <MenuItem value="custom">Custom…</MenuItem>
+            </TextField>
           )}
-        </div>
+        
+          {/* 3. CUSTOM REMINDER */}
+          {reminderEnabled && formData.reminderOption === "custom" && (
+            <TextField
+              fullWidth
+              type="time"
+              label="Custom Reminder"
+              name="customReminderTime"
+              value={formData.customReminderTime}
+              onChange={handleChange}
+              margin="normal"
+              InputLabelProps={{ shrink: true }}
+            />
+          )}
+        </ReusableFormModal>
 
-        {/* Submit Button */}
-        <div className="flex justify-end w-full">
-          <button
-            onClick={handleAddTask}
-            className="mt-5 px-4 py-2 bg-[#6F2DA8] hover:bg-purple-700 text-white rounded-md"
-          >
-            Create Task
-          </button>
-        </div>
-      </div>
-    </Backdrop>
+          <Snackbar
+                              open={openNewSnackbar}
+                              autoHideDuration={3000}
+                              onClose={() => setOpenNewSnackbar(false)}
+                              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                            >
+                              <MuiAlert onClose={() => setOpenNewSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                                Task successfully created!
+                              </MuiAlert>
+                            </Snackbar>
+
+
+    
+   
+    
     
 
     <div className=" md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0"> 
@@ -727,7 +750,7 @@ if (!loading && tasks.length === 0) {
               
             >Manage your Tasks 
             </p></h1>
-                   <Button onClick={openModal} sx={{backgroundColor: "#A89FE3", borderRadius: 100, color: "#FFFFFF", textTransform: "none", paddingY: 0.5, paddingX: 2, gap: 0.2}}>
+                   <Button onClick={openCreateModal} sx={{backgroundColor: "#A89FE3", borderRadius: 100, color: "#FFFFFF", textTransform: "none", paddingY: 0.5, paddingX: 2, gap: 0.2}}>
                                    <svg
                                    xmlns="http://www.w3.org/2000/svg"
                                    width="16"
@@ -757,7 +780,7 @@ if (!loading && tasks.length === 0) {
     
     {/* Status Filter */}
     <SlidingButton
-      options={["pending", "inProgress", "completed"]}
+      options={["pending", "in-progress", "completed"]}
       selected={selectedCategory}
       onChange={setSelectedCategory}
       className="mb-4"
@@ -817,7 +840,7 @@ if (!loading && tasks.length === 0) {
             >
               {finalFilteredTasks.map((t) => (
                 // Use the pre-calculated linkPath
-                <Link key={t.id} to={t.linkPath} className='w-full min-w-[280px] list-none block'>
+                <Link key={t.id} to={t.linkPath} className='md:w-6/12 w-full min-w-[280px] list-none block'>
                   <li className='w-full h-full list-none'>
                     <Box className='flex w-full px-2 py-4 h-full rounded-2xl transition-transform duration-300 hover:scale-[0.95] relative'
                          sx={{ backgroundColor: colors.background.paper }}>
@@ -905,15 +928,19 @@ if (!loading && tasks.length === 0) {
         
           Today's Productivity
         </Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: colors.text.primary, mt: 1 }}
-        >
-          <span style={{ color: "#10D3F1", fontWeight: "bold", fontSize: "1.1rem" }}>
+          <div className="p-2 mt-2 flex gap-2  items-center  rounded-lg" style={{backgroundColor: colors.menu.primary}}>
+            <span style={{ color: "#10D3F1", fontWeight: "bold", fontSize: "1.1rem" }}>
             {dashboardStats.tasks_completed_today.count + dashboardStats.ai_tasks_completed_today.count}
-          </span>{" "}
+          </span>
+                <Typography
+          variant="body2"
+          sx={{ color: colors.text.primary}}
+        >
+          {" "}
           Tasks Finished Today!
         </Typography>
+          </div>
+      
         {dashboardStats.ai_tasks_completed_week.count > 0 && (
           <Typography
             variant="body2"
@@ -950,9 +977,13 @@ if (!loading && tasks.length === 0) {
               </Box>
             ))
           ) : (
-            <Typography variant="body2" sx={{ color: "#10D3F1" }}>
+            <div className="p-2 rounded-lg" style={{backgroundColor: colors.menu.primary}}>
+               <Typography variant="body2" sx={{ color: "#10D3F1" }}>
               Great job! No overdue tasks detected.
             </Typography>
+
+            </div>
+           
           )}
         </Stack>
       </Box>
@@ -972,7 +1003,7 @@ if (!loading && tasks.length === 0) {
         </Typography>
         <Stack spacing={1} mt={1}>
           {dashboardStats.popular_tags.length > 0 && (
-            <Box sx={{ p: 1, borderRadius: 2, backgroundColor: colors.background.default }}>
+            <Box sx={{ p: 1, borderRadius: 2, backgroundColor: colors.menu.primary }}>
               <Typography variant="body2" sx={{ color: colors.text.primary }}>
                 ✨ Current Focus: {dashboardStats.popular_tags[0][0]} ({dashboardStats.popular_tags[0][1]} recent activities)
               </Typography>
@@ -982,7 +1013,7 @@ if (!loading && tasks.length === 0) {
             </Box>
           )}
           {dashboardStats.top_tags.length > 0 && (
-            <Box sx={{ p: 1, borderRadius: 2, backgroundColor: colors.background.default }}>
+            <Box sx={{ p: 1, borderRadius: 2, backgroundColor: colors.menu.primary }}>
               <Typography variant="body2" sx={{ color: colors.text.primary }}>
                 🏆 Proven Success: {dashboardStats.top_tags[0][0]} (Completed {dashboardStats.top_tags[0][1]} tasks)
               </Typography>

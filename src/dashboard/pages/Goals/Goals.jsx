@@ -935,7 +935,7 @@ useEffect(() => {
 
       
        </div>
-       <div className="w-full flex justify-center items-center  rounded-2xl py-4" style={{ backgroundColor: colors.background.default }}>
+       <div className="w-full flex justify-center items-center  rounded-2xl py-4" style={{ backgroundColor: colors.menu.primary }}>
   <ul className="w-11/12 flex flex-col overflow-hidden max-h-[35vh] overflow-y-auto scrollbar-hide no-scrollbar">
     {filteredPeriods.length === 0 ? (
       <div className='w-full flex md:h-[14vh] h-[10vh] justify-center items-center'>
@@ -1002,7 +1002,7 @@ useEffect(() => {
        
        <div>
        <h1 className=' text-lg text-center font-medium mb-1'>STATS </h1>
-        <div className='w-full   flex p-4 rounded-2xl flex-col justify-center items-center' style={{ backgroundColor: colors.background.default }}>
+        <div className='w-full   flex p-4 rounded-2xl flex-col justify-center items-center' style={{ backgroundColor: colors.menu.primary }}>
         
         <GoalsPieChart goals={goals.goals} aiGoals={goals.ai_goals} />
        </div>

@@ -593,7 +593,7 @@ if (loading) {
             
             
            
-            <Box className="text-lg container w-full px-4 py-2 mb-4 rounded-xl bg-[#FFFFFF] relative" sx={{ backgroundColor: colors.background.default }}>
+            <Box className="text-lg container w-full px-4 py-2 mb-4 rounded-xl bg-[#FFFFFF] relative" sx={{ backgroundColor: colors.menu.primary }}>
               {isVisible ? (<TrophyAnimation />) : 
               (
                   <>
@@ -1160,13 +1160,13 @@ if (loading) {
 
               
               </div>
-            <Box className='w-full    rounded-lg p-2 flex justify-center items-center' sx={{ backgroundColor: colors.background.default }}>
+            <Box className='w-full    rounded-lg p-2 flex justify-center items-center' sx={{ backgroundColor: colors.menu.primary }}>
                  <p className="md:text-sm lg:text-md 2xl:text-lg  font-medium" style={{color: colors.text.primary}}>
                 Start working on your goal today! 🚀
               </p>
             </Box>
            
-            <Box className="text-lg container w-full px-4 py-2 mb-4 rounded-lg bg-[#FFFFFF] relative" sx={{ backgroundColor: colors.background.default }}>
+            <Box className="text-lg container w-full px-4 py-2 mb-4 rounded-lg bg-[#FFFFFF] relative" sx={{ backgroundColor: colors.menu.primary }}>
               {isVisible ? (<TrophyAnimation />) : 
               (
                   <>

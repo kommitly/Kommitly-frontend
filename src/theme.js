@@ -45,6 +45,7 @@ export const tokens = (mode) => ({
           primary: "#3F375C",
           header: "#3F375C",
           content: "#13101B",
+          notifications: "#6D5BA6",
         }
       }
 
@@ -79,6 +80,7 @@ export const tokens = (mode) => ({
           primary: "#FFFFFF",
           header: "#F6F3F3",
           content: "#FFFFFF",
+          notifications: "#F6F3F3",
         },
            empty:{
           primary: "#EAE6FF",

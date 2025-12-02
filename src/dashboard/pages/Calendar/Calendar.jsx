@@ -743,7 +743,7 @@ const selectedDayEvents = React.useMemo(() => {
   key={event.id}
  
   sx={{
-    backgroundColor: colors.background.default,
+    backgroundColor: colors.menu.primary,
     margin: "10px 0",
     borderRadius: "8px",
     color: colors.text.primary,
