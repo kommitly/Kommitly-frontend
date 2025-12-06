@@ -245,7 +245,7 @@ const Signup = ({message, setMessage}) => {
           open={dialogOpen}
           onClick={() => setDialogOpen(false)}
           >
-             <Box className=" w-11/12 space-y-4 p-4 bg-white max-h-full rounded-xl mt-4 " >
+             <Box className=" w-11/12  md:w-4/12  space-y-4 p-4 bg-white max-h-full rounded-xl mt-4 " >
               <div className="flex   justify-center items-center">
             <div className=" w-full flex flex-col justify-center items-center p-6 rounded-md" style={{ color: colors.text.primary }}>
               <div className="w-full flex justify-center items-center">
