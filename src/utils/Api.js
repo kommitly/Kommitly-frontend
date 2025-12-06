@@ -170,7 +170,7 @@ const updateAiGoalById = async (goalId, title, description) => {
 }
 
 const updateGoalById = async (goalId, title, description) => {
-  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/update-goal/`;
+  const url = `https://kommitly-backend.onrender.com/api/goals/${goalId}/update/`;
   const requestBody = { title, description };
   try {
     const token = getToken();

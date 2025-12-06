@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchGoalById, createTask, fetchTasksByGoalId, deleteGoalById } from '../../../utils/Api';
+import { fetchGoalById, createTask, fetchTasksByGoalId, deleteGoalById, updateGoalById } from '../../../utils/Api';
 import { motion } from 'framer-motion';
 import survey from '../../../assets/survey.svg';
 import flag from '../../../assets/flag-dynamic-color.svg';
@@ -21,6 +21,8 @@ import { RiProgress1Line } from "react-icons/ri";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { BsHourglassTop } from "react-icons/bs";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const StatusIcon = ({ status, color, size = 16 }) => {
   const iconColor = color || "#000";
@@ -57,6 +59,7 @@ const Goal = () => {
   const [open, setOpen] = useState(false);
   const [taskMenuVisible, setTaskMenuVisible] = useState(null);
   const [taskOpen, setTaskOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [formData, setFormData] = useState({
       title: "",
       
@@ -173,6 +176,7 @@ if (loading) {
           setGoal((prevGoal) => ({ ...prevGoal, title: newTitle }));
           setIsGoalRenaming(false);
           setMenuVisible(false);
+          setOpenSnackbar(true);
         } catch (error) {
           setError(error.message);
         }
@@ -201,6 +205,17 @@ if (loading) {
                   )}
         </div>
         </div>
+
+         <Snackbar
+                                            open={openSnackbar}
+                                            autoHideDuration={3000}
+                                            onClose={() => setOpenSnackbar(false)}
+                                            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                                          >
+                                            <MuiAlert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                                              Goal successfully updated!
+                                            </MuiAlert>
+                                          </Snackbar>
 
 
          {tasks.length === 0 ? (
@@ -391,6 +406,9 @@ if (loading) {
     </div>
   </>
 )}
+
+
+
 
             
           

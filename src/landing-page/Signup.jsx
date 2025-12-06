@@ -14,6 +14,9 @@ import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { use } from "react";
 import Button from "../dashboard/components/Button"
+import Lottie from "lottie-react";
+import emailVerification from "../animations/email_verification.json"; // Adjust path if needed
+
 
 
 const initialValues = {
@@ -29,7 +32,11 @@ const userSchema = yup.object().shape({
   first_name: yup.string().required("required"),
   last_name: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
+  password: yup
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .required("required"),
+
   
 });
 
@@ -169,8 +176,8 @@ const Signup = ({message, setMessage}) => {
                         onChange={handleChange}
                         value={values.last_name}
                         name="last_name"
-                        error={!!touched.first_name && !!errors.last_name}
-                        helperText={touched.first_name && errors.last_name}
+                        error={!!touched.last_name && !!errors.last_name}
+                        helperText={touched.last_name && errors.last_name}
                         sx={{ gridColumn: "span 2" }}
                   
                         />
@@ -185,7 +192,9 @@ const Signup = ({message, setMessage}) => {
                         name="email"
                         error={!!touched.email && !!errors.email}
                         helperText={touched.email && errors.email}
-                        sx={{ gridColumn: "span 4" }}
+                        sx={{ gridColumn: "span 4",
+                          
+                         }}
                         />
                         <TextField
                         fullWidth
@@ -199,7 +208,7 @@ const Signup = ({message, setMessage}) => {
                         error={!!touched.password && !!errors.password}
                         helperText={touched.password && errors.password}
                         sx={{ gridColumn: "span 4" }}
-                        InputProps={{ style: { color: "#000" } }} 
+                      
                         />
 
 
@@ -236,10 +245,15 @@ const Signup = ({message, setMessage}) => {
           open={dialogOpen}
           onClick={() => setDialogOpen(false)}
           >
-             <Box className=" w-11/12 space-y-4 p-4 max-h-full rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
+             <Box className=" w-11/12 space-y-4 p-4 bg-white max-h-full rounded-xl mt-4 " >
               <div className="flex   justify-center items-center">
-            <div className="bg-white w-full flex justify-center p-6 rounded-md" style={{ color: colors.text.primary }}>
-              <p>Signup successful! Please check your email to verify your account.</p>
+            <div className=" w-full flex flex-col justify-center items-center p-6 rounded-md" style={{ color: colors.text.primary }}>
+              <div className="w-full flex justify-center items-center">
+                 <Lottie animationData={emailVerification} loop={true} style={{ width: 100, height: 100 }} />
+              </div>
+               <p className="flex text-center text-lg font-bold mb-2" style={{ color: colors.text.secondary }}>Signup Successful! </p>
+             
+              <p className="flex text-center">Please check your email to verify your account.</p>
              
             </div>
           </div>

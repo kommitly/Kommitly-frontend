@@ -101,11 +101,11 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
                     error={!!touched.email && !!errors.email}
                     helperText={touched.email && errors.email}
                     sx={{
-                      color: colors.text.primary,
+                
                       gridColumn: "span 4",
                       "& input:-webkit-autofill": {
                         WebkitBoxShadow: "0 0 0 1000px transparent inset !important",
-                        WebkitTextFillColor: "inherit !important",
+                       
                         transition: "background-color 9999s ease-in-out 0s",
                       },
                     }}
@@ -122,11 +122,11 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
                     error={!!touched.password && !!errors.password}
                     helperText={touched.password && errors.password}
                     sx={{
-                      color: colors.text.primary,
+                   
                       gridColumn: "span 4",
                       "& input:-webkit-autofill": {
                         WebkitBoxShadow: "0 0 0 1000px transparent inset !important",
-                        WebkitTextFillColor: "inherit !important",
+                   
                         transition: "background-color 9999s ease-in-out 0s",
                       },
                     }}
