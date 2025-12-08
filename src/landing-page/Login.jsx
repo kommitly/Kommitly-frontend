@@ -11,6 +11,8 @@ import { useTheme } from '@mui/material/styles'
 import { tokens } from '../theme'
 import { Box } from "@mui/material";
 import getLocationAndTimezone from "../utils/location";
+import PasswordField from "../dashboard/components/PasswordField";
+
 
 import { motion } from "framer-motion";
 
@@ -110,27 +112,15 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
                       },
                     }}
                   />
-                  <TextField
-                    fullWidth
-               
-                    type="password"
-                    label="Password"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
+                 <PasswordField
                     value={values.password}
                     name="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     error={!!touched.password && !!errors.password}
                     helperText={touched.password && errors.password}
-                    sx={{
-                   
-                      gridColumn: "span 4",
-                      "& input:-webkit-autofill": {
-                        WebkitBoxShadow: "0 0 0 1000px transparent inset !important",
-                   
-                        transition: "background-color 9999s ease-in-out 0s",
-                      },
-                    }}
                   />
+
                 </Box>
                 <div className="w-full flex justify-end mt-3">
                   <Link>

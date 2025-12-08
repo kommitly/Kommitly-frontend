@@ -201,8 +201,8 @@ export const Navbar = () => {
 
   
   return (
-    <div className={`relative  ${isCollapsed ?  ' w-11/12' : 'w-10/12' }`}>
-       <div className={`fixed top-0   ${isCollapsed ? 'md:left-28 xs:left-0 lg:left-24 xl:left-24  2xl:left-38' : 'md:left-58 lg:left-62 xl:left-62 2xl:left-80  left-50'}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
+    <div className="fixed  ">
+       <div className={` top-0   ${isCollapsed ? 'md:left-28 xs:left-0 lg:left-24 xl:left-24  2xl:left-38 w-full' : 'md:left-58 lg:left-62 xl:left-62 2xl:left-80  left-50 w-full'}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: {
       xs: isCollapsed ? 1 : 8,

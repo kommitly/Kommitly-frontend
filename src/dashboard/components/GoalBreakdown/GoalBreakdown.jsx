@@ -16,7 +16,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { color, motion } from "framer-motion";
 import { IoAdd } from "react-icons/io5";
 import { MdClear } from "react-icons/md";
-import Loading from "../Loading"
+import Loading from "../Loading";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 const extractTimeline = (details) => {
@@ -200,8 +201,8 @@ const TaskAccordion = ({ task, index }) => {
 };
 
 
-const LightTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} arrow placement="top-start" classes={{ popper: className }} />
+const LightTooltip = styled(({ className,placement, ...props }) => (
+  <Tooltip {...props} arrow placement={placement} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
     color: theme.palette.background.sidebar,
@@ -220,10 +221,14 @@ const LightTooltip = styled(({ className, ...props }) => (
 }));
 
 
-const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
+const GoalBreakdown = forwardRef(({ goalData, taskData, onClose, isCollapsed }, ref) => {
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
-
+  const isSm = useMediaQuery(theme.breakpoints.up('md')); // This checks for screens 'sm' and smaller
+  const tooltipPlacement = isCollapsed && isSm ? "right-start" : "top-start";
+  const anchorLeftPosition = (isCollapsed && isSm)
+      ? { xs: '5%', sm: '21%' } // Shift farther left when collapsed on small screens
+      : { xs: '10%', sm: '32%' }; // Default position
   const { goals, setGoals } = useContext(GoalsContext);
   const [loading, setLoading] = useState(false);
 
@@ -300,13 +305,14 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
            sx={{
           position: 'absolute',
           top: { xs: "20%", sm: "26%" }, // higher on extra small screens
-          left: { xs: '10%', sm: '32%' }, // slightly shifted on small screens
+          left: anchorLeftPosition, // slightly shifted on small screens
         
           pointerEvents: 'none',
         }}
         >
           <LightTooltip
             open
+            placement={tooltipPlacement}
             title={
               <Box textAlign="start">
                 <Typography variant="h6" sx={{ color: "#fff", fontWeight: 'bold', mb: 1 }}>
@@ -326,6 +332,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose }, ref) => {
                     borderRadius: '100px',
                     px: 3,
                     py: 0.8,
+                    textTransform: 'none',
                     fontSize: '0.85rem',
                     '&:hover': { backgroundColor: 'primary.light' },
                   }}

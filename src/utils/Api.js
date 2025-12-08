@@ -998,6 +998,28 @@ const fetchDashboardStats = async () => {
 
 
 
+const updateUserProfile = async (updatedData) => {
+  const url = `https://kommitly-backend.onrender.com/api/users/user/update/`;
+  try {
+    const token = getToken();
+    const response = await axios.patch(url, updatedData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return response.data;
+    
+  } catch (error) {
+    console.error(`Error updating user profile:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+
+
+
 
 
 
@@ -1054,7 +1076,8 @@ export {
   fetchTemplatesSuggestions,
   saveTemplateSuggestion,
   markAllNotificationAsRead,
-  fetchDashboardStats
+  fetchDashboardStats,
+  updateUserProfile
 
 
 };

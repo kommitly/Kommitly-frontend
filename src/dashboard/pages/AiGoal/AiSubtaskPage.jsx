@@ -333,7 +333,7 @@ const confirmDeleteSubtask = async () => {
           <div className="relative  w-11/12">
       <textarea
           name="description"
-            className=" rounded w-full md:w-1/2 text-sm  focus:outline-none focus:ring-none focus:bg-purple-100"
+            className=" rounded w-full md:w-1/2 text-sm  focus:outline-[#6D5BA6]"
             value={step.description}
             onChange={handleChange}
           />

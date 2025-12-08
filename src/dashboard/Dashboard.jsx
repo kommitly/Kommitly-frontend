@@ -44,7 +44,7 @@ const DashboardContent = () => {
   
       {/* Main content */}
       <main
-        className="w-full no-scrollbar"
+        className="w-full  no-scrollbar"
         style={{
           paddingLeft: !isMobile
             ? isCollapsed
@@ -83,7 +83,7 @@ const DashboardContent = () => {
         {/* Page content */}
         <div className="mt-14 relative">
           <div className="h-screen w-full relative">
-            <Outlet />
+            <Outlet context={{ isCollapsed, isMobile }} />
           </div>
         </div>
       </main>

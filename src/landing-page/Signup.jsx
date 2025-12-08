@@ -16,6 +16,7 @@ import { use } from "react";
 import Button from "../dashboard/components/Button"
 import Lottie from "lottie-react";
 import emailVerification from "../animations/email_verification.json"; // Adjust path if needed
+import PasswordField from "../dashboard/components/PasswordField";
 
 
 
@@ -196,19 +197,13 @@ const Signup = ({message, setMessage}) => {
                           
                          }}
                         />
-                        <TextField
-                        fullWidth
-                        
-                        type="password"
-                        label="Password"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.password}
-                        name="password"
-                        error={!!touched.password && !!errors.password}
-                        helperText={touched.password && errors.password}
-                        sx={{ gridColumn: "span 4" }}
-                      
+                       <PasswordField
+                          value={values.password}
+                          name="password"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={!!touched.password && !!errors.password}
+                          helperText={touched.password && errors.password}
                         />
 
 

@@ -63,11 +63,11 @@ const Settings = () => {
 
   return (
     <div className='w-full  text-black flex flex-col min-h-screen'>
-      <div className="flex p-4  min-h-screen w-full h-full flex-col items-start   relative">
+      <div className="flex md:p-4 p-2 min-h-screen w-full h-full flex-col items-start   relative">
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs value={value} onChange={handleChange} aria-label="Settings Tabs">
-            <Tab label="Profile" {...a11yProps(0)} />
-            <Tab label="Password" {...a11yProps(1)} />
+             <Tab label="Profile" {...a11yProps(0)} sx={{ textTransform: "none" }} />
+  <Tab label="Password" {...a11yProps(1)} sx={{ textTransform: "none" }} />
             {/* {<Tab label="Subscription" {...a11yProps(2)} />
             <Tab label="Billing" {...a11yProps(3)} />} */}
           </Tabs>

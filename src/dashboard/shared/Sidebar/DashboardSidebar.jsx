@@ -481,56 +481,66 @@ sx={{
                       </MenuItem>
                       
                        
-                        <SubMenu 
-                        
-                            icon={selected === "Goals" ? <FlagIcon sx={{fontSize:{
-  xs: "1.5rem",
-  sm: "1.5rem",
-  md: "1.5rem",
-  lg: "1.5rem",
-  xl: "2rem",
-  xxl: "1.5rem",
-  },
- }} /> : <OutlinedFlagIcon sx={{fontSize:{
-  xs: "1.5rem",
-  sm: "1.5rem",
-  md: "1.5rem",
-  lg: "1.5rem",
-  xl: "2rem",
-  xxl: "1.5rem",
-  },
- }} />}
-                            title="Goals"
-                            label="Goals"
-                            active={selected === "Goals"}
-                            onClick={() => {
-                              navigate("/dashboard/goals"); // navigate to the goals page
-                              setSelected("Goals");
-                              setMenuVisible(!menuVisible); // optionally keep this if you want to toggle the submenu
-                             
-                            }}
-                    
-                            style={{ color: colors.primary[100] }}
-                          
-                            >
-                            {recentAiGoals?.map((goal)=> (
-                                <MenuItem
-                                    key={goal.id}
-                                    onClick={() => {
-                                        navigate(`/dashboard/ai-goal/${goal.id}`);
-                                        setSelected(goal.title);
-                                        if (!isCollapsed) setIsCollapsed(true);
-                                    }}
+                 
 
-                                    active={selected === goal.title}
-                                    style={{ color: colors.primary[100] }}
-                                >
-                                    {goal.title}
-                                </MenuItem>
-                            ))}
-                       
 
-                        </SubMenu>
+
+
+<SubMenu
+     icon={selected === "Goals" ? <FlagIcon sx={{fontSize:{
+        xs: "1.5rem",
+        sm: "1.5rem",
+        md: "1.5rem",
+        lg: "1.5rem",
+        xl: "2rem",
+        xxl: "1.5rem",
+    },
+    }} /> : <OutlinedFlagIcon sx={{fontSize:{
+        xs: "1.5rem",
+        sm: "1.5rem",
+        md: "1.5rem",
+        lg: "1.5rem",
+        xl: "2rem",
+        xxl: "1.5rem",
+    },
+    }} />}
+    title="Goals"
+    label="Goals"
+    active={selected === "Goals"}
+    // Re-introduce the onClick to navigate and collapse the sidebar
+    onClick={() => {
+        navigate("/dashboard/goals"); // Navigate to the goals page
+        setSelected("Goals");
+        // Collapse the sidebar when the main 'Goals' heading is clicked
+        if (!isCollapsed) setIsCollapsed(true); 
+    }}
+    style={{ color: colors.primary[100] }}
+>
+    {/* ... nested MenuItem goals remain the same ... */}
+    {recentAiGoals?.map((goal)=> (
+        <MenuItem
+            key={goal.id}
+            onClick={() => {
+                navigate(`/dashboard/ai-goal/${goal.id}`);
+                setSelected(goal.title);
+                setMenuVisible(!menuVisible); 
+                // Collapse the sidebar when a final selection (a goal) is made.
+                if (!isCollapsed) setIsCollapsed(true); 
+            }}
+            active={selected === goal.title}
+            style={{ color: colors.primary[100] }}
+        >
+            {goal.title}
+        </MenuItem>
+    ))}
+</SubMenu>
+
+
+
+
+
+
+
                         <SubMenu
                             icon={ selected === "Tasks" ? <AssignmentIcon sx={{fontSize:{
   xs: "1.5rem",
@@ -555,7 +565,7 @@ sx={{
                             onClick={() => {
                               navigate("/dashboard/tasks"); // navigate to the tasks page
                               setSelected("Tasks");
-                              setTaskMenuVisible(!taskMenuVisible); // optionally keep this if you want to toggle the submenu
+                              if (!isCollapsed) setIsCollapsed(true); // optionally keep this if you want to toggle the submenu
                             }}
                     
                             style={{ color: colors.primary[100] }}

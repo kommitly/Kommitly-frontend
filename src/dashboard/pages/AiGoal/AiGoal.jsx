@@ -467,7 +467,7 @@ const handleSubmitAiSubtask = async () => {
       ),
     }));
 
-    alert("AI Subtask Created Successfully");
+
     setAddSubtaskOpen(false);
     setOpenSnackbar(true);
   } catch (error) {
@@ -586,7 +586,7 @@ if (loading) {
       handleCloseTaskView();
     }
   }}>
-       <Box className=" actionable-steps w-11/12 space-y-4 p-4 rounded-xl mt-4 " sx={{ backgroundColor: colors.background.paper }}>
+       <Box className=" actionable-steps w-11/12 space-y-4  rounded-xl mt-4 " sx={{ backgroundColor: colors.menu.primary }}>
               
                
               

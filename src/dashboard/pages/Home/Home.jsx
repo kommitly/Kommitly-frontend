@@ -1,5 +1,6 @@
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
+import { useOutletContext } from 'react-router-dom';
 import  { useState, useContext, useEffect, useRef } from 'react';
 import { LuSendHorizontal } from "react-icons/lu";
 import GoalBreakdown from '../../components/GoalBreakdown/GoalBreakdown';
@@ -13,6 +14,7 @@ import { animate } from "motion"
 import TypingText from './TypingText';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Loading from '../../components/Loading';
+
 
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow placement="top" classes={{ popper: className }} />
@@ -33,6 +35,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 }));
 
 const Home = () => {
+  const { isCollapsed, isMobile } = useOutletContext();
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
   const [inputValue, setInputValue] = useState('');
@@ -197,6 +200,7 @@ if (loading) {
               borderRadius: '100px',
               px: 3,
               py: 0.8,
+              textTransform: 'none',
               fontSize: '0.85rem',
               '&:hover': { backgroundColor: 'primary.light' },
             }}
@@ -321,6 +325,7 @@ if (loading) {
             taskData={taskData}
             ref={goalBreakdownRef} // Pass ref to GoalBreakdown
             onClose={handleCloseGoalBreakdown}
+            isCollapsed={isCollapsed}
           />
           
           </>
