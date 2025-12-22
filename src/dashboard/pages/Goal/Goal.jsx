@@ -183,9 +183,9 @@ if (loading) {
   };
 
   return (
-    <div className=' flex  h-screen p-6'>
+    <div className=' flex w-full h-screen p-6'>
       <div className='w-full'>
-        <div className='flex items-center justify-between gap-2'>
+        <div className='flex w-full  items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
         <div className='  font-semibold  flex justify-center items-center'
         >
@@ -302,10 +302,6 @@ if (loading) {
 
 
 
-{/* {
-        <Typography variant="subtitle1" color="textSecondary">
-          Category: {goal.category}
-        </Typography>} */}
 
       
 

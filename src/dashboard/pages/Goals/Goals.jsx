@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef, useMemo } from 'react';
 import { GoalsContext } from '../../../context/GoalsContext';
-import { Link, useNavigate, useLocation , useParams} from "react-router-dom";
+import { Link, useNavigate, useLocation , useParams, useOutletContext } from "react-router-dom";
 import CustomButton from '../../components/Button';
 import { IconButton, Typography, useTheme, Button, Menu } from "@mui/material";
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
@@ -265,6 +265,7 @@ const Goals = () => {
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
   const isXxl = useMediaQuery(theme.breakpoints.up("xl"));
   const isXsDown = useMediaQuery(theme.breakpoints.down("xs"));
+  const { isCollapsed, isMobile } = useOutletContext();
   const [goalTypeFilter, setGoalTypeFilter] = useState("all"); // New filter (all, ai, user)
   const [formData, setFormData] = useState({
    
@@ -691,7 +692,7 @@ useEffect(() => {
     
     ) : (
       <>
-     <div className='w-full   sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full p-4 grid gap-1 grid-cols-12  sm:grid-cols-12 justify-center  flex min-h-screen'>
+     <div className={`w-full   sm:w-full xs:w-full lg:w-full xl:w-full 2xl:w-full p-4 grid  grid-cols-12  sm:grid-cols-12 justify-center  flex min-h-screen  ${isCollapsed ? 'gap-2 2xl:gap-6': 'gap-1 2xl:gap-4'} `}>
        
 
          <ReusableFormModal

@@ -736,7 +736,7 @@ if (!loading && tasks.length === 0) {
     
     
 
-    <div className=" md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0"> 
+    <div className=" md:flex flex-col md:col-span-7 col-span-12  md:p-0 p-0 "> 
        
         <Box className='w-full relative  container md:h-46 xl:h-50 2xl:h-64  h-42 flex items-center justify-between rounded-4xl md:p-8 xl:p-8 p-6 pl-4 md:mt-4 mt-0'
         sx={{backgroundColor: "#4F378A", boxShadow: "0px 0px 6px rgba(79, 55, 138, 0.7)"}}
@@ -905,15 +905,17 @@ if (!loading && tasks.length === 0) {
 </div> 
 {/* 🚀 AI TASK COACH INSIGHTS (RIGHT COLUMN) 🚀 */}
 {/* 🚀 AI TASK COACH INSIGHTS (RIGHT COLUMN) 🚀 */}
-<Box
-  className="mt-4 md:col-span-5 md:h-[86vh] h-auto col-span-12 md:ml-4 ml-0 rounded-2xl p-6"
-  sx={{
+<div
+  className="mt-4 md:col-span-5 md:h-[86vh] col-span-12 md:ml-4 ml-0 rounded-2xl p-6"
+  style={{
     backgroundColor: colors.background.paper,
     boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
   }}
 >
+  <div className="overflow-y-auto  no-scrollbar  h-full">
 
-  {dashboardStats ? (
+
+    {dashboardStats ? (
     <Stack spacing={2}>
       {/* === 1. TODAY'S FOCUS === */}
       <Box>
@@ -968,7 +970,7 @@ if (!loading && tasks.length === 0) {
         <Stack spacing={1} mt={1}>
           {dashboardStats.least_tags.length > 0 ? (
             dashboardStats.least_tags.map(([tag, count]) => (
-              <Box key={tag} sx={{ p: 1, borderRadius: 2, backgroundColor: colors.background.default }}>
+              <Box key={tag} sx={{ p: 1, borderRadius: 2, backgroundColor: colors.menu.primary }}>
                 <Typography variant="body2" sx={{ color: colors.text.primary, fontWeight: "bold" }}>
                   🚨 {tag}: {count} overdue task(s)
                 </Typography>
@@ -1031,7 +1033,13 @@ if (!loading && tasks.length === 0) {
       <CircularProgress size={28} sx={{ color: colors.primary[500] }} />
     </Box>
   )}
-</Box>
+
+
+  </div>
+
+
+  
+</div>
 
 </div>
     

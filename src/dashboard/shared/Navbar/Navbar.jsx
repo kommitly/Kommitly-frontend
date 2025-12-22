@@ -201,16 +201,16 @@ export const Navbar = () => {
 
   
   return (
-    <div className="fixed  ">
-       <div className={` top-0   ${isCollapsed ? 'md:left-28 xs:left-0 lg:left-24 xl:left-24  2xl:left-38 w-full' : 'md:left-58 lg:left-62 xl:left-62 2xl:left-80  left-50 w-full'}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
+    <div className={`fixed   ${isCollapsed ? 'md:w-11/12 w-full  2xl:w-[calc(97.533%-50px)] lg:w-[calc(96.933%-50px)]': 'xl:w-[calc(85%-24px)] 2xl:w-[calc(87%-24px)] lg:w-[calc(85.333%-50px)] w-full' } `}>
+       <div className={` top-0 w-full  ${isCollapsed ? 'md:left-28 xs:left-0 lg:left-24 xl:left-24  2xl:left-38 w-full' : 'md:left-58 lg:left-62 xl:left-62 2xl:left-80  left-50 w-full'}  right-0 z-50 transition-width  `} style={{backgroundColor: colors.background.default}}>
 
       <Box className=" items-center w-full"  display = "flex" justifyContent="space-between" pl={4} pr={2} py={1.5} sx={{paddingLeft: {
       xs: isCollapsed ? 1 : 8,
       sm: isCollapsed ? 2 : 3,
-      md: isCollapsed ? 0 : 2,
-      lg: isCollapsed ? 2 : 2,
-      xl: isCollapsed ? 0 : 4,
-      xxl: isCollapsed ? 0 : 2,
+      md: isCollapsed ? 3 : 2,
+      lg: isCollapsed ? 3 : 3,
+      xl: isCollapsed ? 4 : 4,
+      xxl: isCollapsed ? 5 : 4,
     }, paddingRight: isXs ? 1 : isSm ? 1 : isMd ? 1 : isLg ? 1 : isXl ? 1 : isXxl ? 4 : 4, width: isCollapsed? "100%" : isXs ? "100%" : isSm ? "100%" : isMd ? "100%" : isLg ? "100%" : isXl ? "100%" : isXxl ? "100%" : "100%"  }}>
       {/* Logo */}
       <div className='flex items-center  grid grid-cols-12   w-full ' style={{ paddingRight: isCollapsed ? 0 : isXs ? 0 : isSm ? 0 : isMd ? 0 : isLg ? 0 : isXl ? 0 : isXxl ? 0 : 0 }}>
