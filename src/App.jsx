@@ -39,6 +39,7 @@ import Taskpage from './dashboard/pages/Task/Task';
 import AiSubtaskPage from "./dashboard/pages/AiGoal/AiSubtaskPage";
 import Calendar from "./dashboard/pages/Calendar/Calendar";
 import VerifyRedirect from "./landing-page/VerifyRedirect";
+import Blog from "./landing-page/Blog";
 
 
 function App() {
@@ -63,7 +64,9 @@ function App() {
         <CssBaseline/>
             <Routes>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/blog" element={<Blog />} />
               <Route path="/registration" element={<Registration />} />
+
               <Route path="/registration?tab=signup" element={<Signup />} />
               <Route path="/registration?tab=login" element={<Login />} />
              

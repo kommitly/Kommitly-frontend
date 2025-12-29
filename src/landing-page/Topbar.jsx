@@ -99,6 +99,16 @@ const Topbar = ({ clipRadius }) => {
 
       {/* Desktop Auth Buttons */}
       <div className="hidden sm:flex gap-4">
+         <Link
+        to="/blog"
+        className="px-4 py-2  transition-colors 2xl:text-xl xl:text-base lg:text-base"
+        style={{
+          color: currentLogoColor,
+        
+        }}
+      >
+        Blog
+      </Link>
         {/* Login Link: Uses dynamic color */}
         <Link
         to="/registration?tab=login"
@@ -134,6 +144,13 @@ const Topbar = ({ clipRadius }) => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="absolute top-16 right-6 shadow-lg rounded-xl p-4 flex flex-col gap-4 sm:hidden z-50" style={{ backgroundColor: colors.background.paper }}>
+          <Link
+        to="/blog"
+        className="text-[#6F2DA8] px-4 py-2  hover:bg-gray-100 transition"
+        
+      >
+        Blog
+      </Link>
           {/* Mobile Links: Use theme colors, which are dark */}
           <Link
             to="/registration?tab=login"

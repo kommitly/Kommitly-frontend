@@ -224,10 +224,10 @@ const LightTooltip = styled(({ className,placement, ...props }) => (
 const GoalBreakdown = forwardRef(({ goalData, taskData, onClose, isCollapsed }, ref) => {
   const theme = useTheme();
   const colors =tokens(theme.palette.mode);
-  const isSm = useMediaQuery(theme.breakpoints.up('md')); // This checks for screens 'sm' and smaller
-  const tooltipPlacement = isCollapsed && isSm ? "right-start" : "top-start";
+  const isSm = useMediaQuery(theme.breakpoints.down('xs')); // This checks for screens 'sm' and smaller
+  const tooltipPlacement = isCollapsed && isSm ? "bottom-start" : "top-start";
   const anchorLeftPosition = (isCollapsed && isSm)
-      ? { xs: '5%', sm: '21%' } // Shift farther left when collapsed on small screens
+      ? { xs: '5%', sm: '23%' } // Shift farther left when collapsed on small screens
       : { xs: '10%', sm: '32%' }; // Default position
   const { goals, setGoals } = useContext(GoalsContext);
   const [loading, setLoading] = useState(false);
@@ -304,7 +304,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose, isCollapsed }, 
         <Box
            sx={{
           position: 'absolute',
-          top: { xs: "20%", sm: "26%" }, // higher on extra small screens
+          top: { xs: "40%", sm: "26%" }, // higher on extra small screens
           left: anchorLeftPosition, // slightly shifted on small screens
         
           pointerEvents: 'none',
@@ -318,7 +318,7 @@ const GoalBreakdown = forwardRef(({ goalData, taskData, onClose, isCollapsed }, 
                 <Typography variant="h6" sx={{ color: "#fff", fontWeight: 'bold', mb: 1 }}>
                   Save this goal 📁
                 </Typography>
-                <Typography sx={{ color: "#fff",  fontSize: '0.9rem', mb: 2 }}>
+                <Typography sx={{ color: "#fff",  fontSize: '0.8rem', mb: 2 }}>
                   Like this goal breakdown? Save it to your collection and revisit it anytime.
                 </Typography>
                

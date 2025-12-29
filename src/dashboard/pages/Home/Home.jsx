@@ -185,7 +185,7 @@ if (loading) {
           <Typography variant="h6" sx={{ color: "#fff", fontWeight: 'bold', mb: 1 }}>
             Welcome to Kommitly 🎯
           </Typography>
-          <Typography sx={{ color: "#fff",  fontSize: '0.9rem', mb: 2 }}>
+          <Typography sx={{ color: "#fff",  fontSize: '0.8rem', mb: 2 }}>
             Start by typing your first goal below to see how Kommitly helps you
             break it down into actionable steps.
           </Typography>
