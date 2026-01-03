@@ -24,8 +24,7 @@ export const GoalsProvider = ({ children }) => {
   useEffect(() => {
     const loadGoals = async () => {
       
-        const token = localStorage.getItem("token");  // Check if token exists
-        if (!token || !user) return;
+        
 
           try {
             const fetchedGoals = await fetchGoals();

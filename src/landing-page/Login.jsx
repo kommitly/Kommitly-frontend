@@ -14,6 +14,7 @@ import getLocationAndTimezone from "../utils/location";
 import PasswordField from "../dashboard/components/PasswordField";
 
 
+
 import { motion } from "framer-motion";
 
 const initialValues = {
@@ -47,17 +48,20 @@ const Login = ({ submitting, setSubmitting, message, setMessage  }) => {
   const handleLogin = async (values) => {
     setSubmitting(true);
     try {
-      const response = await fetch("https://kommitly-backend.onrender.com/api/users/login", {
+      const response = await fetch("http://127.0.0.1:8000/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
+        credentials: "include",
       });
 
       const data = await response.json();
       if (response.ok) {
-        await login(data.access);
+        await login();
+        console.log("login successful");
         // await loadProfile();
         getLocationAndTimezone();
+        console.log("time zone gotten");
       } else {
         setMessage(data.error || "Login failed.");
         console.log("Login error message", data.error || "Login failed."); 

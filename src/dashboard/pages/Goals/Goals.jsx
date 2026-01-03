@@ -599,8 +599,8 @@ useEffect(() => {
       },
       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
         borderColor: "#4F378A",
-      },
-    }}
+      },  
+    }}     
     MenuProps={{
       PaperProps: {
         sx: {

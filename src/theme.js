@@ -53,7 +53,7 @@ export const tokens = (mode) => ({
         primary: {
           100: "#F6F3F3", // Soft Lavender-White
           200: "#D6CFFF", // Muted Lavender
-          300: "#A89FE3", // Dusty Periwinkle
+          300: "#0c0c0eff", // Dusty Periwinkle
           400: "#6D5BA6", // Deep Violet
           500: "#4F378A", // Rich Purple
           600: "#2C2640", // Muted Eggplant (Surface)

@@ -5,49 +5,52 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Runs once on app load
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      fetchUser(storedToken);
-    } else {
-      setLoading(false); // No token, set loading to false
-    }
+    fetchUser();
   }, []);
 
-  const fetchUser = async (token) => {
-    setLoading(true); // Set loading to true before fetching
+  const fetchUser = async () => {
+    setLoading(true);
     try {
-      const response = await fetch("https://kommitly-backend.onrender.com/api/users/profile/", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const userData = await response.json();
-      if (response.ok) {
-        setUser(userData);
-        return true;
-        
-      } else {
-        logout();
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/users/profile/",
+        {
+          method: "GET",
+          credentials: "include", // ✅ THIS IS THE KEY
+        }
+      );
+
+      if (!response.ok) {
+        setUser(null);
         return false;
       }
-    } catch {
-      logout();
+
+      const userData = await response.json();
+      setUser(userData);
+      return true;
+    } catch (error) {
+      console.error("Fetch user failed:", error);
+      setUser(null);
       return false;
     } finally {
-      setLoading(false); // Set loading to false after fetch completes
+      setLoading(false);
     }
   };
 
-  const login = async (token) => {
-  localStorage.setItem("token", token);
-  await fetchUser(token); // Fetch and set the user
-  navigate("/dashboard/home"); // Navigate after user is fully set
-};
+  const login = async () => {
+    // Login already set cookies
+    const success = await fetchUser();
+    if (success) {
+      navigate("/dashboard/home");
+    }
+  };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const logout = async () => {
+    // optional: call backend logout endpoint to clear cookies
     setUser(null);
     navigate("/");
   };

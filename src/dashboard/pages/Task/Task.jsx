@@ -248,7 +248,7 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
    
        
      } catch (error) {
-       console.error("Error deleting task:", error);
+       console.error("Error deleting task:", error);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
        alert("Failed to delete task.");
      }
    };
@@ -259,7 +259,7 @@ const subTaskProgress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) 
       const { id: subtaskId, task: taskId } = updatedSubtask;
       console.log("Type of taskId:", typeof taskId, "Value:", taskId);
 
-      console.log("Task ID: ", taskId, "Subtask ID: ", subtaskId, "updated subtask: ", updatedSubtask);
+      console.log("Task ID: ", task.id, "Subtask ID: ", subtaskId, "updated subtask: ", updatedSubtask);
        // Format due_date
   const cleanSubtask = {
     ...updatedSubtask,

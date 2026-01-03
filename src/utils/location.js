@@ -5,14 +5,14 @@ const getLocationAndTimezone = () => {
     timeout: 15000,
   };
 
-const getToken = () => {
+/*const getToken = () => {
   const token = localStorage.getItem("token");
   if (!token) {
     console.error("Token not found in localStorage");
     return null;
   }   
   return token;
-};
+};*/
 
 
   const success = async (position) => {
@@ -21,15 +21,16 @@ const getToken = () => {
     console.log('Longitude:', longitude);
 
     try {
-      const token = getToken();
-      const response = await fetch('https://kommitly-backend.onrender.com/api/users/get-timezone/', {
+      
+      const response = await fetch('http://127.0.0.1:8000/api/users/get-timezone/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
       
-          "Authorization": `Bearer ${token}`
+        //  "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ latitude, longitude }),
+        credentials: "include" 
       });
 
       const data = await response.json();

@@ -1,21 +1,12 @@
-import axios from 'axios';
+import axios from "../utils/axiosConfig";  // now works
 
-// Function to get token from localStorage
-const getToken = () => {
-   return localStorage.getItem('token');
-};
 
 const generateInsights = async (title, description) => {
   const url = "https://kommitly-backend.onrender.com/api/goals/generate-ai-insights/";
   const requestBody = { title, description };
   try {
-    const token = getToken();
-    const response = await axios.post(url, requestBody, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
-    });
+    //const token = getToken();
+    const response = await axios.post(url, requestBody);
     return response.data;
   } catch (error) {
     console.error("Error creating goal:", error);
@@ -63,14 +54,10 @@ const createGoal = async (title, category) => {
 
 
 const fetchGoals = async () => {
-  const url = "https://kommitly-backend.onrender.com/api/goals/user-goals/";
+  const url = "http://127.0.0.1:8000/api/goals/user-goals/";
   try {
-    const token = getToken();
+   
     const response = await axios.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
     });
     return response.data; // Since response.data is already an array
 
@@ -403,14 +390,11 @@ const fetchTasksByGoalId = async (goalId) => {
 }
 
 const fetchUserProfile = async () => {
-  const url = "https://kommitly-backend.onrender.com/api/users/profile/";
+  const url = "http://127.0.0.1:8000/api/users/profile/";
   try {
-    const token = getToken();
+    
     const response = await axios.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
+      
     });
     return response.data;
   } catch (error) {
@@ -978,14 +962,11 @@ const saveTemplateSuggestion = async (templateData ) => {
 
 
 const fetchDashboardStats = async () => {
-  const url = "https://kommitly-backend.onrender.com/api/users/stats/";
+  const url = "http://127.0.0.1:8000/api/users/stats/";
   try {
-    const token = getToken();
+    
     const response = await axios.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
+      
     });
     return response.data;
   } catch (error) {
